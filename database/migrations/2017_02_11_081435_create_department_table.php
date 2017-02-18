@@ -15,11 +15,10 @@ class CreateDepartmentTable extends Migration
 	{
 		Schema::create('department',function(Blueprint $table){
 			$table->increments('id')->index();
+			$table->string('code',6)->index();
 			$table->string('name');
-			$table->integer('type')->comment('1: 分社1; 2: 部门101; 3: 编辑室10101');
-			$table->integer('principal_id')->nullable();
 			$table->string('principal_name')->nullable();
-			$table->timestamps();
+			$table->integer('type')->comment('1: 分社1; 2: 部门101; 3: 编辑室10101');
 		});
 	}
 

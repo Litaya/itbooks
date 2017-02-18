@@ -17,9 +17,9 @@ class CreateAuthorTable extends Migration
 			$table->integer('id');
 			$table->string('realname',15);
 			$table->string('workplace',63);
-			$table->string('book_isbn',13); // 图书的ISBN号
+			$table->unsignedInteger('book_id'); // 图书的ISBN号
 
-			$table->foreign('book_isbn')->references('isbn')->on('book');
+			$table->foreign('book_id')->references('id')->on('book');
 
 		});
 	}

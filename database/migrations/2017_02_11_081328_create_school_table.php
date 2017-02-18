@@ -17,7 +17,6 @@ class CreateSchoolTable extends Migration
 			$table->increments('id')->index();
 			$table->string('name');
 			$table->unsignedSmallInteger('district_id');
-			$table->timestamps();
 
 			$table->foreign('district_id')->references('id')->on('district');
 		});
