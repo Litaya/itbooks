@@ -2,6 +2,7 @@
 /public/storage
 /vendor
 /.idea
+/database/sqls/script.sql
 Homestead.json
 Homestead.yaml
 .env
