@@ -12,5 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome',['message'=>'欢迎来到书圈']);
 });
+
+Route::get('/admin',function (){
+	return view('admin.index');
+});
+
+Route::post('/wechat','WechatController@index');

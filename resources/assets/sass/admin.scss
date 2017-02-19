@@ -1,0 +1,148 @@
+// Fonts
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+$theme-color: #7098DA;
+$font-color: #444444;
+$light-blue: #99ccff;
+
+/* universal */
+
+body {
+  padding: 0;
+  background-color: #FCFCFC;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.jumbotron {
+  text-align: center;
+}
+
+/* typography */
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
+}
+
+h1 {
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.2em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: normal;
+  color: #777;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
+}
+
+a{
+  text-decoration: none;
+  color: $theme-color;
+
+  &:hover{
+    text-decoration: none;
+  }
+}
+
+.container{
+  margin: 0;
+  padding: 0;
+}
+
+.push{
+  margin-right: 5px;
+}
+
+.mynav{
+  background-color: $theme-color;
+  margin-bottom: 0;
+  color: #ffffff;
+  border:none;
+  border-radius: 0;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{
+  background-color: #99CCFF;
+}
+
+#side-bar{
+  padding:50px 0 0 0;
+  min-height: 650px;
+  height: 100%;
+  background-color: #F2F4F4;
+
+  h4{
+    margin-left: 30px;
+    color: #444;
+    font-size: 18px;
+  }
+
+  ul{
+    padding: 0;
+    text-align: center;
+    list-style: none;
+
+    li{
+      margin: 20px;
+
+      a{
+        font-size: 14px;
+        color: $font-color;
+        text-decoration: none;
+
+        &:hover{
+          color: $theme-color;
+        }
+      }
+    }
+  }
+}
+
+.main-module{
+  text-align: center;
+  a{
+    color: $font-color;
+    text-decoration: none;
+
+    &:hover{
+      .panel{
+        h1,h4{
+          color: $theme-color;
+        }
+        border-color: $theme-color;
+      }
+    }
+  }
+}
+
+.usual-module{
+  .panel{
+    border-color: $light-blue;
+  }
+  .panel .panel-heading{
+    border-color: $light-blue;
+    background-color: $light-blue;
+  }
+}

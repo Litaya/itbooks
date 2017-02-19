@@ -13,7 +13,10 @@ require('laravel-elixir-vue');
  |
  */
 
-elixir(mix => {
+elixir(function(mix){
     mix.sass('app.scss')
-       .webpack('app.js');
+        .sass('./resources/assets/sass/admin.scss','public/css/admin.css')
+        .webpack('app.js')
+        .scripts(['jquery.js','bootstrap.js']);
+    //mix.compass();
 });
