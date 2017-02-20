@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('frontend', function(){
-	return view('book_request.index');
-});
+Route::resource('bookreq', 'BookRequestController');
 
 Route::get('show', function(){
 	return view('book_request.show');

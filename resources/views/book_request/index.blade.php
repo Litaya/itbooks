@@ -3,26 +3,27 @@
 @section('title', '样书申请')
 
 @section('content')
-
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <table class="table"> 
                 <thead>
                     <tr>
-                        <th>Head1</th>
-                        <th>Head2</th>
-                        <th>Head3</th>
+                        <th>BookId</th>
+                        <th>Status</th>
+                        <th>Message</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                @for($i=0;$i<10;$i++)
+                @foreach($user->bookRequests as $bookreq)
                     <tr>
-                        <td>Name {{$i}}</th>
-                        <td>Status {{$i}}</th>
+                        <td>{{$bookreq->book_id}}</th>
+                        <td>{{$bookreq->status}}</th>
+                        <td>{{$bookreq->message}}</th>
                         <td><a href="show">Show Detail</a></th>
                     </tr>
-                @endfor
+                @endforeach
                 </tbody>
                 </table>
             </div>
