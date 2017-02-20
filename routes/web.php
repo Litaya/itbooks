@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-	return view('welcome',['message'=>'欢迎来到书圈']);
+	return view('welcome',['message'=>'欢迎来到书圈!']);
+//	return view('welcome',['message'=>"您还未设置登录密码,请尽快设置",'status'=>'danger','url'=>'/user/1/setPassword']);
 });
 
 Route::get('/admin',function (){
