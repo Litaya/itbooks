@@ -1,5 +1,6 @@
 /node_modules
 /public/storage
+/config/database.php
 /vendor
 /.idea
 Homestead.json
