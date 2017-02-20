@@ -11,6 +11,15 @@
 |
 */
 
+Route::get('frontend', function(){
+	return view('book_request.index');
+});
+
+Route::get('show', function(){
+	return view('book_request.show');
+});
+
+
 Route::get('/', function () {
 	return view('welcome',['message'=>'欢迎来到书圈']);
 });
