@@ -10,5 +10,9 @@ class Certification extends Model
 
 	protected $fillable = [
 		'cert_name', // TEACHER|AUTHOR|STUDENT|EDITOR|DEPARTMENT_ADMIN|SUPER_ADMIN
+		'user_id',
+		'cert_content',
+		'status',
+		'message'
 	];
 }
