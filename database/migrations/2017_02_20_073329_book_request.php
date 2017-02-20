@@ -23,6 +23,8 @@ class BookRequest extends Migration
 			$table->string('address');
 			$table->string('phone');
 			$table->string('receiver');
+
+			$table->timestamps();
 		});
 	}
 
