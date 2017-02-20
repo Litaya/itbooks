@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ url('/admin') }}" style="margin-left: 500px;color: #ffffff; font-size: 20px;">书圈后台管理系统</a>
+            <a class="navbar-brand" href="{{ url('/admin') }}" style="margin-left: 50px;">书圈后台管理系统</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -16,7 +16,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {{--<li><a href="#">Link</a></li>--}}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-right: 50px;color:#fff">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-right: 50px;">
                         <i class="fa fa-user push" aria-hidden="true"></i>
                         管理员
                         {{--<span class="caret"></span>--}}

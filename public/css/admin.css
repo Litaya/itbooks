@@ -7751,28 +7751,27 @@ a:hover {
 }
 
 .mynav {
-  background-color: #7098DA;
   margin-bottom: 0;
   color: #ffffff;
-  border: none;
   border-radius: 0;
 }
 
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-  background-color: #99CCFF;
-}
-
 #side-bar {
-  padding: 50px 0 0 0;
+  padding: 30px 0 0 0;
   min-height: 650px;
   height: 100%;
+  width: 150px;
   background-color: #F2F4F4;
 }
 
+#side-bar hr {
+  margin: 10px 0 10px 0;
+}
+
 #side-bar h4 {
-  margin-left: 30px;
+  margin-left: 20px;
   color: #444;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 #side-bar ul {
@@ -7782,11 +7781,11 @@ a:hover {
 }
 
 #side-bar ul li {
-  margin: 20px;
+  margin: 10px;
 }
 
 #side-bar ul li a {
-  font-size: 14px;
+  font-size: 12px;
   color: #444444;
   text-decoration: none;
 }
