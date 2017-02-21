@@ -18,14 +18,15 @@ class User extends Authenticatable
 	 */
 	protected $fillable = [
 		'openid',
-		'name',
+		'username',
 		'email',
 		'email_status',
 		'password',
 		'permission_string',
 		'certificate_as',
 		'information_id',
-		'credits'
+		'credits',
+		'subscribed'
 	];
 
 	/**

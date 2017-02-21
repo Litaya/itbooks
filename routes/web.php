@@ -21,3 +21,7 @@ Route::get('/admin',function (){
 });
 
 Route::post('/wechat','WechatController@index');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
