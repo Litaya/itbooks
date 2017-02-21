@@ -12,6 +12,8 @@
 */
 
 Route::resource('bookreq', 'BookRequestController');
+Route::resource('cert', 'CertificationController');
+
 
 Route::get('show', function(){
 	return view('book_request.show');
@@ -39,4 +41,11 @@ Route::group(["prefix" => "admin"], function(){
 	Route::get('bookreq', 'BookRequestAdminController@getIndex')->name('admin.bookreq.index');
 	Route::get('bookreq/{id}', 'BookRequestAdminController@show')->name('admin.bookreq.show');
 	Route::post('bookreq/pass/{id}', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
+
+	Route::get('cert', 'CertificationAdminController@index')->name('admin.cert.index');
+	Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
+	Route::post('cert/pass/{id}', 'CertificationAdminController@pass')->name('admin.cert.pass');
+	Route::post('cert/reject/{id}', 'CertificationAdminController@reject')->name('admin.cert.reject');
+	
 });
+
