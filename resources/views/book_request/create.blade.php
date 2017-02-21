@@ -16,7 +16,7 @@
                 <li>类别: {{ "纪实".", "."科技" }}</li>
                 <li>ISBN号: {{ $book->isbn }}</li>
                 <li><p><small>图片展示</small></p>
-                    <p><img src="/test_images/dummy.jpg" style="width:80%" alt="母猪的产后护理"></img></p>
+                    <p><img src="/test_images/dummy.jpg" style="width:80%" alt="图书附图"></img></p>
                 </li>
                 </ul>
             </div>

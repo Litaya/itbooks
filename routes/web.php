@@ -33,3 +33,10 @@ Route::post('/wechat','WechatController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+// admin dashboard routes:
+Route::group(["prefix" => "admin"], function(){
+	Route::get('bookreq', 'BookRequestAdminController@getIndex')->name('admin.bookreq.index');
+	Route::get('bookreq/{id}', 'BookRequestAdminController@show')->name('admin.bookreq.show');
+	Route::post('bookreq/pass/{id}', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
+});

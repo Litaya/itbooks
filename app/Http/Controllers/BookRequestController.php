@@ -115,6 +115,12 @@ class BookRequestController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $req = BookRequest::find($id);
+        $bookname = $req->book->name;
+        $req->delete();
+
+        Session::flash('success', '您已经取消了对'.$bookname.'的样书申请');
+        
+        return redirect()->route('bookreq.index');
     }
 }

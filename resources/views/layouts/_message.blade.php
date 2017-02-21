@@ -21,9 +21,15 @@
     <div class="alert alert-danger" role="alert">
     <strong>Error:</strong>
     <ul>
-    @foreach($errors as $error)
+    @foreach($errors->all() as $error)
     <li>{{$error}}</li>
     @endforeach
     </ul>
+    </div>
+@endif
+
+@if(Session::has('warning'))
+    <div class="alert alert-warning" role="alert">
+    <strong>Warning:</strong> {{Session::get('warning')}}
     </div>
 @endif
