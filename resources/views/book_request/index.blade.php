@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach($user->bookRequests as $bookreq)
+                @foreach(Auth::user()->bookRequests as $bookreq)
                     <tr>
                         <td>{{$bookreq->book_id}}</th>
                         <td>{{$bookreq->status}}</th>

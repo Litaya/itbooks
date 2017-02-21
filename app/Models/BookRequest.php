@@ -8,6 +8,8 @@ class BookRequest extends Model
 {
 	protected $table = 'book_request';
 
+	public $timestamps = false;  // here is a problem
+
 	protected $fillable = [
 		'book_id',
 		'user_id',
