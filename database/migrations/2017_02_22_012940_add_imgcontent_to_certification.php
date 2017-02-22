@@ -14,8 +14,8 @@ class AddImgcontentToCertification extends Migration
     public function up()
     {
         Schema::table('certification', function (Blueprint $table) {
-            $table->string("img_upload")->after("message");
-            $table->text("json_content")->after("img_upload");
+            $table->string("img_upload")->after("message")->nullable();
+            $table->text("json_content")->after("img_upload")->nullable();
         });
     }
 

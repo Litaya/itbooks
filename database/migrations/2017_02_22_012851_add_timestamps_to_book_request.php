@@ -14,8 +14,8 @@ class AddTimestampsToBookRequest extends Migration
     public function up()
     {
         Schema::table('book_request', function (Blueprint $table) {
-            $table->date("created_at");
-            $table->date("updated_at")->after("created_at");
+            $table->date("created_at")->nullable();
+            $table->date("updated_at")->after("created_at")->nullable();
         });
     }
 
