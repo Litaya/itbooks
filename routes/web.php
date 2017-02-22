@@ -11,6 +11,13 @@
 |
 */
 
+Route::resource('bookreq', 'BookRequestController');
+
+Route::get('show', function(){
+	return view('book_request.show');
+});
+
+
 Route::get('/', function () {
 	return view('welcome',['message'=>'欢迎来到书圈!']);
 //	return view('welcome',['message'=>"您还未设置登录密码,请尽快设置",'status'=>'danger','url'=>'/user/1/setPassword']);
@@ -21,3 +28,14 @@ Route::get('/admin',function (){
 });
 
 Route::post('/wechat','WechatController@index');
+
+Route::get('/home', 'HomeController@index');
+Auth::routes();
+
+
+// admin dashboard routes:
+Route::group(["prefix" => "admin"], function(){
+	Route::get('bookreq', 'BookRequestAdminController@getIndex')->name('admin.bookreq.index');
+	Route::get('bookreq/{id}', 'BookRequestAdminController@show')->name('admin.bookreq.show');
+	Route::post('bookreq/pass/{id}', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
+});

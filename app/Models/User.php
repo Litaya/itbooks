@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 class User extends Authenticatable
 {
 	use Notifiable;
@@ -18,14 +19,15 @@ class User extends Authenticatable
 	 */
 	protected $fillable = [
 		'openid',
-		'name',
+		'username',
 		'email',
 		'email_status',
 		'password',
 		'permission_string',
 		'certificate_as',
 		'information_id',
-		'credits'
+		'credits',
+		'subscribed'
 	];
 
 	/**
@@ -36,4 +38,8 @@ class User extends Authenticatable
 	protected $hidden = [
 		'password', 'remember_token',
 	];
+
+	public function bookRequests(){
+		return $this->hasMany('App\Models\BookRequest', 'user_id', 'id');
+	}
 }
