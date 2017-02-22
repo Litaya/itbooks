@@ -27,7 +27,11 @@ Route::get('/admin',function (){
 	return view('admin.index');
 });
 
-Route::post('/wechat','WechatController@index');
+Route::group(["prefix" => "wechat"], function(){
+	Route::get("/","WechatController@index");
+    Route::post("/","WechatController@server");
+    Route::get('/test','WechatController@test');
+});
 
 Route::get('/home', 'HomeController@index');
 Auth::routes();
