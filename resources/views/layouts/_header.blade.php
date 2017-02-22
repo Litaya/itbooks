@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">书圈</a>
+            <a class="navbar-brand" href="/home">书圈</a>
 
             <ul class="dropdown-menu" aria-labelledby="menu_trigger" id="menu-list">
                 {{--<li><a href="#">Link</a></li>--}}
