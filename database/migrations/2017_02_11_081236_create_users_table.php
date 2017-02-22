@@ -15,15 +15,16 @@ class CreateUsersTable extends Migration
 	{
 		Schema::create('user', function (Blueprint $table) {
 			$table->increments('id')->index();
-			$table->string('openid')->index();
+			$table->string('openid')->nullable()->index();
 			$table->string('username');
-			$table->string('email')->nullable();
+			$table->string('email')->unique()->nullable();
 			$table->integer('email_status')->default(0)->comment('0: 未验证; 1: 验证通过');
-			$table->string('password');
+			$table->string('password')->nullable();
 			$table->integer('credits')->default(0)->comment('积分');
-			$table->string('permission_string');
-			$table->string('certificate_as');
-			$table->unsignedInteger('information_id');
+			$table->string('permission_string')->default('');
+			$table->string('certificate_as')->default('');
+			$table->unsignedInteger('information_id')->nullable();
+			$table->tinyInteger('subscribed')->default(0);
 			$table->timestamps();
 			$table->rememberToken();
 		});

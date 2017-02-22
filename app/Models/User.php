@@ -26,7 +26,8 @@ class User extends Authenticatable
 		'permission_string',
 		'certificate_as',
 		'information_id',
-		'credits'
+		'credits',
+		'subscribed'
 	];
 
 	/**
