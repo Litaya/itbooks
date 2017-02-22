@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Http\Controllers\Wechat;
+namespace App\Libraries;
 
 use App\Models\User;
 use EasyWeChat\Foundation\Application;
@@ -63,7 +63,7 @@ class WechatMessageHandler{
 		$user = User::where('openid',$open_id)->first();
 		if(empty($user)){
 			User::create([
-				'name'=>$wechat_user->nickname,
+				'username'=>$wechat_user->nickname,
 				'openid'=>$open_id,
 				'gender'=>$wechat_user->sex,
 				'subscribe'=>1,
