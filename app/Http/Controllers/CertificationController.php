@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+use Image;
+use File;
+
 use App\Models\Certification;
+use App\Helpers\FileHelper;
 
 class CertificationController extends Controller
 {
@@ -89,12 +93,14 @@ class CertificationController extends Controller
             "img_upload" => "required"
         ]);
         
+        
         $unfin_cert = Certification::where("user_id", "=", $user->id)->where("status", "=", 0)->get();
         if(count($unfin_cert)==0){
             $cert = new Certification;
             $cert->cert_name = strtoupper($request->id_type);
             $cert->user_id = $user->id;
             $cert->status = 0;
+            $cert->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
             $cert->save();
             Session::flash('success', '您的身份认证申请提交成功');
         }

@@ -11,7 +11,7 @@
                 @if($selection=="exist")
                     您有未完成的审批，审批进度为<strong>正在审核</strong>，请不要重复申请！
                 @else
-                    {!! Form::open(["route"=>"cert.store", "method"=>"post"]) !!}
+                    {!! Form::open(["route"=>"cert.store", "method"=>"post", "files"=>true]) !!}
                     {{ Form::hidden("user_id", Auth::id()) }}
                     {{ Form::label("realname", "真实姓名:")}}
                     {{ Form::text("realname", null, ["class"=>"form-control"]) }}
