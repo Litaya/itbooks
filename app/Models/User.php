@@ -29,7 +29,8 @@ class User extends Authenticatable
 		'certificate_as',
 		'information_id',
 		'credits',
-		'subscribed'
+		'subscribed',
+		'source'
 	];
 
 	/**

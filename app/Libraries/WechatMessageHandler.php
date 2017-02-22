@@ -67,7 +67,8 @@ class WechatMessageHandler{
 				'openid'=>$open_id,
 				'gender'=>$wechat_user->sex,
 				'subscribe'=>1,
-				'headimgurl'=>$wechat_user->headimgurl
+				'headimgurl'=>$wechat_user->headimgurl,
+				'source'=>'wechat'
 			]);
 		}else{
 			User::where('openid',$open_id)->update(['subscribe'=>1]);

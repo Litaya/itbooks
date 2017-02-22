@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
 	{
 		Schema::create('user', function (Blueprint $table) {
 				$table->increments('id')->index();
-				$table->string('openid')->nullable()->index();
+				$table->string('openid')->nullable()->unique();
 				$table->string('username');
 				$table->integer('gender')->default(0)->comment('0 未知;1 男; 2 女');
 				$table->string('headimgurl')->default('/img/avatar.png');
@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
 				$table->string('certificate_as')->default('');
 				$table->unsignedInteger('information_id')->nullable();
 				$table->tinyInteger('subscribed')->default(0);
+				$table->string('source')->default("未知")->comment('wechat、web_register');
 				$table->timestamps();
 				$table->rememberToken();
 				});
