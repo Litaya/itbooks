@@ -29,9 +29,9 @@ Route::get('/admin',function (){
 
 Route::post('/wechat','WechatController@index');
 
+Route::get('/home', 'HomeController@index');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
 
 // admin dashboard routes:
 Route::group(["prefix" => "admin"], function(){
