@@ -17,11 +17,18 @@ class PermissionManager
 	 */
 	static public function resolve($permission_string){
 		$permission_string = trim(strtolower($permission_string));
+
+		$isSuperAdmin = 0;
+		if($permission_string == "all"){
+			$isSuperAdmin = 1;
+		}
+
 		$permissions = array();
 		$book_department_permissions = array();
 		$book_district_permissions = array();
 		$department_permissions = array();
 		$user_permission = array();
+
 		$permission_array = explode("|",$permission_string);
 		foreach ($permission_array as $permission){
 			$permission_info = explode('_',$permission);
@@ -53,10 +60,12 @@ class PermissionManager
 			}
 
 		}
+
 		$permissions["book"]["department"] = $book_department_permissions;
 		$permissions["book"]["district"] = $book_district_permissions;
 		$permissions["department"] = $department_permissions;
 		$permissions["user"] = $user_permission;
+		$permissions["super_admin"] = $isSuperAdmin;
 
 		return $permissions;
 	}

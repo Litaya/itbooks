@@ -5,7 +5,7 @@
 
     <div class="col-lg-12">
         <div class="col-lg-4 main-module">
-            <a href="javascript:void(0)">
+            <a href="{{ route('admin.user.index') }}">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1> <i class="fa fa-user push"></i></h1>
