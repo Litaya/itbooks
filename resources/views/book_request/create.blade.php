@@ -16,7 +16,11 @@
                 <li>类别: {{ "纪实".", "."科技" }}</li>
                 <li>ISBN号: {{ $book->isbn }}</li>
                 <li><p><small>图片展示</small></p>
-                    <p><img src="/test_images/dummy.jpg" style="width:80%" alt="图书附图"></img></p>
+                    @if($book->img_upload)
+                    <p><img src="{{route('image', $book->img_upload)}}" style="width:80%" alt="图书附图"></img></p>
+                    @else
+                    <p><img src="{{URL::asset('test_images/404.jpg')}}" style="width:80%" alt="图书附图"></img></p>
+                    @endif
                 </li>
                 </ul>
             </div>
