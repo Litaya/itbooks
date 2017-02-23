@@ -7800,15 +7800,23 @@ a:hover {
 }
 
 .main-module a {
-  color: #444444;
+  color: #cccccc;
   text-decoration: none;
 }
 
-.main-module a:hover .panel {
+.main-module.active a {
+  color: #444444;
+}
+
+.main-module.active a .panel {
+  border-color: #444444;
+}
+
+.main-module.active a:hover .panel {
   border-color: #7098DA;
 }
 
-.main-module a:hover .panel h1, .main-module a:hover .panel h4 {
+.main-module.active a:hover .panel h1, .main-module.active a:hover .panel h4 {
   color: #7098DA;
 }
 
@@ -7816,9 +7824,33 @@ a:hover {
   border-color: #99ccff;
 }
 
+.usual-module .panel .panel-heading a {
+  color: #ffffff;
+}
+
 .usual-module .panel .panel-heading {
   border-color: #99ccff;
   background-color: #99ccff;
+}
+
+.department-module {
+  text-align: center;
+}
+
+.department-module a {
+  color: #444444;
+}
+
+.department-module a:hover {
+  color: #7098DA;
+}
+
+.department-module a:hover .panel {
+  border-color: #7098DA;
+}
+
+.department-module a:hover .panel h1, .department-module a:hover .panel h4 {
+  color: #7098DA;
 }
 
 /*# sourceMappingURL=admin.css.map */

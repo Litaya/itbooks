@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="panel panel-primary">
-        <div class="panel-heading"><span style="font-size: large">新用户</span></div>
+        <div class="panel-heading"><span style="font-size: large">全部用户</span></div>
         <div class="panel-body">
             <table class="table table-default table-hover" >
                 <tr>

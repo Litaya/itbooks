@@ -9,6 +9,8 @@
 namespace App\Libraries;
 
 
+use Illuminate\Support\Facades\Auth;
+
 class PermissionManager
 {
 
@@ -97,5 +99,14 @@ class PermissionManager
 			$curd_permission['d']=0;
 		}
 		return $curd_permission;
+	}
+
+	static public function hasDepartmentPermission($request,$department_id){
+		if(Auth::check()){
+			if($request->session()->get('permission')['super_admin'] || in_array($department_id,$request->session()->get('permission')['department'])){
+				return true;
+			}
+		}
+		return false;
 	}
 }

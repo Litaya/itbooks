@@ -21,7 +21,7 @@ Route::get('show', function(){
 Route::get('/', function () {
 	return view('welcome',['message'=>'欢迎来到书圈!']);
 });
-Route::get('/errors',"PermissionController@user_permission_error")->name('errors.index');
+Route::get('/errors',"PerdmissionController@user_permission_error")->name('errors.index');
 
 Route::get('/home', 'HomeController@index');
 Auth::routes();
@@ -54,5 +54,14 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	 */
 	Route::group(['prefix'=>'user'],function (){
 		Route::get('/', 'Admin\AdminUserController@index')->name("admin.user.index");
+	});
+
+	Route::group(['prefix'=>'department'],function (){
+		Route::get('/','Admin\DepartmentController@index')->name('admin.department.index');
+		Route::get('/{id}','Admin\DepartmentController@showDepartment')->name('admin.department.show');
+
+		Route::post('/create','Admin\DepartmentController@createDepartment')->name('admin.department.create');
+		Route::post('/{department_id}/update','Admin\DepartmentController@updateDepartment')->name('admin.department.update');
+		Route::post('/{department_id}/office/delete','Admin\DepartmentController@deleteOffice')->name('admin.office.delete');
 	});
 });

@@ -120,17 +120,29 @@ a{
 }
 
 .main-module{
+
   text-align: center;
   a{
-    color: $font-color;
+    color: #cccccc;
     text-decoration: none;
+    .panel{
+    }
+  }
 
-    &:hover{
+  &.active{
+    a{
+      color: $font-color;
       .panel{
-        h1,h4{
-          color: $theme-color;
+        border-color: $font-color;
+      }
+
+      &:hover{
+        .panel{
+          h1,h4{
+            color: $theme-color;
+          }
+          border-color: $theme-color;
         }
-        border-color: $theme-color;
       }
     }
   }
@@ -138,10 +150,32 @@ a{
 
 .usual-module{
   .panel{
+    .panel-heading{
+      a{
+        color: #ffffff;
+      }
+    }
     border-color: $light-blue;
   }
   .panel .panel-heading{
     border-color: $light-blue;
     background-color: $light-blue;
+  }
+}
+
+.department-module{
+  text-align: center;
+  a{
+    color: $font-color;
+
+    &:hover{
+      color: $theme-color;
+      .panel{
+        h1,h4{
+          color: $theme-color;
+        }
+        border-color: $theme-color;
+      }
+    }
   }
 }
