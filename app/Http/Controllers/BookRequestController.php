@@ -34,9 +34,9 @@ class BookRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create($book_id)
     {
-        $book = Book::find($request->book_id);
+        $book = Book::find($book_id);
         return view('book_request.create')->withBook($book);
     }
 

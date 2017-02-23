@@ -55,8 +55,8 @@ class FileHelper {
         $folder = FileHelper::bookFolder($book);
         $filename = time() . "." . $image->getClientOriginalExtension();
         $location = $folder.$filename;
-        Image::make($image)->save($location);
-        return location;
+        Image::make($image)->save(public_path($location));
+        return $location;
     }
     
     public static function getUserImage($user, $src){
