@@ -17,16 +17,26 @@
                 {{--<li><a href="#">Link</a></li>--}}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-right: 50px;">
-                        <i class="fa fa-user push" aria-hidden="true"></i>
-                        管理员
+                        @if(Auth::check())
+                            <i class="fa fa-user push" aria-hidden="true"></i>
+                            {{ Auth::user()->username }}
+                        @endif
                         {{--<span class="caret"></span>--}}
                     </a>
                     <ul class="dropdown-menu" style="margin-right: 50px">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                        <li><a href="#">个人信息</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        <li>
+                            <a href="{{ url('/admin/logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                登出
+                            </a>
+
+                            <form id="logout-form" action="{{ url('/admin/logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        </li>
                     </ul>
                 </li>
             </ul>
