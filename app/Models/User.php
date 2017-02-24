@@ -20,6 +20,8 @@ class User extends Authenticatable
 	protected $fillable = [
 		'openid',
 		'username',
+		'gender',
+		'headimgurl',
 		'email',
 		'email_status',
 		'password',
@@ -27,7 +29,8 @@ class User extends Authenticatable
 		'certificate_as',
 		'information_id',
 		'credits',
-		'subscribed'
+		'subscribed',
+		'source'
 	];
 
 	/**

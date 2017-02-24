@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Wechat\WechatMessageHandler;
+use App\Libraries\WechatMessageHandler;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Support\Facades\Log;
 
@@ -50,7 +50,7 @@ class WechatController extends Controller
 		$server = $app->server;
 		$this->app = $app;
 		$server->setMessageHandler(function($message){
-				Log::info('message received');
+				Log::info("【 wechat message received 】\n".$message);
 				$handler = new WechatMessageHandler($this->app,$message);
 				return $handler->handle();
 				});

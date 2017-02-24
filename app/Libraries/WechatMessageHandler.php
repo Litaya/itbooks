@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Http\Controllers\Wechat;
+namespace App\Libraries;
 
 use App\Models\User;
 use EasyWeChat\Foundation\Application;
@@ -63,21 +63,22 @@ class WechatMessageHandler{
 		$user = User::where('openid',$open_id)->first();
 		if(empty($user)){
 			User::create([
-				'name'=>$wechat_user->nickname,
+				'username'=>$wechat_user->nickname,
 				'openid'=>$open_id,
 				'gender'=>$wechat_user->sex,
 				'subscribe'=>1,
-				'headimgurl'=>$wechat_user->headimgurl
+				'headimgurl'=>$wechat_user->headimgurl,
+				'source'=>'wechat'
 			]);
 		}else{
-			User::where('openid',$open_id)->update(['subscribe'=>1]);
+			User::where('openid',$open_id)->update(['subscribed'=>1]);
 		}
 		return "欢迎关注书圈";
 	}
 
 	private function unsubscribe(){
 		$openid = $this->message->FromUserName;
-		User::where('openid',$openid)->update(['subscribe'=>0]);
+		User::where('openid',$openid)->update(['subscribed'=>0]);
 		return '';
 	}
 

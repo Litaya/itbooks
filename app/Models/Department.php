@@ -8,6 +8,8 @@ class Department extends Model
 {
 	protected $table = 'department';
 
+	public $timestamps = false;
+
 	protected $fillable = [
 		'code',
 		'name',
