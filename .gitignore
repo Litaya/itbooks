@@ -5,4 +5,5 @@
 /database/sqls/script.sql
 Homestead.json
 Homestead.yaml
-.env
+/.env
+/composer.lock
