@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTimestampsToBookRequest extends Migration
+class AlterUserPasswordLen extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddTimestampsToBookRequest extends Migration
      */
     public function up()
     {
-        Schema::table('book_request', function (Blueprint $table) {
-            $table->date("created_at")->nullable();
-            $table->date("updated_at")->after("created_at")->nullable();
+        Schema::table('user', function (Blueprint $table) {
+            $table->string('password', 60)->change();
         });
     }
 
@@ -26,8 +25,8 @@ class AddTimestampsToBookRequest extends Migration
      */
     public function down()
     {
-        Schema::table('book_request', function (Blueprint $table) {
-            $table->dropColumn(["updated_at", "created_at"]);
+        Schema::table('user', function (Blueprint $table) {
+            
         });
     }
 }

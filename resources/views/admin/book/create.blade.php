@@ -4,14 +4,7 @@
 
 <div class="container">
     <div class="row">
-        <!--
-        TODO:
 
-        SHOW PAGE
-        CREATE PAGE
-        DESTROY PANEL
-        
-        -->
         <style>
         label {
             margin-top: 10px;

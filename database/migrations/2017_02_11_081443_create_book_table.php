@@ -26,8 +26,7 @@ class CreateBookTable extends Migration
 			$table->timestamp('publish_time'); // 出版时间
 			$table->timestamps();
 
-			$table->foreign('department_id')->references('id')->on('department');
-
+			// $table->foreign('department_id')->references('id')->on('department');
 		});
 	}
 

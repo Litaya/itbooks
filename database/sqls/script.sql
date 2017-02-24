@@ -1,4 +1,4 @@
-source /home/vagrant/Code/shuquan/database/sqls/district-standard.sql;
-source /home/vagrant/Code/shuquan/database/sqls/school.sql;
-source /home/vagrant/Code/shuquan/database/sqls/department.sql;
-source /home/vagrant/Code/shuquan/database/sqls/book.sql;
+source D:/Code/itbooks/database/sqls/district-standard.sql;
+source D:/Code/itbooks/database/sqls/sqls/school.sql;
+source D:/Code/itbooks/database/sqls/database/sqls/department.sql;
+source D:/Code/itbooks/database/sqls/database/sqls/book.sql;
