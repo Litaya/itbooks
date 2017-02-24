@@ -18,7 +18,7 @@ class CreateSchoolTable extends Migration
 			$table->string('name');
 			$table->unsignedSmallInteger('district_id');
 
-			$table->foreign('district_id')->references('id')->on('district');
+			// $table->foreign('district_id')->references('id')->on('district');
 		});
 	}
 
