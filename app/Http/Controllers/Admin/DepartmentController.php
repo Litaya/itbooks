@@ -46,13 +46,28 @@ class DepartmentController extends Controller
 				'department-id' => 'required',
 				'office-code'=>'required|string',
 				'office-name'=>'required|string',
-				'department-type' => 'required'
 			]);
+
+			switch (strlen($request->get('office-code'))){
+				case 1:
+					$type = 1;
+					break;
+				case 3:
+					$type = 2;
+					break;
+				case 5:
+					$type = 3;
+					break;
+				default:
+					$type = 0;
+					break;
+			}
+
 			if (PermissionManager::hasDepartmentPermission($request,$request->get('department-id'))){
 				Department::create([
 					'code' => $request->get('office-code'),
 					'name' => $request->get('office-name'),
-					'type' => $request->get('department-type')
+					'type' => $type
 				]);
 				$request->session()->flash('message','添加成功');
 				$request->session()->flash('status','success');
@@ -75,7 +90,6 @@ class DepartmentController extends Controller
 		$department['code'] = $request->get('department-code');
 		$department['name'] = $request->get('department-name');
 		$result = $department->save();
-		Log::info($result);
 		if($result){
 			$request->session()->flash("message","修改成功!");
 			$request->session()->flash("status",'success');

@@ -93,22 +93,23 @@
                                 <input type="text" class="form-control" id="office-name" name="office-name" placeholder="请输入编辑室名称">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">类型</label>
-                            <div class="col-lg-10" >
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        <input type="radio" name="department-type" id="option-department" autocomplete="off" checked value="1"> 分社
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="department-type" id="option-organization" autocomplete="off" value="2"> 事业部
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" name="department-type" id="option-office" autocomplete="off" value="3"> 编辑室
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        {{----}}
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-lg-2 control-label">类型</label>--}}
+                            {{--<div class="col-lg-10" >--}}
+                                {{--<div class="btn-group" data-toggle="buttons">--}}
+                                    {{--<label class="btn btn-primary active">--}}
+                                        {{--<input type="radio" name="department-type" id="option-department" autocomplete="off" checked value="1"> 分社--}}
+                                    {{--</label>--}}
+                                    {{--<label class="btn btn-primary">--}}
+                                        {{--<input type="radio" name="department-type" id="option-organization" autocomplete="off" value="2"> 事业部--}}
+                                    {{--</label>--}}
+                                    {{--<label class="btn btn-primary">--}}
+                                        {{--<input type="radio" name="department-type" id="option-office" autocomplete="off" value="3"> 编辑室--}}
+                                    {{--</label>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         编号 &nbsp;
                         @foreach($offices as $office)
                             @if($office->type == 3)

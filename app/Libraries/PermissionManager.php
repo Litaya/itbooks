@@ -10,6 +10,7 @@ namespace App\Libraries;
 
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PermissionManager
 {
