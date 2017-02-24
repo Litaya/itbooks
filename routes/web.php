@@ -11,6 +11,10 @@
 |
 */
 
+
+Route::resource('resource', 'ResourceController');
+Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("resource.download"); // TODO: 增加支付积分逻辑，增加支付路由(getDownload)，编写下载逻辑
+
 /* get image from storage */
 Route::get('image/{src?}', function ($src){
     return Image::make(storage_path($src))->response();
@@ -40,7 +44,7 @@ Route::resource('cert', 'CertificationController');
 Route::get('/', function () {
 	return view('welcome',['message'=>'欢迎来到书圈!']);
 });
-Route::get('/errors',"PerdmissionController@user_permission_error")->name('errors.index');
+Route::get('/errors',"PermissionController@user_permission_error")->name('errors.index');
 
 Route::get('/home', 'HomeController@index');
 Auth::routes();

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use File;
 use Image;
+use Storage;
 
 class FileHelper {
 
@@ -49,6 +50,17 @@ class FileHelper {
             return $location;
         }
         return FALSE;
+    }
+
+    public static function saveResourceFile($file){
+        $filename = $file->getClientOriginalName() .'_'. time() . '.' . $file->getClientOriginalExtension();
+        $location = 'resource/'.$filename;
+        Storage::disk('public')->put($location, file_get_contents($file));
+        return $location;
+    }
+
+    public static function getResourceFile($src){
+        return Storage::disk('public')->get($src);
     }
 
     public static function saveBookImage($book, $image){
