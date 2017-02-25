@@ -8,5 +8,4 @@ Homestead.yaml
 /composer.lock
 /.env
 *.swp
-/database/sqls/script.sql
 *.DS_Store

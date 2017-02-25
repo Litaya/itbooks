@@ -1,8 +1,8 @@
-@if(isset($message))
+@if(Session::has('notice_message'))
     <div class="col-lg-12">
-        <div class="panel panel-{{isset($status)?$status:'default'}}">
+        <div class="panel panel-{{Session::has('notice_status')?Session::get('notice_status'):'default'}}">
             <div class="panel-body">
-                {{ $message }}
+                {{ Session::get('notice_message') }}
             </div>
         </div>
     </div>

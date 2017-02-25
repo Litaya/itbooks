@@ -9,6 +9,7 @@
 namespace App\Libraries;
 
 
+use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -104,9 +105,29 @@ class PermissionManager
 
 	static public function hasDepartmentPermission($request,$department_id){
 		if(Auth::check()){
-			if($request->session()->get('permission')['super_admin'] || in_array($department_id,$request->session()->get('permission')['department'])){
+
+			//超级管理员
+			if($request->session()->get('permission')['super_admin']){
 				return true;
 			}
+
+			$departments = [];
+			$departments_from_permission = $request->session()->get('permission')['department'];
+			foreach($departments_from_permission as $id){
+
+				$department = Department::where('id',$id)->first();
+				$sub_departments = Department::where('code','like',$department->code."%")->get();
+				foreach ($sub_departments as $sub_department){
+					array_push($departments,$sub_department->id);
+				}
+			}
+
+			Log::info($departments);
+
+			if(in_array($department_id,$departments)){
+				return true;
+			}
+
 		}
 		return false;
 	}

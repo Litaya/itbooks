@@ -97,7 +97,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
 	Route::group(['prefix'=>'department'],function (){
 		Route::get('/','Admin\DepartmentController@index')->name('admin.department.index');
-		Route::get('/{id}','Admin\DepartmentController@showDepartment')->name('admin.department.show');
+		Route::get('/{department_id}','Admin\DepartmentController@showDepartment')->name('admin.department.show');
 
 		Route::post('/create','Admin\DepartmentController@createDepartment')->name('admin.department.create');
 		Route::post('/{department_id}/update','Admin\DepartmentController@updateDepartment')->name('admin.department.update');

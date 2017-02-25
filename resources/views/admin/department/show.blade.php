@@ -19,7 +19,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="deleteOfficeLable">编辑室{{ $office->code }}-{{ $office->name }}</h4>
+                            <h4 class="modal-title" id="deleteOfficeLable">{{ $office->code }}-{{ $office->name }}</h4>
                         </div>
                         <div class="modal-body">
                             <form action="{{ route('admin.office.delete',['department_id'=>$department->id]) }}" method="post">

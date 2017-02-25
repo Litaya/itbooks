@@ -8,7 +8,7 @@
         {{--</div>--}}
     {{--</form>--}}
 
-    <h3>全部分社</h3>
+    <h3>我的分社</h3>
     <hr>
     @foreach( $departments as $department)
         <div class="col-lg-4 department-module">
@@ -26,16 +26,4 @@
             </a>
         </div>
     @endforeach
-    <div class="col-lg-4 department-module">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <p>
-                    9,S
-                </p>
-                <p>
-                    {{ $department->name }}
-                </p>
-            </div>
-        </div>
-    </div>
 @stop
