@@ -31,8 +31,13 @@ class Permission
 			if($uri_arr[1] == 'admin'){
 				if(count($uri_arr) >= 3){
 					if($uri_arr[2] == 'department'){
+						if(!PermissionManager::hasPermission('department')){
+							$request->session()->flash('notice_message','对不起, 您没有此模块的权限');
+							$request->session()->flash('notice_status','danger');
+							return redirect()->route('admin.index');
+						}
 						if(isset($request->department_id)){
-							if(!PermissionManager::hasDepartmentPermission($request,$request->department_id)){
+							if(!PermissionManager::hasPermission('department',"r",$request->department_id)){
 								$request->session()->flash('notice_message','您没有该部门的权限');
 								$request->session()->flash('notice_status','danger');
 								return redirect()->route('admin.department.index');

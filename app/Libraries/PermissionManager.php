@@ -8,7 +8,6 @@
 
 namespace App\Libraries;
 
-
 use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -103,32 +102,96 @@ class PermissionManager
 		return $curd_permission;
 	}
 
-	static public function hasDepartmentPermission($request,$department_id){
-		if(Auth::check()){
+//	static public function hasDepartmentPermission($request,$department_id){
+//		if(Auth::check()){
+//
+//			//超级管理员
+//			if($request->session()->get('permission')['super_admin']){
+//				return true;
+//			}
+//
+//			$departments = [];
+//			$departments_from_permission = array_keys($request->session()->get('permission')['department']);
+//
+//			foreach($departments_from_permission as $id){
+//
+//				$department = Department::where('id',$id)->first();
+//				$sub_departments = Department::where('code','like',$department->code."%")->get();
+//				foreach ($sub_departments as $sub_department){
+//					array_push($departments,$sub_department->id);
+//				}
+//			}
+//
+//			if(in_array($department_id,$departments)){
+//				return true;
+//			}
+//
+//		}
+//		return false;
+//	}
 
-			//超级管理员
-			if($request->session()->get('permission')['super_admin']){
-				return true;
-			}
+	// 获取登录用户管辖的编辑室(type=3),返回code数组
+	static public function getAuthorizedDepartments($type){
+		if (self::isSuperAdmin()) {
+			return Department::where('type', $type)->get();
+		}
+		return [];
+	}
 
-			$departments = [];
-			$departments_from_permission = $request->session()->get('permission')['department'];
-			foreach($departments_from_permission as $id){
+	// 获取登录用户管辖的省、直辖市、自治州,返回id数组
+	static public function getAuthorizedProvinces(){}
 
-				$department = Department::where('id',$id)->first();
-				$sub_departments = Department::where('code','like',$department->code."%")->get();
-				foreach ($sub_departments as $sub_department){
-					array_push($departments,$sub_department->id);
-				}
-			}
-
-			Log::info($departments);
-
-			if(in_array($department_id,$departments)){
-				return true;
-			}
-
+	static public function hasPermission($entity,$operation="",$entity_id = null){
+		switch ($entity){
+			case 'book':
+				return self::hasBookPermission($operation,$entity_id);
+			case 'bookreq':
+				return self::hasBookReqPermission($operation,$entity_id);
+			case 'user':
+				return self::hasUserPermission($operation);
+			case 'department':
+				return self::hasDepartmentPermission($operation,$entity_id);
+			default:
+				break;
 		}
 		return false;
 	}
+
+	// 判断登录用户是否对某本书有操作权限。
+	static private function hasBookPermission($operation,$book_id){
+		if(self::isSuperAdmin())
+			return true;
+		return false;
+	}
+
+	static private function hasBookReqPermission($operation,$bookreq_id){
+		if(self::isSuperAdmin())
+			return true;
+		return false;
+	}
+
+	static private function hasDepartmentPermission($operation,$department_code){
+		if(self::isSuperAdmin())
+			return true;
+		return false;
+	}
+
+	static private function hasUserPermission($operation){
+		if(self::isSuperAdmin())
+			return true;
+		return false;
+	}
+
+	//判断登录用户是否是超级用户
+	static public function isSuperAdmin(){
+		if(!empty(session('permission'))){
+			if(session('permission')['super_admin'] == 1)
+				return 1;
+		}
+		return 0;
+	}
+
+	//获取登录用户的身份: SUPER_ADMIN|DEPARTMENT_ADMIN|REPRESENTATIVE
+	static public function getAdminIdentity(){}
+
 }

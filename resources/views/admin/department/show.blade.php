@@ -9,11 +9,10 @@
     <hr>
     @foreach($offices as $office)
         @if($office->type == 2)
+
             <button class="btn btn-primary" style="margin:5px;" data-toggle="modal" data-target="#eddit-office-{{ $office->id }}" >
                 <span>{{ $office->code }}-{{$office->name}}</span>
             </button>
-
-
             <div class="modal fade bs-example-modal-sm" id="eddit-office-{{ $office->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteOfficeLable" style="margin-top: 200px">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
@@ -22,9 +21,9 @@
                             <h4 class="modal-title" id="deleteOfficeLable">{{ $office->code }}-{{ $office->name }}</h4>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('admin.office.delete',['department_id'=>$department->id]) }}" method="post">
+                            <form action="{{ route('admin.office.delete',['department_code'=>$department->code]) }}" method="post">
                                 {{ csrf_field() }}
-                                <input type="text" name="office-id" value="{{ $office->id }}" hidden>
+                                <input type="text" name="office-code" value="{{ $office->code }}" hidden>
                                 <input type="submit" class="btn btn-danger" value="删除"/>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             </form>
@@ -41,19 +40,17 @@
             <button class="btn btn-default" style="margin:5px;" data-toggle="modal" data-target="#eddit-office-{{ $office->id }}" >
                 <span>{{ $office->code }}-{{$office->name}}</span>
             </button>
-
-
             <div class="modal fade bs-example-modal-sm" id="eddit-office-{{ $office->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteOfficeLable" style="margin-top: 200px">
                 <div class="modal-dialog modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="deleteOfficeLable">编辑室{{ $office->code }}-{{ $office->name }}</h4>
+                            <h4 class="modal-title" id="deleteOfficeLable">{{ $office->code }}-{{ $office->name }}</h4>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('admin.office.delete',['department_id'=>$department->id]) }}" method="post">
+                            <form action="{{ route('admin.office.delete',['department_code'=>$department->code]) }}" method="post">
                                 {{ csrf_field() }}
-                                <input type="text" name="office-id" value="{{ $office->id }}" hidden>
+                                <input type="text" name="office-code" value="{{ $office->code }}" hidden>
                                 <input type="submit" class="btn btn-danger" value="删除"/>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             </form>
@@ -80,7 +77,7 @@
                 <div class="modal-body">
                     <form action="{{ route('admin.department.create') }}" method="post" class="form-horizontal" >
                         {{ csrf_field() }}
-                        <input type="text" name="department-id" value="{{ $department->id }}" hidden>
+                        <input type="text" name="department-code" value="{{ $department->code }}" hidden>
                         <div class="form-group">
                             <label for="office-code" class="col-lg-2 control-label">编号</label>
                             <div class="col-lg-10">
@@ -141,7 +138,7 @@
                     <h4 class="modal-title" id="addOfficeLabel">编辑分社信息</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.department.update',['department-id'=>$department->id])}}" method="post" class="form-horizontal" >
+                    <form action="{{ route('admin.department.update',['department-code'=>$department->code])}}" method="post" class="form-horizontal" >
                         {{ csrf_field() }}
                         <div class="form-group">
                             <label for="department-code" class="col-lg-2 control-label">编号</label>
