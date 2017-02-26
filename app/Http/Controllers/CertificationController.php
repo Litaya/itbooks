@@ -41,7 +41,7 @@ class CertificationController extends Controller
                 $selection = "none";
         }
         else {
-            $unfin_cert = Certification::where("user_id", "=", $user->id)->and("status", "=", "0")->get();
+            $unfin_cert = Certification::where("user_id", "=", $user->id)->where("status", "=", "0")->get();
             if(count($unfin_cert)>0)
                 $selection = "exist";
         }
