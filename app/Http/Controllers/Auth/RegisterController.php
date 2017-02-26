@@ -64,7 +64,7 @@ class RegisterController extends Controller
     {
         return User::create([
             'openid' => "null_open_id",
-            'permission_string' => "BROWSE|BOOKREQ",
+            'permission_string' => "",
             'certificate_as' => "NOBODY",
             'information_id' => 0,
             'username' => $data['name'],
