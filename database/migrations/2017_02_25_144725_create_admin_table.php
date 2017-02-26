@@ -15,6 +15,7 @@ class CreateAdminTable extends Migration
     {
         Schema::create('admin',function(Blueprint $table){
         	$table->unsignedInteger('id');
+	        $table->string('username',12)->default('');
 	        $table->string('permission_string', 128)->default('');
 	        $table->string('certificate_as', 32)->default('');
         });

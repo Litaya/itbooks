@@ -15,8 +15,10 @@ require('laravel-elixir-vue');
 
 elixir(function(mix){
     mix.sass('app.scss')
-        .sass('./resources/assets/sass/admin.scss','public/css/admin.css')
+        .sass(
+            ['./resources/assets/sass/admin.scss'], 'public/css/admin.css')
         .webpack('app.js')
         .scripts(['jquery.js','bootstrap.js']);
+        //.scripts(['jquery.multi-select.js'],'jquery-plugin.js') ;
     //mix.compass();
 });

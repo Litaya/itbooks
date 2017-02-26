@@ -16,26 +16,6 @@ class DepartmentController extends Controller
 		$departments = PermissionManager::getAuthorizedDepartments(1);
 		$orgnizations= []; //事业部
 		$offices     = []; //编辑室
-//		if(PermissionManager::isSuperAdmin()){
-//			$departments = Department::where('type',1)->get();
-//		}else{
-//			$valid_departments =Department::whereIn('id',array_keys($request->session()->get('permission')['department']))->get();
-//			foreach ($valid_departments as $department){
-//				switch(Department::getDepartmentType($department->code)){
-//					case 1:
-//						array_push($departments,Department::where('code',$department->code)->first());
-//						break;
-//					case 2:
-//						array_push($orgnizations,Department::where('code',$department->code)->first());
-//						break;
-//					case 3:
-//						array_push($offices,Department::where('code',$department->code)->first());
-//						break;
-//					default:
-//						break;
-//				}
-//			}
-//		}
 		return view('admin.department.index',compact('departments','orgnizations','offices'));
 	}
 
