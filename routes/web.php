@@ -36,8 +36,7 @@ Route::group(["prefix"=>"bookreq"], function(){
 	Route::get("create/{book_id}", "BookRequestController@create")->name("bookreq.create");
 	Route::get("{id}", "BookRequestController@show")->name("bookreq.show");
 	Route::post("store", "BookRequestController@store")->name("bookreq.store");
-	Route::delete("destroy", "BookRequestController@destroy")->name("bookreq.destroy"); // Somehow I made BookRequestAdminCtrler used this. 
-																						// Should it be fixed?
+	Route::delete("destroy", "BookRequestController@destroy")->name("bookreq.destroy");
 	// Users do not have the access to edit/update an book request;
 });
 
@@ -47,7 +46,7 @@ Route::resource('cert', 'CertificationController');
 
 Route::get('/', function () {
 	return view('welcome',['message'=>'欢迎来到书圈!']);
-});
+})->name('index');
 Route::get('/errors',"PermissionController@user_permission_error")->name('errors.index');
 
 Route::get('/home', 'HomeController@index');

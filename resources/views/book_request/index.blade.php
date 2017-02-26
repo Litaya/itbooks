@@ -29,12 +29,13 @@
                         <td>
                         <div class="row">
                             <div class="col-md-6">
-                                <a href="{{route('bookreq.show', $bookreq->id)}}">详情</a>
+                                <a href="{{route('bookreq.show', $bookreq->id)}}">
+                                <button class="btn btn-default btn-xs">详情</button></a>
                             </div>
                             <!-- IF HAS DELETE PERMISSION -->
                             <div class="col-md-6">
                                 {!! Form::open(['route'=>['bookreq.destroy', $bookreq->id], 'method'=>'DELETE']) !!}
-                                {!! Form::submit('Delete', ['class'=>'btn btn-danger btn-xs']) !!}
+                                {!! Form::submit('删除', ['class'=>'btn btn-danger btn-xs']) !!}
                                 {!! Form::close() !!}
                             </div>
                             <!-- END IF HAS DELETE PERMISSION -->
