@@ -3,6 +3,7 @@
 /vendor
 /.idea
 /database/sqls/script.sql
+/storage/fileupload
 Homestead.json
 Homestead.yaml
 /composer.lock

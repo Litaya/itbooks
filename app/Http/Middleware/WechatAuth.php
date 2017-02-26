@@ -24,8 +24,6 @@ class WechatAuth
 		    if (!empty($user) && !Auth::check()){
 		    	Auth::login($user);
 			    $request->session()->put('permission',PermissionManager::resolve($user->permission_string));
-
-			    Log::info($request->session()->get('permission'));
 		    }
 	    }
         return $next($request);
