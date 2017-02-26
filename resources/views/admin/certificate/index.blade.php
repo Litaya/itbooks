@@ -1,6 +1,6 @@
 @extends('admin.layouts.frame')
 
-@section('title', '样书申请管理')
+@section('title', '用户认证管理')
 
 @section('content')
 
@@ -14,7 +14,7 @@
                         <th>用户ID</th>
                         <th>申请角色</th>
                         <th>状态</th>
-                        <th></th>
+                        <th width="30%"></th>
                     </tr>
                 </thead>
                 <tbody>

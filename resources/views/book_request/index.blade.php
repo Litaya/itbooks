@@ -9,10 +9,10 @@
                 <table class="table"> 
                 <thead>
                     <tr>
-                        <th>BookId</th>
-                        <th>Status</th>
-                        <th>Message</th>
-                        <th></th>
+                        <th style="width: 35%">图书名</th>
+                        <th>申请状态</th>
+                        <th>发起日期</th>
+                        <th style="width: 25%"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,9 +23,9 @@
                         {{ csrf_field() }}
                     </form>
                     <tr>
-                        <td>{{$bookreq->book_id}}</td>
-                        <td>{{$bookreq->status}}</td>
-                        <td>{{$bookreq->message}}</td>
+                        <td>{{$bookreq->book->name}}</td>
+                        <td>{{$bookreq->status==0?"审核中":($bookreq->status==1?"通过":"未通过")}}</td>
+                        <td>{{date('Y-m-d', strtotime($bookreq->created_at))}}</td>
                         <td>
                         <div class="row">
                             <div class="col-md-6">

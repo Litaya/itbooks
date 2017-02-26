@@ -60,6 +60,7 @@ class BookRequestController extends Controller
         $req->user_id = Auth::id();
         $req->book_id = $request->book_id;
         $req->address = $request->address;
+        $req->district_id = 0;
         $req->phone = $request->phone;
         $req->receiver = $request->receiver;
         $req->message = $request->message;

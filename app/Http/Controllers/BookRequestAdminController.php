@@ -40,4 +40,26 @@ class BookRequestAdminController extends Controller
 
         return redirect()->route("admin.bookreq.index");
     }
+
+    public function reject($id){
+        $bookreq = BookRequest::find($id);
+        if($bookreq->status == 0){
+            $bookreq->status = 2;
+            $bookreq->update();
+            Session::flash('success', '您拒绝了一项样书申请');
+        }
+        else
+            Session::flash('warning', '此申请已经被审批过');
+
+        return redirect()->route("admin.bookreq.index");
+    }
+
+    public function destroy($id){
+        $req = BookRequest::find($id);
+        $req->delete();
+
+        Session::flash('success', '您删除了一个样书申请');
+        
+        return redirect()->route('bookreq.index');
+    }
 }

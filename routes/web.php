@@ -18,7 +18,7 @@ Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("
 /* get image from storage */
 Route::get('image/{src?}', function ($src){
     return Image::make(storage_path($src))->response();
-})->where('src', '(.*)');
+})->where('src', '(.*)')->name('image');
 
 /* book module for users */
 Route::group(["prefix"=>"book"], function(){
@@ -31,6 +31,7 @@ Route::group(["prefix"=>"book"], function(){
 Route::group(["prefix"=>"bookreq"], function(){
 	Route::get("/", "BookRequestController@index")->name("bookreq.index");
 	Route::get("create/{book_id}", "BookRequestController@create")->name("bookreq.create");
+	Route::get("{id}", "BookRequestController@show")->name("bookreq.show");
 	Route::post("store", "BookRequestController@store")->name("bookreq.store");
 	Route::delete("destroy", "BookRequestController@destroy")->name("bookreq.destroy"); // Somehow I made BookRequestAdminCtrler used this. 
 																						// Should it be fixed?
@@ -73,7 +74,9 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
 	Route::get('bookreq', 'BookRequestAdminController@getIndex')->name('admin.bookreq.index');
 	Route::get('bookreq/{id}', 'BookRequestAdminController@show')->name('admin.bookreq.show');
-	Route::post('bookreq/pass/{id}', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
+	Route::post('bookreq/{id}/pass', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
+	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
+	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
 
 	Route::get('cert', 'CertificationAdminController@index')->name('admin.cert.index');
 	Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');

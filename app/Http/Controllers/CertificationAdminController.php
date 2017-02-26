@@ -24,8 +24,9 @@ class CertificationAdminController extends Controller
         return view("admin.certificate.index")->withCerts($open_certs);
     }
 
-    public function show(){
-        // nothing here by now
+    public function show($id){
+        $cert = Certification::find($id);
+        return view('admin.certificate.show')->withCert($cert);
     }
 
 

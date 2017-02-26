@@ -45,7 +45,7 @@
             <p>类别: {{$book->type==0?"其他图书":($book->type==1?"教辅":"非教辅")}}</p>
             <hr>
             <p>出版号: {{$book->product_number}}</p>
-            <p>出版时间: {{$book->publish_time}}</p>
+            <p>出版时间: {{date('Y-m-d', strtotime($book->publish_time))}}</p>
             <p>编辑: {{$book->editor_name}}</p>
             <hr> 
             <a href="{{route('admin.book.edit', $book->id)}}"><button class="btn btn-primary btn-md">修改</button></a>

@@ -97,6 +97,8 @@ class CertificationController extends Controller
         $unfin_cert = Certification::where("user_id", "=", $user->id)->where("status", "=", 0)->get();
         if(count($unfin_cert)==0){
             $cert = new Certification;
+            $cert->realname = $request->realname;
+            $cert->id_number = $request->id_number;
             $cert->cert_name = strtoupper($request->id_type);
             $cert->user_id = $user->id;
             $cert->status = 0;
@@ -151,6 +153,8 @@ class CertificationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $c = Certification::find($id);
+        $c->delete();
+        return redirect()->route('index');
     }
 }

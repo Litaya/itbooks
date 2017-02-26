@@ -11,23 +11,18 @@
                 <table class="table"> 
                 <thead>
                     <tr>
-                        <th>书名</th>
+                        <th style="width: 35%">书名</th>
                         <th>状态</th>
                         <th>留言</th>
-                        <th></th>
+                        <th style="width: 20%"></th>
                     </tr>
                 </thead>
                 <tbody>
                 @foreach($bookreqs as $bookreq)
-                    <form id="remove-form-{{$bookreq->id}}" action="{{ route('bookreq.destroy', $bookreq->id) }}" 
-                        method="delete" style="display: none;">
-                        <input type="hidden" name="method" value="DELETE">
-                        {{ csrf_field() }}
-                    </form>
                     <tr>
-                        <td>{{$bookreq->book_id}}</td>
+                        <td>{{$bookreq->book->name}}</td>
                         <td>{{$bookreq->status==0?"待审核":($bookreq->status==1?"通过":"未通过")}}</td>
-                        <td>{{$bookreq->message}}</td>
+                        <td>{{mb_strlen($bookreq->message)>30?mb_substr($bookreq->message, 0, 27)."...":$bookreq->message}}</td>
                         <td>
                         <div class="row">
                             <div class="col-md-2">
@@ -36,16 +31,23 @@
                                 </a>
                             </div>
                             <!-- IF HAS PASS PERMISSION -->
+                            @if($bookreq->status==0)
                             <div class="col-md-2">
                                 {!! Form::open(['route'=>['admin.bookreq.pass', $bookreq->id], 'method'=>'POST']) !!}
                                 {!! Form::submit('通过', ['class'=>'btn btn-success btn-xs']) !!}
                                 {!! Form::close() !!}
                             </div>
                             <!-- END IF HAS PASS PERMISSION -->
+                            <div class="col-md-2">
+                                {!! Form::open(['route'=>['admin.bookreq.reject', $bookreq->id], 'method'=>'POST']) !!}
+                                {!! Form::submit('拒绝', ['class'=>'btn btn-danger btn-xs']) !!}
+                                {!! Form::close() !!}
+                            </div>
+                            @endif
                             <!-- IF HAS DELETE PERMISSION -->
                             <div class="col-md-2">
-                                {!! Form::open(['route'=>['bookreq.destroy', $bookreq->id], 'method'=>'DELETE']) !!}
-                                {!! Form::submit('删除', ['class'=>'btn btn-danger btn-xs']) !!}
+                                {!! Form::open(['route'=>['admin.bookreq.destroy', $bookreq->id], 'method'=>'DELETE']) !!}
+                                {!! Form::submit('删除', ['class'=>'btn btn-default btn-xs']) !!}
                                 {!! Form::close() !!}
                             </div>
                             <!-- END IF HAS DELETE PERMISSION -->
