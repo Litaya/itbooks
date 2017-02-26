@@ -88,9 +88,14 @@ class WechatMessageHandler{
 		$reply = '';
         $apply_url = 'http://www.baidu.com';
 		//$apply_url = url('/user/teacher/apply')."?openid=$openid";
+		$bookreq_url     = url('/book')."?openid=$openid";
+		$certificate_url = url('/cert/create')."?openid=$openid";
 		switch ($key){
-			case 'teacher_signup':
-				$reply = "<a href='$apply_url'>教师用户点此申请</a>";
+			case 'bookreq':
+				$reply = "<a href='$bookreq_url'>点此查看可申请书籍</a>";
+				break;
+			case 'certificate':
+				$reply = "<a href='$certificate_url'>点此进行身份认证</a>";
 				break;
 			default:
                 $reply = "";
