@@ -66,7 +66,7 @@ class WechatMessageHandler{
 				'username'=>$wechat_user->nickname,
 				'openid'=>$open_id,
 				'gender'=>$wechat_user->sex,
-				'subscribe'=>1,
+				'subscribed'=>1,
 				'headimgurl'=>$wechat_user->headimgurl,
 				'source'=>'wechat'
 			]);
