@@ -9,6 +9,9 @@
 </head>
 
 <body>
+<script src="/js/app.js"></script>
+<script src="/js/all.js"></script>
+
 @include('admin.layouts._header')
 <div class="container">
     <div class="col-lg-2" id="side-bar">
@@ -19,7 +22,6 @@
         @yield('content')
     </div>
 </div>
-<script src="/js/app.js"></script>
 
 </body>
 

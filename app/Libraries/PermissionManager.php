@@ -8,6 +8,7 @@
 
 namespace App\Libraries;
 
+use App\Models\Book;
 use App\Models\Department;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -131,7 +132,7 @@ class PermissionManager
 //	}
 
 	// 获取登录用户管辖的编辑室(type=3),返回code数组
-	static public function getAuthorizedDepartments($type){
+	static public function getAuthorizedDepartments($type,$department_code=""){
 		if (self::isSuperAdmin()) {
 			return Department::where('type', $type)->get();
 		}
@@ -154,25 +155,54 @@ class PermissionManager
 			default:
 				break;
 		}
-		return false;
+		return true;
 	}
 
 	// 判断登录用户是否对某本书有操作权限。
 	static private function hasBookPermission($operation,$book_id){
-		if(self::isSuperAdmin())
-			return true;
+		switch (self::getAdminIdentity()) {
+			case 'SUPER_ADMIN':
+				return true;
+			case 'DEPARTMENT_ADMIN':
+				return true;
+			case 'REPRESENTATIVE':
+				if(!empty($operation)){
+					$book = Book::where('id',$book_id)->first();
+					$district_id = $book->district_id;
+
+					return false;
+				}
+				return true;
+			default:
+				break;
+		}
 		return false;
 	}
 
 	static private function hasBookReqPermission($operation,$bookreq_id){
-		if(self::isSuperAdmin())
-			return true;
+		switch (self::getAdminIdentity()) {
+			case 'SUPER_ADMIN':
+				return true;
+			case 'DEPARTMENT_ADMIN':
+				return true;
+			case 'REPRESENTATIVE':
+				if(!empty($operation) && strstr('cud',$operation)){
+					return false;
+				}
+				return true;
+			default:
+				break;
+		}
 		return false;
 	}
 
 	static private function hasDepartmentPermission($operation,$department_code){
-		if(self::isSuperAdmin())
-			return true;
+		switch (self::getAdminIdentity()) {
+			case 'SUPER_ADMIN':
+				return true;
+			default:
+				break;
+		}
 		return false;
 	}
 
@@ -192,6 +222,36 @@ class PermissionManager
 	}
 
 	//获取登录用户的身份: SUPER_ADMIN|DEPARTMENT_ADMIN|REPRESENTATIVE
-	static public function getAdminIdentity(){}
+	static public function getAdminIdentity(){
+		if (self::isSuperAdmin()){
+			return 'SUPER_ADMIN';
+		}
+		$permission = session('permission');
+		if(in_array('book',$permission)){
+			if(!empty($permission['book']['department']))
+				return 'DEPARTMENT_ADMIN';
+			if(!empty($permission['book']['district']))
+				return 'REPRESENTATIVE';
+		}
+		return 'UNKNOW';
+	}
+
+	static public function getAdminModules(){
+		$modules = [];
+		switch (self::getAdminIdentity()){
+			case 'SUPER_ADMIN':
+				$modules = ['BOOK','DEPARTMENT','USER','BOOKREQ'];
+				break;
+			case 'DEPARTMENT_ADMIN':
+				$modules = ['BOOK','BOOKREQ'];
+				break;
+			case 'REPRESENTATIVE':
+				$modules = ['BOOK','BOOKREQ'];
+				break;
+			default:
+				break;
+		}
+		return $modules;
+	}
 
 }

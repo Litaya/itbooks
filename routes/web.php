@@ -96,6 +96,8 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	 */
 	Route::group(['prefix'=>'user'],function (){
 		Route::get('/', 'Admin\AdminUserController@index')->name("admin.user.index");
+
+		Route::post('/create','Admin\AdminUserController@create')->name('admin.user.create');
 	});
 
 	Route::group(['prefix'=>'department'],function (){
