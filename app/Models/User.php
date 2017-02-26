@@ -45,4 +45,8 @@ class User extends Authenticatable
 	public function bookRequests(){
 		return $this->hasMany('App\Models\BookRequest', 'user_id', 'id');
 	}
+
+	public function addDepartmentAdmin(){}
+
+	public function addRepresentative(){}
 }

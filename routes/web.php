@@ -11,6 +11,9 @@
 |
 */
 
+//Route::get('/test',function (){
+//	return \App\Libraries\PermissionManager::isSuperAdmin();
+//});
 
 Route::resource('resource', 'ResourceController');
 Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("resource.download"); // TODO: 增加支付积分逻辑，增加支付路由(getDownload)，编写下载逻辑
@@ -84,7 +87,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('cert/{id}/reject', 'CertificationAdminController@reject')->name('admin.cert.reject');
 	
 	Route::get('book', 'BookAdminController@index')->name('admin.book.index');
-	Route::post('book', 'BookAdminController@store')->name('admin.book.store');
+	Route::post('book', 'BookAdminContrsoller@store')->name('admin.book.store');
 	Route::get('book/create', 'BookAdminController@create')->name('admin.book.create');
 	Route::get('book/{id}', 'BookAdminController@show')->name('admin.book.show');
 	Route::put('book/{id}', 'BookAdminController@update')->name('admin.book.update');
@@ -100,11 +103,11 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
 	Route::group(['prefix'=>'department'],function (){
 		Route::get('/','Admin\DepartmentController@index')->name('admin.department.index');
-		Route::get('/{department_id}','Admin\DepartmentController@showDepartment')->name('admin.department.show');
+		Route::get('/{department_code}','Admin\DepartmentController@showDepartment')->name('admin.department.show');
 
 		Route::post('/create','Admin\DepartmentController@createDepartment')->name('admin.department.create');
-		Route::post('/{department_id}/update','Admin\DepartmentController@updateDepartment')->name('admin.department.update');
-		Route::post('/{department_id}/office/delete','Admin\DepartmentController@deleteOffice')->name('admin.office.delete');
+		Route::post('/{department_code}/update','Admin\DepartmentController@updateDepartment')->name('admin.department.update');
+		Route::post('/{department_code}/office/delete','Admin\DepartmentController@deleteOffice')->name('admin.office.delete');
 	});
 });
 

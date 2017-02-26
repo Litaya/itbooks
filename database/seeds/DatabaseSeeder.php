@@ -12,14 +12,50 @@ class DatabaseSeeder extends Seeder
 	public function run()
 	{
 		DB::table('user')->insert([
+			'id'=>1,
 			'openid' => "o89Rxt6-8Ckqv9I_mXiYWXoqhz3k",
-			'username' => "我是测试用户",
+			'username' => "超级管理员",
 			'gender' => 2,
 			'permission_string' => 'all',
 			'headimgurl' => "http://wx.qlogo.cn/mmopen/hDHfY6iauFKeb08Nu1BL1NvqUzInxE3okLL8iauXUBkNu0tHAz9W1VH9NowZB4KCuw8gIXrFdvWq98Iia6RFwS7RWMg8gVKibdicp/0",
-			'email' => 'Zhangxr1221'.'@gmail.com',
+			'email' => 'super'.'@gmail.com',
 			'email_status' => 1,
 			'password' => bcrypt('secret')
 		]);
+
+		DB::table('admin')->insert([
+			'id'=>1,
+			'permission_string' => 'all',
+			'certificate_as'    => 'SUPER_ADMIN'
+		]);
+
+		DB::table('user')->insert([
+			'openid' => "o89Rxt6-8Ckqv9I_mXiYWXoqhz2k",
+			'username' => "普通用户",
+			'gender' => 2,
+			'permission_string' => '',
+			'headimgurl' => "http://wx.qlogo.cn/mmopen/hDHfY6iauFKeb08Nu1BL1NvqUzInxE3okLL8iauXUBkNu0tHAz9W1VH9NowZB4KCuw8gIXrFdvWq98Iia6RFwS7RWMg8gVKibdicp/0",
+			'email' => 'user'.'@gmail.com',
+			'email_status' => 1,
+			'password' => bcrypt('secret')
+		]);
+
+		DB::table('user')->insert([
+			'id'=>3,
+			'openid' => "o89Rxt6-8Ckqv9I_mXiYWXoqhz1k",
+			'username' => "部门管理员#1",
+			'gender' => 1,
+			'permission_string' => 'book_curd_d1|bookreq_curd_d1',
+			'headimgurl' => "http://wx.qlogo.cn/mmopen/hDHfY6iauFKeb08Nu1BL1NvqUzInxE3okLL8iauXUBkNu0tHAz9W1VH9NowZB4KCuw8gIXrFdvWq98Iia6RFwS7RWMg8gVKibdicp/0",
+			'email' => 'department'.'@gmail.com',
+			'email_status' => 1,
+			'password' => bcrypt('secret')
+		]);
+		DB::table('admin')->insert([
+			'id'=>3,
+			'permission_string' => 'book_curd_d1|bookreq_curd_d1',
+			'certificate_as'    => 'DEPARTMENT_ADMIN'
+		]);
+
 	}
 }
