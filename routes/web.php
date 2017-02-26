@@ -86,14 +86,27 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('cert/{id}/pass', 'CertificationAdminController@pass')->name('admin.cert.pass');
 	Route::post('cert/{id}/reject', 'CertificationAdminController@reject')->name('admin.cert.reject');
 	
-	Route::get('book', 'BookAdminController@index')->name('admin.book.index');
-	Route::post('book', 'BookAdminContrsoller@store')->name('admin.book.store');
-	Route::get('book/create', 'BookAdminController@create')->name('admin.book.create');
-	Route::get('book/{id}', 'BookAdminController@show')->name('admin.book.show');
-	Route::put('book/{id}', 'BookAdminController@update')->name('admin.book.update');
-	Route::delete('book/{id}', 'BookAdminController@destroy')->name('admin.book.destroy');
-	Route::get('book/{id}/edit', 'BookAdminController@edit')->name('admin.book.edit');
-	
+	Route::group(['prefix'=>'book'], function(){
+		Route::get('/', 'BookAdminController@index')->name('admin.book.index');
+		Route::post('/', 'BookAdminController@store')->name('admin.book.store');
+		Route::get('create', 'BookAdminController@create')->name('admin.book.create');
+		Route::get('{id}', 'BookAdminController@show')->name('admin.book.show');
+		Route::put('{id}', 'BookAdminController@update')->name('admin.book.update');
+		Route::delete('{id}', 'BookAdminController@destroy')->name('admin.book.destroy');
+		Route::get('{id}/edit', 'BookAdminController@edit')->name('admin.book.edit');
+	});
+
+	Route::group(['prefix'=>'resource'], function(){
+		Route::get('/', 'ResourceAdminController@index')->name('admin.resource.index');
+		Route::post('/', 'ResourceAdminController@store')->name('admin.resource.store');
+		Route::get('create', 'ResourceAdminController@create')->name('admin.resource.create');
+		Route::get('{id}', 'ResourceAdminController@show')->name('admin.resource.show');
+		Route::put('{id}', 'ResourceAdminController@update')->name('admin.resource.update');
+		Route::delete('{id}', 'ResourceAdminController@destroy')->name('admin.resource.destroy');
+		Route::get('{id}/edit', 'ResourceAdminController@edit')->name('admin.resource.edit');
+		Route::post('{id}/download', 'ResourceAdminController@postDownload')->name('admin.resource.download');
+	});
+
 	/*
 	 * user routes
 	 */

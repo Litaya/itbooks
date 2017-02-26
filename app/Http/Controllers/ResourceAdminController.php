@@ -3,9 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Book;
+use App\Models\Resource;
+
+use App\Helpers\FileHelper;
+
+use Auth;
+use Session;
+
 
 class ResourceAdminController extends Controller
 {
+
+    public function postDownload(Request $request){
+        return "页面未准备好 - 2017/02/24";
+        // 管理员下载资源不消耗积分
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +28,8 @@ class ResourceAdminController extends Controller
      */
     public function index()
     {
-        //
+        $resources = Resource::orderBy('id', 'desc')->paginate(20);
+        return view('admin.resource.index')->withResources($resources);
     }
 
     /**
@@ -23,7 +39,7 @@ class ResourceAdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.resource.create');
     }
 
     /**
@@ -34,7 +50,38 @@ class ResourceAdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            "file_upload" => "required",
+            "title" => "required|min:1|max:30",
+            "credit" => "required|integer",
+        ]);
+
+        $access_role = [];
+        if($request->role_author) array_push($access_role, 'AUTHOR');
+        if($request->role_teacher) array_push($access_role, 'TEACHER');
+        if($request->role_user) array_push($access_role, 'USER');
+
+        if(count($access_role) > 0){
+            $res = new Resource;
+            $res->title = $request->title;
+            $res->owner_user_id = Auth::id();
+            $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+            $res->access_role = implode('|', $access_role);
+            $res->description = $request->description;
+            $res->credit = $request->credit;
+            $res->type = ($request->file_upload)->getClientOriginalExtension();
+            if(!empty($request->book_id) and Book::find($requst->book_id))
+                $res->owner_book_id = $request->book_id;
+            $res->save();
+
+            Session::flash('success', '上传资源成功');
+        } else {
+            return redirect()->back()->withErrors(['用户角色至少勾选一项']);
+        }
+
+
+
+        return redirect()->route('admin.resource.show', $res->id);
     }
 
     /**
@@ -45,7 +92,8 @@ class ResourceAdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $res = Resource::find($id);
+        return view('admin.resource.show')->withResource($res);
     }
 
     /**
@@ -56,7 +104,8 @@ class ResourceAdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $res = Resource::find($id);
+        return view('admin.resource.edit')->withResource($res);
     }
 
     /**
@@ -68,7 +117,26 @@ class ResourceAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            "file_upload" => "required",
+            "title" => "required|min:1|max:30",
+            "credit" => "required|integer",
+        ]);
+
+        $res = Resource::find($id);
+        $res->owner_user_id = Auth::id();
+        $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+        $res->access_role = implode('|', $request->access_role);
+        $res->description = $request->description;
+        $res->credit = $request->credit;
+        $res->type = ($request.file_upload)->getClientOriginalExtension();
+        if(!empty($request->book_id) and Book::find($requst->book_id))
+            $res->owner_book_id = $request->book_id;
+        $res->update();
+            
+        Session::flash('success', '资源信息修改成功');
+
+        return redirect()->route('admin.resource.show', $res->id);
     }
 
     /**
@@ -79,6 +147,10 @@ class ResourceAdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $res = Resource::find($id);
+        $res->delete();
+        
+        Session::flash('success', '删除资源成功');
+        return redirect()->route('admin.resource.index');
     }
 }

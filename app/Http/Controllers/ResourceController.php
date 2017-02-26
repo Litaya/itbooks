@@ -27,7 +27,8 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        return view('resource.index');
+        $resources = Resource::orderBy('id', 'desc')->paginate(20);
+        return view('resource.index')->withResources($resources);
     }
 
     /**

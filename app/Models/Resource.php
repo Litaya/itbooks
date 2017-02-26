@@ -21,4 +21,12 @@ class Resource extends Model
         'created_at',
         'updated_at',
 	];
+
+    public function ownerUser(){
+        return $this->belongsTo('App\Models\User', 'owner_user_id', 'id');
+    }
+
+    public function ownerBook(){
+        return $this->belongsTo('App\Models\Book', 'owner_book_id', 'id');
+    }
 }
