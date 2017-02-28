@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUniqueKeyToDepartment extends Migration
+class AddMaxPersonToConference extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddUniqueKeyToDepartment extends Migration
      */
     public function up()
     {
-        Schema::table('department',function (Blueprint $table){
-        	// $table->unique('code');
+        Schema::table("conference", function(Blueprint $table){
+            $table->integer("max_person")->after("time");
         });
+        
     }
 
     /**
@@ -25,6 +26,8 @@ class AddUniqueKeyToDepartment extends Migration
      */
     public function down()
     {
-        //
+        Schema::table("conference", function(Blueprint $table){
+            $table->dropColumn("max_person");
+        });
     }
 }
