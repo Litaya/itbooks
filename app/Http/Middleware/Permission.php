@@ -18,10 +18,12 @@ class Permission
 	 */
 	public function handle($request, Closure $next)
 	{
+		$uri= $request->getRequestUri();
+        $uri_arr = explode('/',$uri);
+		if($uri_arr[1]=='image'){
+			return $next($request);
+		}
 		if(Auth::check()){
-			$uri= $request->getRequestUri();
-			$uri_arr = explode('/',$uri);
-
 			if($uri_arr[1]=='admin' ){
 				if(Auth::user()->permission_string == "" )
 					return redirect('/');

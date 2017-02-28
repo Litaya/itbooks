@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUniqueKeyToDepartment extends Migration
+class AddConferenceRegisterTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddUniqueKeyToDepartment extends Migration
      */
     public function up()
     {
-        Schema::table('department',function (Blueprint $table){
-        	// $table->unique('code');
+        Schema::create("conference_register", function(Blueprint $table){
+            $table->increments("id")->index();
+            $table->integer("user_id")->index();
+            $table->integer("conference_id")->index();
         });
     }
 
@@ -25,6 +27,6 @@ class AddUniqueKeyToDepartment extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop("conference_register");
     }
 }

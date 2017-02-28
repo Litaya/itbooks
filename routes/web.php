@@ -12,7 +12,7 @@
 */
 
 //Route::get('/test',function (){
-//	return \App\Libraries\PermissionManager::isSuperAdmin();
+//	return route('image',['src'=>'fileupload/public/bookreq.png']);
 //});
 
 Route::resource('resource', 'ResourceController');

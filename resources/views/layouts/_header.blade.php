@@ -28,7 +28,16 @@
           <ul class="dropdown-menu">
             <li><a href="#">个人资料</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">注销</a></li>
+            <li>
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                登出
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+             </li>
           </ul>
         </li>
       </ul>

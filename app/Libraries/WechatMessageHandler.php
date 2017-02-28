@@ -5,6 +5,7 @@ namespace App\Libraries;
 use App\Models\User;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Support\Facades\Log;
+use EasyWeChat\Message\News;
 
 class WechatMessageHandler{
 
@@ -86,19 +87,29 @@ class WechatMessageHandler{
 		$openid = $this->message->FromUserName;
 		$key = $this->message->EventKey;
 		$reply = '';
-        $apply_url = 'http://www.baidu.com';
-		//$apply_url = url('/user/teacher/apply')."?openid=$openid";
 		$bookreq_url     = url('/book')."?openid=$openid";
 		$certificate_url = url('/cert/create')."?openid=$openid";
 		switch ($key){
 			case 'bookreq':
-				$reply = "<a href='$bookreq_url'>点此查看可申请书籍</a>";
+				$news = new News([
+						'title'       => '申请样书',
+						'description' => "点此申请样书",
+						'url'         => $bookreq_url,
+						'image'       => route('image',['src'=>'public/bookreq.png']),
+				]);
+				$reply = $news;	
 				break;
 			case 'certificate':
-				$reply = "<a href='$certificate_url'>点此进行身份认证</a>";
+				$news = new News([
+                        'title'       => '身份认证',
+                        'description' => "点此认证您的身份",
+                        'url'         => $certificate_url,
+                        'image'       => route('image',['src'=>'public/cert.png']),
+                ]);
+				$reply = $news;
 				break;
 			default:
-                $reply = "";
+				$reply = "";
 				break;
 		}
 		return $reply;
