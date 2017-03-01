@@ -15,6 +15,13 @@
 //	return \App\Libraries\PermissionManager::isSuperAdmin();
 //});
 
+Route::group(['prefix'=>'conference'], function(){
+	Route::get('/', 'ConferenceController@index')->name('conference.index');
+	Route::get('{id}', 'ConferenceController@show')->name('conference.show');
+	Route::post('{id}/register', 'ConferenceController@postRegister')->name('conference.register');
+	Route::post('{id}/cancel', 'ConferenceController@postCancel')->name('conference.cancel');
+});
+
 Route::resource('resource', 'ResourceController');
 Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("resource.download"); // TODO: 增加支付积分逻辑，增加支付路由(getDownload)，编写下载逻辑
 
@@ -123,5 +130,18 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::post('/{department_code}/update','Admin\DepartmentController@updateDepartment')->name('admin.department.update');
 		Route::post('/{department_code}/office/delete','Admin\DepartmentController@deleteOffice')->name('admin.office.delete');
 	});
+
+	Route::group(['prefix'=>'conference'], function(){
+		Route::get('/', 'ConferenceAdminController@index')->name('admin.conference.index');
+		Route::post('/', 'ConferenceAdminController@store')->name('admin.conference.store');
+		Route::get('create', 'ConferenceAdminController@create')->name('admin.conference.create');
+		Route::get('{id}', 'ConferenceAdminController@show')->name('admin.conference.show');
+		Route::put('{id}', 'ConferenceAdminController@update')->name('admin.conference.update');
+		Route::delete('{id}', 'ConferenceAdminController@destroy')->name('admin.conference.destroy');
+		Route::get('{id}/edit', 'ConferenceAdminController@edit')->name('admin.conference.edit');
+	});
 });
 
+Route::get('test', function(){
+	return view('test');
+});
