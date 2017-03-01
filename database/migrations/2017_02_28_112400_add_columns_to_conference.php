@@ -16,7 +16,10 @@ class AddColumnsToConference extends Migration
         Schema::table('conference', function (Blueprint $table) {
             $table->timestamps();
             $table->date('time')->after('name');
-            $table->text('json')->after('description');
+            $table->string('location')->after('time');
+            $table->string('host')->after('location')->nullable();
+            $table->string('detail_url')->after('host')->nullable();
+            $table->text('json')->after('description')->nullable();
         });
     }
 
@@ -28,7 +31,7 @@ class AddColumnsToConference extends Migration
     public function down()
     {
         Schema::table('conference', function (Blueprint $table) {
-            $table->dropColumn(['time', 'json', 'created_at', 'updated_at']);
+            $table->dropColumn(['time', 'json', 'location', 'host', 'created_at', 'updated_at']);
         });
     }
 }

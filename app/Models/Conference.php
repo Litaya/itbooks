@@ -16,4 +16,8 @@ class Conference extends Model
         "created_at",
         "updated_at"
     ];
+
+    public function participants(){
+        return $this->hasMany('App\Models\ConferenceRegister', 'conference_id', 'id');
+    }
 }
