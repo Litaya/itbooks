@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <title> @yield('title') </title>
+    
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

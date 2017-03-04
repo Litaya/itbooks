@@ -1,5 +1,7 @@
 /node_modules
 /public/storage
+/public/fileupload
+/storage
 /vendor
 /.idea
 /database/sqls/script.sql
