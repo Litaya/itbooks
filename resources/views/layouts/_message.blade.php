@@ -1,15 +1,12 @@
-@if(isset($message))
-    <div class="panel panel-{{isset($status)?$status:'default'}}">
-        <div class="panel-body">
-            {{ $message }}
-            <p></p>
-            @if(isset($url))
-                <a href="{{ url($url) }}">点击此处 >></a>
-            @endif
+@if(Session::has('notice_message'))
+    <div class="col-lg-12">
+        <div class="panel panel-{{Session::has('notice_status')?Session::get('notice_status'):'default'}}">
+            <div class="panel-body">
+                {{ Session::get('notice_message') }}
+            </div>
         </div>
     </div>
 @endif
-
 
 @if(Session::has('success'))
     <div class="alert alert-success" role="alert">

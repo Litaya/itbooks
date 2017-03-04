@@ -22,4 +22,13 @@ class BookController extends Controller
         return view("book.show")->withBook(Book::find($id));
     }
 
+    /*
+     * for api
+     */
+    public function getBooksBySearch(Request $request,$search_string){
+	    $books = Book::where('isbn','like',"%$search_string%")
+		    ->orWhere('name','like',"%$search_string%")
+		    ->orWhere("authors","like","%$search_string%")->paginate(5);
+	    return \GuzzleHttp\json_encode($books);
+    }
 }

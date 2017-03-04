@@ -32,18 +32,6 @@ class DatabaseSeeder extends Seeder
 		]);
 
 		DB::table('user')->insert([
-			'openid' => "o89Rxt6-8Ckqv9I_mXiYWXoqhz2k",
-			'username' => "普通用户",
-			'gender' => 2,
-			'permission_string' => '',
-			'headimgurl' => "http://wx.qlogo.cn/mmopen/hDHfY6iauFKeb08Nu1BL1NvqUzInxE3okLL8iauXUBkNu0tHAz9W1VH9NowZB4KCuw8gIXrFdvWq98Iia6RFwS7RWMg8gVKibdicp/0",
-			'email' => 'user'.'@gmail.com',
-			'email_status' => 1,
-			'subscribed' => 1,
-			'password' => bcrypt('secret')
-		]);
-
-		DB::table('user')->insert([
 			'id'=>3,
 			'openid' => "o89Rxt6-8Ckqv9I_mXiYWXoqhz1k",
 			'username' => "部门管理员#1",
@@ -79,6 +67,33 @@ class DatabaseSeeder extends Seeder
 			'username' => '院校代表#1',
 			'permission_string' => 'book_r_p1|bookreq_r_p1',
 			'certificate_as'    => 'REPRESENTATIVE'
+		]);
+
+
+		DB::table('user')->insert([
+			'openid' => "o89Rxt6-8Ckqv9I_mXiYWXoqhz2k",
+			'username' => "普通用户",
+			'gender' => 2,
+			'permission_string' => '',
+			'headimgurl' => "http://wx.qlogo.cn/mmopen/hDHfY6iauFKeb08Nu1BL1NvqUzInxE3okLL8iauXUBkNu0tHAz9W1VH9NowZB4KCuw8gIXrFdvWq98Iia6RFwS7RWMg8gVKibdicp/0",
+			'email' => 'user'.'@gmail.com',
+			'email_status' => 1,
+			'subscribed' => 1,
+			'password' => bcrypt('secret')
+		]);
+
+
+		DB::table('user')->insert([
+			'openid' => "o89Rxt6-8Ckqv9I_mXiYWXoqhz2g",
+			'username' => "教师",
+			'gender' => 1,
+			'permission_string' => '',
+			'headimgurl' => "http://wx.qlogo.cn/mmopen/hDHfY6iauFKeb08Nu1BL1NvqUzInxE3okLL8iauXUBkNu0tHAz9W1VH9NowZB4KCuw8gIXrFdvWq98Iia6RFwS7RWMg8gVKibdicp/0",
+			'email' => 'teacher'.'@gmail.com',
+			'email_status' => 1,
+			'subscribed' => 1,
+			'password' => bcrypt('secret'),
+			'certificate_as' => "TEACHER"
 		]);
 	}
 }

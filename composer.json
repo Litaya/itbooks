@@ -10,7 +10,10 @@
         "laravelcollective/html": "^5.3.0",
         "overtrue/wechat": "^3.2",
         "intervention/image": "^2.3",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "guzzlehttp/guzzle": "^6.2",
+        "laravel/scout": "2.*",
+        "damiantw/laravel-scout-mysql-driver": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

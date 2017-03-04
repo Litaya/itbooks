@@ -1,0 +1,1 @@
+{{ $name }}, 您好, 请<a href="{{ route('email.certificate',['token'=>$token]) }}">点此链接</a>认证您的邮箱。

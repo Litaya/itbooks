@@ -23,10 +23,14 @@ class BookRequestController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index(Request $request){
+		return view('book_request.index');
+    }
+
+    public function record(Request $request)
     {
         $user = User::find($request->userId);
-        return view('book_request.index')->withUser($user);
+        return view('book_request.record')->withUser($user);
     }
 
     /**
@@ -70,7 +74,7 @@ class BookRequestController extends Controller
 
         Session::flash('success', '您的样书申请已经成功提交！');
         
-        return redirect()->route('bookreq.index');
+        return redirect()->route('bookreq.record');
     }
 
     /**
@@ -93,7 +97,7 @@ class BookRequestController extends Controller
      */
     public function edit($id)
     {
-        return redirect()->route('bookreq.index'); //样书申请表不提供修改功能
+        return redirect()->route('bookreq.record'); //样书申请表不提供修改功能
     }
 
     /**
@@ -105,7 +109,7 @@ class BookRequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return redirect()->route('bookreq.index'); //样书申请表不提供修改功能
+        return redirect()->route('bookreq.record'); //样书申请表不提供修改功能
     }
 
     /**
@@ -122,6 +126,6 @@ class BookRequestController extends Controller
 
         Session::flash('success', '您已经取消了对'.$bookname.'的样书申请');
         
-        return redirect()->route('bookreq.index');
+        return redirect()->route('bookreq.record');
     }
 }

@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <a href="{{route('bookreq.index')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
+        <a href="{{route('bookreq.record')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
     </div>
 
 @endsection

@@ -182,8 +182,11 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         // Image Service from image.intervention.io
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
 
+	    //全文检索
+		Laravel\Scout\ScoutServiceProvider::class,
+	    DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class
     ],
 
     /*
