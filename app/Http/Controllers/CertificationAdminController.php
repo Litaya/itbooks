@@ -26,6 +26,7 @@ class CertificationAdminController extends Controller
 
     public function show($id){
         $cert = Certification::find($id);
+        $cert->json_content = json_decode($cert->json_content, true);
         return view('admin.certificate.show')->withCert($cert);
     }
 
@@ -50,10 +51,12 @@ class CertificationAdminController extends Controller
         return redirect()->route("admin.cert.index");
     }
 
-    public function reject($id){
+    public function reject($id, Request $request){
         $cert = Certification::find($id);
+        $this->validate($request, ["message"=>"max:250"]);
         if($cert->status == 0){
             $cert->status = 2;
+            $cert->message = $request->message;
             $cert->update();
             Session::flash('success', "已拒绝申请");
         }

@@ -88,20 +88,50 @@ class CertificationController extends Controller
         $user = Auth::user();
         $this->validate($request, [
             "realname" => "required",
-            "id_number" => "required|alpha_dash",
+            // "id_number" => "required|alpha_dash",
+            "workplace" => "required",
             "id_type" => "required|in:author,teacher",
             "img_upload" => "required"
         ]);
+
+        if($request->id_type=="teacher"){
+            $this->validate($request, [
+                "course_name_1" => "required",
+                "number_stud_1" => "required|integer",
+            ]);
+        };
         
+        if($request->number_stud_2 && !$request->course_name_2)
+            return redirect()->back()->withErrors("请填写第二课程名称")->withInput();
+        if($request->number_stud_3 && !$request->course_name_3)
+            return redirect()->back()->withErrors("请填写第三课程名称")->withInput();
+        if(!$request->number_stud_2 && $request->course_name_2)
+            return redirect()->back()->withErrors("未填写第二课程学生人数")->withInput();
+        if(!$request->number_stud_3 && $request->course_name_3)
+            return redirect()->back()->withErrors("未填写第三课程学生人数")->withInput();
+
+
+        $data = [
+            "course_name_1" => $request->course_name_1,
+            "number_stud_1" => $request->number_stud_1,
+            "course_name_2" => $request->course_name_2,
+            "number_stud_2" => $request->number_stud_2,
+            "course_name_3" => $request->course_name_3,
+            "number_stud_3" => $request->number_stud_3,
+        ];
+
+        $jdata = json_encode($data);
         
         $unfin_cert = Certification::where("user_id", "=", $user->id)->where("status", "=", 0)->get();
         if(count($unfin_cert)==0){
             $cert = new Certification;
             $cert->realname = $request->realname;
-            $cert->id_number = $request->id_number;
+            // $cert->id_number = $request->id_number;
+            $cert->workplace = $request->workplace;
             $cert->cert_name = strtoupper($request->id_type);
             $cert->user_id = $user->id;
             $cert->status = 0;
+            $cert->json_content = $jdata;
             $cert->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
             $cert->save();
             Session::flash('success', '您的身份认证申请提交成功');

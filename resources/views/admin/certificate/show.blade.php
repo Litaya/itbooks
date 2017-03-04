@@ -11,8 +11,21 @@
                 <div class="row">
                     <div class="col-md-6">
                         <p>真实姓名: {{$cert->realname}}</p>
-                        <p>证件号: {{$cert->id_number}}</p>
+                        <p>工作单位: {{$cert->workplace}}</p>
                         <p>申请类型: {{$cert->cert_name=="TEACHER"?"教师":"作者"}}</p>
+                        @if($cert->cert_name == "TEACHER")
+                        <hr>
+                        <p>教学情况</p>
+                        <ol>
+                            @for($i = 1; $i <= 3; $i++)
+                            @if($cert->json_content["course_name_".$i])
+                            <li>{{$cert->json_content["course_name_".$i]}}, 学生人数 {{$cert->json_content["number_stud_".$i]}}</li>
+                            @endif
+                            @endfor
+                        </ol>
+                        @endif
+                        
+
                     </div>
                     <div class="col-md-6">
                         <p><strong>上传证件</strong></p>
@@ -27,13 +40,39 @@
                         {!! Form::close() !!}
                     </div>
                     <div class="col-md-5">
-                        {!! Form::open(["route"=>["admin.cert.reject", $cert->id], "method"=>"POST"]) !!}
-                        {{ Form::submit("拒绝", ["class"=>"btn btn-danger btn-block"]) }}
-                        {!! Form::close() !!}
+                            <button type="button"
+                                    class="btn btn-danger btn-block"
+                                    data-toggle="modal"
+                                    data-target="#register-modal">
+                                    拒绝
+                            </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+<div class="modal fade" id="register-modal"
+     tabindex="-1" role="dialog"
+     aria-labelledby="register-modal-label">
+     <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="register-modal-label">拒绝申请</h4>
+            </div>
+            <div class="modal-body">
+            
+            {!! Form::open(["route"=>["admin.cert.reject", $cert->id], "method"=>"POST"]) !!}
+            {{ Form::label("message", "拒绝理由:") }}
+            {{ Form::textarea("message", null, ["class"=>"form-control"]) }}
+            {{ Form::submit('确认', ['class'=>'btn btn-danger btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
+            {!! Form::close() !!}
+            </div>
+        </div>
+     </div>
+</div>
 
 @endsection
