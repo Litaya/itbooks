@@ -9,6 +9,7 @@ use App\Models\BookRequest;
 use App\Models\Book;
 
 use Illuminate\Support\Facades\Auth;    // to use Auth::id() and Auth::user()
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session; // to use Session::get()/set()/flash()
 
 class BookRequestController extends Controller
@@ -25,6 +26,42 @@ class BookRequestController extends Controller
 
     public function index(Request $request){
 		return view('book_request.index');
+    }
+
+    public function storeMultiple(Request $request){
+    	$this->validate($request,[
+			'book-ids' => 'required',
+		    'receiver' => 'required',
+		    'address'  => 'required',
+		    'phone'    => 'required|regex:/\+?[0-9\-]+/',
+		    'message'  => 'required'
+	    ]);
+
+	    $receiver = $request->get('receiver');
+	    $address  = $request->get('address');
+	    $phone    = $request->get('phone');
+		$message  = $request->get('message');
+
+	    $book_ids = $request->get('book-ids');
+	    foreach ($book_ids as $book_id){
+	    	$book_req = new BookRequest();
+		    $book_req->user_id  = Auth::id();
+		    $book_req->book_id  = $book_id;
+		    $book_req->address  = $address;
+		    $book_req->phone    = $phone;
+		    $book_req->receiver = $receiver;
+		    $book_req->district_id = 0;
+		    $book_req->message  = $message;
+
+	    	if($request->has("typeOf$book_id")){
+	    		$book_req->book_type = $request->get("typeOf$book_id");
+	    	}
+	    	$book_req->save();
+	    }
+	    $request->session()->flash('notice_status','success');
+	    $request->session()->flash('notice_message','申请成功');
+
+	    return redirect()->route('bookreq.record');
     }
 
     public function record(Request $request)
