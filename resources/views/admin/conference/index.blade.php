@@ -5,6 +5,9 @@
 @section('content')
 
     <div class="container">
+        <div class="col-md-2 pull-right">
+        <a href="{{route('admin.conference.create')}}"><button class="btn btn-default pull-right">新建会议</button></a>
+        </div>
         <div class="row">
             <div class="panel">
                 <table class="table">

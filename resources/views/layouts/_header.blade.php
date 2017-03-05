@@ -14,7 +14,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="{{Request::is('book*') ? "active":""}}"><a href="{{route('book.index')}}">图书</a></li>
+        <li class="{{(Request::is('book/*') or Request::is('book')) ? "active":""}}"><a href="{{route('book.index')}}">图书</a></li>
         <li class="{{Request::is('resource*') ? "active":""}}"><a href="{{route('resource.index')}}">资源</a></li>
         <li class="{{Request::is('bookreq*') ? "active":""}}"><a href="{{route('bookreq.record')}}">样书申请</a></li>
         <li class="{{Request::is('cert*') ? "active":""}}"><a href="{{route('cert.create')}}">认证</a></li>

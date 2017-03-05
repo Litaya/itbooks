@@ -5,6 +5,11 @@
 @section('content')
     <div class="container">
         <div class="row">
+        <div class="col-md-2 pull-right">
+        <a href="{{route('admin.resource.create')}}"><button class="btn btn-default pull-right">创建资源</button></a>
+        </div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <table class="table"> 
                 <thead>
