@@ -20,14 +20,15 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-		if($uri_arr[1]=='image'){
+		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail'){
 			return $next($request);
 		}
 		if(Auth::check()){
+			$user = Auth::user();
 			if($uri_arr[1]=='admin' ){
-				if(Auth::user()->permission_string == "" )
+				if($user->permission_string == "" )
 					return redirect('/');
-			}elseif (Auth::user()->permission_string != ""){
+			}elseif ($user->permission_string != ""){
 				return redirect('/admin');
 			}
 
@@ -51,6 +52,14 @@ class Permission
 						default:
 							break;
 					}
+				}
+			}else if($uri_arr[1] == 'bookreq'){
+				$certificate_as = $user->certificate_as;
+				$certification = explode('|',$certificate_as)[0];
+				if($certification != 'TEACHER'){
+					$request->session()->flash('notice_message', '申请样书需先认证教师身份');
+					$request->session()->flash('notice_status', 'danger');
+					return redirect()->route('cert.create');
 				}
 			}
 		}

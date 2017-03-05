@@ -37,7 +37,9 @@ Route::group(["prefix"=>"book"], function(){
 /* book request module for users*/
 //Route::resource('bookreq', 'BookRequestController');
 Route::group(["prefix"=>"bookreq"], function(){
-	Route::get("/", "BookRequestController@index")->name("bookreq.index");
+	Route::get("/","BookRequestController@index")->name("bookreq.index");
+	Route::post('store/multiple',"BookRequestController@storeMultiple")->name('bookreq.store.multiple');
+	Route::get("/record", "BookRequestController@record")->name("bookreq.record");
 	Route::get("create/{book_id}", "BookRequestController@create")->name("bookreq.create");
 	Route::get("{id}", "BookRequestController@show")->name("bookreq.show");
 	Route::post("store", "BookRequestController@store")->name("bookreq.store");
@@ -65,10 +67,9 @@ Route::group(["prefix" => "wechat"], function(){
     Route::post("/","WechatController@server");
 });
 
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 
 // admin dashboard routes:
 Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
@@ -145,4 +146,9 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
 Route::get('test', function(){
 	return view('test');
+});
+
+Route::group(["prefix" => "email"],function (){
+	Route::get('/send','MailController@send');
+	Route::get('/certificate/{token}',"MailController@certificate")->name('email.certificate');
 });

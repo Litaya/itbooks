@@ -74,11 +74,11 @@
             {!!Form::close()!!}
             </div>
             <div class="col-md-4">
-            <a href="{{route('bookreq.index')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
+            <a href="{{route('bookreq.record')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
             </div>
             @else
             <div class="col-md-12">
-            <a href="{{route('bookreq.index')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
+            <a href="{{route('bookreq.record')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
             </div>
             @endif
             

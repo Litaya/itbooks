@@ -185,8 +185,11 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 
         // Excel-Mysql support 
-        Maatwebsite\Excel\ExcelServiceProvider::class
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
+	    //全文检索
+		Laravel\Scout\ScoutServiceProvider::class,
+	    DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class
     ],
 
     /*

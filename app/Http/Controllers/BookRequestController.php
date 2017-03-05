@@ -9,6 +9,7 @@ use App\Models\BookRequest;
 use App\Models\Book;
 
 use Illuminate\Support\Facades\Auth;    // to use Auth::id() and Auth::user()
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session; // to use Session::get()/set()/flash()
 
 class BookRequestController extends Controller
@@ -23,10 +24,50 @@ class BookRequestController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function index(Request $request){
+		return view('book_request.index');
+    }
+
+    public function storeMultiple(Request $request){
+    	$this->validate($request,[
+			'book-ids' => 'required',
+		    'receiver' => 'required',
+		    'address'  => 'required',
+		    'phone'    => 'required|regex:/\+?[0-9\-]+/',
+		    'message'  => 'required'
+	    ]);
+
+	    $receiver = $request->get('receiver');
+	    $address  = $request->get('address');
+	    $phone    = $request->get('phone');
+		$message  = $request->get('message');
+
+	    $book_ids = $request->get('book-ids');
+	    foreach ($book_ids as $book_id){
+	    	$book_req = new BookRequest();
+		    $book_req->user_id  = Auth::id();
+		    $book_req->book_id  = $book_id;
+		    $book_req->address  = $address;
+		    $book_req->phone    = $phone;
+		    $book_req->receiver = $receiver;
+		    $book_req->district_id = 0;
+		    $book_req->message  = $message;
+
+	    	if($request->has("typeOf$book_id")){
+	    		$book_req->book_type = $request->get("typeOf$book_id");
+	    	}
+	    	$book_req->save();
+	    }
+	    $request->session()->flash('notice_status','success');
+	    $request->session()->flash('notice_message','申请成功');
+
+	    return redirect()->route('bookreq.record');
+    }
+
+    public function record(Request $request)
     {
         $user = User::find($request->userId);
-        return view('book_request.index')->withUser($user);
+        return view('book_request.record')->withUser($user);
     }
 
     /**
@@ -70,7 +111,7 @@ class BookRequestController extends Controller
 
         Session::flash('success', '您的样书申请已经成功提交！');
         
-        return redirect()->route('bookreq.index');
+        return redirect()->route('bookreq.record');
     }
 
     /**
@@ -93,7 +134,7 @@ class BookRequestController extends Controller
      */
     public function edit($id)
     {
-        return redirect()->route('bookreq.index'); //样书申请表不提供修改功能
+        return redirect()->route('bookreq.record'); //样书申请表不提供修改功能
     }
 
     /**
@@ -105,7 +146,7 @@ class BookRequestController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return redirect()->route('bookreq.index'); //样书申请表不提供修改功能
+        return redirect()->route('bookreq.record'); //样书申请表不提供修改功能
     }
 
     /**
@@ -122,6 +163,6 @@ class BookRequestController extends Controller
 
         Session::flash('success', '您已经取消了对'.$bookname.'的样书申请');
         
-        return redirect()->route('bookreq.index');
+        return redirect()->route('bookreq.record');
     }
 }

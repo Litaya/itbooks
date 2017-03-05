@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+	use Searchable;
+
 	protected $table = 'book';
+
+	public function searchableAs(){
+		return 'book_index';
+	}
 
 	protected $fillable = [
 		'isbn',
