@@ -15,6 +15,8 @@
 //	return route('image',['src'=>'fileupload/public/bookreq.png']);
 //});
 
+
+
 Route::group(['prefix'=>'conference'], function(){
 	Route::get('/', 'ConferenceController@index')->name('conference.index');
 	Route::get('{id}', 'ConferenceController@show')->name('conference.show');
@@ -139,6 +141,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::put('{id}', 'ConferenceAdminController@update')->name('admin.conference.update');
 		Route::delete('{id}', 'ConferenceAdminController@destroy')->name('admin.conference.destroy');
 		Route::get('{id}/edit', 'ConferenceAdminController@edit')->name('admin.conference.edit');
+		Route::get('{id}/export', "DatabaseController@exportConferenceRegisters")->name('admin.conference.export');
 	});
 });
 
