@@ -33,12 +33,10 @@
         <p>资源描述: {{$resource->description}}</p>
         <hr>
         <p><small>下载需要积分: {{$resource->credit}}</small></p>
-        <p><small>文件名: {{substr($resource->file_upload, strpos($resource->file_upload, '/')+1)}}</small></p>
-        {!! Form::open(["route"=>["resource.download", $resource->id], "method"=>"post"]) !!}
+        <!--p><small>文件名: {{substr($resource->file_upload, strpos($resource->file_upload, '/')+1)}}</small></p-->
         <div class="col-md-4 col-md-offset-2">
-        {{ Form::submit("下载", ["class"=>"btn btn-success btn-block form-spacing-top"]) }}
+        <a href="{{$resoure->file_upload}}"><button class="btn btn-success btn-block form-spacing-top">点击下载</button></a>
         </div>
-        {!! Form::close() !!}
         <div class="col-md-4">
         <a href="{{route('resource.index')}}">
             <button class="btn btn-default btn-block form-spacing-top">返回首页</button>
@@ -47,6 +45,12 @@
     </div>
 </div>
 
-
+<!-- OLD DOWNLOAD FORM
+    {!! Form::open(["route"=>["resource.download", $resource->id], "method"=>"post"]) !!}
+    <div class="col-md-4 col-md-offset-2">
+    {{ Form::submit("下载", ["class"=>"btn btn-success btn-block form-spacing-top"]) }}
+    </div>
+    {!! Form::close() !!}
+-->
 
 @endsection
