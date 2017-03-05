@@ -5,6 +5,13 @@
 <div class="container">
     <div class="row">
     <div class="col-md-12">
+        <div class="row">
+        <div class="col-md-2 pull-right">
+        <a href="{{route('admin.book.create')}}"><button class="btn btn-default push-left">创建新书</button></a>
+        <a href="{{route('admin.book.import')}}"><button class="btn btn-default push-left">批量导入</button></a>
+        </div>
+        </div>
+        <div class="row">
         <table class="table" style="column-width: 10px">
         <thead>
             <th>ID</th>
@@ -33,6 +40,7 @@
         <div>
             {{$books->links()}} <!-- pagination bar -->
         </div>
+        </div>  
     </div>
     </div>
 </div>

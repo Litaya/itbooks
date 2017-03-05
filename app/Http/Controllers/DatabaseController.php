@@ -9,8 +9,23 @@ use URL;
 use DB;
 use PDO;
 
+use App\Helpers\CrossDomainHelper;
+
 class DatabaseController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
+    public function importBooks(){
+
+    }
+
+    public function testCheckUrl($product_number){
+        $t;
+        return var_dump(CrossDomainHelper::url_exists("http://www.tup.com.cn/upload/books/kj/".$product_number.".rar", $t)).'<br>'.$t;
+    }
+
     public function exportConferenceRegisters($id){
         DB::setFetchMode(PDO::FETCH_ASSOC);
         $crs = DB::select("select * from conference_register where conference_id = ?", [$id]);

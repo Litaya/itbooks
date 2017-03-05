@@ -41,21 +41,5 @@
 
 <script>
 
-// function exportAndDownload(){
-//     var xmlhttp;
-//     if(window.XMLHttpRequest)
-//         xmlhttp = new XMLHttpRequest();
-//     else
-//         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-
-//     xmlhttp.onreadystatechange=function(){
-//         if(xmlhttp.readyState==4 && xmlhttp.status==200){
-//             document.getElementById("download-link").innerHTML = '<a href="' +xmlhttp.responseText +'">点击下载</a>';
-//         }
-//     }
-//     xmlhttp.open("GET", "{{route('admin.conference.export', $conference->id)}}", true);
-//     xmlhttp.send();
-// }
-
 </script>
 @endsection

@@ -182,7 +182,10 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         // Image Service from image.intervention.io
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+
+        // Excel-Mysql support 
+        Maatwebsite\Excel\ExcelServiceProvider::class
 
     ],
 
@@ -237,6 +240,9 @@ return [
 
         // Image Facades from image.intervention.io
         'Image' => Intervention\Image\Facades\Image::class,
+
+        // Excel - mysql support
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class
     ],
 
 ];
