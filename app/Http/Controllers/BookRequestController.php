@@ -32,7 +32,10 @@ class BookRequestController extends Controller
     }
 
     public function storeMultiple(Request $request){
-    	$this->validate($request,[
+	    $user = Auth::user();
+	    $user_json = \GuzzleHttp\json_decode($user->json_content,true);
+
+	    $this->validate($request,[
 			'book-ids' => 'required',
 		    'receiver' => 'required',
 		    'address'  => 'required',
@@ -46,6 +49,13 @@ class BookRequestController extends Controller
 		$message  = $request->get('message');
 
 	    $book_ids = $request->get('book-ids');
+
+	    if( $user_json['teacher']['book_limit'] - sizeof($book_ids) < 0){
+		    $request->session()->flash('notice_status','danger');
+		    $request->session()->flash('notice_message','您申请的书籍多余您的限额，请重新申请!');
+		    return redirect()->route('bookreq.index');
+	    }
+
 	    foreach ($book_ids as $book_id){
 	    	$book_req = new BookRequest();
 		    $book_req->user_id  = Auth::id();
@@ -62,8 +72,6 @@ class BookRequestController extends Controller
 	    	$book_req->save();
 	    }
 
-	    $user = Auth::user();
-	    $user_json = \GuzzleHttp\json_decode($user->json_content,true);
 	    $user_json['address'] = [
 		    'receiver' => $receiver,
 		    'location'  => $address,

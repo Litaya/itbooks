@@ -7,6 +7,7 @@
  */
 
 function url_file_exists($url) {
+	\EasyWeChat\Support\Log::info($url);
 	$curl = curl_init($url);
 	curl_setopt($curl, CURLOPT_NOBODY, true);
 	$result = curl_exec($curl);
