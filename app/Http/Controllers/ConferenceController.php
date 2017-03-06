@@ -9,11 +9,8 @@ use Session;
 use App\Models\Conference;
 use App\Models\ConferenceRegister;
 
-use DateUtil;
-
 class ConferenceController extends Controller
 {
-
     public function index(){
         $now = date('Y-m-d');
         $cs = Conference::where('time', '>', $now)->orderBy('time', 'desc')->paginate(10);

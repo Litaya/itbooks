@@ -15,21 +15,31 @@
         <li>参会须知: {{$conference->detail_url}}</li>
         <li>会议介绍: <p>{{$conference->description}}</p></li>
         </ul>
+        <a href="{{route('admin.conference.export', $conference->id)}}"><button class="btn btn-success btn-md" onclick="exportAndDownload()">导出报名表</button></a>
+        <div id="download-link"></div>
     </div>
 
     <div class="col-md-3 col-md-offset-1">
+        <div class="row">
+        <div class="col-md-8">
         <p>创建时间: {{date('Y-m-d', strtotime($conference->created_at))}}</p>
         <p>修改时间: {{date('Y-m-d', strtotime($conference->updated_at))}}</p>
+        </div>
+        </div>
         <div class="row">
         <div class="col-md-6">
-        <button class="btn btn-default" onclick="window.history.back();">返回会议列表</button>
+        <button class="btn btn-default btn-block" onclick="window.history.back();">返回会议列表</button>
         </div>
         <div class="col-md-6">
-        <a href="{{route('admin.conference.edit', $conference->id)}}"><button class="btn btn-primary">编辑会议</button></a>
+        <a href="{{route('admin.conference.edit', $conference->id)}}"><button class="btn btn-primary btn-block">编辑会议</button></a>
         </div>
         </div>
     </div>
 
     </div>
 </div>
+
+<script>
+
+</script>
 @endsection

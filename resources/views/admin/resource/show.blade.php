@@ -33,11 +33,9 @@
         <p>资源描述: {{$resource->description}}</p>
         <hr>
         <p><small>下载需要积分: {{$resource->credit}}</small></p>
-        <p><small>文件名: {{substr($resource->file_upload, strpos($resource->file_upload, '/')+1)}}</small></p>
+        <!-- p><small>文件名: {{substr($resource->file_upload, strpos($resource->file_upload, '/')+1)}}</small></p-->
         <div class="col-md-4">
-            {!! Form::open(["route"=>["admin.resource.download", $resource->id], "method"=>"post"]) !!}
-            {{ Form::submit("下载资源", ["class"=>"btn btn-success btn-block form-spacing-top"]) }}
-            {!! Form::close() !!}
+        <a href="{{$resource->file_upload}}"><button class="btn btn-success btn-block form-spacing-top"]>下载资源</button></a>
         </div>
         <div class="col-md-4">
             {!! Form::open(["route"=>["admin.resource.destroy", $resource->id], "method"=>"delete"]) !!}
@@ -45,14 +43,18 @@
             {!! Form::close() !!}
         </div>
         <div class="col-md-4">
-            <a href="{{route('resource.index')}}">
-            <button class="btn btn-default btn-block form-spacing-top">返回首页</button>
+            <a href="{{route('admin.resource.index')}}">
+            <button class="btn btn-default btn-block form-spacing-top">返回列表</button>
             </a>
         </div>
 
     </div>
 </div>
 
-
+<!-- OLD DOWNLOAD FORM
+            {!! Form::open(["route"=>["admin.resource.download", $resource->id], "method"=>"post"]) !!}
+            {{ Form::submit("下载资源", ["class"=>"btn btn-success btn-block form-spacing-top"]) }}
+            {!! Form::close() !!}
+-->
 
 @endsection

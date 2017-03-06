@@ -41,11 +41,8 @@
             <p>作者: {{$book->authors}}</p>
             <p>ISBN号: {{$book->isbn}}</p>
             <p>定价: {{$book->price}}</p>
-            <p>类别: {{$book->type==0?"其他图书":($book->type==1?"教辅":"非教辅")}}</p>
-            <hr>
-            <p>出版号: {{$book->product_number}}</p>
+            <p>类别: {{$book->type==0?"其他图书":($book->type==1?"教材":"非教材")}}</p>
             <p>出版时间: {{$book->publish_time}}</p>
-            <p>编辑: {{$book->editor_name}}</p>
             <hr>
             <!-- if the book is open to reservations, and the user has enough privilege -->
             <a href="{{route('bookreq.create', $book->id)}}"><button class="btn btn-primary btn-md">申请样书</button></a>

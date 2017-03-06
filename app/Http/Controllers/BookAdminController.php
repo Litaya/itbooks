@@ -9,13 +9,13 @@ use App\Models\Book;
 use App\Models\Department;
 
 use App\Helpers\FileHelper;
+use App\Helpers\CrossDomainHelper;
 use Faker\Factory as Faker;
 
 use Image;
 
 class BookAdminController extends Controller
 {
-
     private $department_array = null;
 
     public function __construct(){
@@ -40,7 +40,7 @@ class BookAdminController extends Controller
      */
     public function create()
     {
-        return view("admin.book.create")->withFaked($book)->withDepartments($this->getDepartmentArray());
+        return view("admin.book.create")->withDepartments($this->getDepartmentArray());
     }
 
     /**
@@ -74,6 +74,14 @@ class BookAdminController extends Controller
         $book->authors = $request->authors;
         $book->type = $request->type;
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
+        $book->kj_url = null;
+        $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
+                        "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
+        $real_url = null;
+        foreach($kj_url_list as $kj_url)
+            if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
+
+
         $book->save();  // $book->id is first set here!!
 
         // FileHelper::saveBookImage() make use of $book->id
@@ -145,8 +153,14 @@ class BookAdminController extends Controller
         $book->authors = $request->authors;
         $book->type = $request->type;
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
-        if($request->img_upload)
-        {
+        $book->kj_url = null;
+        $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
+                        "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
+        $real_url = null;
+        foreach($kj_url_list as $kj_url)
+            if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
+        
+        if($request->img_upload) {
             // FileHelper::removeBookImage($book, $book->img_upload); // TODO: implement this
             $book->img_upload = FileHelper::saveBookImage($book, $request->img_upload);
         }
@@ -169,6 +183,25 @@ class BookAdminController extends Controller
 
         Session::flash('success', '成功移除图书');
         return redirect()->route('admin.book.index');
+    }
+
+    public function updateKejian($id){
+        $book = Book::find($id);
+        $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",
+                        "http://www.tup.com.cn/upload/books/kj/".$book->product_number.".zip"];
+        $real_url = null;
+        $old_url = $book->kj_url;
+        foreach($kj_url_list as $kj_url) if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
+        if($book->kj_url != $old_url) {  
+            $book->update();
+            Session::flash('success', '找到并更新了配套课件');
+        }
+        elseif($real_url === null)
+            Session::flash('warning', '社网上找不到本书的配套课件');
+        elseif($real_url == $old_url)
+            Session::flash('warning', '当前课件链接已经是最新的');
+
+        return 'success';
     }
 
     private function loadDepartmentArray(){

@@ -184,6 +184,9 @@ return [
         // Image Service from image.intervention.io
         Intervention\Image\ImageServiceProvider::class,
 
+        // Excel-Mysql support 
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
 	    //全文检索
 		Laravel\Scout\ScoutServiceProvider::class,
 	    DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class
@@ -201,7 +204,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -240,6 +242,9 @@ return [
 
         // Image Facades from image.intervention.io
         'Image' => Intervention\Image\Facades\Image::class,
+
+        // Excel - mysql support
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class
     ],
 
 ];

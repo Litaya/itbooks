@@ -11,6 +11,7 @@
         "overtrue/wechat": "^3.2",
         "intervention/image": "^2.3",
         "doctrine/dbal": "^2.5",
+        "maatwebsite/excel": "~2.1.0",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/scout": "2.*",
         "damiantw/laravel-scout-mysql-driver": "^1.0"
