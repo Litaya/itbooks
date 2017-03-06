@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="container">
+        <p><small>您可在个人中心上传相关书籍的学校订书单,审核通过后相关申请不扣总的申请次数</small></p>
         <div class="row">
             <div class="col-md-12">
                 <table class="table"> 

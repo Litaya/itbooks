@@ -8,27 +8,29 @@
             {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN、书名、作者检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
             <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
             </ul>
-            <p><small>您还可申请10本书</small></p>
+            <p><small id="notice-book-limit">您还可申请{{ $user->json_content->teacher->book_limit }}本书</small></p>
         </div>
         <div class="col-xs-12">
             <form action="{{ route("bookreq.store.multiple") }}" method="post">
                 {{ csrf_field() }}
-                <h4><i class="fa fa-book"></i> 您选择的书籍</h4>
-                <p><small>您可在个人中心上传相关书籍的学校订书单,审核通过后本次申请不扣总的申请次数</small></p>
+                <h4><i class="fa fa-book"></i> 您选择的书籍 <small>在搜索框搜索选择</small></h4>
                 <ul class="list-group" id="selected_books">
                 </ul>
                 <h4> <i class="fa fa-map-marker"></i> 地址信息</h4>
                 <div class="form-group">
                     <label for="receiver">收件人姓名</label>
-                    <input type="tel" class="form-control" name="receiver" id="receiver" placeholder="收件人姓名">
+                    <input type="tel" class="form-control" name="receiver" id="receiver" placeholder="收件人姓名"
+                           value="{{ isset($user->json_content->address->receiver)?$user->json_content->address->receiver:"" }}">
                 </div>
                 <div class="form-group">
                     <label for="address">收件地址</label>
-                    <input type="text" class="form-control" name="address" id="address" placeholder="请填写详细地址方便寄送">
+                    <input type="text" class="form-control" name="address" id="address" placeholder="请填写详细地址方便寄送"
+                           value="{{ isset($user->json_content->address->location)?$user->json_content->address->location:"" }}">
                 </div>
                 <div class="form-group">
                     <label for="phone">联系电话</label>
-                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="电话">
+                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="电话"
+                           value="{{ isset($user->json_content->address->phone)?$user->json_content->address->phone:"" }}">
                 </div>
                 <div class="form-group">
                     <label for="phone">申请理由</label>
@@ -70,7 +72,6 @@
 
         function book_select(book_id,book_name){
             books_num ++;
-
             var icon_delete = "<i class='fa fa-times' style='color:red' onclick='remove_selected("+book_id+")'/>&nbsp;&nbsp;";
             var radio_boxes = "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=1 checked='checked' required> 教材</label>";
             radio_boxes += "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=2 required> 教辅</label> <br/>";
