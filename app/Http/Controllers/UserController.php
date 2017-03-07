@@ -27,6 +27,21 @@ class UserController extends Controller
 		return view('user/email');
 	}
 
+	public function storeEmail(Request $request){
+		$this->validate($request,[
+			'email'=>'required'
+		]);
+		$user = Auth::user();
+		$email = $request->get('email');
+		$user->email = $email;
+		$user->email_status = 0;
+		$user->save();
+		Mail::to($user->email)->send(new EmailCertificate($user));
+		$request->session()->flash('notice_status','success');
+		$request->session()->flash("notice_message",'验证邮件已发送，请登录邮箱查看');
+		return redirect()->route('user.email');
+	}
+
 	public function sendEmailCert(){
 		$user = Auth::user();
 		Mail::to($user->email)->send(new EmailCertificate($user));
@@ -34,7 +49,8 @@ class UserController extends Controller
 
 	public function address(Request $request){
 		$user = Auth::user();
-		$user->json_content = \GuzzleHttp\json_decode($user->json_content);
+		if(isset($user->json_content))
+			$user->json_content = \GuzzleHttp\json_decode($user->json_content);
 		return view('user/address',compact('user'));
 	}
 }

@@ -5,10 +5,10 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <p style="font-size: 12px; color:#ccc">Tips:&nbsp;您可在申请详情页上传相关书籍的学校订书单,审核通过后相关申请不扣总的申请次数</p>
+            {{--<p style="font-size: 12px; color:#ccc">Tips:&nbsp;您可在申请详情页上传相关书籍的学校订书单,审核通过后相关申请不扣总的申请次数</p>--}}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <small style="font-size: 14px;">亲爱的{{ Auth::user()->username }}，您好。您今年共申请了7本样书，今年的总申请额度还有3本</small>
+                    <small style="font-size: 14px;">亲爱的{{ Auth::user()->username }}，您好。您今年共申请了{{ sizeof(Auth::user()->bookRequests) }}本样书，今年的总申请额度还有{{ json_decode(Auth::user()->json_content)->teacher->book_limit }}本</small>
                 </div>
             </div>
         </div>

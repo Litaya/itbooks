@@ -13,7 +13,7 @@
         <div class="list-group">
             <a href="{{ route('user.email') }}" class="list-group-item">
                 邮箱: {{ Auth::user()->email }}
-                <span style="position:absolute; right: 20px;">{{ Auth::user()->email_status?'已验证':'未验证' }} <i class="fa fa-angle-right" style="margin-left: 5px"></i></span>
+                <span style="position:absolute; right: 20px;">{{ Auth::user()->email?(Auth::user()->email_status?'已验证':'未验证'):"未填写" }} <i class="fa fa-angle-right" style="margin-left: 5px"></i></span>
             </a>
             <a class="list-group-item" href="{{ Auth::user()->certificate_as==""?route("cert.create"):(Auth::user()->certificate_as=="TEACHER"?route('user.teacher.index'):(Auth::user()->certificate_as=="AUTHOR"?"javascript:void(0)":"javascript:void(0)")) }}">
                 用户身份: {{ Auth::user()->certificate_as==""?"未知":(Auth::user()->certificate_as=="TEACHER"?"教师":(Auth::user()->certificate_as=="AUTHOR"?"作者":"未知")) }}

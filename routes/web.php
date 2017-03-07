@@ -148,6 +148,7 @@ Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
 	Route::get('/',"UserController@index")->name('user.index');
 	Route::get('/teacher',"UserController@teacher")->name('user.teacher.index');
 	Route::get('/email',"UserController@email")->name('user.email');
+	Route::post('/email/store','UserController@storeEmail')->name('user.email.store');
 	Route::get('/email/send_cert',"UserController@sendEmailCert")->name('user.email.send_cert');
 	Route::get('/address','UserController@address')->name('user.address.index');
 });
