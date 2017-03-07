@@ -42,7 +42,7 @@ class CertificationAdminController extends Controller
 
 				$user_json = [];
 				if(!empty($user->json_content))
-					$user_json = \GuzzleHttp\json_decode($user->json_content);
+					$user_json = \GuzzleHttp\json_decode($user->json_content,true);
 				if($cert->cert_name == 'TEACHER')
 					$user_json['teacher'] = ['book_limit'=>10];
 				$user->json_content = \GuzzleHttp\json_encode($user_json);
