@@ -53,7 +53,7 @@ class Permission
 							break;
 					}
 				}
-			}else if($uri_arr[1] == 'bookreq'){
+			}else if(strpos($uri_arr[1],'bookreq')!==false){
 				$certificate_as = $user->certificate_as;
 				$certification = explode('|',$certificate_as)[0];
 				if($certification != 'TEACHER'){
