@@ -87,7 +87,7 @@ class WechatMessageHandler{
 		$openid = $this->message->FromUserName;
 		$key = $this->message->EventKey;
 		$reply = '';
-		$bookreq_url     = url('/book')."?openid=$openid";
+		$bookreq_url     = url('/bookreq')."?openid=$openid";
 		$certificate_url = url('/cert/create')."?openid=$openid";
 		switch ($key){
 			case 'bookreq':

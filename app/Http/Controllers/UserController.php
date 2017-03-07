@@ -37,14 +37,18 @@ class UserController extends Controller
 		$user->email_status = 0;
 		$user->save();
 		Mail::to($user->email)->send(new EmailCertificate($user));
+
 		$request->session()->flash('notice_status','success');
 		$request->session()->flash("notice_message",'验证邮件已发送，请登录邮箱查看');
 		return redirect()->route('user.email');
 	}
 
-	public function sendEmailCert(){
+	public function sendEmailCert(Request $request){
 		$user = Auth::user();
 		Mail::to($user->email)->send(new EmailCertificate($user));
+		$request->session()->flash('notice_status','success');
+		$request->session()->flash("notice_message",'验证邮件已发送，请登录邮箱查看');
+		return redirect()->route('user.email');
 	}
 
 	public function address(Request $request){
