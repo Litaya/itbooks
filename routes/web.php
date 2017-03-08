@@ -161,3 +161,7 @@ Route::group(["prefix" => "email"],function (){
 	Route::get('/send','MailController@send');
 	Route::get('/certificate/{token}',"MailController@certificate")->name('email.certificate');
 });
+
+Route::group(["prefix" => "message"],function (){
+	Route::get('/',"MessageController@index")->name('message.index');
+});

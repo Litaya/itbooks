@@ -40,7 +40,6 @@ class BookRequestController extends Controller
 		    'receiver' => 'required',
 		    'address'  => 'required',
 		    'phone'    => 'required|regex:/\+?[0-9\-]+/',
-		    'message'  => 'required'
 	    ]);
 
 	    $receiver = $request->get('receiver');

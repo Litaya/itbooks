@@ -24,17 +24,16 @@ class MailController extends Controller
 		$new_token = "$user_id,".sha1($user->username.$user->email);
 
 		if($new_token == $token) {
-			Auth::login($user);
 			$user->email_status = 1;
 			$user->save();
-			$request->session()->flash('notice_message', '您的邮箱已验证成功');
-			$request->session()->flash('notice_status', 'success');
-			return redirect()->route('home');
+			$request->session()->flash('message', '您的邮箱已验证成功');
+			$request->session()->flash('status', 'success');
+			return redirect()->route('message.index');
 		}else{
-			$request->session()->flash('notice_message', '验证失败');
-			$request->session()->flash('notice_status', 'danger');
+			$request->session()->flash('message', '验证失败');
+			$request->session()->flash('status', 'danger');
 		}
 
-		return redirect()->route('home');
+		return redirect()->route('message.index');
 	}
 }
