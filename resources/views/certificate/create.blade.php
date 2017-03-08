@@ -27,12 +27,12 @@
                     <div id="teacher-input" style="display: none;">
                     <hr>
                     <p><strong>授课情况</strong></p>
-                    {{ Form::label("course_name_1", "课程名称:")}}{{ Form::text("course_name_1", null, ["style"=>"form-control", "placeholder"=>"课程名称(必填)"])}}
-                    {{ Form::label("course_name_1", "学生人数:")}}{{ Form::number("number_stud_1", null)}}<br>
-                    {{ Form::label("course_name_2", "课程名称:")}}{{ Form::text("course_name_2", null, ["style"=>"form-control", "placeholder"=>"课程名称(可选)"])}}
-                    {{ Form::label("course_name_2", "学生人数:")}}{{ Form::number("number_stud_2", null)}}<br>
-                    {{ Form::label("course_name_3", "课程名称:")}}{{ Form::text("course_name_3", null, ["style"=>"form-control", "placeholder"=>"课程名称(可选)"])}}
-                    {{ Form::label("course_name_3", "学生人数:")}}{{ Form::number("number_stud_3", null)}}
+                    {{ Form::label("course_name_1", "课程名称:")}}{{ Form::text("course_name_1", null, ["class"=>"form-control", "placeholder"=>"课程名称(必填)"])}}
+                    {{ Form::label("course_name_1", "学生人数:")}}{{ Form::number("number_stud_1", null,["class"=>"form-control", "placeholder"=>"课程人数(必填)"])}}<br>
+                    {{ Form::label("course_name_2", "课程名称:")}}{{ Form::text("course_name_2", null, ["class"=>"form-control", "placeholder"=>"课程名称(可选)"])}}
+                    {{ Form::label("course_name_2", "学生人数:")}}{{ Form::number("number_stud_2", null, ["class"=>"form-control", "placeholder"=>"课程人数(可选)"])}}<br>
+                    {{ Form::label("course_name_3", "课程名称:")}}{{ Form::text("course_name_3", null, ["class"=>"form-control", "placeholder"=>"课程名称(可选)"])}}
+                    {{ Form::label("course_name_3", "学生人数:")}}{{ Form::number("number_stud_3", null,["class"=>"form-control", "placeholder"=>"课程人数(可选)"])}}
                     </div>
 
                     <hr>

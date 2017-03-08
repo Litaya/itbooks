@@ -20,7 +20,7 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail'){
+		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message'){
 			return $next($request);
 		}
 		if(Auth::check()){
@@ -53,7 +53,7 @@ class Permission
 							break;
 					}
 				}
-			}else if($uri_arr[1] == 'bookreq'){
+			}else if(strpos($uri_arr[1],'bookreq')!==false){
 				$certificate_as = $user->certificate_as;
 				$certification = explode('|',$certificate_as)[0];
 				if($certification != 'TEACHER'){

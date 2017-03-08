@@ -149,6 +149,7 @@ Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
 	Route::get('/',"UserController@index")->name('user.index');
 	Route::get('/teacher',"UserController@teacher")->name('user.teacher.index');
 	Route::get('/email',"UserController@email")->name('user.email');
+	Route::post('/email/store','UserController@storeEmail')->name('user.email.store');
 	Route::get('/email/send_cert',"UserController@sendEmailCert")->name('user.email.send_cert');
 	Route::get('/address','UserController@address')->name('user.address.index');
 });
@@ -160,4 +161,8 @@ Route::get('test', function(){
 Route::group(["prefix" => "email"],function (){
 	Route::get('/send','MailController@send');
 	Route::get('/certificate/{token}',"MailController@certificate")->name('email.certificate');
+});
+
+Route::group(["prefix" => "message"],function (){
+	Route::get('/',"MessageController@index")->name('message.index');
 });
