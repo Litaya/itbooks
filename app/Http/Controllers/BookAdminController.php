@@ -112,6 +112,18 @@ class BookAdminController extends Controller
     public function show($id)
     {
         $book = Book::find($id);
+        if(empty($book->img_upload)){
+            $imurl = "http://www.tup.com.cn/upload/bigbookimg/".$book->product_number.".jpg";
+            if(CrossDomainHelper::url_exists($imurl, $imurl)){ $book->img_upload = $imurl; $book->update(); }
+        }
+
+        if(empty($book->kj_url)){
+            $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",
+                        "http://www.tup.com.cn/upload/books/kj/".$book->product_number.".zip"];
+            foreach($kj_url_list as $kj_url) 
+                if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; $book->update(); break; }
+        }
+        
         return view("admin.book.show")->withBook($book);
     }
 

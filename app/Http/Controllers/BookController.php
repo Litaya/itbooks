@@ -19,7 +19,20 @@ class BookController extends Controller
 
     // GET
     public function show($id){
-        return view("book.show")->withBook(Book::find($id));
+        $book = Book::find($id);
+        if(empty($book->img_upload)){
+            $imurl = "http://www.tup.com.cn/upload/bigbookimg/".$book->product_number.".jpg";
+            if(CrossDomainHelper::url_exists($imurl, $imurl)){ $book->img_upload = $imurl; $book->update(); }
+        }
+
+        if($book->type==1 && empty($book->kj_url)){
+            $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",
+                        "http://www.tup.com.cn/upload/books/kj/".$book->product_number.".zip"];
+            foreach($kj_url_list as $kj_url)
+                if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; $book->update(); break; }
+        }
+
+        return view("book.show")->withBook($book);
     }
 
     /*
@@ -33,7 +46,6 @@ class BookController extends Controller
     }
 
     public function updateKejian($id){
-
         if(!Auth::check()){
             return 'denied';
         }
