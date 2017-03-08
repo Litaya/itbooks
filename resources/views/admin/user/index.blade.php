@@ -77,7 +77,7 @@
 
         <div class="col-lg-4">
             <div class="panel panel-default">
-                <div class="panel-heading"><span >全部用户</span></div>
+                <div class="panel-heading"><span>全部用户</span></div>
                 <div class="panel-body">
                     <table class="table table-default table-hover" >
                         <tr>
