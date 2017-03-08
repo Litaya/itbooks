@@ -19,7 +19,7 @@ class BookRequestAdminController extends Controller
     public function getIndex(Request $request){
         // $privilege = Auth::user()->permission_string;    // TODO: add permission control here
 
-        $bookreqs = BookRequest::all();
+        $bookreqs = BookRequest::paginate(20);
         return view('admin.book_request.index')->withBookreqs($bookreqs);
     }
 

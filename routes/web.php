@@ -31,7 +31,8 @@ Route::get('image/{src?}', function ($src){
 /* book module for users */
 Route::group(["prefix"=>"book"], function(){
 	Route::get("/", "BookController@index")->name("book.index");
-	Route::get("show/{id}", "BookController@show")->name("book.show");
+	Route::get("{id}", "BookController@show")->name("book.show");
+	Route::get('{id}/updatekj', 'BookController@updateKejian')->name('book.updatekj');
 });
 
 /* book request module for users*/

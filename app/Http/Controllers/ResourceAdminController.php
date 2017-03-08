@@ -11,7 +11,7 @@ use App\Helpers\FileHelper;
 
 use Auth;
 use Session;
-
+use DB;
 
 class ResourceAdminController extends Controller
 {
@@ -26,9 +26,23 @@ class ResourceAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $resources = Resource::orderBy('id', 'desc')->paginate(20);
+        if($request->search){
+            $search = $request->search;
+			$resources = DB::table('resource')
+							->join('user', 'resource.owner_user_id', '=', 'user.id')
+							->select('resource.*')
+							->where('resource.title', 'like', "%$search%")
+							->orWhere('user.username', 'like', "%$search%")
+							->paginate(20);
+
+			for($i=0; $i<count($resources); $i++){
+				$r = (new Resource)->newFromBuilder($resources[$i]);
+				$resources[$i] = $r;
+			}
+        }
+        else $resources = Resource::paginate(20);
         return view('admin.resource.index')->withResources($resources);
     }
 

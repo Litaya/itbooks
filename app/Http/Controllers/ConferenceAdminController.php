@@ -15,9 +15,18 @@ class ConferenceAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $conferences = Conference::orderBy('id', 'desc')->paginate(10);
+        if($request->search){
+            $search = $request->search;
+            $conferences = Conference::where('name', 'like', "%$search%")
+                                    ->orWhere('location', 'like', "%$search%")
+                                    ->orWhere('host', 'like', "%$search%")
+                                    ->orderBy('id', 'desc')
+                                    ->paginate(15);
+        }
+        else $conferences = Conference::orderBy('id', 'desc')->paginate(15);
+
         return view('admin.conference.index')->withConferences($conferences);
     }
 

@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Session;
 
 use App\Models\Certification;
 use App\Models\User;
-
+use DB;
+use Illuminate\Pagination\Paginator;
 
 class CertificationAdminController extends Controller
 {
@@ -16,12 +17,29 @@ class CertificationAdminController extends Controller
 		$this->middleware('auth');
 	}
 
-	public function index(){
+	public function index(Request $request){
 		$user = Auth::user();
 		// TODO: check user permission here!
 
-		$open_certs = Certification::where("status", "=", 0)->paginate(10);
-		return view("admin.certificate.index")->withCerts($open_certs);
+		$certs = [];
+		if($request->search){
+			$search = $request->search;
+			$certs = DB::table('certification')
+							->join('user', 'certification.user_id', '=', 'user.id')
+							->select('certification.*')
+							->where('certification.realname', 'like', "%$search%")
+							->orWhere('user.username', 'like', "%$search%")
+							->paginate(20);
+			
+			for($i=0; $i<count($certs); $i++){
+				$c = (new Certification)->newFromBuilder($certs[$i]);
+				$certs[$i] = $c;
+			}
+		}
+		else $certs = Certification::orderBy('id', 'desc')->paginate(20);
+
+		//else $open_certs = Certification::where("status", "=", 0)->paginate(20); // show open certification request only
+		return view("admin.certificate.index")->withCerts($certs);
 	}
 
 	public function show($id){

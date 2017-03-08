@@ -5,13 +5,23 @@
 @section('content')
 
     <div class="container">
-
+        <div class="row">
+            <!-- SEARCH BAR -->
+            <div class="col-md-8"> 
+            {!! Form::open(["route"=>"admin.cert.index", "method"=>"GET"]) !!}
+            {{ Form::text("search", null, ["placeholder"=>"搜索指定用户"]) }}
+            {{ Form::submit("搜索") }}
+            {!! Form::close() !!}
+            </div>
+            <!-- END SEARCH BAR -->
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table"> 
                 <thead>
                     <tr>
-                        <th>用户ID</th>
+                        <th>用户名</th>
+                        <th>姓名</th>
                         <th>申请角色</th>
                         <th>状态</th>
                         <th width="30%"></th>
@@ -25,7 +35,8 @@
                         {{ csrf_field() }}
                     </form>
                     <tr>
-                        <td>{{$cert->user_id}}</td>
+                        <td>{{$cert->user->username}}</td>
+                        <td>{{$cert->realname}}</td>
                         <td>{{$cert->cert_name=="TEACHER"?"教师":"作者"}}</td>
                         <td>{{$cert->status==0?"待审核":($cert->status==1?"通过":"未通过")}}</td>
                         <td>
@@ -36,6 +47,7 @@
                                 </a>
                             </div>
                             <!-- IF HAS PASS PERMISSION -->
+                            @if($cert->status == 0)
                             <div class="col-xs-2">
                                 {!! Form::open(['route'=>['admin.cert.pass', $cert->id], 'method'=>'POST']) !!}
                                 {!! Form::submit('通过', ['class'=>'btn btn-success btn-xs']) !!}
@@ -46,6 +58,7 @@
                                 {!! Form::submit('拒绝', ['class'=>'btn btn-success btn-xs']) !!}
                                 {!! Form::close() !!}
                             </div>
+                            @endif
                             <!-- END IF HAS PASS PERMISSION -->
                             <!-- IF HAS DELETE PERMISSION -->
                             <div class="col-xs-2">
@@ -60,6 +73,9 @@
                 @endforeach
                 </tbody>
                 </table>
+                <div>
+                {!! $certs->appends(Input::except('page'))->links() !!}
+                </div>
             </div>
         </div>
         </div>

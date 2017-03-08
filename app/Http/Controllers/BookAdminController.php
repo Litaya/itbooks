@@ -27,10 +27,18 @@ class BookAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::paginate(20);
-        return view("admin.book.index")->withBooks($books);
+        if($request->search){
+            $search = $request->search;
+            $books = Book::where('ISBN', 'like', "%$search%")
+                        ->orWhere('name', 'like', "%$search%")
+                        ->orWhere('authors', 'like', "%$search%")
+                        ->paginate(20);
+        }
+        else $books = Book::orderBy('id', 'asc')->paginate(20);
+        
+        return view("admin.book.index")->withBooks($books)->withInput($request->except("page"));
     }
 
     /**

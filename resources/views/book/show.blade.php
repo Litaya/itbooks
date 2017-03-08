@@ -44,6 +44,14 @@
             <p>类别: {{$book->type==0?"其他图书":($book->type==1?"教材":"非教材")}}</p>
             <p>出版时间: {{$book->publish_time}}</p>
             <hr>
+            @if(Auth::check())
+            <p>课件: 
+                @if(!empty($book->kj_url))
+                <a href="{{$book->kj_url}}">下载课件</a>
+                @endif
+                &nbsp;&nbsp;
+                <a href="javascript:updateKjUrl();">扫描课件变更</a></p>
+            @endif
             <!-- if the book is open to reservations, and the user has enough privilege -->
             <a href="{{route('bookreq.create', $book->id)}}"><button class="btn btn-primary btn-md">申请样书</button></a>
             <!-- end if -->
@@ -52,6 +60,26 @@
         
     </div>
 </div>
+
+<script>
+function updateKjUrl(){
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+        xmlhttp=new XMLHttpRequest();
+    else
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            location.reload();
+    }
+    xmlhttp.open("GET", "{{route('book.updatekj', $book->id)}}", true);
+    xmlhttp.send();
+
+
+}
+</script>
 
 
 @endsection
