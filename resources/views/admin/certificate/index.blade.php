@@ -29,16 +29,25 @@
                 </thead>
                 <tbody>
                 @foreach($certs as $cert)
-                    <form id="remove-form-{{$cert->id}}" action="{{ route('cert.destroy', $cert->id) }}" 
-                        method="delete" style="display: none;">
-                        <input type="hidden" name="method" value="DELETE">
+                    <form id="remove-form-{{$cert->id}}" action="{{ route('admin.cert.destroy', $cert->id) }}" 
+                        method="POST" style="display: none;">
+                        <input type="hidden" name="_method" value="DELETE">
+                        {{ csrf_field() }}
+                    </form>
+                    <form id="deprive-form-{{$cert->id}}" action="{{ route('admin.cert.deprive', $cert->id) }}" 
+                        method="POST" style="display: none;">
                         {{ csrf_field() }}
                     </form>
                     <tr>
                         <td>{{$cert->user->username}}</td>
                         <td>{{$cert->realname}}</td>
                         <td>{{$cert->cert_name=="TEACHER"?"教师":"作者"}}</td>
-                        <td>{{$cert->status==0?"待审核":($cert->status==1?"通过":"未通过")}}</td>
+                        @if($cert->status==1)
+                        <td>通过 <a href="javascript:$('#deprive-form-{{$cert->id}}').submit()">收回</a>
+                        </td>
+                        @else
+                        <td>{{$cert->status==0?"待审核":($cert->status==2?"未通过":"已取消")}}</td>
+                        @endif
                         <td>
                         <div class="row">
                             <div class="col-xs-2">
@@ -62,9 +71,10 @@
                             <!-- END IF HAS PASS PERMISSION -->
                             <!-- IF HAS DELETE PERMISSION -->
                             <div class="col-xs-2">
-                                {!! Form::open(['route'=>['cert.destroy', $cert->id], 'method'=>'DELETE']) !!}
+                                <button class="btn btn-danger btn-xs" onclick="cert_destory({{$cert->id}});">删除</button>
+                                <!-- {!! Form::open(['route'=>['admin.cert.destroy', $cert->id], 'method'=>'DELETE']) !!}
                                 {!! Form::submit('删除', ['class'=>'btn btn-danger btn-xs']) !!}
-                                {!! Form::close() !!}
+                                {!! Form::close() !!} -->
                             </div>
                             <!-- END IF HAS DELETE PERMISSION -->
                         </div>
@@ -80,5 +90,16 @@
         </div>
         </div>
     </div>
+
+<script>
+// 添加删除保护
+function cert_destory(id){
+    formname = 'remove-form-'+id.toString();
+    if(window.confirm("确定要删除此条申请记录吗？（用户的当前身份不受影响）")){
+        document.getElementById(formname).submit();
+    }
+}
+
+</script>
 
 @endsection

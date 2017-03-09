@@ -79,11 +79,12 @@ class ResourceAdminController extends Controller
             $res = new Resource;
             $res->title = $request->title;
             $res->owner_user_id = Auth::id();
-            $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+            // $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+            $res->file_upload = $request->file_upload;
             $res->access_role = implode('|', $access_role);
             $res->description = $request->description;
             $res->credit = $request->credit;
-            $res->type = ($request->file_upload)->getClientOriginalExtension();
+            $res->type = "url"; //($request->file_upload)->getClientOriginalExtension();
             if(!empty($request->book_id) and Book::find($requst->book_id))
                 $res->owner_book_id = $request->book_id;
             $res->save();
@@ -139,11 +140,12 @@ class ResourceAdminController extends Controller
 
         $res = Resource::find($id);
         $res->owner_user_id = Auth::id();
-        $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+        // $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+        $res->file_upload = $request->file_upload;
         $res->access_role = implode('|', $request->access_role);
         $res->description = $request->description;
         $res->credit = $request->credit;
-        $res->type = ($request.file_upload)->getClientOriginalExtension();
+        $res->type = "url"; // ($request.file_upload)->getClientOriginalExtension();
         if(!empty($request->book_id) and Book::find($requst->book_id))
             $res->owner_book_id = $request->book_id;
         $res->update();

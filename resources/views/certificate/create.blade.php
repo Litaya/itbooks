@@ -26,6 +26,14 @@
                     @endif
                     <div id="teacher-input" style="display: none;">
                     <hr>
+                    {{ Form::label("department", "院系", ["class"=>"form-spacing-top"]) }}
+                    {{ Form::text("department", null, ["class"=>"form-control"]) }}
+                    {{ Form::label("jobtitle", "职称", ["class"=>"form-spacing-top"]) }}
+                    {{ Form::text("jobtitle", null, ["class"=>"form-control"]) }}
+                    {{ Form::label("qqnumber", "QQ号", ["class"=>"form-spacing-top"]) }}
+                    {{ Form::text("qqnumber", null, ["class"=>"form-control"]) }}
+                    {{ Form::label("phone", "手机号", ["class"=>"form-spacing-top"]) }}
+                    {{ Form::text("phone", null, ["class"=>"form-control"]) }}
                     <p><strong>授课情况</strong></p>
                     {{ Form::label("course_name_1", "课程名称:")}}{{ Form::text("course_name_1", null, ["class"=>"form-control", "placeholder"=>"课程名称(必填)"])}}
                     {{ Form::label("course_name_1", "学生人数:")}}{{ Form::number("number_stud_1", null,["class"=>"form-control", "placeholder"=>"课程人数(必填)"])}}<br>

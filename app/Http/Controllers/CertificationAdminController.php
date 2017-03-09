@@ -91,4 +91,29 @@ class CertificationAdminController extends Controller
 		return redirect()->route("admin.cert.index");
 	}
 
+	public function deprive($id, Request $request){
+		$cert = Certification::find($id);
+		if($cert->status == 1){
+			$cert->status = 3; // deprivated
+			$cert->update();
+			Session::flash('success', "此身份认证已作废");
+		}
+		else Session::flash('warning', "该申请未审批或未通过");
+
+		$user = $cert->user;
+		if(strpos($user->certificate_as, "TEACHER") !== FALSE){
+			if(strpos($user->certificate_as, "AUTHOR") !== FALSE) $user->certificate_as = "AUTHOR";
+			else $user->certificate_as = "";
+		}
+		$user->update();
+
+		return redirect()->route("admin.cert.index");
+	}
+
+	public function destroy($id)
+    {
+        $c = Certification::find($id);
+        $c->delete();
+        return redirect()->route('admin.cert.index');
+    }
 }

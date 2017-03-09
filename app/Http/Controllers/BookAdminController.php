@@ -70,6 +70,7 @@ class BookAdminController extends Controller
             "type"=>"in:0,1,2",
             "publish_time"=>"nullable|date",
             "img_upload"=>"nullable",
+            "weight"=>"integer|min:0",
         ]);
 
         $book = new Book;
@@ -82,6 +83,7 @@ class BookAdminController extends Controller
         $book->authors = $request->authors;
         $book->type = $request->type;
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
+        $book->weight = empty($request->weight) ? 0 : $request->weight;
         $book->kj_url = null;
         $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
                         "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
@@ -158,6 +160,7 @@ class BookAdminController extends Controller
             "authors"=>"required",
             "type"=>"in:0,1,2",
             "publish_time"=>"nullable|date",
+            "weight"=>"integer|min:0",
         ]);
 
         $book = Book::find($id);
@@ -174,6 +177,7 @@ class BookAdminController extends Controller
         $book->type = $request->type;
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
         $book->kj_url = null;
+        $book->weight = empty($request->weight) ? 0 : $request->weight;
         $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
                         "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
         $real_url = null;

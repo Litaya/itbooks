@@ -189,7 +189,6 @@ return [
 
 	    //全文检索
 		Laravel\Scout\ScoutServiceProvider::class,
-	    DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class
     ],
 
     /*
