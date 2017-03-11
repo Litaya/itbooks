@@ -5,9 +5,18 @@
 @section('content')
     <div class="container">
         <div class="row">
-        <div class="col-md-2 pull-right">
-        <a href="{{route('admin.resource.create')}}"><button class="btn btn-default pull-right">创建资源</button></a>
-        </div>
+            <!-- SEARCH BAR -->
+            <div class="col-md-8"> 
+            {!! Form::open(["route"=>"admin.resource.index", "method"=>"GET"]) !!}
+            {{ Form::text("search", null, ["placeholder"=>"资源名称、上传者..."]) }}
+            {{ Form::submit("搜索") }}
+            {!! Form::close() !!}
+            </div>
+            <!-- END SEARCH BAR -->
+
+            <div class="col-md-2 pull-right">
+            <a href="{{route('admin.resource.create')}}"><button class="btn btn-default pull-right">创建资源</button></a>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -58,7 +67,7 @@
                 </table>
             </div>
         </div>
-        {{$resources->links()}}
+        {!! $resources->appends(Input::except('page'))->links() !!}
     </div>
 
 @endsection

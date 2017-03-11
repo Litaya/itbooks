@@ -98,6 +98,10 @@ class CertificationController extends Controller
             $this->validate($request, [
                 "course_name_1" => "required",
                 "number_stud_1" => "required|integer",
+                "department" => "required",
+                "jobtitle" => "required",
+                "qqnumber" => "digits_between:5,12",
+                "phone" => "required",
             ]);
         };
         
@@ -118,6 +122,10 @@ class CertificationController extends Controller
             "number_stud_2" => $request->number_stud_2,
             "course_name_3" => $request->course_name_3,
             "number_stud_3" => $request->number_stud_3,
+            "jobtitle" => $request->jobtitle,
+            "department" => $request->department,
+            "qqnumber" => $request->qqnumber,
+            "phone" => $request->phone,
         ];
 
         $jdata = json_encode($data);

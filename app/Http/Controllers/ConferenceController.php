@@ -13,7 +13,11 @@ class ConferenceController extends Controller
 {
     public function index(){
         $now = date('Y-m-d');
-        $cs = Conference::where('time', '>', $now)->orderBy('time', 'desc')->paginate(10);
+        $cs = Conference::orderBy('time', 'desc')->paginate(10);
+        for($i=0;$i<count($cs);$i++)
+            if(empty($cs[$i]->img_upload))
+                $cs[$i]->img_upload = asset('test_images/conference_empty.jpg');
+        
         return view('conference.index')->withConferences($cs);
     }
 

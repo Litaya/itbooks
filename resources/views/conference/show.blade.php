@@ -8,7 +8,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel">
                 <h2>{{$conference->name}}</h2>
-                <p class="text-center"><small>会议时间: {{date('Y-m-d H:i', strtotime($conference->time))}} &nbsp;&nbsp;&nbsp; 主办方: {{$conference->host}}</small></p>
+                <p class="text-center"><small>会议时间: {{date('Y-m-d H:i', strtotime($conference->time))}} <br> 主办方: {{$conference->host}}</small></p>
                 <article>{{$conference->description}}</article>
                 @if($register!==null)
                 <p class="text-center"><small style="color: #F33">您已报名参加此会议</small></p>

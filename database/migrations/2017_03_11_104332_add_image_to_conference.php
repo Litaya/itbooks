@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUniqueandindexToBook extends Migration
+class AddImageToConference extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddUniqueandindexToBook extends Migration
      */
     public function up()
     {
-        Schema::table('book',function(Blueprint $table){
-	        // $table->string('isbn',13)->unique()->change();
-	        // $table->string('name',511)->index()->change();
+        Schema::table('conference', function (Blueprint $table) {
+            $table->string('img_upload')->nullable()->after('detail_url');
         });
     }
 
@@ -26,6 +25,8 @@ class AddUniqueandindexToBook extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('conference', function (Blueprint $table) {
+            $table->dropColumn('img_upload');
+        });
     }
 }

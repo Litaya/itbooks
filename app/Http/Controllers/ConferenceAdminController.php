@@ -15,9 +15,18 @@ class ConferenceAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $conferences = Conference::orderBy('id', 'desc')->paginate(10);
+        if($request->search){
+            $search = $request->search;
+            $conferences = Conference::where('name', 'like', "%$search%")
+                                    ->orWhere('location', 'like', "%$search%")
+                                    ->orWhere('host', 'like', "%$search%")
+                                    ->orderBy('id', 'desc')
+                                    ->paginate(15);
+        }
+        else $conferences = Conference::orderBy('id', 'desc')->paginate(15);
+
         return view('admin.conference.index')->withConferences($conferences);
     }
 
@@ -99,7 +108,8 @@ class ConferenceAdminController extends Controller
             "time"=>"required|date",
             "location"=>"required",
             "host"=>"required",
-            "detail_url"=>"url"
+            "detail_url"=>"url",
+            "image"=>"url",
         ]);
 
         $c = Conference::find($id);
@@ -109,6 +119,7 @@ class ConferenceAdminController extends Controller
         $c->host = $request->host;
         $c->detail_url = $request->detail_url;
         $c->description = $request->description;
+        $c->img_upload = $request->image;
         $c->update();
 
         Session::flash('success', '会议详情已更新');

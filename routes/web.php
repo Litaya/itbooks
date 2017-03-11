@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('test/{id}', "DatabaseController@testCheckUrl");
+Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
 Route::group(['prefix'=>'conference'], function(){
 	Route::get('/', 'ConferenceController@index')->name('conference.index');
@@ -31,7 +31,9 @@ Route::get('image/{src?}', function ($src){
 /* book module for users */
 Route::group(["prefix"=>"book"], function(){
 	Route::get("/", "BookController@index")->name("book.index");
-	Route::get("show/{id}", "BookController@show")->name("book.show");
+	Route::get("{id}", "BookController@show")->name("book.show");
+	Route::get('{id}/updatekj', 'BookController@updateKejian')->name('book.updatekj');
+	Route::get('search', 'BookController@search')->name('book.search');
 });
 
 /* book request module for users*/
@@ -90,6 +92,8 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
 	Route::post('cert/{id}/pass', 'CertificationAdminController@pass')->name('admin.cert.pass');
 	Route::post('cert/{id}/reject', 'CertificationAdminController@reject')->name('admin.cert.reject');
+	Route::post('cert/{id}/deprive', 'CertificationAdminController@deprive')->name('admin.cert.deprive');
+	Route::delete('cert/{id}', 'CertificationAdminController@destroy')->name('admin.cert.destroy');
 	
 	Route::group(['prefix'=>'book'], function(){
 		Route::get('/', 'BookAdminController@index')->name('admin.book.index');

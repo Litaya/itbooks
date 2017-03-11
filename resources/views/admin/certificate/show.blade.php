@@ -15,6 +15,10 @@
                         <p>申请类型: {{$cert->cert_name=="TEACHER"?"教师":"作者"}}</p>
                         @if($cert->cert_name == "TEACHER")
                         <hr>
+                        <p>院系名称: {{ $cert->json_content["department"] }}</p>
+                        <p>手机号: {{ $cert->json_content["phone"] }} </p>
+                        <p>QQ号: {{ empty($cert->json_content["qqnumber"])?"未填":$cert->json_content["qqnumber"] }}</p>
+                        <hr>
                         <p>教学情况</p>
                         <ol>
                             @for($i = 1; $i <= 3; $i++)

@@ -27,10 +27,18 @@ class BookAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::paginate(20);
-        return view("admin.book.index")->withBooks($books);
+        if($request->search){
+            $search = $request->search;
+            $books = Book::where('ISBN', 'like', "%$search%")
+                        ->orWhere('name', 'like', "%$search%")
+                        ->orWhere('authors', 'like', "%$search%")
+                        ->paginate(20);
+        }
+        else $books = Book::orderBy('id', 'asc')->paginate(20);
+        
+        return view("admin.book.index")->withBooks($books)->withInput($request->except("page"));
     }
 
     /**
@@ -62,6 +70,7 @@ class BookAdminController extends Controller
             "type"=>"in:0,1,2",
             "publish_time"=>"nullable|date",
             "img_upload"=>"nullable",
+            "weight"=>"integer|min:0",
         ]);
 
         $book = new Book;
@@ -74,6 +83,7 @@ class BookAdminController extends Controller
         $book->authors = $request->authors;
         $book->type = $request->type;
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
+        $book->weight = empty($request->weight) ? 0 : $request->weight;
         $book->kj_url = null;
         $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
                         "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
@@ -104,6 +114,18 @@ class BookAdminController extends Controller
     public function show($id)
     {
         $book = Book::find($id);
+        if(empty($book->img_upload)){
+            $imurl = "http://www.tup.com.cn/upload/bigbookimg/".$book->product_number.".jpg";
+            if(CrossDomainHelper::url_exists($imurl, $imurl)){ $book->img_upload = $imurl; $book->update(); }
+        }
+
+        if(empty($book->kj_url)){
+            $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",
+                        "http://www.tup.com.cn/upload/books/kj/".$book->product_number.".zip"];
+            foreach($kj_url_list as $kj_url) 
+                if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; $book->update(); break; }
+        }
+        
         return view("admin.book.show")->withBook($book);
     }
 
@@ -138,6 +160,7 @@ class BookAdminController extends Controller
             "authors"=>"required",
             "type"=>"in:0,1,2",
             "publish_time"=>"nullable|date",
+            "weight"=>"integer|min:0",
         ]);
 
         $book = Book::find($id);
@@ -154,6 +177,7 @@ class BookAdminController extends Controller
         $book->type = $request->type;
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
         $book->kj_url = null;
+        $book->weight = empty($request->weight) ? 0 : $request->weight;
         $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
                         "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
         $real_url = null;

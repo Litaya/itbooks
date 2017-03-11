@@ -11,7 +11,7 @@ use App\Helpers\FileHelper;
 
 use Auth;
 use Session;
-
+use DB;
 
 class ResourceAdminController extends Controller
 {
@@ -26,9 +26,23 @@ class ResourceAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $resources = Resource::orderBy('id', 'desc')->paginate(20);
+        if($request->search){
+            $search = $request->search;
+			$resources = DB::table('resource')
+							->join('user', 'resource.owner_user_id', '=', 'user.id')
+							->select('resource.*')
+							->where('resource.title', 'like', "%$search%")
+							->orWhere('user.username', 'like', "%$search%")
+							->paginate(20);
+
+			for($i=0; $i<count($resources); $i++){
+				$r = (new Resource)->newFromBuilder($resources[$i]);
+				$resources[$i] = $r;
+			}
+        }
+        else $resources = Resource::paginate(20);
         return view('admin.resource.index')->withResources($resources);
     }
 
@@ -65,11 +79,12 @@ class ResourceAdminController extends Controller
             $res = new Resource;
             $res->title = $request->title;
             $res->owner_user_id = Auth::id();
-            $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+            // $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+            $res->file_upload = $request->file_upload;
             $res->access_role = implode('|', $access_role);
             $res->description = $request->description;
             $res->credit = $request->credit;
-            $res->type = ($request->file_upload)->getClientOriginalExtension();
+            $res->type = "url"; //($request->file_upload)->getClientOriginalExtension();
             if(!empty($request->book_id) and Book::find($requst->book_id))
                 $res->owner_book_id = $request->book_id;
             $res->save();
@@ -125,11 +140,12 @@ class ResourceAdminController extends Controller
 
         $res = Resource::find($id);
         $res->owner_user_id = Auth::id();
-        $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+        // $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+        $res->file_upload = $request->file_upload;
         $res->access_role = implode('|', $request->access_role);
         $res->description = $request->description;
         $res->credit = $request->credit;
-        $res->type = ($request.file_upload)->getClientOriginalExtension();
+        $res->type = "url"; // ($request.file_upload)->getClientOriginalExtension();
         if(!empty($request->book_id) and Book::find($requst->book_id))
             $res->owner_book_id = $request->book_id;
         $res->update();
