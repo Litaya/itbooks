@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\BookRequest;
+use DB;
 
 class BookRequestAdminController extends Controller
 {
@@ -19,7 +20,25 @@ class BookRequestAdminController extends Controller
     public function getIndex(Request $request){
         // $privilege = Auth::user()->permission_string;    // TODO: add permission control here
 
-        $bookreqs = BookRequest::all();
+        if($request->search){
+            $search = $request->search;
+			$bookreqs = DB::table('book_request')
+							->join('user', 'book_request.user_id', '=', 'user.id')
+                            ->join('book', 'book_request.book_id', '=', 'book.id')
+							->select('book_request.*')
+							->where('user.username', 'like', "%$search%")
+                            ->orWhere('book.name', 'like', "%$search%")
+                            ->orderBy('id', 'desc')
+                            //->orWhere('book_request.realname', 'like', "%$search%")
+							->paginate(20);
+			
+			for($i=0; $i<count($bookreqs); $i++){
+				$br = (new BookRequest)->newFromBuilder($bookreqs[$i]);
+				$bookreqs[$i] = $br;
+			}
+        }
+
+        else $bookreqs = BookRequest::orderBy('id', 'desc')->paginate(20);
         return view('admin.book_request.index')->withBookreqs($bookreqs);
     }
 

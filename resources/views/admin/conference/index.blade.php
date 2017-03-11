@@ -5,8 +5,19 @@
 @section('content')
 
     <div class="container">
-        <div class="col-md-2 pull-right">
-        <a href="{{route('admin.conference.create')}}"><button class="btn btn-default pull-right">新建会议</button></a>
+        <div class="row">
+            <!-- SEARCH BAR -->
+            <div class="col-md-10"> 
+            {!! Form::open(["route"=>"admin.conference.index", "method"=>"GET"]) !!}
+            {{ Form::text("search", null, ["placeholder"=>"会议、地点、主办方..."]) }}
+            {{ Form::submit("搜索") }}
+            {!! Form::close() !!}
+            </div>
+            <!-- END SEARCH BAR -->
+
+            <div class="col-md-2">
+            <a href="{{route('admin.conference.create')}}"><button class="btn btn-default pull-right">新建会议</button></a>
+            </div>
         </div>
         <div class="row">
             <div class="panel">
@@ -32,9 +43,9 @@
                 @endforeach
                 </tbody>
                 </table>
-                
-                {{$conferences->links()}}
-
+                <div>
+                {!! $conferences->appends(Input::except('page'))->links() !!}
+                </div>
             </div>
             
         </div>
