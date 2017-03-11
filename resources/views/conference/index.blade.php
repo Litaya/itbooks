@@ -39,19 +39,19 @@
         <div class="panel panel-default">
         <div class="panel-heading">会议列表</div>
         <div class="panel-body"> 
-            <h2>{{$conferences[0]->name}}</h2>
+            <h2>{{$latest->name}}</h2>
             <div class="row">
             <div class="col-xs-6">
-                <a href="{{route('conference.show', $conferences[0]->id)}}">
-                <img class="img-thumbnail col-center-block" src="{{$conferences[0]->img_upload}}" alt="最近会议">
+                <a href="{{route('conference.show', $latest->id)}}">
+                <img class="img-thumbnail col-center-block" src="{{$latest->img_upload}}" alt="最近会议">
                 </a>
             </div>
 
             <div class="col-xs-6">
-                主办方: {{$conferences[0]->host}}<br>
-                地点: {{$conferences[0]->location}}<br>
-                时间: {{$conferences[0]->time}}<br>
-                <a href="{{route('conference.show', $conferences[0]->id)}}">详情</a>
+                主办方: {{$latest->host}}<br>
+                地点: {{$latest->location}}<br>
+                时间: {{$latest->time}}<br>
+                <a href="{{route('conference.show', $latest->id)}}">详情</a>
             </div>
             </div>
         
@@ -70,12 +70,12 @@
         @endforeach
         </ul>
 
+        <div class="text-center">
+        {!! $conferences->appends(Input::except('page'))->links() !!}
         </div>
-        </div>
-
+    </div>
+    </div>
     </div>
 
-    </div>
-    </div>
 
 @endsection

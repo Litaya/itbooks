@@ -53,7 +53,8 @@ class ConferenceAdminController extends Controller
             "time"=>"required|date",
             "location"=>"required",
             "host"=>"required",
-            "detail_url"=>"url"
+            "detail_url"=>"url",
+            "image"=>"url",
         ]);
 
         $c = new Conference;
@@ -63,6 +64,7 @@ class ConferenceAdminController extends Controller
         $c->host = $request->host;
         $c->detail_url = $request->detail_url;
         $c->description = $request->description;
+        $c->img_upload = $request->image;
         $c->save();
 
         Session::flash('success', '创建会议成功');
