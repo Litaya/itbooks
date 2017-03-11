@@ -5,7 +5,7 @@
 @section('content')
     <style>
         .well-showcase {
-            height: 230px;
+            height: 220px;
             padding: 0;
             margin: 0;
         }
@@ -20,7 +20,7 @@
         .img-in-well {
             width: auto;
             max-width: 100%;
-            height: 70%;
+            height: 65%;
         }
 
         .marginless {
@@ -76,9 +76,9 @@
                             <div class="col-xs-6" style="margin-left: 0; margin-right: 0;">
                             <div class="well well-showcase">
                             <a href="{{route('book.show', $book->id)}}"><img class="img-thumbnail img-in-well col-center-block" src="{{$book->img_upload}}" alt="Book0"></a>
-                            <div class="row">
+                            <p>
                                 <h2>{{$book->name}}</h2>
-                            </div>
+                            </p>
                             
                             </div>
                             </div>
@@ -94,9 +94,9 @@
                             <div class="col-xs-6">
                             <div class="well well-showcase">
                             <a href="{{route('book.show', $book->id)}}"><img class="img-thumbnail img-in-well col-center-block" src="{{$book->img_upload}}" alt="Book0"></a>
-                            <div class="row">
+                            <p>
                                 <h2>{{$book->name}}</h2>
-                            </div>
+                            </p>
                             
                             </div>
                             </div>
@@ -113,9 +113,9 @@
                             <div class="well well-showcase">
                             <a href="{{route('book.show', $book->id)}}"><img class="img-thumbnail img-in-well col-center-block" src="{{$book->img_upload}}" alt="Book0"></a>
 
-                            <div class="row">
+                            <p>
                                 <h2>{{$book->name}}</h2>
-                            </div>
+                            </p>
                             
                             </div>
                             </div>
