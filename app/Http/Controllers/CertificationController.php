@@ -96,7 +96,6 @@ class CertificationController extends Controller
 				$selection = "none";
 		}
 
-
 		return view("certificate.create")->withSelection($selection);
 	}
 
