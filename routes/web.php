@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('test/{id}', "DatabaseController@testCheckUrl");
+Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
 Route::group(['prefix'=>'conference'], function(){
 	Route::get('/', 'ConferenceController@index')->name('conference.index');
@@ -33,6 +33,7 @@ Route::group(["prefix"=>"book"], function(){
 	Route::get("/", "BookController@index")->name("book.index");
 	Route::get("{id}", "BookController@show")->name("book.show");
 	Route::get('{id}/updatekj', 'BookController@updateKejian')->name('book.updatekj');
+	Route::get('search', 'BookController@search')->name('book.search');
 });
 
 /* book request module for users*/
