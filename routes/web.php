@@ -45,7 +45,7 @@ Route::group(["prefix"=>"bookreq"], function(){
 	Route::get("create/{book_id}", "BookRequestController@create")->name("bookreq.create");
 	Route::get("{id}", "BookRequestController@show")->name("bookreq.show");
 	Route::post("store", "BookRequestController@store")->name("bookreq.store");
-	Route::delete("destroy", "BookRequestController@destroy")->name("bookreq.destroy");
+	Route::delete("/{id}/destroy", "BookRequestController@destroy")->name("bookreq.destroy");
 	// Users do not have the access to edit/update an book request;
 });
 

@@ -45,7 +45,16 @@ class BookRequestController extends Controller
 	    $receiver = $request->get('receiver');
 	    $address  = $request->get('address');
 	    $phone    = $request->get('phone');
-		$message  = $request->get('message');
+	    $book_plan = "";
+	    $remarks  = "";
+	    if($request->has('book_plan')){
+			$book_plan = $request->get('book_plan');
+	    }
+	    if($request->has('remarks')){
+	    	$remarks = $request->get('remarks');
+	    }
+	    $message = ['book_plan'=>$book_plan,'remarks'=>$remarks];
+	    $message = json_encode($message);
 
 	    $book_ids = $request->get('book-ids');
 
@@ -76,10 +85,6 @@ class BookRequestController extends Controller
 		    'location'  => $address,
 		    'phone'    => $phone
 	    ];
-	    $user_json['teacher']['book_limit'] = $user_json['teacher']['book_limit'] - sizeof($book_ids);
-	    $user->json_content = \GuzzleHttp\json_encode($user_json);
-	    $user->save();
-
 
 	    $request->session()->flash('notice_status','success');
 	    $request->session()->flash('notice_message','申请成功');

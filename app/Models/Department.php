@@ -34,4 +34,8 @@ class Department extends Model
 		}
 		return $type;
 	}
+
+	public function books(){
+		return $this->hasMany('App\Models\Book', 'department_id', 'id');
+	}
 }

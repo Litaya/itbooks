@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\BookRequest;
@@ -52,6 +53,14 @@ class BookRequestAdminController extends Controller
         if($bookreq->status == 0){
             $bookreq->status = 1;
             $bookreq->update();
+
+	        $user      = $bookreq->user;
+	        $user_json = $bookreq->user->json_content;
+	        $user_json = json_decode($user_json,true);
+	        $user_json['teacher']['book_limit'] -- ;
+	        $user->json_content = json_encode($user_json);
+	        $user->save();
+
             Session::flash('success', '您通过了一项样书申请');
         }
         else

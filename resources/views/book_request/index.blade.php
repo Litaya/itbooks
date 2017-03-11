@@ -8,7 +8,7 @@
             {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN、书名、作者检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
             <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
             </ul>
-            <p><small id="notice-book-limit">您还可申请{{ $user->json_content->teacher->book_limit }}本书</small></p>
+            <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书</small></p>
         </div>
         <div class="col-xs-12">
             <form action="{{ route("bookreq.store.multiple") }}" method="post">
@@ -33,11 +33,14 @@
                            value="{{ isset($user->json_content->address->phone)?$user->json_content->address->phone:"" }}">
                 </div>
                 <div class="form-group">
-                    <label for="phone">申请理由</label>
-                    <textarea class="form-control" name="message" id="message"> </textarea>
+                    <label for="book_plan">图书编写计划(可选)</label>
+                    <textarea class="form-control" name="book_plan" id="book_plan" placeholder="近期是否有图书编写计划，书名是什么？"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="remarks">备注(可选)</label>
+                    <textarea class="form-control" name="remarks" id="remarks" placeholder="备注"></textarea>
                 </div>
                 <div class="form-group" id="checkboxes"  hidden>
-
                 </div>
                 <button type="submit" class="btn btn-default">提交</button>
             </form>
@@ -61,31 +64,41 @@
                     var book_com_name = books[i]["name"];
                     var book_name = books[i]["name"].length>=20?books[i]["name"].substring(0,20)+"...":books[i]["name"];
                     var book_id   = books[i]['id'];
+                    var book_isbn = books[i]['isbn'];
 
                     $("#result_place").append("<li><a href='javascript:void(0)' class='book_item' id='book_"+book_id
-                            +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\")'>"+book_name+"</a></li>");
+                            +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\",\""+book_isbn+"\")'>"+book_name+"</a></li>");
                 }
 
             });
         });
         $("#search_box").trigger("input");
 
-        function book_select(book_id,book_name){
+        function book_select(book_id,book_name,book_isbn){
             books_num ++;
+            changeBookNum(-1);
             var icon_delete = "<i class='fa fa-times' style='color:red' onclick='remove_selected("+book_id+")'/>&nbsp;&nbsp;";
             var radio_boxes = "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=1 checked='checked' required> 教材</label>";
             radio_boxes += "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=2 required> 教辅</label> <br/>";
             var check_boxes = "<input type='checkbox' id='book_ids_"+book_id+"' name='book-ids[]' value="+book_id+" checked='checked'>";
+            var p_book_isbn = "<small style='color:grey'>ISBN号："+book_isbn+"</small>";
 
             $("#selected_books").append("<li class='list-group-item' id='selected_"+book_id+"'>" + icon_delete
-                    +radio_boxes+books_num+".&nbsp;"+book_name+" </li>");
+                    +radio_boxes+book_name+"<br/> "+p_book_isbn+"</li>");
             $("#checkboxes").append(check_boxes);
         }
 
         function remove_selected(book_id){
             books_num -- ;
+            changeBookNum(1);
             $("#selected_"+book_id).remove();
             $("#book_ids_"+book_id).remove();
+        }
+
+        function changeBookNum(x){
+            var i = parseInt($("#books_num").html());
+            i = i+x;
+            $("#books_num").html(i);
         }
     </script>
 @stop
