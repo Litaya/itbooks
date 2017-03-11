@@ -102,6 +102,5 @@ class BookController extends Controller
                 if(CrossDomainHelper::url_exists($imurl, $imurl)){ $books[$i]->img_upload = $imurl; $info_changed = true; }
             }
         }
-        
     }
 }

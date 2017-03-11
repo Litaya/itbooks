@@ -17,6 +17,7 @@
         <li class="{{(Request::is('book/*') or Request::is('book')) ? "active":""}}"><a href="{{route('book.index')}}">图书</a></li>
         <li class="{{Request::is('resource*') ? "active":""}}"><a href="{{route('resource.index')}}">资源</a></li>
         <li class="{{Request::is('bookreq*') ? "active":""}}"><a href="{{route('bookreq.index')}}">样书申请</a></li>
+        <li class="{{Request::is('conference*' ? "active":"")}}"><a href="{{route('conference.index')}}">会议</a></li>
         <li class="{{Request::is('cert*') ? "active":""}}"><a href="{{route('cert.create')}}">认证</a></li>
         <!--li class="{{Request::is('personal') ? "active":""}}"><a href="#">个人空间</a></li-->
       </ul>

@@ -13,6 +13,9 @@ li.sidebar-active{
     @if(in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/resource')?'sidebar-active':''}}"><a href="{{ route('admin.resource.index') }}"> <i class="fa fa-briefcase push"></i>资源管理</a></li>
     @endif
+    @if(in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules()))
+        <li class="{{Request::is('admin/conference')?'sidebar-active':''}}"><a href="{{ route('admin.conference.index') }}"> <i class="fa fa-street-view push"></i>会议管理</a></li>
+    @endif
     @if(in_array('USER',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/user')?'sidebar-active':''}}"><a href="{{ route('admin.user.index') }}"> <i class="fa fa-user push"></i>用户中心</a></li>
     @endif
