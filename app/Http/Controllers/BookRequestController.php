@@ -86,6 +86,10 @@ class BookRequestController extends Controller
 		    'phone'    => $phone
 	    ];
 
+	    $user_json['teacher']['book_limit'] -= sizeof($book_ids);
+	    $user->json_content = json_encode($user_json);
+	    $user->save();
+
 	    $request->session()->flash('notice_status','success');
 	    $request->session()->flash('notice_message','申请成功');
 

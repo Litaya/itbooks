@@ -53,14 +53,6 @@ class BookRequestAdminController extends Controller
         if($bookreq->status == 0){
             $bookreq->status = 1;
             $bookreq->update();
-
-	        $user      = $bookreq->user;
-	        $user_json = $bookreq->user->json_content;
-	        $user_json = json_decode($user_json,true);
-	        $user_json['teacher']['book_limit'] -- ;
-	        $user->json_content = json_encode($user_json);
-	        $user->save();
-
             Session::flash('success', '您通过了一项样书申请');
         }
         else
@@ -74,7 +66,15 @@ class BookRequestAdminController extends Controller
         if($bookreq->status == 0){
             $bookreq->status = 2;
             $bookreq->update();
-            Session::flash('success', '您拒绝了一项样书申请');
+
+	        $user      = $bookreq->user;
+	        $user_json = $bookreq->user->json_content;
+	        $user_json = json_decode($user_json,true);
+	        $user_json['teacher']['book_limit'] ++ ;
+	        $user->json_content = json_encode($user_json);
+	        $user->save();
+
+	        Session::flash('success', '您拒绝了一项样书申请');
         }
         else
             Session::flash('warning', '此申请已经被审批过');
@@ -86,7 +86,16 @@ class BookRequestAdminController extends Controller
         $req = BookRequest::find($id);
         $req->delete();
 
-        Session::flash('success', '您删除了一个样书申请');
+        if($req->status==0 ||$req->status == 1) { // 只有在样书申请等待审核或者已经通过的状态下，删除才会在申请限额上减一
+	        $bookreq = $req;
+	        $user = $bookreq->user;
+	        $user_json = $bookreq->user->json_content;
+	        $user_json = json_decode($user_json, true);
+	        $user_json['teacher']['book_limit']++;
+	        $user->json_content = json_encode($user_json);
+	        $user->save();
+        }
+	    Session::flash('success', '您删除了一个样书申请');
         
         return redirect()->route('bookreq.index');
     }
