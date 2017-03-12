@@ -16,7 +16,7 @@ class ConferenceController extends Controller
         $latest = Conference::orderBy('time', 'desc')->limit(1)->first();
         $cs = Conference::orderBy('time', 'desc')->paginate(8);
 
-        if(empty($latest->img_upload))
+        if($latest and empty($latest->img_upload))
                 $latest->img_upload = asset('test_images/conference_empty.jpg');
                 
         for($i=0;$i<count($cs);$i++)

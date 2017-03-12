@@ -39,6 +39,7 @@
         <div class="panel panel-default">
         <div class="panel-heading">会议列表</div>
         <div class="panel-body"> 
+            @if($latest)
             <h2>{{$latest->name}}</h2>
             <div class="row">
             <div class="col-xs-6">
@@ -54,7 +55,10 @@
                 <a href="{{route('conference.show', $latest->id)}}">详情</a>
             </div>
             </div>
-        
+            @else
+            <h1>暂无会议</h1>
+            @endif
+
         </div>
 
         <ul class="list-group">
