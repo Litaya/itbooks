@@ -8,6 +8,7 @@ use App\Helpers\CrossDomainHelper;
 use App\Helpers\RecommendHelper;
 use Auth;
 use Session;
+use DB;
 
 class BookController extends Controller
 {
@@ -48,11 +49,19 @@ class BookController extends Controller
             foreach($kj_url_list as $kj_url)
                 if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; $info_changed = true; break; }
         }
-
         // if($info_changed) $book->update(); // got error 'Driver [mysql] is not supported'
 
         if(!empty($book->kj_url)) $book->kj_url = route("navigate", ["url"=>$book->kj_url]);
-        return view("book.show")->withBook($book);
+        
+        $like = NULL; $read = NULL;
+        if(Auth::check()) {
+            $like = DB::select('select id from user_like_book where user_id = ? and book_id = ?', [Auth::id(), $book->id]);
+            $like = count($like) > 0;
+            $read = DB::select('select id from user_read_book where user_id = ? and book_id = ?', [Auth::id(), $book->id]);
+            $read = count($read) > 0;
+        }
+
+        return view("book.show")->withBook($book)->withUserlike($like)->withUserread($read);
     }
 
     /*
@@ -103,4 +112,5 @@ class BookController extends Controller
             }
         }
     }
+
 }

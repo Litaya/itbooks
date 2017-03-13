@@ -13,6 +13,11 @@
 
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
+Route::get('like', "LikeController@like")->name('like');
+Route::get('unlike', "LikeController@unlike")->name('unlike');
+Route::get('read', "ReadController@read")->name('read');
+Route::get('unread', "ReadController@unread")->name('unread');
+
 Route::group(['prefix'=>'conference'], function(){
 	Route::get('/', 'ConferenceController@index')->name('conference.index');
 	Route::get('{id}', 'ConferenceController@show')->name('conference.show');
