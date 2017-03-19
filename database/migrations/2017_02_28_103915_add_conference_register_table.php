@@ -17,6 +17,15 @@ class AddConferenceRegisterTable extends Migration
             $table->increments("id")->index();
             $table->integer("user_id")->index();
             $table->integer("conference_id")->index();
+	        $table->string('name', 10);
+	        $table->string('school', 20);
+	        $table->string('position', 10);
+	        $table->string('job_title', 10);
+	        $table->string('phone', 15);
+	        $table->string('email', 48);
+	        $table->string('invoice_title', 127);
+	        $table->string('mail_address');
+	        $table->timestamps();
         });
     }
 

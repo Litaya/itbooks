@@ -34,6 +34,8 @@ class CreateUserinfoTable extends Migration
 			$table->integer('department_id')->nullable();
 			$table->string('department_name')->nullable();
 
+			$table->text("address")->nullable();
+
 			$table->timestamps();
 		});
 	}

@@ -15,8 +15,14 @@ class AddConferenceTable extends Migration
     {
         Schema::create("conference", function(Blueprint $table){
             $table->increments('id')->index();
-            $table->string('name', 50);      
-            $table->text('description');
+            $table->string('name', 50);
+	        $table->date('time');
+	        $table->string('location');
+	        $table->string('host')->nullable();
+	        $table->string('detail_url')->nullable();
+	        $table->string('img_upload')->nullable();
+	        $table->text('description');
+	        $table->text('json')->nullable();
         });
     }
 

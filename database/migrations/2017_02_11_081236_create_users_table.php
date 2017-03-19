@@ -21,13 +21,14 @@ class CreateUsersTable extends Migration
 			$table->string('headimgurl')->default('/img/avatar.png');
 			$table->string('email', 40)->unique()->nullable();
 			$table->integer('email_status')->default(0)->comment('0: 未验证; 1: 验证通过');
-			$table->string('password', 32)->nullable();
+			$table->string('password', 60)->nullable();
 			$table->integer('credits')->default(0)->comment('积分');
 			$table->string('permission_string', 128)->default('');
 			$table->string('certificate_as', 32)->default('');
 			$table->unsignedInteger('information_id')->nullable();
 			$table->tinyInteger('subscribed')->default(0);
 			$table->string('source', 12)->default("未知")->comment('wechat、web_register');
+			$table->text('json_content')->nullable();
 			$table->timestamps();
 			$table->rememberToken();
 		});
