@@ -19,6 +19,7 @@ class UserInfo extends Model
 		'district_id',
 		'district_name',
 		'department_id',
-		'department_name'
+		'department_name',
+		'address'
 	];
 }

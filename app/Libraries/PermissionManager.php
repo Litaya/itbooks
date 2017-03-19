@@ -205,7 +205,7 @@ class PermissionManager
 			if(!empty($permission['book']['district']))
 				return 'REPRESENTATIVE';
 		}
-		return 'UNKNOW';
+		return 'UNKNOWN';
 	}
 
 	static public function getAdminModules(){

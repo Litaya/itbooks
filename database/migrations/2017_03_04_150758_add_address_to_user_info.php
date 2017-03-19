@@ -14,7 +14,7 @@ class AddAddressToUserInfo extends Migration
     public function up()
     {
         Schema::table('user_info',function(Blueprint $table){
-        	$table->text("address")->after('department_name');
+        	$table->text("address")->after('department_name')->nullable();
         });
     }
 

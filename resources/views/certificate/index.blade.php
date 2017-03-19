@@ -8,7 +8,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        @if(sizeof('success_records')>0)
+                        @if(sizeof($success_records)>0)
                             您已认证成为:
                             @foreach($identities as $identity)
                                 {{ $identity." " }}
