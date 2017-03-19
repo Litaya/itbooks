@@ -49,4 +49,8 @@ class User extends Authenticatable
 	public function addDepartmentAdmin(){}
 
 	public function addRepresentative(){}
+
+	public function userInfos(){
+		$this->hasOne('App\Models\UserInfo','user_if','id');
+	}
 }

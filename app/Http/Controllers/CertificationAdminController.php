@@ -70,6 +70,18 @@ class CertificationAdminController extends Controller
 			}
 			$cert->status = 1;
 			$cert->update();
+
+			// 同步user_info的信息
+			$cert_json = \GuzzleHttp\json_decode($cert->json_content);
+			$user_info = UserInfo::where('user_id',$user->id)->first();
+			$user_info->school_name     = $cert->workplace;
+			$user_info->school_division = $cert_json->department;
+			$user_info->school_title    = $cert_json->jobtitle;
+			$user_info->phone           = $cert_json->phone;
+			$user_info->qq              = $cert_json->qqnumber;
+			$user_info->realname        = $cert->realname;
+			$user_info->save();
+
 			Session::flash('success', "已批准申请");
 		}
 		else Session::flash('warning', "该申请已经过期");

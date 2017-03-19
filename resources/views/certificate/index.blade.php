@@ -17,7 +17,7 @@
                             您还没有认证为任何身份
                         @endif
                         <br>
-                        <small style="font-size: 12px; color:grey"> 您可 <a href="{{ route('cert.create') }}">点击此处</a>进行@if(sizeof($certifications)>0)其他@endif身份认证 </small>
+                        <small style="font-size: 12px; color:grey"> 您可 <a href="{{ route('cert.create') }}">点击此处</a> 进行@if(sizeof($success_records)>0)其他@endif身份认证 </small>
                     </div>
                 </div>
             </div>
@@ -36,10 +36,11 @@
                                 <strong>工作单位：</strong>{{ $certification->workplace }} <br>
                                 <strong>申请时间：</strong>{{ $certification->created_at }}<br>
                             @endif
-                            <img src="{{route('image', $certification->img_upload)}}" alt="" width="100%">
                             @if($certification->status == 2)
-                                <strong>拒绝理由：</strong>{{ $certification->message }}<br>
+                                <strong style="color:orangered">拒绝理由：</strong>{{ $certification->message }}<br>
                             @endif
+                            <img src="{{route('image', $certification->img_upload)}}" alt="" width="100%">
+
                         </div>
                     </div>
                 @endforeach

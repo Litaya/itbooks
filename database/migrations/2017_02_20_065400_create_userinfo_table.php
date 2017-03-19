@@ -16,11 +16,15 @@ class CreateUserinfoTable extends Migration
 		Schema::create('user_info', function (Blueprint $table){
 			$table->integer('user_id');
 			$table->string('phone')->nullable();
+			$table->string('qq')->nullable();
 			$table->string('realname')->nullable();
 
 			// for teacher、student
 			$table->integer('school_id')->nullable();
 			$table->string('school_name')->nullable();
+			$table->string('school_division')->nullable();
+			$table->string('school_title')->nullable();
+			$table->text('school_json')->nullable();
 
 			// for author
 			$table->string('workplace')->nullable();

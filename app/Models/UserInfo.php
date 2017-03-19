@@ -22,4 +22,8 @@ class UserInfo extends Model
 		'department_name',
 		'address'
 	];
+
+	public function user(){
+		return $this->belongsTo('App\Models\User','user_id','id');
+	}
 }

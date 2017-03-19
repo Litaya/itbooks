@@ -20,6 +20,7 @@
                 <span style="position:absolute; right: 20px;">{{ Auth::user()->certificate_as==""?'未认证':'已认证' }}<i class="fa fa-angle-right" style="margin-left: 5px"></i></span>
             </a>
             <a class="list-group-item" href="{{ route("user.address.index") }}">地址：{{ isset(json_decode(Auth::user()->json_content,true)['address']['location'])?json_decode(Auth::user()->json_content,true)['address']['location']:"未填写" }}</a>
+            <a class="list-group-item" href="javascript:void(0)">电话：{{ Auth::user() }}</a>
         </div>
     </div>
 @stop
