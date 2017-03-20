@@ -35,7 +35,7 @@
     <div class="container-fluid">
 
     <div class="row" style="margin-left: -20px; margin-right: -20px;">
-    {!! Form::open(["route"=>"book.search", "method"=>"GET"]) !!}
+    {!! Form::open(["route"=>"book.index", "method"=>"GET"]) !!}
     <div class="col-xs-9 col-md-9" style="padding: 0; margin: 0;">
     {{ Form::text('search', null, ['placeholder'=>'发现更多好书', "class"=>"form-control", "style"=>"margin: 0;"]) }}
     </div>
@@ -51,6 +51,7 @@
     <div class="col-xs-12">
         <div class="panel panel-default">
         
+        @if(count($topbooks) > 0)
         <div class="panel-body" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-5">
                 <a href="{{route('book.show', $topbooks[0]->id)}}"><img class="img-thumbnail img-in-well col-center-block" src="{{$topbooks[0]->img_upload}}" alt="编辑推荐"></a>
@@ -66,6 +67,7 @@
                 <small>
             </div>
         </div>
+        @endif
 
         <ul class="list-group">
             <a data-toggle="collapse" href="#recommendCollapse" class="list-group-item">为您精选</a>

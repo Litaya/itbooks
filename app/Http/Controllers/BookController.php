@@ -13,23 +13,32 @@ use DB;
 class BookController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $top_books = RecommendHelper::getManuallySetTopBook();
-        $books_recommend = RecommendHelper::getBookRecommend(Auth::user());
-        $hot_books = RecommendHelper::getHotBooks();
-        $new_books = RecommendHelper::getNewBooks();
 
-        self::grabImages($top_books);
-        self::grabImages($books_recommend);
-        self::grabImages($hot_books);
-        self::grabImages($new_books);
-        
-        return  view("book.index")
-                ->withTopbooks($top_books)
-                ->withBooksrecommend($books_recommend)
-                ->withHotbooks($hot_books)
-                ->withNewbooks($new_books);
+        if(empty($request->search)){
+            $top_books = RecommendHelper::getManuallySetTopBook();
+            $books_recommend = RecommendHelper::getBookRecommend(Auth::user());
+            $hot_books = RecommendHelper::getHotBooks();
+            $new_books = RecommendHelper::getNewBooks();
+
+            self::grabImages($top_books);
+            self::grabImages($books_recommend);
+            self::grabImages($hot_books);
+            self::grabImages($new_books);
+            
+            return  view("book.index")
+                    ->withTopbooks($top_books)
+                    ->withBooksrecommend($books_recommend)
+                    ->withHotbooks($hot_books)
+                    ->withNewbooks($new_books);
+        }
+
+        else{
+            $search = $request->search;
+            $books = Book::where('name', 'like', "%$search%")->orWhere('authors', 'liek', "%$search%")->paginate(10);
+            return view("book.search")->withBooks($books);
+        }
     }
 
     // GET
@@ -100,7 +109,8 @@ class BookController extends Controller
     // getSearch
     public function search(Request $request){
         $search = $request->search;
-        return "search utility not ready";
+        $books = Book::where('name', 'like', "%$search%")->orWhere('authors', 'liek', "%$search%")->paginate(10);
+        return view("book.search")->withBooks($books);
     }
 
     private function grabImages(&$books){
