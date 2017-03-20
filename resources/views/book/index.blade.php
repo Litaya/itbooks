@@ -20,7 +20,7 @@
         .img-in-well {
             width: auto;
             max-width: 100%;
-            height: 65%;
+            max-height: 65%;
         }
 
         .marginless {

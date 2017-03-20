@@ -3,10 +3,14 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        @if(Auth::check() and !empty(Auth::user()->headimgurl))
+        <img src="{{ Auth::user()->headimgurl }}" alt="" style="max-width: 20px; max-height: 20px; border-radius: 0; padding: 0;">
+        @else
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
+        @endif
       </button>
       <a class="navbar-brand" href="{{route('index')}}">书圈</a>
     </div>
@@ -25,7 +29,7 @@
       @if(Auth::user())
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Auth::user()->username}}<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Auth::user()->username}}</a>
           <ul class="dropdown-menu">
             <li><a href="{{ route('user.index') }}">个人资料</a></li>
             <li role="separator" class="divider"></li>

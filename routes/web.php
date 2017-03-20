@@ -59,7 +59,7 @@ Route::resource('cert', 'CertificationController');
 
 
 Route::get('/', function () {
-	return view('welcome',['message'=>'欢迎来到书圈!']);
+	return redirect()->route('book.index');
 })->name('index');
 Route::get('/errors',"PermissionController@user_permission_error")->name('errors.index');
 
