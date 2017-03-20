@@ -40,7 +40,11 @@
                                 <strong style="color:orangered">拒绝理由：</strong>{{ $certification->message }}<br>
                             @endif
                             <img src="{{route('image', $certification->img_upload)}}" alt="" width="100%">
-
+                            <p></p>
+                                <a href="{{ route("cert.show",['cert'=>$certification->id]) }}" class="btn btn-primary"><i class="fa fa-info push"></i>详细信息</a>
+                            @if($certification->status == 0)
+                                <a class="btn btn-success" href="{{ route('cert.edit',['cert'=>$certification->id]) }}"><i class="fa fa-pencil-square-o push"></i>修改</a>
+                            @endif
                         </div>
                     </div>
                 @endforeach

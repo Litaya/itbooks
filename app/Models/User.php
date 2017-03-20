@@ -50,7 +50,7 @@ class User extends Authenticatable
 
 	public function addRepresentative(){}
 
-	public function userInfos(){
-		$this->hasOne('App\Models\UserInfo','user_if','id');
+	public function userInfo(){
+		return $this->hasOne('App\Models\UserInfo','user_id','id');
 	}
 }

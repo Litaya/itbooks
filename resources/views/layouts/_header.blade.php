@@ -2,12 +2,13 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <img src="{{ isset(Auth::user()->headimgurl)?Auth::user()->headimgurl:'/img/avatar.png' }}" alt="" style="padding:0; width:40px; height: 40px; border-radius: 25px" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+        {{--<img src="{{ Auth::user()->headimgurl }}" alt="" style="width:50px; height: 50px; border-radius: 25px">--}}
+        {{--<span class="icon-bar"></span>--}}
+        {{--<span class="icon-bar"></span>--}}
+        {{--<span class="icon-bar"></span>--}}
+      </img>
       <a class="navbar-brand" href="{{route('index')}}">书圈</a>
     </div>
 
