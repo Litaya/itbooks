@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -70,6 +71,27 @@ class CertificationAdminController extends Controller
 			}
 			$cert->status = 1;
 			$cert->update();
+
+			// 同步user_info的信息
+			$cert_json = \GuzzleHttp\json_decode($cert->json_content);
+			$data = [
+				'school_name' => $cert->workplace,
+				'school_division' => $cert_json->department,
+				'school_title'    => $cert_json->jobtitle,
+				'school_json'     => \GuzzleHttp\json_encode([
+					"course_name_1" => $cert_json->course_name_1,
+					"number_stud_1" => $cert_json->number_stud_1,
+					"course_name_2" => $cert_json->course_name_2,
+					"number_stud_2" => $cert_json->number_stud_2,
+					"course_name_3" => $cert_json->course_name_3,
+					"number_stud_3" => $cert_json->number_stud_3,
+				]),
+				'phone'           => $cert_json->phone,
+				'qq'              => $cert_json->qqnumber,
+				'realname'        => $cert->realname
+			];
+			UserInfo::where('user_id',$user->id)->update($data);
+
 			Session::flash('success', "已批准申请");
 		}
 		else Session::flash('warning', "该申请已经过期");

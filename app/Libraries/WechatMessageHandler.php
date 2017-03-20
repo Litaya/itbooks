@@ -3,6 +3,7 @@
 namespace App\Libraries;
 
 use App\Models\User;
+use App\Models\UserInfo;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Support\Facades\Log;
 use EasyWeChat\Message\News;
@@ -63,13 +64,16 @@ class WechatMessageHandler{
 		$wechat_user = $this->app->user->get($open_id);
 		$user = User::where('openid',$open_id)->first();
 		if(empty($user)){
-			User::create([
-				'username'=>$wechat_user->nickname,
-				'openid'=>$open_id,
-				'gender'=>$wechat_user->sex,
-				'subscribed'=>1,
-				'headimgurl'=>$wechat_user->headimgurl,
-				'source'=>'wechat'
+			$user = User::create([
+				'username'   => $wechat_user->nickname,
+				'openid'     => $open_id,
+				'gender'     => $wechat_user->sex,
+				'subscribed' => 1,
+				'headimgurl' => $wechat_user->headimgurl,
+				'source'     => 'wechat'
+			]);
+			UserInfo::create([
+				'user_id' => $user->id
 			]);
 		}else{
 			User::where('openid',$open_id)->update(['subscribed'=>1]);

@@ -23,6 +23,9 @@ class CreateBookTable extends Migration
 			$table->string('editor_name');
 			$table->string('authors');
 			$table->integer('type')->comment('0:未知,1:教材类;2:非教材类');
+			$table->integer('weight')->default(0);
+			$table->string("img_upload")->nullable();
+			$table->string("kj_url")->nullable();
 			$table->timestamp('publish_time'); // 出版时间
 			$table->timestamps();
 

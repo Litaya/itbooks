@@ -21,8 +21,10 @@ class BookRequest extends Migration
 			$table->integer('status')->default(0)->comment('0:未审核; 1:审核通过; 2审核未通过');
 			$table->string('message')->default('')->comment('审核未通过时,管理员的反馈信息');
 			$table->string('address');
+			$table->integer('district_id');
 			$table->string('phone');
 			$table->string('receiver');
+			$table->integer('book_type')->default(0)->comment('0未知;1教材;2教辅');
 
 			$table->timestamps();
 		});

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserInfo;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -164,9 +165,11 @@ class CertificationController extends Controller
 			$cert->json_content = $jdata;
 			$cert->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
 			$cert->save();
+
+
 			Session::flash('success', '您的身份认证申请提交成功');
-		}
-		else Session::flash('warning', '您有未关闭的身份认证申请');
+		}else
+			Session::flash('warning', '您有未关闭的身份认证申请');
 
 		return redirect()->route("cert.index");
 	}
@@ -179,7 +182,7 @@ class CertificationController extends Controller
 	 */
 	public function show($id)
 	{
-		//
+		return view('certificate.show');
 	}
 
 	/**
@@ -188,9 +191,9 @@ class CertificationController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id)
+	public function edit($cert)
 	{
-		//
+		return view('certificate.edit');
 	}
 
 	/**
