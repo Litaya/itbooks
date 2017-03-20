@@ -109,7 +109,7 @@
             <a data-toggle="collapse" href="#hotbookCollapse" class="list-group-item">热门图书</a>
             <div class="collapse" id="hotbookCollapse">
                 <div class="well">
-                        <div class="row">    
+                        <div class="row" id="hotbookRow">    
                             @foreach($hotbooks as $book)
                             <div class="col-xs-6">
                             <div class="well well-showcase">
@@ -129,8 +129,6 @@
         </div>
         </div>
 
-
-
     </div>
 
 
@@ -139,5 +137,9 @@
     
     </div>
     </div>
+
+<script>
+
+</script>
 
 @endsection
