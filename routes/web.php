@@ -21,6 +21,9 @@ Route::get('unread', "ReadController@unread")->name('unread');
 
 
 Route::group(['prefix'=>'userinfo'], function(){
+	Route::get('/',function (){
+		return redirect()->route('userinfo.basic');
+	})->name("userinfo.index");
 	Route::get("basic", "UserInfoController@getBasic")->name("userinfo.basic");
 	Route::get("detail", "UserInfoController@getDetail")->name("userinfo.detail");
 	Route::get("teacher", "UserInfoController@getTeacher")->name("userinfo.teacher");

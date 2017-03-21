@@ -70,7 +70,8 @@ class CertificationController extends Controller
 			}
 		}
 		$certifications = $unfin_cert;
-		return view("certificate.index")->with(compact('success_records','rejected_records','waiting_records','identities','certifications'));
+//		return view("certificate.index")->with(compact('success_records','rejected_records','waiting_records','identities','certifications'));
+		return redirect()->route('userinfo.index');
 	}
 
 	/**
@@ -97,7 +98,8 @@ class CertificationController extends Controller
 				$selection = "none";
 		}
 
-		return view("certificate.create")->withSelection($selection);
+//		return view("certificate.create")->withSelection($selection);
+		return redirect()->route('userinfo.index');
 	}
 
 	/**
@@ -182,7 +184,8 @@ class CertificationController extends Controller
 	 */
 	public function show($id)
 	{
-		return view('certificate.show');
+//		return view('certificate.show');
+		return redirect()->route('userinfo.index');
 	}
 
 	/**
@@ -193,7 +196,8 @@ class CertificationController extends Controller
 	 */
 	public function edit($cert)
 	{
-		return view('certificate.edit');
+//		return view('certificate.edit');
+		return redirect()->route('userinfo.index');
 	}
 
 	/**
@@ -218,6 +222,7 @@ class CertificationController extends Controller
 	{
 		$c = Certification::find($id);
 		$c->delete();
-		return redirect()->route('index');
+//		return redirect()->route('index');
+		return redirect()->route('userinfo.index');
 	}
 }
