@@ -83,7 +83,7 @@
             <!-- if the book is open to reservations, and the user has enough privilege -->
             <a href="{{route('bookreq.create', $book->id)}}"><button class="btn btn-primary btn-xs">申请样书</button></a>
             <!-- end if -->
-            <a href="{{route('book.index')}}"><button class="btn btn-default btn-xs">返回首页</button></a>
+            <a href="{{route('home')}}"><button class="btn btn-default btn-xs">返回首页</button></a>
         </div>
         
     </div>

@@ -22,7 +22,7 @@
 
 <body>
 @include('layouts._header')
-<div class="container">
+<div class="container" style="margin: 0;padding: 0">
     @include('layouts._message')
     @yield('content')
 </div>

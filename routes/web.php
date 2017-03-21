@@ -59,11 +59,11 @@ Route::resource('cert', 'CertificationController');
 
 
 Route::get('/', function () {
-	return redirect()->route('book.index');
+	return redirect()->route('home');
 })->name('index');
 Route::get('/errors',"PermissionController@user_permission_error")->name('errors.index');
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 /**

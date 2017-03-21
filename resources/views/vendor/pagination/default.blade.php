@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <ul class="pagination">
+    <ul class="pagination pagination-sm">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
             <li class="disabled"><span>&laquo;</span></li>
@@ -17,6 +17,7 @@
             {{-- Array Of Links --}}
             @if (is_array($element))
                 @foreach ($element as $page => $url)
+{{--                    @if($loop->remaining>2) @continue @endif--}}
                     @if ($page == $paginator->currentPage())
                         <li class="active"><span>{{ $page }}</span></li>
                     @else
