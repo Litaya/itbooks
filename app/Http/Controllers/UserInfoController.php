@@ -178,6 +178,8 @@ class UserInfoController extends Controller
         $userinfo->role = $request->role;
         self::update_user_info($userinfo);
 
+        Session::flash("success", "信息保存成功");
+
         return redirect()->route("userinfo.basic");
     }
 
@@ -194,6 +196,8 @@ class UserInfoController extends Controller
 
         self::update_user_info($userinfo);
         
+        Session::flash("success", "信息保存成功");
+
         return redirect()->route("userinfo.detail");
     }
 
@@ -235,6 +239,7 @@ class UserInfoController extends Controller
             return self::createCertRequest(self::get_user_info(Auth::user(), true));
         }
 
+        Session::flash("success", "信息保存成功");
 
         return redirect()->route("userinfo.teacher");
     }
@@ -292,6 +297,8 @@ class UserInfoController extends Controller
 
         self::update_user_info($userinfo);
 
+        Session::flash("success", "信息保存成功");
+
         return redirect()->route("userinfo.basic");
     }
 
@@ -329,12 +336,13 @@ class UserInfoController extends Controller
 
 
         // check duplicate
-        $tmp = CertRequest::where("user_id", "=", $user->id)->where("status","<>",2)->first();
+        $tmp = CertRequest::where("user_id", "=", $user->id)->where("status","<>", 2)->first();
         if(empty($tmp)){
             $cr = new CertRequest;
             $cr->user_id = $user->id;
             $cr->status = 0;
             $cr->save();
+            Session::flash("success", "提交申请成功");
         }
         else{
             if($tmp->status == 0)

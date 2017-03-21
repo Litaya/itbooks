@@ -28,6 +28,7 @@ class CertRequestAdminController extends Controller
                         ->select('cert_request.id as id', 'user.username as username', 'user_info.realname as realname', 'user_info.role as cert_name', 'user_info.workplace as workplace', 'cert_request.status as status')
                         ->where('user_info.realname', 'like', "%$search%")
                         ->orWhere('user.username', 'like', "%$search%")
+                        ->orderBy('id', 'desc')
                         ->paginate(20);
         }
         else{
@@ -35,6 +36,7 @@ class CertRequestAdminController extends Controller
                         ->join('user_info', 'cert_request.user_id', '=', 'user_info.user_id')
                         ->join('user', 'user_info.user_id', '=', 'user.id')
                         ->select('cert_request.id as id', 'user.username as username', 'user_info.realname as realname', 'user_info.role as cert_name', 'user_info.workplace as workplace', 'cert_request.status as status')
+                        ->orderBy('id', 'desc')
                         ->paginate(20);
         }
 
@@ -109,7 +111,7 @@ class CertRequestAdminController extends Controller
 	public function deprive($id, Request $request){
 		$cr = CertRequest::find($id);
 		if($cr->status == 1){
-			$cr->status = 3; // deprivated
+			$cr->status = 2; // deprivated // used to be 3!
 			$cr->update();
 
             $user = User::find($cr->user_id);

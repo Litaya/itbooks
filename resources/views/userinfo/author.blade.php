@@ -45,12 +45,21 @@
 {{ Form::textarea("book_plan", null, ["class"=>"form-control"])}}
 </div>
 
+<hr>
+
+@if(!empty($userinfo->img_upload))
+<img class="img-responsive" src="{{route('image', $userinfo->img_upload)}}" width="100" height="100"></img>
+@endif
+
 {{ Form::label("img_upload", "上传图片材料", ["class"=>"form-spacing-top"]) }}
 <small>(请上传图书封面、样书照片等可供验证作者身份的图片)</small>
 {{ Form::file("img_upload", ["class"=>"form-control"])}}
 
 {{ Form::submit("保存", ["class"=>"btn btn-primary btn-block form-spacing-top"])}}
+
+@if($userinfo->role == "author")
 <button class="btn btn-primary btn-block form-spacing-top" onclick="save_and_apply()">保存并申请认证</button>
+@endif
 
 </small>
 {!! Form::close() !!}

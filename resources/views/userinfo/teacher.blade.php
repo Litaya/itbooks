@@ -65,14 +65,21 @@
 {{ Form::label("course_name_3", "学生人数3")}}{{ Form::number("number_stud_3", null,["class"=>"form-control", "placeholder"=>"课程人数"])}}
 </div></div>
 
+<hr>
 
+@if(!empty($userinfo->img_upload))
+<img class="img-responsive" src="{{route('image', $userinfo->img_upload)}}" width="100" height="100"></img>
+@endif
 {{ Form::label("img_upload", "上传图片材料", ["class"=>"form-spacing-top"]) }}
 <small>(请上传教师证、校网个人主页截图等可供验证教师身份的图片)</small>
 {{ Form::file("img_upload", ["class"=>"form-control"])}}
 
 
 {{ Form::submit("保存", ["class"=>"btn btn-primary btn-block form-spacing-top"])}}
+
+@if($userinfo->role =="teacher")
 <button class="btn btn-primary btn-block form-spacing-top" onclick="save_and_apply()">保存并申请认证</button>
+@endif
 </small>
 {!! Form::close() !!}
 
