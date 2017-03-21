@@ -13,10 +13,26 @@
 
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
+
 Route::get('like', "LikeController@like")->name('like');
 Route::get('unlike', "LikeController@unlike")->name('unlike');
 Route::get('read', "ReadController@read")->name('read');
 Route::get('unread', "ReadController@unread")->name('unread');
+
+
+Route::group(['prefix'=>'userinfo'], function(){
+	Route::get("basic", "UserInfoController@getBasic")->name("userinfo.basic");
+	Route::get("detail", "UserInfoController@getDetail")->name("userinfo.detail");
+	Route::get("teacher", "UserInfoController@getTeacher")->name("userinfo.teacher");
+	Route::get("author", "UserInfoController@getAuthor")->name("userinfo.author");
+	Route::get("missing", "UserInfoController@getMissing")->name("userinfo.missing");
+	Route::post("basic", "UserInfoController@postSaveBasic")->name("userinfo.basic.save");
+	Route::post("detail", "UserInfoController@postSaveDetail")->name("userinfo.detail.save");
+	Route::post("teacher", "UserInfoController@postSaveTeacher")->name("userinfo.teacher.save");
+	Route::post("author", "UserInfoController@postSaveAuthor")->name("userinfo.author.save");
+	Route::post("missing", "UserInfoController@postSaveMissing")->name("userinfo.missing.save");
+});
+
 
 Route::group(['prefix'=>'conference'], function(){
 	Route::get('/', 'ConferenceController@index')->name('conference.index');
@@ -25,8 +41,9 @@ Route::group(['prefix'=>'conference'], function(){
 	Route::post('{id}/cancel', 'ConferenceController@postCancel')->name('conference.cancel');
 });
 
+
 Route::resource('resource', 'ResourceController');
-Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("resource.download"); // TODO: 增加支付积分逻辑，增加支付路由(getDownload)，编写下载逻辑
+Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("resource.download.save"); // TODO: 增加支付积分逻辑，增加支付路由(getDownload)，编写下载逻辑
 
 /* get image from storage */
 Route::get('image/{src?}', function ($src){
