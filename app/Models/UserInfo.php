@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserInfo extends Model
 {
 	protected $table = 'user_info';
+	protected $primaryKey = 'user_id';
+	public $incrementing = false;
 
 	protected $fillable = [
 		'user_id',
@@ -20,7 +22,8 @@ class UserInfo extends Model
 		'district_name',
 		'department_id',
 		'department_name',
-		'address'
+		'address',
+		'json_content',
 	];
 
 	public function user(){

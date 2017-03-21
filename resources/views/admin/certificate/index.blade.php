@@ -40,10 +40,10 @@
                         {{ csrf_field() }}
                     </form>
                     <tr>
-                        <td>{{$cert->user->username}}</td>
+                        <td>{{$cert->username}}</td>
                         <td>{{$cert->realname}}</td>
                         <td>{{$cert->workplace}}</td>
-                        <td>{{$cert->cert_name=="TEACHER"?"教师":"作者"}}</td>
+                        <td>{{strtoupper($cert->cert_name)=="TEACHER"?"教师":"作者"}}</td>
                         @if($cert->status==1)
                         <td>通过 <a href="javascript:$('#deprive-form-{{$cert->id}}').submit()">收回</a>
                         </td>
@@ -73,7 +73,7 @@
                             <!-- END IF HAS PASS PERMISSION -->
                             <!-- IF HAS DELETE PERMISSION -->
                             <div class="col-xs-2">
-                                <button class="btn btn-danger btn-xs" onclick="cert_destory({{$cert->id}});">删除</button>
+                                <!-- button class="btn btn-danger btn-xs" onclick="cert_destory({{$cert->id}});">删除</button -->
                                 <!-- {!! Form::open(['route'=>['admin.cert.destroy', $cert->id], 'method'=>'DELETE']) !!}
                                 {!! Form::submit('删除', ['class'=>'btn btn-danger btn-xs']) !!}
                                 {!! Form::close() !!} -->

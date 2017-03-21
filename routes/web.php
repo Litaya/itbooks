@@ -13,10 +13,26 @@
 
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
+
 Route::get('like', "LikeController@like")->name('like');
 Route::get('unlike', "LikeController@unlike")->name('unlike');
 Route::get('read', "ReadController@read")->name('read');
 Route::get('unread', "ReadController@unread")->name('unread');
+
+
+Route::group(['prefix'=>'userinfo'], function(){
+	Route::get("basic", "UserInfoController@getBasic")->name("userinfo.basic");
+	Route::get("detail", "UserInfoController@getDetail")->name("userinfo.detail");
+	Route::get("teacher", "UserInfoController@getTeacher")->name("userinfo.teacher");
+	Route::get("author", "UserInfoController@getAuthor")->name("userinfo.author");
+	Route::get("missing", "UserInfoController@getMissing")->name("userinfo.missing");
+	Route::post("basic", "UserInfoController@postSaveBasic")->name("userinfo.basic.save");
+	Route::post("detail", "UserInfoController@postSaveDetail")->name("userinfo.detail.save");
+	Route::post("teacher", "UserInfoController@postSaveTeacher")->name("userinfo.teacher.save");
+	Route::post("author", "UserInfoController@postSaveAuthor")->name("userinfo.author.save");
+	Route::post("missing", "UserInfoController@postSaveMissing")->name("userinfo.missing.save");
+});
+
 
 Route::group(['prefix'=>'conference'], function(){
 	Route::get('/', 'ConferenceController@index')->name('conference.index');
@@ -25,8 +41,9 @@ Route::group(['prefix'=>'conference'], function(){
 	Route::post('{id}/cancel', 'ConferenceController@postCancel')->name('conference.cancel');
 });
 
+
 Route::resource('resource', 'ResourceController');
-Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("resource.download"); // TODO: 增加支付积分逻辑，增加支付路由(getDownload)，编写下载逻辑
+Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("resource.download.save"); // TODO: 增加支付积分逻辑，增加支付路由(getDownload)，编写下载逻辑
 
 /* get image from storage */
 Route::get('image/{src?}', function ($src){
@@ -93,12 +110,13 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
 
-	Route::get('cert', 'CertificationAdminController@index')->name('admin.cert.index');
-	Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
-	Route::post('cert/{id}/pass', 'CertificationAdminController@pass')->name('admin.cert.pass');
-	Route::post('cert/{id}/reject', 'CertificationAdminController@reject')->name('admin.cert.reject');
-	Route::post('cert/{id}/deprive', 'CertificationAdminController@deprive')->name('admin.cert.deprive');
-	Route::delete('cert/{id}', 'CertificationAdminController@destroy')->name('admin.cert.destroy');
+	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
+	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
+	Route::get('cert/{id}', "CertRequestAdminController@show")->name('admin.cert.show');
+	Route::post('cert/{id}/pass', 'CertRequestAdminController@pass')->name('admin.cert.pass');
+	Route::post('cert/{id}/reject', 'CertRequestAdminController@reject')->name('admin.cert.reject');
+	Route::post('cert/{id}/deprive', 'CertRequestAdminController@deprive')->name('admin.cert.deprive');
+	Route::delete('cert/{id}', 'CertRequestAdminController@destroy')->name('admin.cert.destroy');
 	
 	Route::group(['prefix'=>'book'], function(){
 		Route::get('/', 'BookAdminController@index')->name('admin.book.index');
