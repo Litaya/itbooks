@@ -40,6 +40,11 @@
 {{ Form::text("workplace", null, ["class"=>"form-control"])}}
 </div></div>
 
+<div class="form-group">
+{{ Form::label("book_plan", "新书计划") }}
+{{ Form::textarea("book_plan", null, ["class"=>"form-control"])}}
+</div>
+
 {{ Form::label("img_upload", "上传图片材料", ["class"=>"form-spacing-top"]) }}
 <small>(请上传图书封面、样书照片等可供验证作者身份的图片)</small>
 {{ Form::file("img_upload", ["class"=>"form-control"])}}
