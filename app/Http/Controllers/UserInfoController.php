@@ -20,7 +20,7 @@ class UserInfoController extends Controller
     private $teacher_required = ["realname", "workplace", "department", "job_title", 
                      "img_upload", "course_info"];
 
-    private $author_required =  ["realname", "workplace", "img_upload", "book_plan"];
+    private $author_required =  ["realname", "workplace", "img_upload"];
 
     public static function get_user_info($user, $expand_json=true){
 
@@ -60,7 +60,7 @@ class UserInfoController extends Controller
             $userinfo->number_stud_2 = $get($data, "number_stud_2");
             $userinfo->course_name_3 = $get($data, "course_name_3");
             $userinfo->number_stud_3 = $get($data, "number_stud_3");
-
+            $userinfo->book_plan = $get($data, "book_plan");
             $userinfo->department = $get($data, "department");
             $userinfo->jobtitle = $get($data, "jobtitle");
             $userinfo->qqnumber = $get($data, "qqnumber");
@@ -178,6 +178,8 @@ class UserInfoController extends Controller
         $userinfo->role = $request->role;
         self::update_user_info($userinfo);
 
+        Session::flash("success", "信息保存成功");
+
         return redirect()->route("userinfo.basic");
     }
 
@@ -194,6 +196,8 @@ class UserInfoController extends Controller
 
         self::update_user_info($userinfo);
         
+        Session::flash("success", "信息保存成功");
+
         return redirect()->route("userinfo.detail");
     }
 
@@ -235,6 +239,7 @@ class UserInfoController extends Controller
             return self::createCertRequest(self::get_user_info(Auth::user(), true));
         }
 
+        Session::flash("success", "信息保存成功");
 
         return redirect()->route("userinfo.teacher");
     }
@@ -253,6 +258,10 @@ class UserInfoController extends Controller
         $userinfo->json_content = json_encode($data);
 
         self::update_user_info($userinfo);
+
+        if($request->sendrequest == "true"){
+            return self::createCertRequest(self::get_user_info(Auth::user(), true));
+        }
 
         return redirect()->route("userinfo.author");
     }
@@ -288,6 +297,8 @@ class UserInfoController extends Controller
 
         self::update_user_info($userinfo);
 
+        Session::flash("success", "信息保存成功");
+
         return redirect()->route("userinfo.basic");
     }
 
@@ -295,29 +306,43 @@ class UserInfoController extends Controller
         $info->id_type = $info->role;
 
         $user = Auth::user();
-
-        if(
-            empty($info->realname) or
-            empty($info->workplace) or
-            empty($info->img_upload) or
-            (empty($info->course_name_1) and empty($info->course_name_2) and empty($info->course_name_3)) or
-            (empty($info->number_stud_1) and empty($info->number_stud_2) and empty($info->number_stud_3)) or
-            empty($info->jobtitle) or
-            empty($info->phone) or
-            empty($info->department)
-        ){
-            Session::flash("warning", "认证所需的信息不全，请您在本页补完");
-            return redirect()->route("userinfo.missing");
+        if($info->role == "teacher"){
+            if(
+                empty($info->realname) or
+                empty($info->workplace) or
+                empty($info->img_upload) or
+                (empty($info->course_name_1) and empty($info->course_name_2) and empty($info->course_name_3)) or
+                (empty($info->number_stud_1) and empty($info->number_stud_2) and empty($info->number_stud_3)) or
+                empty($info->jobtitle) or
+                empty($info->phone) or
+                empty($info->department)
+            ){
+                Session::flash("warning", "认证所需的信息不全，请您在本页补完");
+                return redirect()->route("userinfo.missing");
+            }
+        }
+        else if($info->role == "author")
+        {
+            if(
+                empty($info->realname) or
+                empty($info->workplace) or
+                empty($info->img_upload) or
+                empty($info->phone)
+            ){
+                Session::flash("warning", "认证所需的信息不全，请您在本页补完");
+                return redirect()->route("userinfo.missing");
+            }
         }
 
 
         // check duplicate
-        $tmp = CertRequest::where("user_id", "=", $user->id)->first();
+        $tmp = CertRequest::where("user_id", "=", $user->id)->where("status","<>", 2)->first();
         if(empty($tmp)){
             $cr = new CertRequest;
             $cr->user_id = $user->id;
             $cr->status = 0;
             $cr->save();
+            Session::flash("success", "提交申请成功");
         }
         else{
             if($tmp->status == 0)

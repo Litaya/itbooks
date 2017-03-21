@@ -35,14 +35,7 @@
 {{ Form::text("phone", null, ["class"=>"form-control"])}}
 
 {{ Form::label("role", "角色") }}
-<select name="role" "class"="form-control">
-    <option value="teacher">教师</option>
-    <option value="student">学生</option>
-    <option value="staff">职员</option>
-    <option value="author">作者</option>
-    <option value="other">其他</option>
-</select><br>
-
+{{ Form::select('role', ['teacher' => '教师', 'student' => '学生', "stuff"=>"职员", "author"=>"作者", "other"=>"其他"], null, ['placeholder' => '选择您的身份', "class"=>"form-control"]) }}
 
 {{ Form::submit("保存", ["class"=>"btn btn-primary btn-block form-spacing-top"])}}
 
