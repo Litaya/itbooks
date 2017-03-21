@@ -22,7 +22,7 @@ class UserInfoController extends Controller
 
     private $author_required =  ["realname", "workplace", "img_upload", "book_plan"];
 
-    private function get_user_info($user, $expand_json=true){
+    public static function get_user_info($user, $expand_json=true){
 
         // 取出user_info表中携带的信息
         $userinfo = UserInfo::where("user_id", "=", $user->id)->first();
@@ -69,7 +69,7 @@ class UserInfoController extends Controller
         return $userinfo;
     }
 
-    private function update_user_info($new_info){
+    public static function update_user_info($new_info){
         $user = User::find($new_info->user_id);
         //$userinfo = UserInfo::where("user_id", "=", $new_info->user_id)->first();
         $userinfo = UserInfo::find($user->id);
@@ -86,6 +86,7 @@ class UserInfoController extends Controller
         $userinfo->address = $new_info->address;
         $userinfo->json_content = $new_info->json_content;
         $userinfo->district_name = $new_info->district_name;
+        $userinfo->img_upload = $new_info->img_upload;
 
         $userinfo->update();
     }
@@ -202,7 +203,7 @@ class UserInfoController extends Controller
         $userinfo->workplace = $request->workplace;
 
         if($request->img_upload)
-            $userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->img_upload, "certificate");
+            $userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
 
         if($request->number_stud_1 && !$request->course_name_1)
 			return redirect()->back()->withErrors("请填写第一课程名称")->withInput();
@@ -238,59 +239,13 @@ class UserInfoController extends Controller
         return redirect()->route("userinfo.teacher");
     }
 
-    private function createCertRequest($info){
-        $info->id_type = $info->role;
-
-        $user = Auth::user();
-
-        if(
-            empty($info->realname) or
-            empty($info->workplace) or
-            empty($info->img_upload) or
-            (empty($info->course_name_1) and empty($info->course_name_2) and empty($info->course_name_3)) or
-            (empty($info->number_stud_1) and empty($info->number_stud_2) and empty($info->number_stud_3)) or
-            empty($info->jobtitle) or
-            empty($info->phone) or
-            empty($info->department)
-        ){
-            Session::flash("warning", "认证所需的信息不全，请您在本页补完");
-            return redirect()->route("userinfo.missing");
-        }
-
-
-        // check duplicate
-        $tmp = CertRequest::where("user_id", "=", $user->id);
-        if(empty($tmp)){
-            $cr = new CertRequest;
-            $cr->user_id = $user->id;
-            $cr->status = 0;
-            $cr->save();
-        }
-        else{
-            if($tmp->status == 0)
-                Session::flash("warning", "您已经提交过申请，请耐心等待管理员审核");
-            else if($tmp->status == 1)
-                Session::flash("warning", "您已经通过了审批，请不要重复审批");
-        }
-
-        if($info->role=="teacher")
-            return redirect()->route("userinfo.teacher");
-        else if($info->role=="author")
-            return redirect()->route("userinfo.author");
-        
-        else
-            return redirect()->route("userinfo.basic");
-
-    }
-
-
     public function postSaveAuthor(Request $request){
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
 
         $userinfo->realname = $request->realname;
         $userinfo->workplace = $request->workplace;
         if($request->img_upload){
-            $userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->img_upload, "certificate");
+            $userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
         }
 
         $data = empty($userinfo->json_content) ? [] : json_decode($userinfo->json_content, true);
@@ -334,6 +289,51 @@ class UserInfoController extends Controller
         self::update_user_info($userinfo);
 
         return redirect()->route("userinfo.basic");
+    }
+
+    private function createCertRequest($info){
+        $info->id_type = $info->role;
+
+        $user = Auth::user();
+
+        if(
+            empty($info->realname) or
+            empty($info->workplace) or
+            empty($info->img_upload) or
+            (empty($info->course_name_1) and empty($info->course_name_2) and empty($info->course_name_3)) or
+            (empty($info->number_stud_1) and empty($info->number_stud_2) and empty($info->number_stud_3)) or
+            empty($info->jobtitle) or
+            empty($info->phone) or
+            empty($info->department)
+        ){
+            Session::flash("warning", "认证所需的信息不全，请您在本页补完");
+            return redirect()->route("userinfo.missing");
+        }
+
+
+        // check duplicate
+        $tmp = CertRequest::where("user_id", "=", $user->id)->first();
+        if(empty($tmp)){
+            $cr = new CertRequest;
+            $cr->user_id = $user->id;
+            $cr->status = 0;
+            $cr->save();
+        }
+        else{
+            if($tmp->status == 0)
+                Session::flash("warning", "您已经提交过申请，请耐心等待管理员审核");
+            else if($tmp->status == 1)
+                Session::flash("warning", "您已经通过了审批，请不要重复审批");
+        }
+
+        if($info->role=="teacher")
+            return redirect()->route("userinfo.teacher");
+        else if($info->role=="author")
+            return redirect()->route("userinfo.author");
+        
+        else
+            return redirect()->route("userinfo.basic");
+
     }
 
 }

@@ -110,12 +110,13 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
 
-	Route::get('cert', 'CertificationAdminController@index')->name('admin.cert.index');
-	Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
-	Route::post('cert/{id}/pass', 'CertificationAdminController@pass')->name('admin.cert.pass');
-	Route::post('cert/{id}/reject', 'CertificationAdminController@reject')->name('admin.cert.reject');
-	Route::post('cert/{id}/deprive', 'CertificationAdminController@deprive')->name('admin.cert.deprive');
-	Route::delete('cert/{id}', 'CertificationAdminController@destroy')->name('admin.cert.destroy');
+	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
+	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
+	Route::get('cert/{id}', "CertRequestAdminController@show")->name('admin.cert.show');
+	Route::post('cert/{id}/pass', 'CertRequestAdminController@pass')->name('admin.cert.pass');
+	Route::post('cert/{id}/reject', 'CertRequestAdminController@reject')->name('admin.cert.reject');
+	Route::post('cert/{id}/deprive', 'CertRequestAdminController@deprive')->name('admin.cert.deprive');
+	Route::delete('cert/{id}', 'CertRequestAdminController@destroy')->name('admin.cert.destroy');
 	
 	Route::group(['prefix'=>'book'], function(){
 		Route::get('/', 'BookAdminController@index')->name('admin.book.index');
