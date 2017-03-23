@@ -78,9 +78,13 @@ class CertRequestAdminController extends Controller
 				if(!empty($user->certificate_as) and strlen($user->certificate_as) > 0) $user->certificate_as = $user->certificate_as . "|";
                 else $user->certificate_as = "";
 
-				if($user->role == 'teacher')
+				$user_json = [];
+				if(!empty($user->json_content))
+					$user_json = json_decode($user->json_content, true);
+				if($cert->cert_name == 'TEACHER')
 					$user_json['teacher'] = ['book_limit'=>10];
-                
+				$user->json_content = json_encode($user_json);
+
 				$user->certificate_as = $user->certificate_as . strtoupper($userinfo->role);
 				$user->update();
 			}
