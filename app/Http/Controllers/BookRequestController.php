@@ -27,13 +27,13 @@ class BookRequestController extends Controller
     public function index(Request $request){
     	$user = Auth::user();
     	if(!empty($user->json_content))
-    	    $user->json_content = \GuzzleHttp\json_decode($user->json_content);
+    	    $user->json_content = json_decode($user->json_content);
 		return view('book_request.index',['user'=>$user]);
     }
 
     public function storeMultiple(Request $request){
 	    $user = Auth::user();
-	    $user_json = \GuzzleHttp\json_decode($user->json_content,true);
+	    $user_json = json_decode($user->json_content,true);
 
 	    $this->validate($request,[
 			'book-ids' => 'required',
