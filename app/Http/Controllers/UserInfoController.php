@@ -81,7 +81,6 @@ class UserInfoController extends Controller
             $user->update();
         }
 
-
         $userinfo->role = $new_info->role;
         $userinfo->phone = $new_info->phone;
         $userinfo->realname = $new_info->realname;
@@ -177,10 +176,13 @@ class UserInfoController extends Controller
         $this->validate($request, [
             "email" => "required|email",
             "phone" => "required",
-            "role" => "required|in:teacher,author,student,staff,other",
+            "role" => "in:teacher,author,student,staff,other",
         ]);
-    
+
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
+        if(empty($userinfo->role) and empty($request->role)){
+            return redirect()->back()->withError("角色字段必须选择");
+        }
         if($request->email != $userinfo->email)
         {
             $this->validate($request, [
