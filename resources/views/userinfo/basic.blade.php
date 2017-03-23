@@ -4,20 +4,7 @@
 
 @section("content")
 
-<div class="btn-group btn-group-justified" role="group" aria-label="...">
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.basic')}}"><button type="button" class="btn btn-success">基本信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.detail')}}"><button type="button" class="btn btn-default">详细信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.teacher')}}"><button type="button" class="btn btn-default">教师附加信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.author')}}"><button type="button" class="btn btn-default">作者附加信息</button></a>
-  </div>
-</div>
+@include("userinfo._sub_header")
 
 <br>
 
@@ -35,7 +22,11 @@
 {{ Form::text("phone", null, ["class"=>"form-control"])}}
 
 {{ Form::label("role", "角色") }}
-{{ Form::select('role', ['teacher' => '教师', 'student' => '学生', "stuff"=>"职员", "author"=>"作者", "other"=>"其他"], null, ['placeholder' => '选择您的身份', "class"=>"form-control"]) }}
+{{ Form::select('role', ['teacher' => '教师', 'student' => '学生', "stuff"=>"职员", "author"=>"作者", "other"=>"其他"], null, ['placeholder' => '选择您的身份', "class"=>"form-control", "disabled"=>$lockrole?"disabled":""]) }}
+@if($lockrole)
+<small>您已经在当前角色下提交或通过身份认证，不能改变角色，如有特殊需要请与管理员联系</small>
+@endif
+
 
 {{ Form::submit("保存", ["class"=>"btn btn-primary btn-block form-spacing-top"])}}
 

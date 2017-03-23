@@ -4,21 +4,7 @@
 
 @section("content")
 
-<div class="btn-group btn-group-justified" role="group" aria-label="...">
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.basic')}}"><button type="button" class="btn btn-default">基本信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.detail')}}"><button type="button" class="btn btn-default">详细信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.teacher')}}"><button type="button" class="btn btn-default">教师附加信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.author')}}"><button type="button" class="btn btn-success">作者附加信息</button></a>
-  </div>
-</div>
-<br>
+@include("userinfo._sub_header")
 
 
 <!-- 证明材料/照片，未来出书计划 -->
