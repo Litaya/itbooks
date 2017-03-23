@@ -22,7 +22,7 @@
 {{ Form::text("phone", null, ["class"=>"form-control"])}}
 
 {{ Form::label("role", "角色") }}
-{{ Form::select('role', ['teacher' => '教师', 'student' => '学生', "stuff"=>"职员", "author"=>"作者", "other"=>"其他"], null, ['placeholder' => '选择您的身份', "class"=>"form-control", "disabled"=>$lockrole?"disabled":""]) }}
+{{ Form::select('role', ['teacher' => '教师', 'student' => '学生', "stuff"=>"职员", "author"=>"作者", "other"=>"其他"], null, ['id'=>'role-select', 'placeholder' => '选择您的身份', "class"=>"form-control"]) }}
 @if($lockrole)
 <small>您已经在当前角色下提交或通过身份认证，不能改变角色，如有特殊需要请与管理员联系</small>
 @endif
@@ -32,5 +32,12 @@
 
 </small>
 {!! Form::close() !!}
+
+<script>
+$(document).ready(function(){
+    if({{$lockrole == true}}) $("#role-select").attr("disabled", "disabled");
+});
+
+</script>
 
 @endsection
