@@ -78,7 +78,9 @@ class UserInfoController extends Controller
         if($user->email != $new_info->email){
             $user->email = $new_info->email;
             $user->email_status = 0;
+            $user->update();
         }
+
 
         $userinfo->role = $new_info->role;
         $userinfo->phone = $new_info->phone;
