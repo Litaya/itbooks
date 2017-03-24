@@ -16,7 +16,7 @@
                     邮箱：{{ Auth::user()->email }}
                     <span style="position:absolute; right: 20px;">{{ Auth::user()->email?(Auth::user()->email_status?'已验证':'未验证'):"未填写" }} <i class="fa fa-angle-right" style="margin-left: 5px"></i></span>
                 </a>
-                <a class="list-group-item" href="{{ route('userinfo.'.Auth::user()->userinfo->role) }}">
+                <a class="list-group-item" href="{{ route('userinfo.basic') }}">
                     用户身份：
                     @if(strpos(strtoupper(Auth::user()->userinfo->role), "TEACHER") !== false)
                     教师
@@ -28,7 +28,9 @@
                     职员
                     @endif
                     <span style="position:absolute; right: 20px;">
+                    @if(strpos(strtoupper(Auth::user()->userinfo->role), "TEACHER") !== false)
                     {{ strpos(strtoupper(Auth::user()->certificate_as), strtoupper(Auth::user()->userinfo->role)) === false ?'未认证':'已认证' }}
+                    @endif
                     <i class="fa fa-angle-right" style="margin-left: 5px"></i>
                     </span>
 

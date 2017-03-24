@@ -19,6 +19,12 @@ Route::get('unlike', "LikeController@unlike")->name('unlike');
 Route::get('read', "ReadController@read")->name('read');
 Route::get('unread', "ReadController@unread")->name('unread');
 
+Route::get('register/provision', "FirstVisitController@getProvision")->name("register.provision");
+Route::get('register/basic', "FirstVisitController@getBasic")->name("register.basic");
+Route::post('register/basic/save', "FirstVisitController@postSaveBasic")->name("register.basic.save");
+Route::get('register/teacher', "FirstVisitController@getTeacher")->name("register.teacher");
+Route::post('register/teacher/save', "FirstVisitController@postSaveTeacher")->name("register.teacher.save");
+Route::get('register/welcome', "FirstVisitController@getWelcome")->name("register.welcome");
 
 Route::group(['prefix'=>'userinfo'], function(){
 	Route::get('/',function (){
@@ -34,6 +40,7 @@ Route::group(['prefix'=>'userinfo'], function(){
 	Route::post("teacher", "UserInfoController@postSaveTeacher")->name("userinfo.teacher.save");
 	Route::post("author", "UserInfoController@postSaveAuthor")->name("userinfo.author.save");
 	Route::post("missing", "UserInfoController@postSaveMissing")->name("userinfo.missing.save");
+
 });
 
 
