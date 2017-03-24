@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Log;
 use Session;
 use App\Models\User;
 use App\Models\UserInfo;
@@ -23,6 +24,9 @@ class FirstVisitController extends Controller
 
     public function postSaveBasic(Request $request){
         // save basic
+        Session::flash("last-picked-role", $request->role);
+        
+
         if($request->role == "teacher") {
             $this->validate($request, [
                 "realname" => "required",
