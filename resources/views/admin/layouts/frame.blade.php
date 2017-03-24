@@ -17,7 +17,7 @@
     <div class="col-lg-2" id="side-bar">
         @include('admin.layouts._side')
     </div>
-    <div class="col-lg-10" style="padding: 40px 0 0 50px;">
+    <div class="col-lg-10" style="padding: 40px 0 40px 50px;">
         @include('admin.layouts._message')
         @yield('content')
     </div>
