@@ -42,8 +42,29 @@ class User extends Authenticatable
 		'password', 'remember_token',
 	];
 
+	/** 申请记录
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function bookRequests(){
 		return $this->hasMany('App\Models\BookRequest', 'user_id', 'id');
+	}
+	/** 评论记录
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function comments(){
+		return $this->hasMany('App\Models\Comment','user_id','id');
+	}
+	/** 在别人回复中被提及的
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function mentioned_comments(){
+		return $this->hasMany('App\Models\Comment','reply_id','id');
+	}
+	/** 收藏记录
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function favorites(){
+		return $this->hasMany('App\Models\Favorite','user_id','id');
 	}
 
 	public function addDepartmentAdmin(){}

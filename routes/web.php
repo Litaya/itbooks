@@ -50,7 +50,7 @@ Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("
 
 /* get image from storage */
 Route::get('image/{src?}', function ($src){
-    return Image::make(storage_path($src))->response();
+	return Image::make(storage_path($src))->response();
 })->where('src', '(.*)')->name('image');
 
 /* book module for users */
@@ -91,7 +91,7 @@ Auth::routes();
  */
 Route::group(["prefix" => "wechat"], function(){
 	Route::get("/","WechatController@index");
-    Route::post("/","WechatController@server");
+	Route::post("/","WechatController@server");
 });
 
 Auth::routes();
@@ -120,7 +120,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('cert/{id}/reject', 'CertRequestAdminController@reject')->name('admin.cert.reject');
 	Route::post('cert/{id}/deprive', 'CertRequestAdminController@deprive')->name('admin.cert.deprive');
 	Route::delete('cert/{id}', 'CertRequestAdminController@destroy')->name('admin.cert.destroy');
-	
+
 	Route::group(['prefix'=>'book'], function(){
 		Route::get('/', 'BookAdminController@index')->name('admin.book.index');
 		Route::post('/', 'BookAdminController@store')->name('admin.book.store');
@@ -172,7 +172,13 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::get('{id}/edit', 'ConferenceAdminController@edit')->name('admin.conference.edit');
 		Route::get('{id}/export', "DatabaseController@exportConferenceRegisters")->name('admin.conference.export');
 	});
-});
+
+	Route::group(['prefix'=>'material'], function() {
+		Route::get('/','WechatMaterialAdminController@index')->name('admin.material.index');
+		Route::get('/{id}',"WechatMaterialAdminController@show")->name('admin.material.show');
+		Route::post('/sync',"WechatMaterialAdminController@sync")->name('admin.material.sync');
+	});
+}); // end admin
 
 Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
 	Route::get('/',"UserController@index")->name('user.index');
