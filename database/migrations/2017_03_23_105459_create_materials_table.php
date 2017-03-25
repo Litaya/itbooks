@@ -22,9 +22,9 @@ class CreateMaterialsTable extends Migration
 		    $table->string('author',32)->comment('作者');
 		    $table->string('digest')->comment('摘要');
 		    $table->string("url")->comment('图文消息的URL');
-		    $table->string("content_source_url")->comment('图文消息的原文地址');
-		    $table->integer('reading_quantity')->comment('阅读量');
-		    $table->unsignedInteger('category_id')->comment('文章类别');
+		    $table->string("content_source_url")->default('')->comment('图文消息的原文地址');
+		    $table->integer('reading_quantity')->default(0)->comment('阅读量');
+		    $table->unsignedInteger('category_id')->default(0)->comment('文章类别');
 		    $table->timestamps();
 	    });
     }

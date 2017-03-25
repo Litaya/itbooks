@@ -95,7 +95,9 @@ class WechatMaterialAdminController extends Controller
 						'author'             => $new->author,
 						'digest'             => $new->digest,
 						'url'                => $new->url,
-						'content_source_url' => $new->content_source_url
+						'content_source_url' => $new->content_source_url,
+						'reading_quantity'   => 0,
+						'category_id'        => 0
 					]);
 				}
 			}

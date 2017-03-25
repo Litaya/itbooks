@@ -8,6 +8,13 @@ class AddLabel extends Model
 {
     protected $table = "add_label";
 
+    protected $fillable = [
+    	'id',
+	    'label_id',
+	    'target_type',
+	    'target_id',
+    ];
+
 	public function label(){
 		return $this->belongsTo('App\Models\Label', 'label_id', 'id');
 	}

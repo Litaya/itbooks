@@ -8,6 +8,11 @@ class Label extends Model
 {
 	protected $table = 'label';
 
+	protected $fillable = [
+		'id',
+		'name'
+	];
+
 	public function materials(){
 		return $this->belongsToMany('App\Models\Material');
 	}

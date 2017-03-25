@@ -8,6 +8,21 @@ class Material extends Model
 {
     protected $table = 'materials';
 
+    protected $fillable = [
+    	'id',
+	    'title',
+	    'media_id',
+	    'thumb_media_id',
+	    'show_cover_pic',
+	    'author',
+	    'digest',
+	    'url',
+	    'content_source_url',
+	    'reading_quantity',
+	    'category_id',
+	    ''
+    ];
+
     public function category(){
     	return $this->belongsTo('App\Models\Category','category_id','id');
     }
