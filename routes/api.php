@@ -20,3 +20,5 @@ Route::get('/user', function (Request $request) {
 Route::group(["prefix"=>'book'],function (){
 	Route::post('/search/{search_string}','BookController@getBooksBySearch')->name('api.book.search');
 });
+
+Route::post('district/citiesof', "DistrictController@postFetchCitiesOf")->name("api.district.citiesof");

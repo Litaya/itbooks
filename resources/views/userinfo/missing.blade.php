@@ -30,17 +30,13 @@
 
 @if( in_array("jobtitle", $missing)  )
 {{ Form::label("jobtitle", "职称", ["class"=>"form-spacing-top"]) }}
-{{ Form::text("jobtitle", null, ["class"=>"form-control"]) }}
+{{ Form::select("jobtitle", ["教授"=>"教授", "副教授"=>"副教授", "讲师"=>"讲师", "助教"=>"助教", "其他"=>"其他"], null, ["class"=>"form-control", "placeholder"=>"请选择职称"]) }}
 @endif
 
 
 @if( in_array("course", $missing)  )
 {{ Form::label("course_name_1", "课程名称:")}}{{ Form::text("course_name_1", null, ["class"=>"form-control", "placeholder"=>"课程名称"])}}
 {{ Form::label("course_name_1", "学生人数:")}}{{ Form::number("number_stud_1", null,["class"=>"form-control", "placeholder"=>"课程人数"])}}<br>
-{{ Form::label("course_name_2", "课程名称:")}}{{ Form::text("course_name_2", null, ["class"=>"form-control", "placeholder"=>"课程名称"])}}
-{{ Form::label("course_name_2", "学生人数:")}}{{ Form::number("number_stud_2", null, ["class"=>"form-control", "placeholder"=>"课程人数"])}}<br>
-{{ Form::label("course_name_3", "课程名称:")}}{{ Form::text("course_name_3", null, ["class"=>"form-control", "placeholder"=>"课程名称"])}}
-{{ Form::label("course_name_3", "学生人数:")}}{{ Form::number("number_stud_3", null,["class"=>"form-control", "placeholder"=>"课程人数"])}}
 @endif
 
 

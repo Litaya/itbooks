@@ -65,7 +65,7 @@ class RegisterController extends Controller
         return User::create([
             'openid' => "null_open_id",
             'permission_string' => "",
-            'certificate_as' => "NOBODY",
+            'certificate_as' => "",
             'information_id' => 0,
             'username' => $data['name'],
             'email' => $data['email'],

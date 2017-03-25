@@ -53,15 +53,25 @@ class Permission
 							break;
 					}
 				}
-			}else if(strpos($uri_arr[1],'bookreq')!==false){
-				$certificate_as = $user->certificate_as;
-				$certification = explode('|',$certificate_as)[0];
-				if($certification != 'TEACHER'){
-					$request->session()->flash('notice_message', '申请样书需先认证教师身份');
-					$request->session()->flash('notice_status', 'danger');
-					return redirect()->route('cert.create');
+			}else 
+			{
+				// if(strpos($uri_arr[1],'register') === false and empty($user->email)){
+				// 	return redirect()->route('register.provision');
+				// }
+				// else if(strpos($uri_arr[1], 'register') !== false and !empty($user->email)){
+				// 	return redirect()->route('index');
+				// }
+				if(strpos($uri_arr[1],'bookreq')!==false){
+					$certificate_as = $user->certificate_as;
+					$certification = explode('|',$certificate_as)[0];
+					if($certification != 'TEACHER'){
+						$request->session()->flash('notice_message', '申请样书需先认证教师身份');
+						$request->session()->flash('notice_status', 'danger');
+						return redirect()->route('cert.create');
+					}
 				}
 			}
+			
 		}
 
 		return $next($request);

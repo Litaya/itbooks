@@ -8,7 +8,11 @@
             {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN、书名、作者检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
             <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
             </ul>
+            @if(strpos($user->certificate_as, "TEACHER") !== false)
             <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书</small></p>
+            @elseif(strpos($user->certificate_as, "AUTHOR") !== false)
+            <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->author->book_limit }}</span>&nbsp;本书</small></p>
+            @endif
         </div>
         <div class="col-xs-12">
             <form action="{{ route("bookreq.store.multiple") }}" method="post">
