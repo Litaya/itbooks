@@ -8,6 +8,17 @@ class Comment extends Model
 {
     protected $table = 'comment';
 
+    protected $fillable = [
+    	'id',
+	    'user_id',
+	    'target_id',
+	    'target_type',
+	    'comment_type',
+	    'reply_id',
+	    'content',
+	    'status',
+    ];
+
     public function user(){
     	$this->belongsTo('App\Models\User','user_id','id');
     }
