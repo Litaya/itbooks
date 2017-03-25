@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use App\Models\Certification;
 use App\Models\CertRequest;
+use App\Models\District;
 use Auth;
 use Session;
 
@@ -17,7 +18,7 @@ class UserInfoController extends Controller
 
     private $basic_required = ["email", "phone", "role"];
 
-    private $teacher_required = ["realname", "workplace", "department", "job_title", 
+    private $teacher_required = ["realname", "workplace", "department", "jobtitle", 
                      "img_upload", "course_info"];
 
     private $author_required =  ["realname", "workplace", "img_upload"];
@@ -77,6 +78,7 @@ class UserInfoController extends Controller
         if($user->email != $new_info->email){
             $user->email = $new_info->email;
             $user->email_status = 0;
+            $user->update();
         }
 
         $userinfo->role = $new_info->role;
@@ -97,13 +99,17 @@ class UserInfoController extends Controller
 
     public function getBasic(){
         $userinfo = self::get_user_info(Auth::user());  // 需要显示，默认展开json_content，下同
-        return view("userinfo.basic")->withUserinfo($userinfo);
+        $lockrole = false;
+        $admissions = CertRequest::where("user_id", "=", Auth::id())->where("status", "<>", 2)->get();
+        if(count($admissions) > 0) $lockrole = true;
+        return view("userinfo.basic")->withUserinfo($userinfo)->withLockrole($lockrole);
     }
 
     public function getDetail(){
         $userinfo = self::get_user_info(Auth::user());
         return view("userinfo.detail")->withUserinfo($userinfo);
     }
+    
 
     public function getAuthor(){
         $userinfo = self::get_user_info(Auth::user());
@@ -126,6 +132,14 @@ class UserInfoController extends Controller
                 if(!isset($info, $key) or empty($info->$key))
                     array_push($missing, $key);
             }
+
+            if( (empty($info->course_name_1)) and 
+                (empty($info->course_name_2)) and
+                (empty($info->course_name_3)) )
+            {
+                array_push($missing, "course");
+            }
+            
         }
 
         else if($role == "author"){
@@ -162,10 +176,13 @@ class UserInfoController extends Controller
         $this->validate($request, [
             "email" => "required|email",
             "phone" => "required",
-            "role" => "required|in:teacher,author,student,staff,other",
+            "role" => "in:teacher,author,student,staff,other",
         ]);
-    
+
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
+        if(empty($userinfo->role) and empty($request->role)){
+            return redirect()->back()->withError("角色字段必须选择");
+        }
         if($request->email != $userinfo->email)
         {
             $this->validate($request, [
@@ -182,6 +199,7 @@ class UserInfoController extends Controller
 
         return redirect()->route("userinfo.basic");
     }
+
 
     public function postSaveDetail(Request $request){
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
@@ -270,11 +288,11 @@ class UserInfoController extends Controller
     public function postSaveMissing(Request $request){
 
         // lambdas
-        $set_array = function($array, $key, $new_value){
+        $set_array = function(&$array, $key, $new_value){
             $array[$key] = empty($new_value) ? $array[$key] : $new_value;
         };
 
-        $set_obj = function($obj, $key, $new_value){
+        $set_obj = function(&$obj, $key, $new_value){
             $obj->$key = empty($new_value) ? $obj->$key : $new_value;
         };
 
@@ -287,13 +305,14 @@ class UserInfoController extends Controller
         $set_array($data, "number_stud_1", $request->number_stud_1);
         $set_array($data, "number_stud_2", $request->number_stud_2);
         $set_array($data, "number_stud_3", $request->number_stud_3);
+        $set_array($data, "department", $request->department);
+        $set_array($data, "jobtitle", $request->jobtitle);
         $userinfo->json_content = json_encode($data);
-
-        $set_obj($userinfo, "img_upload", $request->img_upload);
-        $set_obj($userinfo, "jobtitle", $request->jobtitle);
+        
         $set_obj($userinfo, "workplace", $request->workplace);
-        $set_obj($userinfo, "department", $request->department);
         $set_obj($userinfo, "realname", $request->realname);
+        if($request->img_upload)
+            $userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
 
         self::update_user_info($userinfo);
 

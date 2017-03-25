@@ -4,21 +4,7 @@
 
 @section("content")
 
-<div class="btn-group btn-group-justified" role="group" aria-label="...">
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.basic')}}"><button type="button" class="btn btn-default">基本信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.detail')}}"><button type="button" class="btn btn-default">详细信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.teacher')}}"><button type="button" class="btn btn-success">教师附加信息</button></a>
-  </div>
-  <div class="btn-group" role="group">
-    <a href="{{route('userinfo.author')}}"><button type="button" class="btn btn-default">作者附加信息</button></a>
-  </div>
-</div>
-<br>
+@include("userinfo._sub_header")
 
 <!-- 学校，院系，职称，证明材料/照片，(所授课程，学生人数)x3 -->
 
@@ -47,7 +33,7 @@
 
 <div class="form-inline"><div class="form-group">
 {{ Form::label("jobtitle", "职称") }}
-{{ Form::text("jobtitle", null, ["class"=>"form-control"]) }}
+{{ Form::select("jobtitle", ["教授"=>"教授", "副教授"=>"副教授", "讲师"=>"讲师", "助教"=>"助教", "其他"=>"其他"], null, ["class"=>"form-control", "placeholder"=>"请选择职称"]) }}
 </div></div>
 
 <hr>
