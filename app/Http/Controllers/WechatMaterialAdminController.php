@@ -60,10 +60,11 @@ class WechatMaterialAdminController extends Controller
 	private function updateNews(){
 		$app                = $this->getWechatApp();
 		$material           = $app->material;
-
+        $temporary          = $app->material_temporary;
 		# 数据库里最新的记录，断点标记
 		$newest_media_id    = -1;
-		$newest_in_db       = Material::orderBy('created_at','desc')->first();
+		$newest_in_db       = Material::orderBy('wechat_update_time','desc')->first();
+        Log::info($newest_in_db);
 		if(!empty($newest_in_db))
 			$newest_media_id    = $newest_in_db->media_id;
 
@@ -92,12 +93,15 @@ class WechatMaterialAdminController extends Controller
 				}
 
 				# 对于多图文结构体，每条图文均需单独存库
-				$news = $list->content->news_item;
+				# $news = $list->content->news_item;
+                $news = $material->get($list->media_id);
+                $news = (object)$news["news_item"];
 				foreach ($news as $new){
+                    $new = (object)$new;
 					Material::create([
                         'media_id'           => $list->media_id,
 						'title'              => $new->title,
-						'cover_path'         => $this->storeCover($material,$new->thumb_media_id),
+						'cover_path'         => '',#$this->storeCover($temporary,$list->media_id),
 						'show_cover_pic'     => $new->show_cover_pic,
 						'author'             => $new->author,
 						'digest'             => $new->digest,
@@ -105,7 +109,7 @@ class WechatMaterialAdminController extends Controller
 						'content_source_url' => $new->content_source_url,
 						'reading_quantity'   => 0,
 						'category_id'        => 0,
-						'wechat_update_time'  => $list->update_time # 该素材在微信后台的最后更新时间
+						'wechat_update_time'  => date('Y-m-d H:i:s',$list->update_time) # 该素材在微信后台的最后更新时间
 					]);
                     $news_sum += 1; # 统计更新的图文条数
 				}# end foreach
@@ -121,8 +125,8 @@ class WechatMaterialAdminController extends Controller
 	// 存储封面图
 	private function storeCover($material,$thumb_media_id){
 		$folder = FileHelper::materialFolder();
-		$image = $material->get($thumb_media_id);
-		$file_name = $thumb_media_id."jpg";
+		$image = $material->getStream($thumb_media_id);
+		$file_name = $thumb_media_id.".jpg";
 		file_put_contents(storage_path($folder.$file_name),$image);
 		return '/image/'.$folder.$file_name;
 	}
