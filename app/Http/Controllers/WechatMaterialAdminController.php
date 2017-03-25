@@ -21,8 +21,10 @@ class WechatMaterialAdminController extends Controller
 	}
 
 	// 同步微信图文列表
-	public function sync(){
-		$this->updateNews();
+	public function sync(Request $request){
+		$news_sum = $this->updateNews();
+        $request->session()->flash('notice_message',"已更新 $news_sum 篇图文");
+        $request->session()->flash('notice_status','success');
 		return redirect()->route('admin.material.index');
 	}
 
@@ -67,6 +69,7 @@ class WechatMaterialAdminController extends Controller
 		$count      = 10;
 		$item_count = -1;    # 每次取出的item数量
 		$finish     = false; # 是否到了断点
+        $news_sum   = 0;
 		while (1){
 			$lists = $material->lists('news',$offset,$count);
 
@@ -89,6 +92,7 @@ class WechatMaterialAdminController extends Controller
 				$news = $list->content->news_item;
 				foreach ($news as $new){
 					Material::create([
+                        'media_id'           => $list->media_id,
 						'title'              => $new->title,
 						'thumb_media_id'     => $new->thumb_media_id,
 						'show_cover_pic'     => $new->show_cover_pic,
@@ -99,12 +103,14 @@ class WechatMaterialAdminController extends Controller
 						'reading_quantity'   => 0,
 						'category_id'        => 0
 					]);
-				}
-			}
+                    $news_sum += 1; # 统计更新的图文条数
+				}# end foreach
+			}# end foreach
 			# 如果已经到了断点，结束更新
 			if ($finish) break;
 			$offset += $count;
 			break; #先测试一个例子
-		}
+		} # end while
+        return $news_sum;
 	}
 }
