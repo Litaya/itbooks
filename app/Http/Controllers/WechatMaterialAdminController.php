@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FileHelper;
 use App\Models\Material;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WechatMaterialAdminController extends Controller
 {
 	// 图文管理首页
 	public function index(Request $request){
-		return view('admin.material.index');
+		$materials = Material::orderBy('id','desc')->paginate(10);
+		return view('admin.material.index',compact('materials'));
 	}
 
 	// 图文详情页
@@ -94,14 +97,15 @@ class WechatMaterialAdminController extends Controller
 					Material::create([
                         'media_id'           => $list->media_id,
 						'title'              => $new->title,
-						'thumb_media_id'     => $new->thumb_media_id,
+						'cover_path'         => $this->storeCover($material,$new->thumb_media_id),
 						'show_cover_pic'     => $new->show_cover_pic,
 						'author'             => $new->author,
 						'digest'             => $new->digest,
 						'url'                => $new->url,
 						'content_source_url' => $new->content_source_url,
 						'reading_quantity'   => 0,
-						'category_id'        => 0
+						'category_id'        => 0,
+						'wechat_update_time'  => $list->update_time # 该素材在微信后台的最后更新时间
 					]);
                     $news_sum += 1; # 统计更新的图文条数
 				}# end foreach
@@ -112,5 +116,14 @@ class WechatMaterialAdminController extends Controller
 			break; #先测试一个例子
 		} # end while
         return $news_sum;
+	}
+
+	// 存储封面图
+	private function storeCover($material,$thumb_media_id){
+		$folder = FileHelper::materialFolder();
+		$image = $material->get($thumb_media_id);
+		$file_name = $thumb_media_id."jpg";
+		file_put_contents(storage_path($folder.$file_name),$image);
+		return '/image/'.$folder.$file_name;
 	}
 }

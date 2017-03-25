@@ -20,7 +20,7 @@ class Material extends Model
 	    'content_source_url',
 	    'reading_quantity',
 	    'category_id',
-	    ''
+	    'wechat_update_time',
     ];
 
     public function category(){
