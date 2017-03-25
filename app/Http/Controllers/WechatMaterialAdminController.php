@@ -75,7 +75,7 @@ class WechatMaterialAdminController extends Controller
 			if($item_count == 0) break;
 
 			# 获取本次取到的图文列表
-			$lists = json_encode($lists)->item;
+			$lists = json_decode($lists)->item;
 
 			# 对于每个图文结构体（可能是多图文）
 			foreach ($lists as $list){

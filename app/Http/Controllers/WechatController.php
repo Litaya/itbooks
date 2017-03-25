@@ -52,7 +52,9 @@ class WechatController extends Controller
 		$server->setMessageHandler(function($message){
 				Log::info("【 wechat message received 】\n".$message);
 				$handler = new WechatMessageHandler($this->app,$message);
-				return $handler->handle();
+				$reply = $handler->handle();
+                Log::info($reply);
+                return $reply;
 				});
 		$response = $server->serve();
 		return $response;
