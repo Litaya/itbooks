@@ -22,10 +22,24 @@
     <div class="row" style="margin-bottom: 20px;">
         <div class="col-lg-12">
             <small style="color:gray">今日阅读:23 &nbsp;&nbsp;今日评论:12</small>
-            <form action="{{ route('admin.material.sync') }}" method="post" style="display: inline">
-                {{ csrf_field() }}
-                <input type="submit" href="javascript:void(0)"href="javascript:void(0)" class="btn btn-success btn-sm" style="position: absolute; right: 10px;" value="同步列表"/>
-            </form>
+            <button class="btn btn-success btn-sm" onclick="syncNews({{ route('admin.material.sync') }})" id="btn-sync" style="position: absolute; right: 10px;">同步列表</button>
+            <script type="application/javascript">
+                function syncNews($url) {
+                    $("#btn-sync").attr('disabled','disabled');
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        'method':'post',
+                        'url':$url,
+                        'success':function () {
+                            $("#btn-sync").removeAttr('disabled')
+                        }
+                    });
+                }
+            </script>
         </div>
     </div>
     @foreach($materials as $material)
