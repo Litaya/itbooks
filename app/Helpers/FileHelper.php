@@ -86,12 +86,20 @@ class FileHelper {
 		return $folder;
 	}
 
-	public static function saveMaterialImage($material, $image){
-		$folder = FileHelper::materialFolder();
-		$filename = time() . "." . $image->getClientOriginalExtension();
-		$location = $folder.$filename;
-		Image::make($image)->save(storage_path($location));
-		return $location;
+	/**
+	 * store image from url
+	 * @param $url string
+	 * @param $filename string
+	 * @return string
+	 */
+	public static function storeImageFromUrl($url, $filename){
+		$hinfo    = get_headers($url);
+		$ext      = explode('/',explode(':',$hinfo[7])[1])[1]; #后缀
+		$folder   = FileHelper::materialFolder()."images/";
+		if(trim($filename) == '') $filename = 'example';
+		$filename = explode('.',$filename)[0].".".$ext;
+		Image::make($url)->save(storage_path($folder.$filename));
+		return '/image/'.$folder.$filename;
 	}
 }
 

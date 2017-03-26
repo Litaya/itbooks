@@ -97,8 +97,8 @@ Auth::routes();
  * wechat routes
  */
 Route::group(["prefix" => "wechat"], function(){
-	Route::get("/","WechatController@index");
-	Route::post("/","WechatController@server");
+	Route::get("/",'Wechat\Wechat\Wechat\WechatController@index');
+	Route::post("/",'Wechat\Wechat\Wechat\WechatController@server');
 });
 
 Auth::routes();
@@ -181,9 +181,9 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	});
 
 	Route::group(['prefix'=>'material'], function() {
-		Route::get('/','WechatMaterialAdminController@index')->name('admin.material.index');
-		Route::get('/{id}',"WechatMaterialAdminController@show")->name('admin.material.show');
-		Route::post('/sync',"WechatMaterialAdminController@sync")->name('admin.material.sync');
+		Route::get('/','Wechat\WechatMaterialAdminController@index')->name('admin.material.index');
+		Route::get('/{id}','Wechat\WechatMaterialAdminController@show')->name('admin.material.show');
+		Route::post('/sync','Wechat\WechatMaterialAdminController@sync')->name('admin.material.sync');
 	});
 }); // end admin
 

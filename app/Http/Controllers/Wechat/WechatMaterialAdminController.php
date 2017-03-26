@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Wechat;
 
 use App\Helpers\FileHelper;
+use App\Http\Controllers\Controller;
 use App\Models\Material;
+use App\Models\Wechat;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -58,9 +60,15 @@ class WechatMaterialAdminController extends Controller
 
 	// 更新数据库的material信息
 	private function updateNews(){
-		$app                = $this->getWechatApp();
-		$material           = $app->material;
-        $temporary          = $app->material_temporary;
+
+		// 先存所有的图
+		$wechatModel = Wechat::getInstance();
+		$wechatModel->storeWechatImagesToDB();
+
+		// 获取EasyWechat的$app实例
+		$app      = $wechatModel->getApp();
+		$material = $app->material;
+
 		# 数据库里最新的记录，断点标记
 		$newest_media_id    = -1;
 		$newest_in_db       = Material::orderBy('wechat_update_time','desc')->first();
