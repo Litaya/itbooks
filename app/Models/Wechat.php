@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\FileHelper;
 use EasyWeChat\Foundation\Application;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Wechat,采用单例模式,负责关于微信的所有数据
@@ -89,7 +90,7 @@ class Wechat
 			# 遍历获取到的每张图片，如果有未存库的，存库
 			foreach ($items as $item){
 				$db_img = WechatImgUrl::where('thumb_media_id',$item["media_id"])->get();
-				if(empty($db_img)){ //如果还未存库
+				if(sizeof($db_img)==0){ //如果还未存库
 					WechatImgUrl::create([
 						'thumb_media_id' => $item["media_id"],
 						'url'            => $item["url"],
@@ -118,7 +119,6 @@ class Wechat
 		while (1){
 			$lists = $this->getMaterialLists('news',$offset,$count);
 			$news  = $lists['item'];
-
 			$item_count = $lists['item_count'];
 			if($item_count == 0) break;
 
@@ -127,7 +127,7 @@ class Wechat
 				$media_id    = $new['media_id'];
 				$update_time = $new['update_time'];
 				$new_in_db   = Material::where('media_id',$media_id)->get();
-				if(empty($new_in_db)){
+				if(sizeof($new_in_db)==0){ Log::info('here');
 					# 图文入库
 					$items = $new['content']['news_item'];
 					# 对于多图文消息
