@@ -83,9 +83,6 @@ class Wechat
 			$images = $this->getMaterialLists('image',$offset,$count);
 			$items  = $images['item'];
 
-			$item_count = $images['item_count'];
-			if($item_count==0) break;
-
 			$updated = false; # 本次获取没有任何更新
 			# 遍历获取到的每张图片，如果有未存库的，存库
 			foreach ($items as $item){
@@ -105,7 +102,7 @@ class Wechat
 			if(!$updated)
 				break;
 
-			$offset += 1;
+			$offset += $count;
 		}
 		return $image_sum;
 	}
@@ -119,8 +116,8 @@ class Wechat
 		while (1){
 			$lists = $this->getMaterialLists('news',$offset,$count);
 			$news  = $lists['item'];
-			$item_count = $lists['item_count'];
-			if($item_count == 0) break;
+
+            print("offset: $offset, sum: $news_sum\n");
 
 			$updated = false;
 			foreach ($news as $new){
@@ -138,6 +135,7 @@ class Wechat
 						Material::create([
 							'media_id'           => $media_id,
 							'title'              => $item['title'],
+                            'thumb_media_id'     => $thumb_media_id,
 							'cover_path'         => $cover_path,
 							'show_cover_pic'     => $item['show_cover_pic'],
 							'author'             => $item['author'],
@@ -152,10 +150,10 @@ class Wechat
 					}
 					$updated = true;
 				}
-				if(!$updated)
-					break;
-				$offset += 1;
 			}
+            if(!$updated)
+                break;
+            $offset += $count;
 		}
 		return $news_sum;
 	}

@@ -17,6 +17,7 @@ class CreateMaterialsTable extends Migration
 		    $table->increments('id');
 		    $table->string('title');
 		    $table->string("media_id",127)->comment('图文素材的id');
+            $table->string("thumb_media_id",127)->comment('封面图片media_id');
 		    $table->string('cover_path')->comment('图文消息的封面图片本地地址');
 		    $table->tinyInteger('show_cover_pic')->comment('是否显示封面，0为false，即不显示，1为true，即显示');
 		    $table->string('author',31)->comment('作者');

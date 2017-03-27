@@ -13,6 +13,7 @@ class Material extends Model
 	    'title',
 	    'media_id',
 	    'thumb_media_id',
+        'cover_path',
 	    'show_cover_pic',
 	    'author',
 	    'digest',

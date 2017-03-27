@@ -14,7 +14,7 @@ class WechatMaterialAdminController extends Controller
 {
 	// 图文管理首页
 	public function index(Request $request){
-		$materials = Material::orderBy('id','desc')->paginate(10);
+		$materials = Material::orderBy('wechat_update_time','desc')->paginate(10);
 		return view('admin.material.index',compact('materials'));
 	}
 
@@ -32,7 +32,7 @@ class WechatMaterialAdminController extends Controller
 		$news_sum    = $wechatModel->storeWechatNewsToDB();
         $request->session()->flash('notice_message',"已更新 $news_sum 篇图文");
         $request->session()->flash('notice_status','success');
-		return redirect()->route('admin.material.index');
+        return 'success';
 	}
 
 	// 评论详情页
