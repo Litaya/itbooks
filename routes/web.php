@@ -97,8 +97,8 @@ Auth::routes();
  * wechat routes
  */
 Route::group(["prefix" => "wechat"], function(){
-	Route::get("/",'Wechat\Wechat\Wechat\WechatController@index');
-	Route::post("/",'Wechat\Wechat\Wechat\WechatController@server');
+	Route::get("/",'Wechat\WechatController@index');
+	Route::post("/",'Wechat\WechatController@server');
 });
 
 Auth::routes();
