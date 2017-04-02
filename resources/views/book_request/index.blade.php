@@ -23,7 +23,7 @@
                 <h4> <i class="fa fa-map-marker"></i> 地址信息</h4>
                 <div class="form-group">
                     <label for="receiver">收件人姓名</label>
-                    <input type="tel" class="form-control" name="receiver" id="receiver" placeholder="收件人姓名"
+                    <input type="text" class="form-control" name="receiver" id="receiver" placeholder="收件人姓名"
                            value="{{ isset($userinfo->realname)?$userinfo->realname:"" }}">
                 </div>
                 <div class="form-group">
