@@ -14,6 +14,10 @@
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
 
+Route::get('district/province', "DistrictController@getProvinces")->name('district.getprovinces');
+Route::get('district/city', "DistrictController@getCities")->name('district.getcities');
+
+
 Route::get('like', "LikeController@like")->name('like');
 Route::get('unlike', "LikeController@unlike")->name('unlike');
 Route::get('read', "ReadController@read")->name('read');
@@ -119,6 +123,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/pass', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
+	Route::post('bookreq/{id}/shipping', 'BookRequestAdminController@shipping')->name('admin.bookreq.shipping');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
 	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');

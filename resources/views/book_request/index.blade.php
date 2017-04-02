@@ -24,17 +24,17 @@
                 <div class="form-group">
                     <label for="receiver">收件人姓名</label>
                     <input type="tel" class="form-control" name="receiver" id="receiver" placeholder="收件人姓名"
-                           value="{{ isset($user->json_content->address->receiver)?$user->json_content->address->receiver:"" }}">
+                           value="{{ isset($userinfo->realname)?$userinfo->realname:"" }}">
                 </div>
                 <div class="form-group">
                     <label for="address">收件地址</label>
                     <input type="text" class="form-control" name="address" id="address" placeholder="请填写详细地址方便寄送"
-                           value="{{ isset($user->json_content->address->location)?$user->json_content->address->location:"" }}">
+                           value="{{ isset($userinfo->address)?$userinfo->address:"" }}">
                 </div>
                 <div class="form-group">
                     <label for="phone">联系电话</label>
                     <input type="tel" class="form-control" name="phone" id="phone" placeholder="电话"
-                           value="{{ isset($user->json_content->address->phone)?$user->json_content->address->phone:"" }}">
+                           value="{{ isset($userinfo->phone)?$userinfo->phone:"" }}">
                 </div>
                 <div class="form-group">
                     <label for="book_plan">图书编写计划(可选)</label>
