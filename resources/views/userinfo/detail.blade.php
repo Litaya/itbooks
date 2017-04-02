@@ -28,15 +28,15 @@
 
 
 <div class="row">
-{{ Form::label("province", "省份", ["class"=>"col-xs-3 control-label form-spacing-top"])}}
-<div class="col-xs-5">
+{{ Form::label("province", "省份", ["class"=>"col-xs-2 control-label form-spacing-top"])}}
+<div class="col-xs-8">
 <select id="province-select" name="province" class="form-control form-spacing-top"></select>
 </div>
 </div>
 
 <div class="row">
-{{ Form::label("city", "城市", ["class"=>"col-xs-3 control-label form-spacing-top"])}}
-<div class="col-xs-5">
+{{ Form::label("city", "城市", ["class"=>"col-xs-2 control-label form-spacing-top"])}}
+<div class="col-xs-8">
 <select id="city-select" name="city" class="form-control form-spacing-top">
 <option value="" selected>请先选择省份</option>
 </select>

@@ -18,6 +18,13 @@
                                 {{$bookreq->status==0?'审核中':($bookreq->status==1?'已通过':'未通过')}}
                             </span>
                         </p>
+                        @if($bookreq->status==2)
+                        <p><strong>拒绝理由:</strong>
+                            @if(!empty(json_decode($bookreq->message)->admin_reply))
+                            {{json_decode($bookreq->message)->admin_reply}}
+                            @endif
+                        </p>
+                        @endif
                     </div>
                 </div>
 

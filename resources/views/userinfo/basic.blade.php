@@ -6,8 +6,6 @@
 
 @include("userinfo._sub_header")
 
-<br>
-
 <!-- 邮箱，真实姓名，手机号，角色，-->
 <p><strong>基本信息</strong></p>
 
