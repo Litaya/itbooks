@@ -47,13 +47,17 @@ class WechatMessageHandler{
 	}
 
 	private function messageHandler(){
-		switch ($this->message->Event){
-			case 'Text':
+        $reply = '';
+        Log::info($this->message);
+		switch ($this->message->MsgType){
+			case 'text':
+                $reply = 'hello';
 				break;
 			default:
+                $reply = '';
 				break;
 		}
-		return '';
+		return $reply;
 	}
 
 	/*

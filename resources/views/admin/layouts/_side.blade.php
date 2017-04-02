@@ -1,14 +1,17 @@
 <h4> <i class="fa fa-th-large"></i> 全部功能 </h4>
 <hr>
 <style>
-li.sidebar-active{
-    background-color: #DDD;
-}
+    li.sidebar-active{
+        background-color: #DDD;
+    }
 </style>
 <ul>
 
     @if(in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/book')?'sidebar-active':''}}"><a href="{{ route('admin.book.index') }}"> <i class="fa fa-book push"></i>图书管理</a></li>
+    @endif
+    @if(in_array('MATERIAL',\App\Libraries\PermissionManager::getAdminModules()))
+        <li class="{{Request::is('admin/material')?'sidebar-active':''}}"><a href="{{ route('admin.material.index') }}"> <i class="fa fa-university push"></i>微信文章</a></li>
     @endif
     @if(in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/resource')?'sidebar-active':''}}"><a href="{{ route('admin.resource.index') }}"> <i class="fa fa-briefcase push"></i>资源管理</a></li>

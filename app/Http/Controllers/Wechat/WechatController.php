@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Wechat;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Libraries\WechatMessageHandler;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Support\Facades\Log;
@@ -52,7 +53,9 @@ class WechatController extends Controller
 		$server->setMessageHandler(function($message){
 				Log::info("【 wechat message received 】\n".$message);
 				$handler = new WechatMessageHandler($this->app,$message);
-				return $handler->handle();
+				$reply = $handler->handle();
+                Log::info($reply);
+                return $reply;
 				});
 		$response = $server->serve();
 		return $response;

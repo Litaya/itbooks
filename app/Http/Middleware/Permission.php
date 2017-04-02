@@ -20,7 +20,7 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message'){
+		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message' || $uri_arr[1] == 'wechat'){
 			return $next($request);
 		}
 		if(Auth::check()){
