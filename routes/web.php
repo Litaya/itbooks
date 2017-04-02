@@ -14,6 +14,10 @@
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
 
+Route::get('district/province', "DistrictController@getProvinces")->name('district.getprovinces');
+Route::get('district/city', "DistrictController@getCities")->name('district.getcities');
+
+
 Route::get('like', "LikeController@like")->name('like');
 Route::get('unlike', "LikeController@unlike")->name('unlike');
 Route::get('read', "ReadController@read")->name('read');
