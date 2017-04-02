@@ -35,7 +35,7 @@
 
 <script>
 $(document).ready(function(){
-    if({{$lockrole == true}}) $("#role-select").attr("disabled", "disabled");
+    if({{$lockrole ? 1:0}}) $("#role-select").attr("disabled", "disabled");
 });
 
 </script>

@@ -111,13 +111,13 @@
 
 {{ Form::label("province", "省份", ["class"=>"col-xs-3 control-label form-spacing-top"])}}
 <div class="col-xs-5">
-<select id="province-select" class="form-control form-spacing-top"></select>
+<select id="province-select" name="province" class="form-control form-spacing-top"></select>
 </div>
 </div>
 <div class="row">
 {{ Form::label("city", "城市", ["class"=>"col-xs-3 control-label form-spacing-top"])}}
 <div class="col-xs-5">
-<select id="city-select" class="form-control form-spacing-top">
+<select id="city-select" name="city" class="form-control form-spacing-top">
 <option value="" selected>请先选择省份</option>
 </select>
 </div>
@@ -191,7 +191,7 @@ $(document).ready(function(){
 
     $("input[name='role']:checked").click();
 
-    function getStates(){
+    function getProvinces(){
         $.get("{{route('district.getprovinces')}}",
             function(data, status){
                 var s = document.getElementById("province-select");
@@ -237,7 +237,7 @@ $(document).ready(function(){
         );
     }
 
-    getStates();
+    getProvinces();
 
 });
 
