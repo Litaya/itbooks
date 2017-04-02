@@ -20,7 +20,7 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message' || $uri_arr[1] == 'wechat'){
+		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message' || $uri_arr[1] == 'wechat' || $uri_arr[1]=='district' || $uri_arr[1] == 'email'){
 			return $next($request);
 		}
 		if(Auth::check()){
@@ -58,9 +58,6 @@ class Permission
 				// 首次登录访问控制
 				if(strpos($uri_arr[1],'register') === false and empty($user->email)){
 					return redirect()->route('register.provision');
-				}
-				else if(strpos($uri_arr[1], 'register') !== false and !empty($user->email)){
-					return redirect()->route('index');
 				}
 
 				// 常规访问控制
