@@ -59,9 +59,6 @@ class Permission
 				if(strpos($uri_arr[1],'register') === false and empty($user->email)){
 					return redirect()->route('register.provision');
 				}
-				else if(strpos($uri_arr[1], 'register') !== false and !empty($user->email)){
-					return redirect()->route('index');
-				}
 
 				// 常规访问控制
 				if(strpos($uri_arr[1],'bookreq')!==false){

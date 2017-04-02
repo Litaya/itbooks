@@ -54,7 +54,8 @@ class FirstVisitController extends Controller
             $jdata['jobtitle'] = $request->jobtitle;
             $jdata['course_name_1'] = $request->course_name_1;
             $jdata['number_stud_1'] = $request->number_stud_1;
-            $info->district_name = $request->province . "," . $request->city;
+            $info->province_id = $request->province;
+            $info->city_id = $request->city;
             
             $info->json_content = json_encode($jdata);
             UserInfoController::update_user_info($info);
