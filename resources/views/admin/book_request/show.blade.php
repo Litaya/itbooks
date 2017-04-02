@@ -50,6 +50,7 @@
                                     data-target="#shipping-modal">
                                     修改
                             </a>
+                            </p>
                             @endif
 
                         </div>

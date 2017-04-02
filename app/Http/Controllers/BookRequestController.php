@@ -26,9 +26,10 @@ class BookRequestController extends Controller
 
     public function index(Request $request){
     	$user = Auth::user();
+        $userinfo = UserInfoController::get_user_info($user);
     	if(!empty($user->json_content))
     	    $user->json_content = json_decode($user->json_content);
-		return view('book_request.index',['user'=>$user]);
+		return view('book_request.index', ['user'=>$user, 'userinfo'=>$userinfo]);
     }
 
     public function storeMultiple(Request $request){
@@ -60,7 +61,7 @@ class BookRequestController extends Controller
 
 	    if( $user_json['teacher']['book_limit'] - sizeof($book_ids) < 0){
 		    $request->session()->flash('notice_status','danger');
-		    $request->session()->flash('notice_message','您申请的书籍多余您的限额，请重新申请!');
+		    $request->session()->flash('notice_message','您申请的书籍多于您的限额，请重新申请!');
 		    return redirect()->route('bookreq.index');
 	    }
 
@@ -80,11 +81,11 @@ class BookRequestController extends Controller
 	    	$book_req->save();
 	    }
 
-	    $user_json['address'] = [
-		    'receiver' => $receiver,
-		    'location'  => $address,
-		    'phone'    => $phone
-	    ];
+	    // $user_json['address'] = [
+		//     'receiver' => $receiver,
+		//     'location'  => $address,
+		//     'phone'    => $phone
+	    // ];
 
 	    $user_json['teacher']['book_limit'] -= sizeof($book_ids);
 	    $user->json_content = json_encode($user_json);

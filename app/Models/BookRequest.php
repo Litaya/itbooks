@@ -17,7 +17,8 @@ class BookRequest extends Model
 		'address',
 		'phone',
 		'receiver',
-		'book_type'
+		'book_type',
+		'order_number',
 	];
 
 	public function user(){

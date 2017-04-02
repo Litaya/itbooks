@@ -31,10 +31,17 @@
 
                 @if($bookreq->status==1)
                     <div class="panel panel-default">
-                        <div class="panel-heading">物流详情</div>
-                        <div class="panel-body">
-                            当审批通过后，这里将会显示当前样书的物流状态。
+                    <div class="panel-heading">物流详情</div>
+                    <div class="panel-body">
+                        @if(empty($bookreq->order_number))
+                        <div class="col-md-2">
+                        <strong>暂未发货</strong>
                         </div>
+                        @else
+                        <p><strong>订单号:</strong>{{$bookreq->order_number}}</p>
+                        
+                        @endif
+                    </div>
                     </div>
                 @endif
 
