@@ -56,7 +56,7 @@
         $("#search_box").on('input',function () {
             var search_string = $("#search_box").val();
             $.ajax({
-                'url': "/api/book/search/"+search_string,
+                'url': "/api/book/search_teaching/"+search_string,
                 'method': 'post'
             }).done(function(result){
 
@@ -82,13 +82,13 @@
             books_num ++;
             changeBookNum(-1);
             var icon_delete = "<i class='fa fa-times' style='color:red' onclick='remove_selected("+book_id+")'/>&nbsp;&nbsp;";
-            var radio_boxes = "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=1 checked='checked' required> 教材</label>";
-            radio_boxes += "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=2 required> 教辅</label> <br/>";
+            // var radio_boxes = "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=1 checked='checked' required> 教材</label>";
+            // radio_boxes += "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=2 required> 教辅</label> <br/>";
             var check_boxes = "<input type='checkbox' id='book_ids_"+book_id+"' name='book-ids[]' value="+book_id+" checked='checked'>";
             var p_book_isbn = "<small style='color:grey'>ISBN号："+book_isbn+"</small>";
 
-            $("#selected_books").append("<li class='list-group-item' id='selected_"+book_id+"'>" + icon_delete
-                    +radio_boxes+book_name+"<br/> "+p_book_isbn+"</li>");
+            //$("#selected_books").append("<li class='list-group-item' id='selected_"+book_id+"'>" + icon_delete + radio_boxes+book_name+"<br/> "+p_book_isbn+"</li>");
+            $("#selected_books").append("<li class='list-group-item' id='selected_"+book_id+"'>" + icon_delete + book_name+"<br/> "+p_book_isbn+"</li>");
             $("#checkboxes").append(check_boxes);
         }
 

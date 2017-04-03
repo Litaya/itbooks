@@ -13,11 +13,15 @@
                         <p><strong>申请书目:</strong> {{$bookreq->book->name}}</p>
                         <p><strong>申请用户:</strong> {{$bookreq->user->username}}</p>
                         <p><strong>发起时间:</strong> {{$bookreq->created_at}}</p>
+                        <p><strong>收件人:</strong>   {{$bookreq->receiver}}</p>
+                        <p><strong>收件地址:</strong> {{$bookreq->address}}</p>
                         <p><strong>审批状态:</strong>
                             <span style="color: {{$bookreq->status==0?'#777':($bookreq->status==1?'#4E4':'#E44')}}">
                                 {{$bookreq->status==0?'审核中':($bookreq->status==1?'已通过':'未通过')}}
                             </span>
                         </p>
+                        <p><strong>写书计划:</strong> {{empty(json_decode($bookreq->message)->book_plan)?"未填写":json_decode($bookreq->message)->book_plan}} </p>
+                        <p><strong>留言:</strong> {{empty(json_decode($bookreq->message)->remark)?"未填写":json_decode($bookreq->message)->remark}} </p>
                             @if($bookreq->status==2)
                             <p><strong>拒绝理由:</strong>
                                 @if(!empty(json_decode($bookreq->message)->admin_reply))
@@ -25,7 +29,7 @@
                                 @endif
                             </p>
                             @endif
-                        <p><strong>写书计划:</strong> {{empty(json_decode($bookreq->message)->book_plan)?"未填写":json_decode($bookreq->message)->book_plan}}</p>
+                        
                     </div>
                 </div>
 
