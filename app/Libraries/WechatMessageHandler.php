@@ -54,7 +54,7 @@ class WechatMessageHandler{
         Log::info($this->message);
 		switch ($this->message->MsgType){
 			case 'text':
-                $reply = 'hello';
+                $reply = '';
 				break;
 			default:
                 $reply = '';

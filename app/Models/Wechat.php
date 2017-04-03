@@ -117,14 +117,13 @@ class Wechat
 			$lists = $this->getMaterialLists('news',$offset,$count);
 			$news  = $lists['item'];
 
-            print("offset: $offset, sum: $news_sum\n");
-
 			$updated = false;
 			foreach ($news as $new){
 				$media_id    = $new['media_id'];
 				$update_time = $new['update_time'];
 				$new_in_db   = Material::where('media_id',$media_id)->get();
-				if(sizeof($new_in_db)==0){ Log::info('here');
+
+				if(sizeof($new_in_db)==0){
 					# 图文入库
 					$items = $new['content']['news_item'];
 					# 对于多图文消息
