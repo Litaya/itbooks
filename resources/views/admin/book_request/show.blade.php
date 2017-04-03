@@ -15,6 +15,7 @@
                         <p><strong>发起时间:</strong> {{$bookreq->created_at}}</p>
                         <p><strong>收件人:</strong>   {{$bookreq->receiver}}</p>
                         <p><strong>收件地址:</strong> {{$bookreq->address}}</p>
+                        <p><strong>联系电话:</strong> {{$bookreq->phone}}</p>
                         <p><strong>审批状态:</strong>
                             <span style="color: {{$bookreq->status==0?'#777':($bookreq->status==1?'#4E4':'#E44')}}">
                                 {{$bookreq->status==0?'审核中':($bookreq->status==1?'已通过':'未通过')}}
