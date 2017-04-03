@@ -30,9 +30,10 @@
                 <tbody>
                 @foreach($bookreqs as $bookreq)
                     <tr>
-                        <td>{{$bookreq->user->username}}</td>
-                        <td>{{$bookreq->book->name}}</td>
-                        <td>{{mb_strlen(json_decode($bookreq->message)->remarks)>30?mb_substr(json_decode($bookreq->message)->remarks, 0, 27)."...":json_decode($bookreq->message)->remarks}}</td>
+                        <td>AAA</td>
+                        <td>BBB</td>
+                        <td>CCC</td>
+                        <td>DDD</td>
                         <td>
                         <div class="row">
                             <div class="col-md-2">
