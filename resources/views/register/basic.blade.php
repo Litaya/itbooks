@@ -139,7 +139,12 @@
 </div>
 
 
-
+<div class="row">
+{{ Form::label("position", "职务", ["class"=>"col-xs-3 control-label form-spacing-top"]) }}
+<div class="col-xs-5">
+{{ Form::select("position", ["院长"=>"院长", "副院长"=>"副院长", "主任"=>"主任", "副主任"=>"副主任", "教学秘书"=>"教学秘书", "普通教师"=>"普通教师", "其他"=>"其他"], null, ["class"=>"form-control form-spacing-top", "placeholder"=>"请选择职务"]) }}
+</div>
+</div>
 
 
 <div class="row">

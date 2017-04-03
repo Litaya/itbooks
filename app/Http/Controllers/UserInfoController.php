@@ -65,6 +65,7 @@ class UserInfoController extends Controller
             $userinfo->department = $get($data, "department");
             $userinfo->jobtitle = $get($data, "jobtitle");
             $userinfo->qqnumber = $get($data, "qqnumber");
+            $userinfo->position = $get($data, "position");
         }
 
         return $userinfo;
@@ -248,6 +249,7 @@ class UserInfoController extends Controller
         $data["course_name_3"] = $request->course_name_3;
         $data["number_stud_3"] = $request->number_stud_3;
         $data["jobtitle"] = $request->jobtitle;
+        $data["position"] = $request->position;
         $data["department"] = $request->department;
         $userinfo->json_content = json_encode($data);
 

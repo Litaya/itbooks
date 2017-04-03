@@ -52,6 +52,7 @@ class FirstVisitController extends Controller
             $info->workplace = $request->workplace;
             $jdata['department'] = $request->department;
             $jdata['jobtitle'] = $request->jobtitle;
+            $jdata['position'] = $request->position;
             $jdata['course_name_1'] = $request->course_name_1;
             $jdata['number_stud_1'] = $request->number_stud_1;
             $info->province_id = $request->province;

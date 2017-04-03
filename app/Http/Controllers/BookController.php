@@ -83,6 +83,16 @@ class BookController extends Controller
 	    return \GuzzleHttp\json_encode($books);
     }
 
+    /*
+     * for api
+     */
+    public function getTeachingMaterialsBySearch(Request $request,$search_string){
+	    $books = Book::where('isbn','like',"%$search_string%")
+		    ->orWhere('name','like',"%$search_string%")
+		    ->orWhere("authors","like","%$search_string%")->where('type','1')->paginate(5);
+	    return \GuzzleHttp\json_encode($books);
+    }
+
     public function updateKejian($id){
         if(!Auth::check()){
             return 'denied';
