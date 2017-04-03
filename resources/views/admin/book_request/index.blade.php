@@ -30,9 +30,9 @@
                 <tbody>
                 @foreach($bookreqs as $bookreq)
                     <tr>
-                        <td>AAA</td>
-                        <td>BBB</td>
-                        <td>CCC</td>
+                        <td>{{$bookreq->user->username}}</td>
+                        <td>{{$bookreq->book->name}}</td>
+                        <td>{{$bookreq->status==0?"待审核":($bookreq->status==1?"通过":"未通过")}}</td>
                         <td>DDD</td>
                         <td>
                         <div class="row">
