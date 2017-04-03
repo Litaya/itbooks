@@ -22,7 +22,7 @@
                             </span>
                         </p>
                         <p><strong>写书计划:</strong> {{empty(json_decode($bookreq->message)->book_plan)?"未填写":json_decode($bookreq->message)->book_plan}} </p>
-                        <p><strong>留言:</strong> {{empty(json_decode($bookreq->message)->remark)?"未填写":json_decode($bookreq->message)->remark}} </p>
+                        <p><strong>留言:</strong> {{empty(json_decode($bookreq->message)->remarks)?"未填写":json_decode($bookreq->message)->remarks}} </p>
                             @if($bookreq->status==2)
                             <p><strong>拒绝理由:</strong>
                                 @if(!empty(json_decode($bookreq->message)->admin_reply))
