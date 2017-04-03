@@ -30,8 +30,6 @@
                 <tbody>
                 @foreach($bookreqs as $bookreq)
                     <tr>
-                        <td>{{$bookreq->user->username}}</td>
-                        
                         <td>{{$bookreq->status==0?"待审核":($bookreq->status==1?"通过":"未通过")}}</td>
                         <td>{{mb_strlen(json_decode($bookreq->message)->remarks)>30?mb_substr(json_decode($bookreq->message)->remarks, 0, 27)."...":json_decode($bookreq->message)->remarks}}</td>
                         <td>
