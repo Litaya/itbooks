@@ -34,7 +34,7 @@
                         <td>{{$bookreq->book->name}}</td>
                         <td>{{$bookreq->status==0?"待审核":($bookreq->status==1?"通过":"未通过")}}</td>
                         @if(!empty(json_decode($bookreq->message)))
-                        <td>{{mb_strlen(json_decode($bookreq->message)->remarks)>30?mb_substr(json_decode($bookreq->message)->remarks, 0, 27)."...":json_decode($bookreq->message)->remarks}}</td>
+                        <td>{{mb_strlen(json_decode($bookreq->message)->remark)>30?mb_substr(json_decode($bookreq->message)->remark, 0, 27)."...":json_decode($bookreq->message)->remark}}</td>
                         @else
                         <td>无</td>
                         @endif
