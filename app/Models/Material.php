@@ -17,6 +17,7 @@ class Material extends Model
 	    'show_cover_pic',
 	    'author',
 	    'digest',
+	    'content',
 	    'url',
 	    'content_source_url',
 	    'reading_quantity',
