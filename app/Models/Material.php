@@ -40,4 +40,18 @@ class Material extends Model
 	public function favorites(){
 		return $this->hasMany('App\Models\Favorite','target_id','id');
 	}
+
+	// 搜索文章内容
+	public static function search($message){
+		$materials = self::where('title','like',"%$message%")
+			->orWhere('author','like',"%$message%")
+			->orWhere('digest','like',"%$message%")
+			->orderBy('wechat_update_time','desc')
+			->paginate(10);
+		return $materials;
+	}
+
+	public static function lists(){
+		return self::orderBy('wechat_update_time','desc')->paginate(10);
+	}
 }

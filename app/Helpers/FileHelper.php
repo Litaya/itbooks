@@ -95,7 +95,7 @@ class FileHelper {
 	public static function storeImageFromUrl($url, $filename){
 		$hinfo    = get_headers($url);
 		// $ext      = explode('/',explode(':',$hinfo[7])[1])[1]; #后缀
-        $ext      = explode('=',explode('?',$url)[1])[1]
+        $ext      = explode('=',explode('?',$url)[1])[1];
 
 		$folder   = FileHelper::materialFolder()."images/";
         if(!File::isDirectory(storage_path($folder)))

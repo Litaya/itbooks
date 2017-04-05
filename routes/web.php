@@ -213,3 +213,8 @@ Route::group(["prefix" => "email"],function (){
 Route::group(["prefix" => "message"],function (){
 	Route::get('/',"MessageController@index")->name('message.index');
 });
+
+Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
+	Route::get('/','Wechat\WechatMaterialController@index')->name('material.index');
+	Route::get("/{id}/",'Wechat\WechatMaterialController@show')->name('material.show');
+});

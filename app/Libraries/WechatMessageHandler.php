@@ -36,6 +36,9 @@ class WechatMessageHandler{
 			case 'subscribe':
 				$reply = $this->subscribe();
 				break;
+			case 'unsubscribe':
+				$reply = $this->unsubscribe();
+				break;
 			case 'CLICK':
 				$reply = $this->click();
 				break;
