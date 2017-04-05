@@ -31,7 +31,8 @@
     <div class="row" style="min-height: 20px;"></div>
     @if(!empty($materials))
         @foreach($materials as $material)
-            <a href="{{ route("material.show",'1') }}">
+            <a href="{{ route("material.show",$material->id) }}">
+            {{--<a href="{{ $material->url }}">--}}
                 <div class="col-xs-12 item">
                     <div class="col-xs-3" style="padding: 0;">
                         <img class="item-img" src="{{ $material->cover_path }}" alt="">

@@ -19,10 +19,10 @@ class WechatMaterialAdminController extends Controller
 	}
 
 	// 图文详情页
-	public function show(){
+	public function show(Request $request, $id){
 		// TODO 获取图文消息内容
-
-		return view('admin.material.show');
+		$material = Material::where('id',$id)->first();
+		return view('admin.material.show',compact('material'));
 	}
 
 	// 同步微信图文列表
