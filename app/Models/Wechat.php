@@ -123,7 +123,7 @@ class Wechat
 				$update_time = $new['update_time'];
 				$new_in_db   = Material::where('media_id',$media_id)->get();
 
-				if(sizeof($new_in_db)==0 || $offset <= 80){
+				if(sizeof($new_in_db)==0 || $offset <= 20){
 					Material::where('media_id',$media_id)->delete();
 					# 图文入库
 					$items = $new['content']['news_item'];
