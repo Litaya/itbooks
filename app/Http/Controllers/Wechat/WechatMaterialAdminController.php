@@ -27,9 +27,12 @@ class WechatMaterialAdminController extends Controller
 
 	// 同步微信图文列表
 	public function sync(Request $request){
-		#$news_sum = $this->updateNews();
 		$wechatModel = Wechat::getInstance();
-		$news_sum    = $wechatModel->storeWechatNewsToDB();
+		if($request->has('start_time') && $request->has('end_time')){
+			$news_sum = $wechatModel->storeWechatNewsToDBbyTime($request->get('start_time'),$request->get('end_time'));
+		}else{
+			$news_sum = $wechatModel->storeWechatNewsToDB();
+		}
         $request->session()->flash('notice_message',"已更新 $news_sum 篇图文");
         $request->session()->flash('notice_status','success');
         return 'success';
