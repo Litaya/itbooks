@@ -45,6 +45,6 @@
                 </div>
             </a>
         @endforeach
-        <div class="row">{{ $materials->links() }}</div>
+        <div class="row" style="text-align:center">{{ $materials->links() }}</div>
     @endif
 @stop

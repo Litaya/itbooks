@@ -48,11 +48,11 @@ class Material extends Model
 			->orWhere('author','like',"%$message%")
 			->orWhere('digest','like',"%$message%")
 			->orderBy('wechat_update_time','desc')
-			->paginate(10);
+			->simplePaginate(10);
 		return $materials;
 	}
 
 	public static function lists(){
-		return self::orderBy('wechat_update_time','desc')->paginate(10);
+		return self::orderBy('wechat_update_time','desc')->simplePaginate(10);
 	}
 }
