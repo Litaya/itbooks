@@ -22,6 +22,7 @@ class CreateMaterialsTable extends Migration
 		    $table->tinyInteger('show_cover_pic')->comment('是否显示封面，0为false，即不显示，1为true，即显示');
 		    $table->string('author',31)->comment('作者');
 		    $table->string('digest')->comment('摘要');
+		    $table->text('content')->nullable()->comment('正文');
 		    $table->string("url")->comment('图文消息的URL');
 		    $table->string("content_source_url")->default('')->comment('图文消息的原文地址');
 		    $table->integer('reading_quantity')->default(0)->comment('阅读量');
