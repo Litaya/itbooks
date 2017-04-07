@@ -14,11 +14,21 @@
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
 
+Route::get('district/province', "DistrictController@getProvinces")->name('district.getprovinces');
+Route::get('district/city', "DistrictController@getCities")->name('district.getcities');
+
+
 Route::get('like', "LikeController@like")->name('like');
 Route::get('unlike', "LikeController@unlike")->name('unlike');
 Route::get('read', "ReadController@read")->name('read');
 Route::get('unread', "ReadController@unread")->name('unread');
 
+Route::get('register/provision', "FirstVisitController@getProvision")->name("register.provision");
+Route::get('register/basic', "FirstVisitController@getBasic")->name("register.basic");
+Route::post('register/basic/save', "FirstVisitController@postSaveBasic")->name("register.basic.save");
+Route::get('register/teacher', "FirstVisitController@getTeacher")->name("register.teacher");
+Route::post('register/teacher/save', "FirstVisitController@postSaveTeacher")->name("register.teacher.save");
+Route::get('register/welcome', "FirstVisitController@getWelcome")->name("register.welcome");
 
 Route::group(['prefix'=>'userinfo'], function(){
 	Route::get('/',function (){
@@ -34,6 +44,7 @@ Route::group(['prefix'=>'userinfo'], function(){
 	Route::post("teacher", "UserInfoController@postSaveTeacher")->name("userinfo.teacher.save");
 	Route::post("author", "UserInfoController@postSaveAuthor")->name("userinfo.author.save");
 	Route::post("missing", "UserInfoController@postSaveMissing")->name("userinfo.missing.save");
+
 });
 
 
@@ -50,7 +61,7 @@ Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("
 
 /* get image from storage */
 Route::get('image/{src?}', function ($src){
-    return Image::make(storage_path($src))->response();
+	return Image::make(storage_path($src))->response();
 })->where('src', '(.*)')->name('image');
 
 /* book module for users */
@@ -90,8 +101,8 @@ Auth::routes();
  * wechat routes
  */
 Route::group(["prefix" => "wechat"], function(){
-	Route::get("/","WechatController@index");
-    Route::post("/","WechatController@server");
+	Route::get("/",'Wechat\WechatController@index');
+	Route::post("/",'Wechat\WechatController@server');
 });
 
 Auth::routes();
@@ -112,6 +123,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/pass', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
+	Route::post('bookreq/{id}/shipping', 'BookRequestAdminController@shipping')->name('admin.bookreq.shipping');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
 	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
@@ -120,7 +132,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('cert/{id}/reject', 'CertRequestAdminController@reject')->name('admin.cert.reject');
 	Route::post('cert/{id}/deprive', 'CertRequestAdminController@deprive')->name('admin.cert.deprive');
 	Route::delete('cert/{id}', 'CertRequestAdminController@destroy')->name('admin.cert.destroy');
-	
+
 	Route::group(['prefix'=>'book'], function(){
 		Route::get('/', 'BookAdminController@index')->name('admin.book.index');
 		Route::post('/', 'BookAdminController@store')->name('admin.book.store');
@@ -172,7 +184,13 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::get('{id}/edit', 'ConferenceAdminController@edit')->name('admin.conference.edit');
 		Route::get('{id}/export', "DatabaseController@exportConferenceRegisters")->name('admin.conference.export');
 	});
-});
+
+	Route::group(['prefix'=>'material'], function() {
+		Route::get('/','Wechat\WechatMaterialAdminController@index')->name('admin.material.index');
+		Route::get('/{id}','Wechat\WechatMaterialAdminController@show')->name('admin.material.show');
+		Route::post('/sync','Wechat\WechatMaterialAdminController@sync')->name('admin.material.sync');
+	});
+}); // end admin
 
 Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
 	Route::get('/',"UserController@index")->name('user.index');
@@ -194,4 +212,9 @@ Route::group(["prefix" => "email"],function (){
 
 Route::group(["prefix" => "message"],function (){
 	Route::get('/',"MessageController@index")->name('message.index');
+});
+
+Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
+	Route::get('/','Wechat\WechatMaterialController@index')->name('material.index');
+	Route::get("/{id}/",'Wechat\WechatMaterialController@show')->name('material.show');
 });

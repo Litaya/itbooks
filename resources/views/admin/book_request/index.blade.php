@@ -33,7 +33,11 @@
                         <td>{{$bookreq->user->username}}</td>
                         <td>{{$bookreq->book->name}}</td>
                         <td>{{$bookreq->status==0?"待审核":($bookreq->status==1?"通过":"未通过")}}</td>
+                        @if(!empty(json_decode($bookreq->message)))
                         <td>{{mb_strlen(json_decode($bookreq->message)->remarks)>30?mb_substr(json_decode($bookreq->message)->remarks, 0, 27)."...":json_decode($bookreq->message)->remarks}}</td>
+                        @else
+                        <td>无</td>
+                        @endif
                         <td>
                         <div class="row">
                             <div class="col-md-2">
@@ -50,9 +54,12 @@
                             </div>
                             <!-- END IF HAS PASS PERMISSION -->
                             <div class="col-md-2">
-                                {!! Form::open(['route'=>['admin.bookreq.reject', $bookreq->id], 'method'=>'POST']) !!}
-                                {!! Form::submit('拒绝', ['class'=>'btn btn-danger btn-xs']) !!}
-                                {!! Form::close() !!}
+                            <button type="button"
+                                    class="btn btn-danger btn-xs"
+                                    data-toggle="modal"
+                                    data-target="#reject-modal-{{$bookreq->id}}">
+                                    拒绝
+                            </button>
                             </div>
                             @endif
                             <!-- IF HAS DELETE PERMISSION -->
@@ -65,6 +72,27 @@
                         </div>
                         </td>
                     </tr>
+                        <div class="modal fade" id="reject-modal-{{$bookreq->id}}"
+                            tabindex="-1" role="dialog"
+                            aria-labelledby="reject-modal-label">
+                            <div class="modal-dialog" role="dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="reject-modal-label">拒绝申请</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                    
+                                    {!! Form::open(["route"=>["admin.bookreq.reject", $bookreq->id], "method"=>"POST"]) !!}
+                                    {{ Form::label("message", "拒绝理由:") }}
+                                    {{ Form::textarea("message", null, ["class"=>"form-control"]) }}
+                                    {{ Form::submit('确认', ['class'=>'btn btn-danger btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
+                                    {!! Form::close() !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 @endforeach
                 </tbody>
                 </table>
@@ -75,5 +103,6 @@
         </div>
         </div>
     </div>
+
 
 @endsection

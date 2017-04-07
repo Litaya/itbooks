@@ -111,6 +111,8 @@ return [
 		'title' => '标题',
 		'credit' => '积分',
 		'course_name_1' => '第一个课程',
-		'number_stud_1' => '第一个课程的学生人数'
+		'number_stud_1' => '第一个课程的学生人数',
+		'department' => '院系名称',
+		'jobtitle' => '职称',
 	],
 ];

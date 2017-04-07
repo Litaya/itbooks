@@ -36,6 +36,9 @@ class WechatMessageHandler{
 			case 'subscribe':
 				$reply = $this->subscribe();
 				break;
+			case 'unsubscribe':
+				$reply = $this->unsubscribe();
+				break;
 			case 'CLICK':
 				$reply = $this->click();
 				break;
@@ -47,13 +50,17 @@ class WechatMessageHandler{
 	}
 
 	private function messageHandler(){
-		switch ($this->message->Event){
-			case 'Text':
+        $reply = '';
+        Log::info($this->message);
+		switch ($this->message->MsgType){
+			case 'text':
+                $reply = '';
 				break;
 			default:
+                $reply = '';
 				break;
 		}
-		return '';
+		return $reply;
 	}
 
 	/*

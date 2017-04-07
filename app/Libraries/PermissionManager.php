@@ -212,7 +212,7 @@ class PermissionManager
 		$modules = [];
 		switch (self::getAdminIdentity()){
 			case 'SUPER_ADMIN':
-				$modules = ['BOOK','DEPARTMENT','USER','BOOKREQ'];
+				$modules = ['BOOK','DEPARTMENT','USER','BOOKREQ','MATERIAL'];
 				break;
 			case 'DEPARTMENT_ADMIN':
 				$modules = ['BOOK','BOOKREQ'];

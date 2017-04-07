@@ -61,10 +61,15 @@ class BookRequestAdminController extends Controller
         return redirect()->route("admin.bookreq.index");
     }
 
-    public function reject($id){
+    public function reject($id, Request $request){
         $bookreq = BookRequest::find($id);
         if($bookreq->status == 0){
             $bookreq->status = 2;
+            if($request->message){
+                $js = json_decode($bookreq->message, true);
+                $js["admin_reply"] = $request->message;
+                $bookreq->message = json_encode($js);
+            }
             $bookreq->update();
 
 	        $user      = $bookreq->user;
@@ -99,4 +104,20 @@ class BookRequestAdminController extends Controller
         
         return redirect()->route('bookreq.index');
     }
+    
+    public function shipping($id, Request $request){
+        $req = BookRequest::find($id);
+        $order_number = $request->order_number;
+        if($req->status == 1){
+            $req->order_number = $order_number;
+            $req->update();
+            Session::flash('success', '成功绑定订单号');
+        }
+        else{
+            Session::flash('warning', '此样书申请无法绑定订单号，请检查');
+        }
+
+        return redirect()->route('admin.bookreq.show', $id);
+    }
+    
 }

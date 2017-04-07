@@ -20,7 +20,7 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message'){
+		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message' || $uri_arr[1] == 'wechat' || $uri_arr[1]=='district' || $uri_arr[1] == 'email'){
 			return $next($request);
 		}
 		if(Auth::check()){
@@ -53,15 +53,25 @@ class Permission
 							break;
 					}
 				}
-			}else if(strpos($uri_arr[1],'bookreq')!==false){
-				$certificate_as = $user->certificate_as;
-				$certification = explode('|',$certificate_as)[0];
-				if($certification != 'TEACHER'){
-					$request->session()->flash('notice_message', '申请样书需先认证教师身份');
-					$request->session()->flash('notice_status', 'danger');
-					return redirect()->route('cert.create');
+			}else 
+			{
+				// 首次登录访问控制
+				if(strpos($uri_arr[1],'register') === false and empty($user->email)){
+					return redirect()->route('register.provision');
+				}
+
+				// 常规访问控制
+				if(strpos($uri_arr[1],'bookreq')!==false){
+					$certificate_as = $user->certificate_as;
+					$certification = explode('|',$certificate_as)[0];
+					if($certification != 'TEACHER'){
+						$request->session()->flash('warning', '申请样书需先认证教师身份');
+						//$request->session()->flash('notice_status', 'danger');
+						return redirect()->route('cert.create');
+					}
 				}
 			}
+			
 		}
 
 		return $next($request);
