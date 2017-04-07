@@ -162,6 +162,8 @@ class Wechat
 	}
 
 	public function storeWechatNewsToDBbyTime($start_time, $end_time){
+        $start_time = intval(substr($start_time,0,10));
+        $end_time   = intval(substr($end_time,0,10));
 		$this->storeWechatImagesToDB(); // 先将所有的图片素材存库
 		$offset = 0; $count = 20; $news_sum = 0;
 		while (1){
@@ -170,17 +172,14 @@ class Wechat
 
 			$flag = false; # 标志是否结束
 			# 对于获取到的素材列表中的每一条素材
+            $update_time    = time();
 			foreach ($news as $new){
 				$media_id    = $new['media_id'];
-				$update_time = $new['update_time'];
+				$update_time = intval($new['update_time']);
 
 				# 如果本条时间不在目标时间内，跳过
-				if($update_time > $end_time) {
+				if($update_time > $end_time || $update_time < $start_time) {
 					continue;
-				}
-				if($update_time < $start_time){
-					$flag = true;
-					break;
 				}
 
 				# 如果在目标时间内，则更新
@@ -210,8 +209,9 @@ class Wechat
 					$news_sum += 1;
 				}
 			}
-			if($flag)
-				break;
+            if($update_time < $end_time){
+                break;
+            }
 			$offset += $count;
 		}
 		return $news_sum;

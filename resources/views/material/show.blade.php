@@ -15,7 +15,7 @@
                 @if(!empty($material->content_source_url))
                     <a href="{{ $material->content_source_url }}">阅读原文</a>&nbsp;&nbsp;
                 @endif
-                阅读: {{ $material->reading_quantity }}&nbsp;&nbsp;评论: 0
+                {{-- 阅读: {{ $material->reading_quantity }}&nbsp;&nbsp;评论: 0 --}}
             </p>
         </div>
     </div>
@@ -24,7 +24,12 @@
         $("[data-src]").each(function () {
             $(this).attr("src",$(this).attr('data-src'));
         });
+        $("iframe").each(function () {
+            $(this).attr("width",'100%');
+            $(this).attr("height",'300px;');
+        })
         $("img[data-src]").each(function () {
+            console.log("hi"+$(this).attr("data-s"));
             var max_width = parseInt($(this).attr("data-s").split(",")[0]);
             if($(this).attr("data-w")>max_width){
                 $(this).attr("width",'100%');
