@@ -67,8 +67,13 @@
             $(this).attr("src",$(this).attr('data-src'));
         });
         $("img[data-src]").each(function () {
-            var max_width = parseInt($(this).attr("data-s").split(",")[0]);
-            if($(this).attr("data-w")>max_width){
+            var obj_img_data_s = $(this).attr("data-s");
+            if(obj_img_data_s){
+                var max_width = parseInt(obj_img_data_s.split(",")[0]);
+                if($(this).attr("data-w")>max_width){
+                    $(this).attr("width",'100%');
+                }
+            }else{
                 $(this).attr("width",'100%');
             }
         });
