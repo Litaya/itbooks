@@ -31,4 +31,8 @@ class Book extends Model
 	public function department(){
 		return $this->belongsTo('App\Models\Department', 'department_id', 'id');
 	}
+
+	public function scopeOfDepartment($query, $dept_id){
+		return $query->where('department_id', $dept_id);
+	}
 }

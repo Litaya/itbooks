@@ -16,10 +16,14 @@ use Illuminate\Support\Facades\Log;
 class PermissionManager
 {
 
+	/** NEW GLOBAL FUNCTION ADDED 2014-04-08 **/
+	// static
+
 	/**
-	 * @param $permission_string string 权限字符串, 形如 BOOK_CURD_803
+	 * @param $permission_string string 权限字符串, 形如 BOOK_CURD_D803
 	 */
 	static public function resolve($permission_string){
+
 		$permission_string = trim(strtolower($permission_string));
 
 		$isSuperAdmin = 0;
@@ -63,6 +67,19 @@ class PermissionManager
 				$user_permission = $curd_permission;
 			}
 
+		}
+
+		$curd = ['c', 'u', 'r', 'd'];
+		
+		$permissions["book"]["permission"] = [];
+		
+		foreach($curd as $i){
+			if(!empty($book_department_permissions[$i]))
+				$permissions["book"]["permission"][$i] = $book_department_permissions[$i];
+			else if(!empty($book_district_permissions[$i]))
+				$permissions["book"]["permission"][$i] = $book_district_permissions[$i];
+			else
+				$permissions["book"]["permission"][$i] = 0;
 		}
 
 		$permissions["book"]["department"] = $book_department_permissions;
@@ -124,6 +141,8 @@ class PermissionManager
 				return self::hasUserPermission($operation);
 			case 'department':
 				return self::hasDepartmentPermission($operation,$entity_id);
+			case 'admin':
+				return self::isSuperAdmin();
 			default:
 				break;
 		}
@@ -234,9 +253,37 @@ class PermissionManager
 		}
 		return $modules;
 	}
-//
-//	static public function getUserIdentity(){
-//
-//	}
+
+	// 判断是否在前端显示某个模块
+	static public function hasModule($module_name){
+
+		$name = strtolower($module_name);
+
+		if(!empty(session('permission'))){
+			if($name == "book"){
+				$hasAuth = false;
+				foreach(session('permission')["book"]["permission"] as $i)
+					if($i == 1) return true;
+			}
+			else if($name == "material")
+			{
+				if(self::getAdminIdentity() == "SUPER_ADMIN") return true;
+			}
+			else{
+				$hasAuth = false;
+				foreach(session('permission')[$name] as $i)
+					if($i == 1) return true;
+			}
+		}
+
+		return false;
+	}
+
+	/* MODIFIED ON 2017-04-08 */
+	static public function getAdminRole(){
+		return session('adminrole');
+	}
+	/* END MODIFICATION */
+
 
 }

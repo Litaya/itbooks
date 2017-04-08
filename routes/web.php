@@ -162,11 +162,13 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::group(['prefix'=>'user'],function (){
 		Route::get('/', 'UserAdminController@index')->name("admin.user.index");
 		Route::post('promote', 'UserAdminController@promote')->name("admin.user.promote");
+		Route::get('{id}', 'UserAdminController@show')->name('admin.user.show');
 	});
 
 	Route::group(['prefix'=>'admin'], function(){
 		Route::get('/', 'AdminAdminController@index')->name('admin.admin.index');
 		Route::post('/changerole', 'AdminAdminController@update')->name('admin.admin.changerole');
+		Route::post('/demote', 'AdminAdminController@demote')->name('admin.admin.demote');
 	});
 
 	Route::group(['prefix'=>'department'],function (){

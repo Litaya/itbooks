@@ -74,4 +74,8 @@ class User extends Authenticatable
 	public function userInfo(){
 		return $this->hasOne('App\Models\UserInfo','user_id','id');
 	}
+
+	public function scopeNonAdmin($query){
+		return $query->whereRaw('( LENGTH(permission_string) = 0 )');
+	}
 }

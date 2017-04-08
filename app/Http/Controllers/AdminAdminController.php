@@ -13,6 +13,10 @@ use DB;
 class AdminAdminController extends Controller
 {
 
+    private static function Auth_role(){
+        return Session::get('adminrole');
+    }
+
     public static function get_admin_user($id){
         $user = User::find($id);
         $admin = Admin::where('user_id','=',$id);
@@ -32,7 +36,7 @@ class AdminAdminController extends Controller
     {
         // TODO: refine users to display in index
 
-        $sql_statement = "select user.id id, user.username username, admin.role role, department.name dept_name, district.name dist_name 
+        $sql_statement = "select user.id id, user.username username, user.email email, admin.role role, department.name dept_name, district.name dist_name 
                           from admin left join user on admin.user_id = user.id
                                      left join department on admin.department_id = department.id
                                      left join district on admin.district_id = district.id ";
@@ -117,7 +121,8 @@ class AdminAdminController extends Controller
                     if($bNewAdmin) $admin->save();
                     else $admin->update();
 
-                    $user->permission_string = "BOOK_CURD_D0|DEPARTMENT_CURD_D0|USER_CURD_D0";
+                    //$user->permission_string = "BOOK_CURD_D0|DEPARTMENT_CURD_D0|USER_CURD_D0";
+                    $user->permission_string = "all";
                     $user->update();
                 }
                 break;
@@ -132,7 +137,8 @@ class AdminAdminController extends Controller
                     if($bNewAdmin) $admin->save();
                     else $admin->update();
 
-                    $user->permission_string = "BOOK_CURD_D0|DEPARTMENT_R_D0";
+                    //$user->permission_string = "BOOK_CURD_D0|DEPARTMENT_R_D0";
+                    $user->permission_string = "all";
                     $user->update();
                 }
                 break;
@@ -147,7 +153,8 @@ class AdminAdminController extends Controller
                     if($bNewAdmin) $admin->save();
                     else $admin->update();
 
-                    $user->permission_string = "USER_R_D0";
+                    //$user->permission_string = "USER_R_D0";
+                    $user->permission_string = "all";
                     $user->update();
                 }
                 break;
@@ -166,6 +173,8 @@ class AdminAdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    // !! this function should never be called !!
     public function destroy($id)
     {
         // remove admin and user
@@ -174,9 +183,24 @@ class AdminAdminController extends Controller
 
         $user->delete();
         $admin->delete();
+
+        return redirect()->route("admin.admin.index");
     }
 
 
+    public function demote(Request $request){
+        $id = $request->id;
+        
+        $user = User::find($id);
+        $user->permission_string = "";
+        $user->update();
+
+        $admin = Admin::where('user_id', '=', $id);
+        $admin->delete();
+
+        Session::flash('success', '成功取消了'.$user->username.'的管理员权限');
+        return redirect()->route("admin.admin.index");
+    }
 
 
     /** API: 获取所有部门 **/

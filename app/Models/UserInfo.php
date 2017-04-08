@@ -29,4 +29,16 @@ class UserInfo extends Model
 	public function user(){
 		return $this->belongsTo('App\Models\User','user_id','id');
 	}
+
+	public function province(){
+		return $this->hasOne(District::class, 'id', 'province_id');
+	}
+
+	public function city(){
+		return $this->hasOne(District::class, 'id', 'city_id');
+	}
+
+	public function scopeOfProvince($query, $province_id){
+		return $query->where('province_id', $province_id);
+	}
 }

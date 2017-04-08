@@ -11,6 +11,7 @@
 
 <thead>
     <th>用户名</th>
+    <th>邮箱</th>
     <th>管理员角色</th>
     <th>部门</th>
     <th>地区</th>
@@ -21,12 +22,17 @@
 @foreach($users as $user)
     <tr>
         <td>{{$user->username}}</td>
+        <td>{{$user->email}}</td>
         <td>{{empty($user->role_translation) ? $user->role : $user->role_translation }}</td>
         <td>{{$user->dept_name}}</td>
         <td>{{$user->dist_name}}</td>
         <td>
+        @if($user->id != Auth::id())
         <button class="btn-xs btn-default" id="change-role-btn-{{$user->id}}">修改角色</button>
-        <button class="btn-xs btn-default">取消管理员</button>
+        <button class="btn-xs btn-default" onclick="javascript:confirmAndDemote({{$user->id}});">取消管理员</button>
+        @else
+        <small style="color:#AAA;">您不能修改自己的管理员权限</small>
+        @endif
         </td>
     </tr>
 
@@ -54,7 +60,7 @@ aria-labelledby="change-role-modal-label">
 
             <form action="{{route('admin.admin.changerole')}}" id="change-role-form" method="POST">
             
-            <input type="hidden" name="id" id="userid-input" value="">
+            <input type="hidden" name="id" id="change-role-id-input" value="">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             <select name="role" id="newrole-select">
                 <option value="SUPERADMIN">超级管理员</option>
@@ -70,8 +76,21 @@ aria-labelledby="change-role-modal-label">
 </div>
 
 
+<form action="{{route('admin.admin.demote')}}" method="POST" id="demote-form">
+<input type="hidden" name="id" id="demote-id-input" value="">
+<input type="hidden" name="_token" value="{{csrf_token()}}">
+</form>
+
 
 <script>
+
+function confirmAndDemote(id){
+    var sure = confirm("若取消该管理员的所有权限，该管理员将变成普通用户。确认取消吗？");
+    if(sure){
+        document.getElementById("demote-id-input").value = id;
+        document.getElementById("demote-form").submit();
+    }
+}
 
 $(document).ready(function(){
 
@@ -151,14 +170,15 @@ $(document).ready(function(){
 
                 district_select.appendChild(default_opt);
                 
-                for(var key in all_districts){
+                for(var key in all_provinces){
                     var opt = document.createElement('option');
                     opt.value = key;
-                    opt.text = all_departments[key];
+                    opt.text = all_provinces[key];
                     district_select.appendChild(opt);
                 }
 
-                parent.insertBefore(dept_select, submit_btn);
+                var submit_btn = document.getElementById('change-role-submit');
+                parent.insertBefore(district_select, submit_btn);
                 break;
 
             default: break;
@@ -178,7 +198,7 @@ $(document).ready(function(){
                 var name_split = $(this).attr("id").split("-");
                 var id = parseInt(name_split[name_split.length - 1]);
 
-                $('#userid-input').val(id);
+                $('#change-role-id-input').val(id);
                 
                 var role_select = document.getElementById('newrole-select');
                 role_select.options[role_select.selectedIndex].removeAttribute('selected');
