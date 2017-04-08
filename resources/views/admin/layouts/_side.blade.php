@@ -5,7 +5,7 @@
         background-color: #DDD;
     }
 </style>
-{{Auth::id()}}
+
 <ul>
     @if(in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/book')?'sidebar-active':''}}"><a href="{{ route('admin.book.index') }}"> <i class="fa fa-book push"></i>图书管理</a></li>
@@ -27,7 +27,7 @@
             <li class="{{Request::is('admin/admin')?'sidebar-active':''}}"><a href="{{ route('admin.admin.index') }}">管理员</a></li>
           </ul>
     </li>
-    @elseif(false)
+    @else
         @if(in_array('USER',\App\Libraries\PermissionManager::getAdminModules()))
             <li class="{{Request::is('admin/user')?'sidebar-active':''}}"><a href="{{ route('admin.user.index') }}"> <i class="fa fa-user push"></i>用户管理</a></li>
         @endif
