@@ -204,11 +204,11 @@ class BookAdminController extends Controller
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
         $book->kj_url = null;
         $book->weight = empty($request->weight) ? 0 : $request->weight;
-        $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
-                        "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
-        $real_url = null;
-        foreach($kj_url_list as $kj_url)
-            if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
+        // $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
+        //                 "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
+        // $real_url = null;
+        // foreach($kj_url_list as $kj_url)
+        //     if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
         
         if($request->img_upload) {
             // FileHelper::removeBookImage($book, $book->img_upload); // TODO: implement this
