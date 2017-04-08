@@ -31,14 +31,14 @@
     <div class="row" style="min-height: 20px;"></div>
     @if(!empty($materials))
         @foreach($materials as $material)
-            <a href="{{ route("material.show",$material->id) }}">
-            {{--<a href="{{ $material->url }}">--}}
+            <a href="{{ $material->display==1?route("material.show",$material->id):$material->url }}">
+                {{--<a href="{{ $material->url }}">--}}
                 <div class="col-xs-12 item">
                     <div class="col-xs-3" style="padding: 0;">
                         <img class="item-img" src="{{ $material->cover_path }}" alt="">
                     </div>
                     <div class="col-xs-9 item-content">
-                        <p class="item-title">{{ \Illuminate\Support\Str::limit($material->title,50) }}</p>
+                        <p class="item-title">{{ \Illuminate\Support\Str::limit($material->title,30) }}</p>
                         <small class="item-hint" style="position: absolute; bottom: 2px;">阅读 0 &nbsp;&nbsp;&nbsp;&nbsp; 评论 0</small>
                         <small class="item-hint" style="position: absolute; bottom: 2px; right: 5px;">{{ $material->wechat_update_time }}</small>
                     </div>
