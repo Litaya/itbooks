@@ -54,7 +54,7 @@ class WechatMessageHandler{
         Log::info($this->message);
 		switch ($this->message->MsgType){
 			case 'text':
-                $reply = '';
+                $reply = $this->textHandler($this->message->Content);
 				break;
 			default:
                 $reply = '';
@@ -62,6 +62,28 @@ class WechatMessageHandler{
 		}
 		return $reply;
 	}
+
+    private function textHandler($content){
+        $reply = '';
+        $openid            = $this->message->FromUserName;
+        $material_list_url = url('/material')."?openid=$openid"; 
+        $content           = strtolower($content);
+        switch($content){
+            case 'test':
+            case '文章列表':
+                $news = new News([
+                        'title'       => '文章列表',
+                        'description' => "点此查看文章列表",
+                        'url'         => $material_list_url,
+                        'image'       => '/img/example.jpg',
+                ]);
+                $reply = $news;           
+                break;
+            default:
+                break;
+        }
+        return $reply;
+    } 
 
 	/*
 	 * 以下函数仅供本类使用

@@ -18,39 +18,39 @@ class Wechat
 	/**
 	 * Wechat constructor.
 	 */
-    private function __construct()
-    {
-	    $options = [
-		    'debug'  => true,
-		    'app_id' => env('APP_ID'),
-		    'secret' => env('APP_SECRET'),
-		    'token'  => 'shuquan',
+	private function __construct()
+	{
+		$options = [
+			'debug'  => true,
+			'app_id' => env('APP_ID'),
+			'secret' => env('APP_SECRET'),
+			'token'  => 'shuquan',
 
-		    'log'    => [
-			    'level' => 'debug',
-			    'file'  => '/tmp/easywechat.log'
-		    ]
-	    ];
-	    $this->app = new Application($options);
-    }
+			'log'    => [
+				'level' => 'debug',
+				'file'  => '/tmp/easywechat.log'
+			]
+		];
+		$this->app = new Application($options);
+	}
 
 	/**
 	 * 返回可用的Wechat对象
 	 * @return Wechat
 	 */
-    public static function getInstance(){
-    	if (is_null(self::$instance)){
-    		self::$instance = new Wechat();
-	    }
-	    return self::$instance;
-    }
+	public static function getInstance(){
+		if (is_null(self::$instance)){
+			self::$instance = new Wechat();
+		}
+		return self::$instance;
+	}
 
 	/**
 	 * @return Application|null
 	 */
-    public function getApp(){
-    	return $this->app;
-    }
+	public function getApp(){
+		return $this->app;
+	}
 
 	/**
 	 * 获取永久素材列表
@@ -60,7 +60,7 @@ class Wechat
 	 * @return array
 	 */
 	public function getMaterialLists($type,$offset,$count){
-    	$material = $this->app->material;
+		$material = $this->app->material;
 		$lists    = $material->lists($type,$offset,$count);
 		return $lists;
 	}
@@ -109,6 +109,8 @@ class Wechat
 
 	/**
 	 * 将素材库的所有图文消息内容存本地，并将路径存库
+	 * @param array|null $time， time['start'] time['end'] timestamp类型
+	 * @return int
 	 */
 	public function storeWechatNewsToDB(){
 		$this->storeWechatImagesToDB(); // 先将所有的图片素材存库
@@ -135,7 +137,7 @@ class Wechat
 						Material::create([
 							'media_id'           => $media_id,
 							'title'              => $item['title'],
-                            'thumb_media_id'     => $thumb_media_id,
+							'thumb_media_id'     => $thumb_media_id,
 							'cover_path'         => $cover_path,
 							'show_cover_pic'     => $item['show_cover_pic'],
 							'author'             => $item['author'],
@@ -152,9 +154,65 @@ class Wechat
 					$updated = true;
 				}
 			}
-            if(!$updated)
+			if(!$updated)
+				break;
+			$offset += $count;
+		}
+		return $news_sum;
+	}
+
+	public function storeWechatNewsToDBbyTime($start_time, $end_time){
+        $start_time = intval(substr($start_time,0,10));
+        $end_time   = intval(substr($end_time,0,10));
+		$this->storeWechatImagesToDB(); // 先将所有的图片素材存库
+		$offset = 0; $count = 20; $news_sum = 0;
+		while (1){
+			$lists = $this->getMaterialLists('news',$offset,$count);
+			$news  = $lists['item'];
+
+			$flag = false; # 标志是否结束
+			# 对于获取到的素材列表中的每一条素材
+            $update_time    = time();
+			foreach ($news as $new){
+				$media_id    = $new['media_id'];
+				$update_time = intval($new['update_time']);
+
+				# 如果本条时间不在目标时间内，跳过
+				if($update_time > $end_time || $update_time < $start_time) {
+					continue;
+				}
+
+				# 如果在目标时间内，则更新
+				Material::where('media_id',$media_id)->delete();
+				# 图文入库
+				$items = $new['content']['news_item'];
+				# 对于多图文消息
+				foreach ($items as $item){
+					$thumb_media_id = $item['thumb_media_id'];
+					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
+					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
+					Material::create([
+						'media_id'           => $media_id,
+						'title'              => $item['title'],
+						'thumb_media_id'     => $thumb_media_id,
+						'cover_path'         => $cover_path,
+						'show_cover_pic'     => $item['show_cover_pic'],
+						'author'             => $item['author'],
+						'digest'             => $item['digest'],
+						'content'            => $item['content'],
+						'url'                => $item['url'],
+						'content_source_url' => $item['content_source_url'],
+						'reading_quantity'   => 0,
+						'category_id'        => 0,
+						'wechat_update_time'  => date('Y-m-d H:i:s',$update_time) # 该素材在微信后台的最后更新时间
+					]);
+					$news_sum += 1;
+				}
+			}
+            if($update_time < $end_time){
                 break;
-            $offset += $count;
+            }
+			$offset += $count;
 		}
 		return $news_sum;
 	}

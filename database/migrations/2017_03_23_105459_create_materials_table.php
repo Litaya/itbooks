@@ -27,7 +27,8 @@ class CreateMaterialsTable extends Migration
 		    $table->string("content_source_url")->default('')->comment('图文消息的原文地址');
 		    $table->integer('reading_quantity')->default(0)->comment('阅读量');
 		    $table->unsignedInteger('category_id')->default(0)->comment('文章类别');
-		    $table->timestamp('wechat_update_time')->comment('文章的上传更新时间');
+		    $table->dateTime('wechat_update_time')->comment('文章的上传更新时间');
+		    $table->integer('display')->default(1)->comment('0:备用,1:系统,2:微信');
 		    $table->timestamps();
 	    });
     }
