@@ -36,29 +36,25 @@ class AdminAdminController extends Controller
     {
         // TODO: refine users to display in index
 
-        $sql_statement = "select user.id id, user.username username, user.email email, admin.role role, department.name dept_name, district.name dist_name 
-                          from admin left join user on admin.user_id = user.id
-                                     left join department on admin.department_id = department.id
-                                     left join district on admin.district_id = district.id ";
+        $user_list = [];
 
+        $scope_builder = User::admin()->leftJoin('admin', 'admin.user_id', '=', 'user.id')
+                                      ->leftJoin('user_info', 'user_info.user_id', '=', 'user.id')
+                                      ->leftJoin('department', 'department.id', '=', 'admin.department_id')
+                                      ->leftJoin('district', 'district.id', '=', 'admin.district_id');
+                                      
         if($request->search){
-            $sql_statement .= "where (user.id like %$search% or user.username like %$search$ or district.name like %$search% or department.name like %$search%) ";
+            $search = $request->search;
+            $scope_builder = $scope_builder->where("username", "like", "%$search%")
+                                            ->orWhere("email", "like", "%$search%")
+                                            ->orWhere("user_info.realname", "like", "%$search%");
         }
-
-        // role part
-        if($request->role){
-            $role_statement = " role = ".$request->role." ";
-
-            if($role_statement != ""){
-                if($request->search)
-                    $sql_statement .= " and " . $role_statement . " ";
-                else
-                    $sql_statement .= " where " . $role_statement . " ";
-            }
+        if($request->role && $request->role != "all"){
+            $scope_builder = $scope_builder->where('admin.role', '=', $request->role);
         }
 
         /** WARNING: UNSAFE CALL **/
-        $user_list = DB::select($sql_statement);
+        $user_list = $scope_builder->paginate(20, array('user.id as id', 'admin.role as role', 'department.name as dept_name', 'district.name as dist_name', 'user.email as email', 'user.username as username'));
         for($i=0;$i<count($user_list);$i++){
             $user_list[$i] = (object)$user_list[$i];
             switch($user_list[$i]->role){
@@ -67,7 +63,6 @@ class AdminAdminController extends Controller
                 case "DEPTADMIN": $user_list[$i]->role_translation = "部门管理员"; break;
                 case "REPRESENTATIVE": $user_list[$i]->role_translation = "地区代表"; break;
             }
-            
         }
 
         return view("admin.admin.index")->withUsers($user_list);

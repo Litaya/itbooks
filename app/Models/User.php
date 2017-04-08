@@ -76,6 +76,10 @@ class User extends Authenticatable
 	}
 
 	public function scopeNonAdmin($query){
-		return $query->whereRaw('( LENGTH(permission_string) = 0 )');
+		return $query->whereRaw('LENGTH(permission_string) = 0');
+	}
+
+	public function scopeAdmin($query){
+		return $query->whereRaw('LENGTH(permission_string) > 0');
 	}
 }

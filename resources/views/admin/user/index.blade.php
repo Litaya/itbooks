@@ -6,6 +6,17 @@
 
 <div class="row">
 <div class="col-xs-12">
+{!! Form::open(["route"=>"admin.user.index", "method"=>"GET"]) !!}
+{{ Form::text('search', null, ['placeholder'=>'用户名、邮箱、真实姓名']) }}
+{{ Form::select('role', ["all"=>"全部", "teacher"=>"教师", "staff"=>"职员", "student"=>"学生", "other"=>"其他"], Input::get('role')) }}
+{{ Form::submit('搜索') }}
+</div>
+{!! Form::close() !!}
+</div>
+
+
+<div class="row">
+<div class="col-xs-12 col-md-12">
 <table class="table">
 <thead>
 <tr>

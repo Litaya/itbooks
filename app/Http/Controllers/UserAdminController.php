@@ -23,41 +23,29 @@ class UserAdminController extends Controller
 
         $admin = Admin::where('user_id', '=', Auth::id())->first();
 
+        $scope_builder = User::nonAdmin();
         if($request->search){
             $search = $request->search;
-            $scope_builder = User::nonAdmin()
-                    ->join('user_info', 'user_info.user_id', '=', 'user.id')
-                    ->where("username", "like", "%$search%")
-                    ->orWhere("email", "like", "%$search%")
-                    ->orWhere("user_info.realname", "like", "%$search%");
-
-            switch($admin->role){
-                case "SUPERADMIN":
-                    $users = $scope_builder->paginate(15);
-                    break;
-                case "REPRESENTATIVE":
-                    $users = $scope_builder
-                             ->where("user_info.province_id", "=", $admin->district_id)
-                             ->paginate(15);
-                    break;
-                default: break; // NO PERMISSION
-            }
+            $scope_builder = $scope_builder->join('user_info', 'user_info.user_id', '=', 'user.id')
+                                            ->where("username", "like", "%$search%")
+                                            ->orWhere("email", "like", "%$search%")
+                                            ->orWhere("user_info.realname", "like", "%$search%");
         }
-        else{
-            $scope_builder = User::nonAdmin()
-                             ->join('user_info', 'user_info.user_id', '=', 'user.id');
+        if($request->role && $request->role != "all"){
+            $scope_builder = $scope_builder->join('user_info', 'user_info.user_id', '=', 'user.id')
+                                            ->where('user_info.role', '=', $request->role);
+        }
 
-            switch($admin->role){
-                case "SUPERADMIN": 
-                    $users = $scope_builder->paginate(15);
-                    break;
-                case "REPRESENTATIVE":
-                    $users = $scope_builder
-                             ->where("user_info.province_id", "=", $admin->district_id)
-                             ->paginate(15);
-                    break;
-                default: break; // NO PERMISSION
-            }
+        switch($admin->role){
+            case "SUPERADMIN": 
+                $users = $scope_builder->paginate(15);
+                break;
+            case "REPRESENTATIVE":
+                $users = $scope_builder
+                            ->where("user_info.province_id", "=", $admin->district_id)
+                            ->paginate(15);
+                break;
+            default: break; // NO PERMISSION
         }
 
         return view("admin.user.index")->withUsers($users);

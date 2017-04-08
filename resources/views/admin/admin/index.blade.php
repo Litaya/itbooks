@@ -5,6 +5,17 @@
 @section("content")
 
 <div class="row">
+<div class="col-xs-12">
+{!! Form::open(["route"=>"admin.admin.index", "method"=>"GET"]) !!}
+{{ Form::text('search', null, ['placeholder'=>'用户名、邮箱、真实姓名']) }}
+{{ Form::select('role', ["all"=>"全部", "SUPERADMIN"=>"超级管理员", "DEPTADMIN"=>"部门管理员", "REPRESENTATIVE"=>"地区代表", "NEWADMIN"=>"新管理员"], Input::get('role')) }}
+{{ Form::submit('搜索') }}
+</div>
+{!! Form::close() !!}
+</div>
+
+
+<div class="row">
 
 <div class="col-xs-12">
 <table class="table">
