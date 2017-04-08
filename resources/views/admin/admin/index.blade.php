@@ -122,7 +122,7 @@ $(document).ready(function(){
         if(dept_select) dept_select.parentElement.removeChild(dept_select);
         // 删除地区选择项
         var district_select = document.getElementById('district-select');
-        if(district_select) dept_select.parentElement.removeChild(district_select);
+        if(district_select) district_select.parentElement.removeChild(district_select);
 
         switch($('#newrole-select').val()){
 

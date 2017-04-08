@@ -32,7 +32,10 @@ class Book extends Model
 		return $this->belongsTo('App\Models\Department', 'department_id', 'id');
 	}
 
-	public function scopeOfDepartment($query, $dept_id){
-		return $query->where('department_id', $dept_id);
+	public function scopeOfDepartmentCode($query, $code){
+		return $query->leftJoin('department', 'department.id', '=', 'book.department_id')
+					 ->whereRaw('department.code like \''.$code.'%\'')->select('book.*');
 	}
+
+	// what about editor ?
 }

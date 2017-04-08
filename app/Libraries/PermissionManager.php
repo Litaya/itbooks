@@ -240,7 +240,7 @@ class PermissionManager
 				$modules = ['BOOK','DEPARTMENT','USER','BOOKREQ','MATERIAL'];
 				break;
 			case 'DEPARTMENT_ADMIN':
-				$modules = ['BOOK','BOOKREQ','USER'];
+				$modules = ['BOOK','BOOKREQ'];
 				break;
 			case 'REPRESENTATIVE':
 				$modules = ['USER'];

@@ -12,6 +12,7 @@ use App\Helpers\FileHelper;
 use App\Helpers\CrossDomainHelper;
 use Faker\Factory as Faker;
 
+use Auth;
 use Image;
 
 class BookAdminController extends Controller
@@ -22,6 +23,7 @@ class BookAdminController extends Controller
         $this->middleware('auth');
     }
 
+
     /**
      * Display a listing of the resource.
      *
@@ -29,14 +31,38 @@ class BookAdminController extends Controller
      */
     public function index(Request $request)
     {
+        $admin = \App\Models\Admin::where('user_id', '=', Auth::id())->first();
+
         if($request->search){
             $search = $request->search;
-            $books = Book::where('ISBN', 'like', "%$search%")
+            switch($admin->role){
+                case "SUPERADMIN":
+                $books = Book::where('ISBN', 'like', "%$search%")
                         ->orWhere('name', 'like', "%$search%")
                         ->orWhere('authors', 'like', "%$search%")
                         ->paginate(20);
+                break;
+                case "DEPTADMIN":
+                $code = Department::find($admin->department_id)->first()->code;
+                $books = Book::ofDepartmentCode($code)
+                        ->where('ISBN', 'like', "%$search%")
+                        ->orWhere('name', 'like', "%$search%")
+                        ->orWhere('authors', 'like', "%$search%")
+                        ->paginate(20);
+                break;
+            }
         }
-        else $books = Book::orderBy('id', 'asc')->paginate(20);
+        else{
+            switch($admin->role){
+                case "SUPERADMIN":
+                    $books = Book::orderBy('id', 'asc')->paginate(20); 
+                    break;
+                case "DEPTADMIN":
+                    $code = Department::find($admin->department_id)->first()->code;
+                    $books = Book::ofDepartmentCode($code)->orderBy('id', 'asc')->paginate(20); 
+                    break;
+            }
+        }
         
         return view("admin.book.index")->withBooks($books)->withInput($request->except("page"));
     }
