@@ -19,7 +19,7 @@
     @if(in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/conference')?'sidebar-active':''}}"><a href="{{ route('admin.conference.index') }}"> <i class="fa fa-street-view push"></i>会议管理</a></li>
     @endif
-    @if(strtoupper(\App\Libraries\PermissionManager::getAdminRole()) == "SUPERADMIN")
+    @if(strtoupper(PM::getAdminRole()) == "SUPERADMIN")
     <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user push"></i>用户管理</a>
           <ul class="dropdown-menu">
