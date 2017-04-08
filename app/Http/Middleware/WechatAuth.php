@@ -29,6 +29,7 @@ class WechatAuth
                 /* MODIFIED ON 2017-04-08: directly write admin.role to session */
                 $admin = Admin::where('user_id', '=', $user->id)->get();
                 if(count($admin) != 0) $request->session()->put('adminrole', $admin[0]->role);
+                $request->session()->save();
                 /* END MODIFICATION */
 		    }
 	    }
