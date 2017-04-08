@@ -137,6 +137,8 @@ class PermissionManager
 				return true;
 			case 'DEPARTMENT_ADMIN':
 				return true;
+			case 'EDITOR':
+				return false;
 			case 'REPRESENTATIVE':
 				if(!empty($operation)){
 					$book = Book::where('id',$book_id)->first();
@@ -157,6 +159,8 @@ class PermissionManager
 				return true;
 			case 'DEPARTMENT_ADMIN':
 				return true;
+			case 'EDITOR':
+				return false;
 			case 'REPRESENTATIVE':
 				if(!empty($operation) && strstr('cud',$operation)){
 					return false;
@@ -193,15 +197,17 @@ class PermissionManager
 		return 0;
 	}
 
-	//获取登录用户的身份: SUPER_ADMIN|DEPARTMENT_ADMIN|REPRESENTATIVE
+	//获取登录用户的身份: SUPER_ADMIN|DEPARTMENT_ADMIN|REPRESENTATIVE|EDITOR
 	static public function getAdminIdentity(){
 		if (self::isSuperAdmin()){
 			return 'SUPER_ADMIN';
 		}
 		$permission = session('permission');
 		if(in_array('book',$permission)){
-			if(!empty($permission['book']['department']))
+			if(!empty($permission['book']['department'] && !empty($permission['user'])))
 				return 'DEPARTMENT_ADMIN';
+			if(!empty($permission['book']['department']))
+				return 'EDITOR';
 			if(!empty($permission['book']['district']))
 				return 'REPRESENTATIVE';
 		}
@@ -215,10 +221,13 @@ class PermissionManager
 				$modules = ['BOOK','DEPARTMENT','USER','BOOKREQ','MATERIAL'];
 				break;
 			case 'DEPARTMENT_ADMIN':
-				$modules = ['BOOK','BOOKREQ'];
+				$modules = ['BOOK','BOOKREQ','USER'];
 				break;
 			case 'REPRESENTATIVE':
-				$modules = ['BOOK','BOOKREQ'];
+				$modules = ['USER'];
+				break;
+			case 'EDITOR':
+				$modules = ['BOOK'];
 				break;
 			default:
 				break;

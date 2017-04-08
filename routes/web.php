@@ -160,9 +160,13 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	 * user routes
 	 */
 	Route::group(['prefix'=>'user'],function (){
-		Route::get('/', 'Admin\AdminUserController@index')->name("admin.user.index");
+		Route::get('/', 'UserAdminController@index')->name("admin.user.index");
+		Route::post('promote', 'UserAdminController@promote')->name("admin.user.promote");
+	});
 
-		Route::post('/create','Admin\AdminUserController@create')->name('admin.user.create');
+	Route::group(['prefix'=>'admin'], function(){
+		Route::get('/', 'AdminAdminController@index')->name('admin.admin.index');
+		Route::post('/changerole', 'AdminAdminController@update')->name('admin.admin.changerole');
 	});
 
 	Route::group(['prefix'=>'department'],function (){

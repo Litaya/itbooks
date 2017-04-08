@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="/css/admin.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
+
     <title> @yield('title') </title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
