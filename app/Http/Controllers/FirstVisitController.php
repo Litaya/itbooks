@@ -37,7 +37,9 @@ class FirstVisitController extends Controller
                 "department" => "required",
                 "jobtitle" => "required",
                 "course_name_1" =>"required",
-                "number_stud_1" =>"required"
+                "number_stud_1" =>"required",
+                "province_id" => "integer",
+                "city_id" => "integer"
             ]);
             
             $user = Auth::user();
