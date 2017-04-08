@@ -22,7 +22,7 @@ class Search extends WechatTextHandler{
 			$material_new = new News([
 				'title'       => "查询到".sizeof($material_result)."篇相关文章",
 				'description' => "点此查看相关文章列表",
-				'url'         => route('book.index')."?search=".$message,
+				'url'         => route('material.index')."?search=".$message,
 				'image'       => route('image',['src'=>'public/material_search.png'])
 			]);
 			return [$book_new,$material_new];
