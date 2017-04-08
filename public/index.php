@@ -56,3 +56,5 @@ $response = $kernel->handle(
 $response->send();
 
 $kernel->terminate($request, $response);
+
+require __DIR__."/../app/Libraries/autoload.php";

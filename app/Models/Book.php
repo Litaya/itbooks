@@ -31,4 +31,10 @@ class Book extends Model
 	public function department(){
 		return $this->belongsTo('App\Models\Department', 'department_id', 'id');
 	}
+
+	public static function search($message){
+		return self::where("name","like","%$message%")
+			->orWhere("authors","like","%$message%")
+			->orWhere("isbn",$message);
+	}
 }

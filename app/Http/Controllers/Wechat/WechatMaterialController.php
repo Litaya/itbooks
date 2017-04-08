@@ -14,7 +14,7 @@ class WechatMaterialController extends Controller
 		$message   = "";
 		if($request->has('search')){
 			$message   = $request->get('search');
-			$materials = Material::search($message);
+			$materials = Material::search($message)->simplePaginate(10);
 		}
 		return view('material.index',compact('materials','message'));
 	}

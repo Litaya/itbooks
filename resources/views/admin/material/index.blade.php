@@ -46,7 +46,7 @@
     {{-- 搜索框 --}}
     <div class="row">
         <hr>
-        <form action="{{ route('admin.material.search') }}" class="form-horizontal" method="get">
+        <form action="{{ route('admin.material.index') }}" class="form-horizontal" method="get">
             <input type="text" name="search" class="form-control" placeholder="请输入标题、正文、或作者搜索">
         </form>
     </div>
@@ -106,7 +106,7 @@
     @endforeach
 
     <div class="row" id="pages">
-        {{ $materials->links() }}
+        {{ $materials->appends(Input::except('page'))->links('vendor.pagination.default')  }}
     </div>
 
     <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>

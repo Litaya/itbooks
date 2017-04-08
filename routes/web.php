@@ -187,7 +187,6 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
 	Route::group(['prefix'=>'material'], function() {
 		Route::get('/','Wechat\WechatMaterialAdminController@index')->name('admin.material.index');
-		Route::get('/search','Wechat\WechatMaterialAdminController@search')->name('admin.material.search');
 		Route::get('/{id}','Wechat\WechatMaterialAdminController@show')->name('admin.material.show');
 		Route::post('/sync','Wechat\WechatMaterialAdminController@sync')->name('admin.material.sync');
 		Route::post('/{id}/set_display','Wechat\WechatMaterialAdminController@set_display')->name('admin.material.set_display');
@@ -219,5 +218,6 @@ Route::group(["prefix" => "message"],function (){
 
 Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
 	Route::get('/','Wechat\WechatMaterialController@index')->name('material.index');
+	Route::get('/search','Wechat\WechatMaterialController@search')->name('material.search');
 	Route::get("/{id}/",'Wechat\WechatMaterialController@show')->name('material.show');
 });

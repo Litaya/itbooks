@@ -45,6 +45,6 @@
                 </div>
             </a>
         @endforeach
-        <div class="row" style="text-align:center">{{ $materials->links() }}</div>
+        <div class="row" style="text-align:center">{{ $materials->appends(Input::except('page'))->links('vendor.pagination.simple-default')  }}</div>
     @endif
 @stop

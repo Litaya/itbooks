@@ -14,13 +14,13 @@ class WechatMaterialAdminController extends Controller
 {
 	// 图文管理首页
 	public function index(Request $request){
-		$materials = Material::orderBy('wechat_update_time','desc')->paginate(10);
-		return view('admin.material.index',compact('materials'));
-	}
-
-	public function search(Request $request){
-		$search = $request->get('search');
-		$materials = Material::search($search);
+		if($request->has('search')){
+			$search    = $request->get('search');
+			$materials = Material::search($search)->paginate(10);
+		}else{
+			$search    = "";
+			$materials = Material::orderBy('wechat_update_time','desc')->paginate(10);
+		}
 		return view('admin.material.index',compact('materials','search'));
 	}
 
