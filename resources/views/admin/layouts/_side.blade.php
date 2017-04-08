@@ -5,7 +5,7 @@
         background-color: #DDD;
     }
 </style>
-{{Session::get('adminrole')}}
+{{Auth::id()}}
 <ul>
     @if(in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/book')?'sidebar-active':''}}"><a href="{{ route('admin.book.index') }}"> <i class="fa fa-book push"></i>图书管理</a></li>
