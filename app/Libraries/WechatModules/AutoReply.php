@@ -8,7 +8,7 @@ use App\Models\WechatAutoReply;
 
 class AutoReply extends WechatTextHandler{
 
-	public function handle($message)
+	public function handle($openid,$message)
 	{
 		$auto_replies = WechatAutoReply::all();
 		$matched      = false;
@@ -28,11 +28,10 @@ class AutoReply extends WechatTextHandler{
 
 		# 责任链没有断的情况下，继续向下处理
 		if(!empty($this->successor)){
-			return $this->successor->handle($message);
+			return $this->successor->handle($openid,$message);
 		}else{ # 没有下一个处理模块，则返回空串
 			return "";
 		}
-
 	}
 
 	public function weight()

@@ -16,7 +16,7 @@ abstract class WechatTextHandler{
 	 * @param $message
 	 * @return mixed
 	 */
-	abstract public function handle($message);
+	abstract public function handle($openid,$message);
 
 	/**
 	 * 每个模块有自己的默认权重，自动加载微信处理模块的时候按照权重形成责任链。
