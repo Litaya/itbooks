@@ -227,7 +227,7 @@ $(document).ready(function(){
                     updateModal();
                 }
 
-                jQuery.noConflict();
+                // jQuery.noConflict();
                 $("#change-role-modal").modal();
             });
         }
