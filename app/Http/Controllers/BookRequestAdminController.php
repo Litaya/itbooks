@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Session;
 use App\Models\BookRequest;
 use DB;
 
+use app\Libraries\PermissionManager as PM;
+
 class BookRequestAdminController extends Controller
 {
 
@@ -20,11 +22,8 @@ class BookRequestAdminController extends Controller
 
     public function getIndex(Request $request){
 
-        // $ar = Session::get('adminrole');
-        $admin = \App\Models\Admin::where('user_id','=',Auth::id())->first(); // must succeed, or this user is not an administer.
-        $ar = $admin->role;
+        $ar = PM::getAdminRole();
         
-
         if($request->search){
             $search = $request->search;
             switch($ar){
@@ -38,7 +37,7 @@ class BookRequestAdminController extends Controller
                     break;
 
                 case "DEPTADMIN":
-                    $code = \App\Models\Department::find($admin->department_id)->code;
+                    $code = PM::getAdminDepartmentCode();
                     $bookreqs = BookRequest::ofDepartmentCode($code)
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
@@ -63,7 +62,7 @@ class BookRequestAdminController extends Controller
                     $bookreqs = BookRequest::orderBy('id', 'desc')->paginate(20);
                     break;
                 case "DEPTADMIN":
-                    $code = \App\Models\Department::find($admin->department_id)->code;
+                    $code = PM::getAdminDepartmentCode();
                     $bookreqs = BookRequest::ofDepartmentCode($code)->orderBy('id', 'desc')->paginate(20, ['book_request.*']);
                     break;
                 case "EDITOR": // unknown

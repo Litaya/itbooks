@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\UserInfo;
 use Session;
 use Auth;
-use App\Libraries\PermissionManager;
+use app\Libraries\PermissionManager as PM;
 
 class UserAdminController extends Controller
 {
@@ -21,30 +21,41 @@ class UserAdminController extends Controller
 
         $users = [];
 
-        $admin = Admin::where('user_id', '=', Auth::id())->first();
+        $adminrole = PM::getAdminRole();
 
         $scope_builder = User::nonAdmin();
+
+        $bUserInfoJoined = false;
+
         if($request->search){
             $search = $request->search;
             $scope_builder = $scope_builder->join('user_info', 'user_info.user_id', '=', 'user.id')
                                             ->where("username", "like", "%$search%")
                                             ->orWhere("email", "like", "%$search%")
                                             ->orWhere("user_info.realname", "like", "%$search%");
+            $bUserInfoJoined = true;
         }
         if($request->role && $request->role != "all"){
-            $scope_builder = $scope_builder->join('user_info', 'user_info.user_id', '=', 'user.id')
-                                            ->where('user_info.role', '=', $request->role);
+            if(!$bUserInfoJoined)
+                $scope_builder = $scope_builder->join('user_info', 'user_info.user_id', '=', 'user.id');
+            $scope_builder = $scope_builder->where('user_info.role', '=', $request->role);
+            $bUserInfoJoined = true;
         }
 
-        switch($admin->role){
+        switch($adminrole){
+            
             case "SUPERADMIN": 
                 $users = $scope_builder->paginate(15);
                 break;
+
             case "REPRESENTATIVE":
+                if(!$bUserInfoJoined)
+                    $scope_builder = $scope_builder->join('user_info', 'user_info.user_id', '=', 'user.id');
                 $users = $scope_builder
-                            ->where("user_info.province_id", "=", $admin->district_id)
+                            ->where("user_info.province_id", "=", PM::getAdminDistrict())
                             ->paginate(15);
                 break;
+
             default: break; // NO PERMISSION
         }
 

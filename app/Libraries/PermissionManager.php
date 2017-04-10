@@ -131,7 +131,7 @@ class PermissionManager
 	// 获取登录管理员用户管辖的省、直辖市、自治州,返回id数组
 	static public function getAuthorizedProvinces(){}
 
-	static public function hasPermission($entity,$operation="",$entity_id = null){
+	static public function DEPRECATED_hasPermission($entity,$operation="",$entity_id = null){
 		switch ($entity){
 			case 'book':
 				return self::hasBookPermission($operation,$entity_id);
@@ -143,6 +143,24 @@ class PermissionManager
 				return self::hasDepartmentPermission($operation,$entity_id);
 			case 'admin':
 				return self::isSuperAdmin();
+			default:
+				break;
+		}
+		return true;
+	}
+
+	static public function hasPermission($entity,$operation="",$entity_id = null){
+		switch ($entity){
+			case 'book':
+				return in_array(self::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]);
+			case 'bookreq':
+				return in_array(self::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]);
+			case 'user':
+				return in_array(self::getAdminRole(), ["SUPERADMIN", "REPRESENTATIVE"]);
+			case 'department':
+				return in_array(self::getAdminRole(), ["SUPERADMIN"]);
+			case 'admin':
+				return in_array(self::getAdminRole(), ["SUPERADMIN"]);
 			default:
 				break;
 		}
@@ -282,6 +300,18 @@ class PermissionManager
 	/* MODIFIED ON 2017-04-08 */
 	static public function getAdminRole(){
 		return session('adminrole');
+	}
+
+	static public function getAdminDistrict(){
+		return session('admindist');
+	}
+
+	static public function getAdminDepartmentId(){
+		return session('admindept');
+	}
+
+	static public function getAdminDepartmentCode(){
+		return session('admindeptcode');
 	}
 	/* END MODIFICATION */
 

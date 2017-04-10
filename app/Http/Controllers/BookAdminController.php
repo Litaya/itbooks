@@ -15,6 +15,8 @@ use Faker\Factory as Faker;
 use Auth;
 use Image;
 
+use app\Libraries\PermissionManager as PM;
+
 class BookAdminController extends Controller
 {
     private $department_array = null;
@@ -31,11 +33,11 @@ class BookAdminController extends Controller
      */
     public function index(Request $request)
     {
-        $admin = \App\Models\Admin::where('user_id', '=', Auth::id())->first();
+        $adminrole = PM::getAdminRole();
 
         if($request->search){
             $search = $request->search;
-            switch($admin->role){
+            switch($adminrole){
                 case "SUPERADMIN":
                 $books = Book::where('book.ISBN', 'like', "%$search%")
                         ->orWhere('book.name', 'like', "%$search%")
@@ -43,7 +45,7 @@ class BookAdminController extends Controller
                         ->paginate(20);
                 break;
                 case "DEPTADMIN":
-                $code = Department::find($admin->department_id)->code;
+                $code = PM::getAdminDepartmentCode();
                 $books = Book::ofDepartmentCode($code)
                         ->where('book.ISBN', 'like', "%$search%")
                         ->orWhere('book.name', 'like', "%$search%")
@@ -53,12 +55,12 @@ class BookAdminController extends Controller
             }
         }
         else{
-            switch($admin->role){
+            switch($adminrole){
                 case "SUPERADMIN":
                     $books = Book::orderBy('id', 'asc')->paginate(20); 
                     break;
                 case "DEPTADMIN":
-                    $code = Department::find($admin->department_id)->code;
+                    $code = PM::getAdminDepartmentCode();
                     $books = Book::ofDepartmentCode($code)->orderBy('id', 'asc')->paginate(20); 
                     break;
             }
@@ -120,8 +122,8 @@ class BookAdminController extends Controller
 
         $book->save();  // $book->id is first set here!!
 
-        // FileHelper::saveBookImage() make use of $book->id
-        // so it has to be update() afterwards!!
+        // FileHelper::saveBookImage() make use of $book->id so it has to be update() afterwards
+        // $book = Book::find($book->id);  // to replace the dirty $book ?
         $book->img_upload = empty($request->img_upload) ? null :
                             FileHelper::saveBookImage($book, $request->img_upload);
         $book->update();

@@ -116,8 +116,8 @@ class AdminAdminController extends Controller
                     if($bNewAdmin) $admin->save();
                     else $admin->update();
 
-                    //$user->permission_string = "BOOK_CURD_D0|DEPARTMENT_CURD_D0|USER_CURD_D0";
-                    $user->permission_string = "all";
+                    $user->permission_string = "BOOK_CURD_D0|DEPARTMENT_CURD_D0|USER_CURD_D0";
+                    //$user->permission_string = "all";
                     $user->update();
                 }
                 break;
@@ -132,8 +132,8 @@ class AdminAdminController extends Controller
                     if($bNewAdmin) $admin->save();
                     else $admin->update();
 
-                    //$user->permission_string = "BOOK_CURD_D0|DEPARTMENT_R_D0";
-                    $user->permission_string = "all";
+                    $user->permission_string = "BOOK_CURD_D0|DEPARTMENT_R_D0";
+                    //$user->permission_string = "all";
                     $user->update();
                 }
                 break;
@@ -148,8 +148,8 @@ class AdminAdminController extends Controller
                     if($bNewAdmin) $admin->save();
                     else $admin->update();
 
-                    //$user->permission_string = "USER_R_D0";
-                    $user->permission_string = "all";
+                    $user->permission_string = "USER_R_D0";
+                    //$user->permission_string = "all";
                     $user->update();
                 }
                 break;
