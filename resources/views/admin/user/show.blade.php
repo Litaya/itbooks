@@ -22,7 +22,7 @@
             </li>
             <li>真实姓名: {{$user->userinfo->realname}}</li>
             @if($user->userinfo->province)
-            <li>所在地: {{$user->userinfo->province->name}} {{$user->userinfo->city->name}} </li>
+            <li>所在地: {{$user->userinfo->province->name}} {{empty($user->userinfo->city->name)?"":$user->userinfo->city->name}} </li>
             @endif
             @if($user->userinfo->address)
             <li>地址: {{$user->userinfo->address}} </li>

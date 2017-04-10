@@ -31,11 +31,11 @@ class UserInfo extends Model
 	}
 
 	public function province(){
-		return $this->hasOne(District::class, 'id', 'province_id');
+		return $this->hasOne('App\Models\District', 'id', 'province_id');
 	}
 
 	public function city(){
-		return $this->hasOne(District::class, 'id', 'city_id');
+		return $this->hasOne('App\Models\District', 'id', 'city_id');
 	}
 
 	public function scopeOfProvince($query, $province_id){

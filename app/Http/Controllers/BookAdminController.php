@@ -37,17 +37,17 @@ class BookAdminController extends Controller
             $search = $request->search;
             switch($admin->role){
                 case "SUPERADMIN":
-                $books = Book::where('ISBN', 'like', "%$search%")
-                        ->orWhere('name', 'like', "%$search%")
-                        ->orWhere('authors', 'like', "%$search%")
+                $books = Book::where('book.ISBN', 'like', "%$search%")
+                        ->orWhere('book.name', 'like', "%$search%")
+                        ->orWhere('book.authors', 'like', "%$search%")
                         ->paginate(20);
                 break;
                 case "DEPTADMIN":
-                $code = Department::find($admin->department_id)->first()->code;
+                $code = Department::find($admin->department_id)->code;
                 $books = Book::ofDepartmentCode($code)
-                        ->where('ISBN', 'like', "%$search%")
-                        ->orWhere('name', 'like', "%$search%")
-                        ->orWhere('authors', 'like', "%$search%")
+                        ->where('book.ISBN', 'like', "%$search%")
+                        ->orWhere('book.name', 'like', "%$search%")
+                        ->orWhere('book.authors', 'like', "%$search%")
                         ->paginate(20);
                 break;
             }
@@ -58,7 +58,7 @@ class BookAdminController extends Controller
                     $books = Book::orderBy('id', 'asc')->paginate(20); 
                     break;
                 case "DEPTADMIN":
-                    $code = Department::find($admin->department_id)->first()->code;
+                    $code = Department::find($admin->department_id)->code;
                     $books = Book::ofDepartmentCode($code)->orderBy('id', 'asc')->paginate(20); 
                     break;
             }

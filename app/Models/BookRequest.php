@@ -28,4 +28,12 @@ class BookRequest extends Model
 	public function book(){
 		return $this->belongsTo('App\Models\Book', 'book_id', 'id');
 	}
+
+	public function scopeOfDepartmentCode($query, $code){
+		return $query->leftJoin('book', 'book.id', '=', 'book_request.book_id')
+					 ->leftJoin('department', 'department.id', '=', 'book.department_id')
+					 ->whereRaw('department.code like \''.$code.'%\'')
+					 ->select('book_request.*');
+	}
+
 }

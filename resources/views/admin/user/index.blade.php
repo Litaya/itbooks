@@ -60,7 +60,7 @@
     @if($user->certificate_as != "" and $user->certificate_as != "NOBODY")
     <button class="btn-xs btn-default">取消认证</button>
     @endif
-    <button class="btn-xs btn-default">删除账号</button>
+    <!--<button class="btn-xs btn-default">删除账号</button>-->
     </td>
 
 </tr>
