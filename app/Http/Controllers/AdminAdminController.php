@@ -148,7 +148,7 @@ class AdminAdminController extends Controller
                     if($bNewAdmin) $admin->save();
                     else $admin->update();
 
-                    $user->permission_string = "USER_R_D0";
+                    $user->permission_string = "USER_R_P0";
                     //$user->permission_string = "all";
                     $user->update();
                 }

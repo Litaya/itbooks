@@ -55,9 +55,9 @@
     <td>
     <a href="{{route('admin.user.show', $user->id)}}"><button class="btn-xs btn-default">详细信息</button></a>
     @if(strtoupper(PM::getAdminRole()) == "SUPERADMIN")
-    <button class="btn-xs btn-default" onclick="javascript:confirmAndPromote({{$user->id}});">提升为管理员</button>
+        <button class="btn-xs btn-default" onclick="javascript:confirmAndPromote({{$user->id}});">提升为管理员</button>
         @if($user->certificate_as != "" and $user->certificate_as != "NOBODY")
-        <button class="btn-xs btn-default">取消认证</button>
+            <button class="btn-xs btn-default">取消认证</button>
         @endif
     @endif
     <!--<button class="btn-xs btn-default">删除账号</button>-->
