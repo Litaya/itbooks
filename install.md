@@ -12,7 +12,7 @@ git clone到本地之后，需要进行以下配置
 	
 	shuquan(master)> chmod a+w storage/logs/laravel.log
 
-### 修改Auth的Login逻辑
+### 修改Auth的Login逻辑（WechatAuth也相同）
 由于本项目修改了原本框架的Login逻辑（Login之后讲permission解析，并加入到session中）, 而`vendor`又默认添加在了	`.gitignore`里面，因此，需要手动在 `vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php`中添加几行代码
 
 首先

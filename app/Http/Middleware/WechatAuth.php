@@ -26,11 +26,22 @@ class WechatAuth
 		    if (!empty($user) && !Auth::check()){
 		    	Auth::login($user);
 			    $request->session()->put('permission',PermissionManager::resolve($user->permission_string));
-                /* MODIFIED ON 2017-04-08: directly write admin.role to session */
-                $admin = Admin::where('user_id', '=', Auth::id())->get();
-                if(count($admin) != 0) $request->session()->put('adminrole', $admin[0]->role);
-                $request->session()->save();
-                /* END MODIFICATION */
+                
+                /* 2017-04-08 新增的修改 */
+                if(!empty($user->permission_string) and strlen($user->permission_string) > 0){
+                    $admin = \App\Models\Admin::where('user_id', '=', $user->id)->first();
+                    $request->session()->put("adminrole", $admin->role);
+                    switch($admin->role){
+                        case "DEPTADMIN":
+                            $code = \App\Models\Department::find($admin->department_id)->code;
+                            $request->session()->put("admindept", $admin->department_id);
+                            $request->session()->put("admindeptcode", $code);
+                            break;
+                        case "REPRESENTATIVE":
+                            $request->session()->put("admindist", $admin->district_id);
+                            break;
+                    }
+                }
 		    }
 	    }
         return $next($request);
