@@ -67,7 +67,7 @@ class Permission
 					if($certification != 'TEACHER'){
 						$request->session()->flash('warning', '申请样书需先认证教师身份');
 						//$request->session()->flash('notice_status', 'danger');
-						return redirect()->route('cert.create');
+						return redirect()->route('userinfo.basic');
 					}
 				}
 			}

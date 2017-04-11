@@ -244,7 +244,9 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
 
         // Excel - mysql support
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
+        'PM' => App\Libraries\PermissionManager::class
     ],
 
 ];

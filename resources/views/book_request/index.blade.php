@@ -37,8 +37,8 @@
                            value="{{ isset($userinfo->phone)?$userinfo->phone:"" }}">
                 </div>
                 <div class="form-group">
-                    <label for="book_plan">图书编写计划(可选)</label>
-                    <textarea class="form-control" name="book_plan" id="book_plan" placeholder="近期是否有图书编写计划，书名是什么？"></textarea>
+                    <label for="book_plan">目前教材使用情况(可选)</label>
+                    <textarea class="form-control" name="book_plan" id="book_plan" placeholder="使用教材的书名、作者、出版社"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="remarks">备注(可选)</label>

@@ -1,101 +1,96 @@
 @extends('admin.layouts.frame')
 
+@section('title', '用户管理')
+
 @section('content')
-    <div class="col-lg-12">
-        {{--<button class="btn btn-primary" style="margin:5px;" data-toggle="modal" data-target="#addAdminUser" >--}}
-            {{--<span> <i class="fa fa-plus push"></i>添加管理员 </span>--}}
-        {{--</button>--}}
-        {{--<hr>--}}
 
-        {{-- create admin user --}}
-        <div class="modal fade" id="addAdminUser" tabindex="-1" role="dialog" aria-labelledby="deleteOfficeLable" style="margin-top: 100px">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="deleteOfficeLable">添加管理员</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('admin.user.create') }}" class="form-horizontal">
-                            <div class="form-group">
-                                <label for="username" class="col-lg-2 control-label">用户名</label>
-                                <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-2 control-label">类型</label>
-                                <div class="col-lg-10" >
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-primary active">
-                                            <input type="radio" name="admin-type" id="option-department" autocomplete="off" checked value="DEPARTMENT_ADMIN"> 部门管理员
-                                        </label>
-                                        <label class="btn btn-primary">
-                                            <input type="radio" name="admin-type" id="option-organization" autocomplete="off" value="REPRESENTATIVE"> 院校代表
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-2 control-label">权限区域</label>
-                                <div class="col-lg-10">
-                                    多选框区
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="row">
+<div class="col-xs-12">
+{!! Form::open(["route"=>"admin.user.index", "method"=>"GET"]) !!}
+{{ Form::text('search', null, ['placeholder'=>'用户名、邮箱、真实姓名']) }}
+{{ Form::select('role', ["all"=>"全部", "teacher"=>"教师", "staff"=>"职员", "student"=>"学生", "other"=>"其他"], Input::get('role')) }}
+{{ Form::submit('搜索') }}
+</div>
+{!! Form::close() !!}
+</div>
 
 
-    <div class="col-lg-12">
-        <div class="col-lg-8">
-            <div class="panel panel-primary">
-                <div class="panel-heading">管理员</div>
-                <div class="panel-body">
-                    <table class="table table-default table-hover">
-                        <tr>
-                            <th>id</th>
-                            <th>用户名</th>
-                            <th>身份</th>
-                            <th>权限</th>
-                        </tr>
-                        @foreach($admins as $admin)
-                            <tr>
-                                <td>{{ $admin->id }}</td>
-                                <td>{{ $admin->username }}</td>
-                                <td>{{ $admin->certificate_as }}</td>
-                                <td>{{ $admin->permission_string }}</td>
-                            </tr>
-                        @endforeach
-                    </table>
-                </div>
-            </div>
-        </div>
+<div class="row">
+<div class="col-xs-12 col-md-12">
+<table class="table">
+<thead>
+<tr>
+    <th>用户名</th>
+    <th>邮箱</th>
+    <th>角色</th>
+    <th>真实姓名</th>
+    <th>操作</th>
+</tr>
 
-        <div class="col-lg-4">
-            <div class="panel panel-default">
-                <div class="panel-heading"><span>全部用户</span></div>
-                <div class="panel-body">
-                    <table class="table table-default table-hover" >
-                        <tr>
-                            <th style="border-top:none">id</th>
-                            <th style="border-top:none">用户名</th>
-                            <th style="border-top:none">来源</th>
-                        </tr>
-                        @foreach($users as $user)
-                            <tr>
-                                <td>{{ $user->id }}</td>
-                                <td>{{ $user->username }}</td>
-                                <td>{{ $user->source }}</td>
-                            </tr>
-                        @endforeach
-                    </table>
-                    {{ $users->links() }}
-                </div>
-            </div>
-        </div>
-    </div>
-@stop
+</thead>
+<tbody>
+
+@foreach($users as $user)
+<tr>
+    <td>{{$user->username}}</td>
+    <td>{{$user->email}}</td>
+    <td>
+    @if($user->userinfo->role == "teacher")
+    教师
+    @elseif($user->userinfo->role == "student")
+    学生
+    @elseif($user->userinfo->role == "staff")
+    职员
+    @elseif($user->userinfo->role == "other")
+    其他
+    @endif
+    </td>
+    <td>
+    @if($user->userinfo->realname)
+    {{$user->userinfo->realname}}
+    @else
+    未填写
+    @endif
+    </td>
+    <td>
+    <a href="{{route('admin.user.show', $user->id)}}"><button class="btn-xs btn-default">详细信息</button></a>
+    @if(strtoupper(PM::getAdminRole()) == "SUPERADMIN")
+        <button class="btn-xs btn-default" onclick="javascript:confirmAndPromote({{$user->id}});">提升为管理员</button>
+        @if($user->certificate_as != "" and $user->certificate_as != "NOBODY")
+            <button class="btn-xs btn-default">取消认证</button>
+        @endif
+    @endif
+    <!--<button class="btn-xs btn-default">删除账号</button>-->
+    </td>
+
+</tr>
+@endforeach
+
+
+</tbody>
+</table>
+
+{{ $users->appends(Input::except('page'))->links() }}
+
+</div>
+</div>
+
+<form id="promote-form" action="{{route('admin.user.promote')}}" method="POST">
+    {{ csrf_field() }}
+    <input type="hidden" name="id" id="promote-id" value="">
+</form>
+
+
+<script>
+function confirmAndPromote(id){
+    var theForm = document.getElementById("promote-form");
+    var theId = document.getElementById("promote-id");
+    theId.value = id;
+    var sure = confirm("确定要将此用户提升为管理员吗？");
+    if(sure){
+        theForm.submit();
+    }
+}
+</script>
+
+@endsection

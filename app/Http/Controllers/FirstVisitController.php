@@ -37,7 +37,7 @@ class FirstVisitController extends Controller
                 "department" => "required",
                 "jobtitle" => "required",
                 "course_name_1" =>"required",
-                "number_stud_1" =>"required"
+                "number_stud_1" =>"required",
             ]);
             
             $user = Auth::user();
@@ -56,7 +56,9 @@ class FirstVisitController extends Controller
             $jdata['course_name_1'] = $request->course_name_1;
             $jdata['number_stud_1'] = $request->number_stud_1;
             $info->province_id = $request->province;
+            if($info->province_id == "") $info->province_id = null;
             $info->city_id = $request->city;
+            if($info->city_id == "") $info->city_id = null;
             
             $info->json_content = json_encode($jdata);
             UserInfoController::update_user_info($info);
