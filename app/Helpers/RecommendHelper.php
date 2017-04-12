@@ -36,5 +36,10 @@ class RecommendHelper {
         return $books;
     }
     
+    public static function classifyUserDepartment($user){
+
+    }
+
+
 }
 
