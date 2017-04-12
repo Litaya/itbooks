@@ -14,10 +14,12 @@
             {!! Form::close() !!}
             </div>
             
+            @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
             <div class="col-md-4 pull-right">
             <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn-default">导出快递打印单</button></a>
             <a href="{{route('admin.bookreq.export.book')}}"><button class="btn-default">导出库房发书单</button></a>
             </div>
+            @endif
             <!-- END SEARCH BAR -->
         </div>
         <div class="row">

@@ -143,7 +143,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::put('{id}', 'BookAdminController@update')->name('admin.book.update');
 		Route::delete('{id}', 'BookAdminController@destroy')->name('admin.book.destroy');
 		Route::get('{id}/edit', 'BookAdminController@edit')->name('admin.book.edit');
-		Route::get('import', 'DatabaseController@importBooks')->name('admin.book.import');
+		Route::post('import', 'DatabaseController@importBooks')->name('admin.book.import');
 		Route::get('{id}/updatekj', 'BookAdminController@updateKejian')->name('admin.book.updatekj');
 	});
 

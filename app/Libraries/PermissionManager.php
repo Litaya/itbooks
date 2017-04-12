@@ -154,9 +154,9 @@ class PermissionManager
 			case 'book':
 				return in_array(self::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]);
 			case 'bookreq':
-				return in_array(self::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]);
+				return in_array(self::getAdminRole(), ["SUPERADMIN", "DEPTADMIN", "REPRESENTATIVE"]);
 			case 'user':
-				return in_array(self::getAdminRole(), ["SUPERADMIN", "REPRESENTATIVE"]);
+				return in_array(self::getAdminRole(), ["SUPERADMIN"]);
 			case 'department':
 				return in_array(self::getAdminRole(), ["SUPERADMIN"]);
 			case 'admin':
@@ -199,9 +199,9 @@ class PermissionManager
 			case 'EDITOR':
 				return false;
 			case 'REPRESENTATIVE':
-				if(!empty($operation) && strstr('cud',$operation)){
-					return false;
-				}
+				// if(!empty($operation) && strstr('cud',$operation)){
+				// 	return false;
+				// }
 				return true;
 			default:
 				break;

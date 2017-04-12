@@ -28,7 +28,7 @@
           </ul>
     </li>
     @else
-        @if(in_array(PM::getAdminRole(), ["REPRESENTATIVE"]))
+        @if(in_array(PM::getAdminRole(), ["IMPOSSIBLE"]))
             <li class="{{Request::is('admin/user')?'sidebar-active':''}}"><a href="{{ route('admin.user.index') }}"> <i class="fa fa-user push"></i>用户管理</a></li>
         @endif
     @endif
@@ -42,7 +42,7 @@
 <hr>
 <ul>
 
-    @if(in_array('BOOKREQ',\App\Libraries\PermissionManager::getAdminModules()))
+    @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN", "REPRESENTATIVE"]))
         <li class="{{Request::is('admin/bookreq')?'sidebar-active':''}}"><a href="{{ route('admin.bookreq.index') }}"> <i class="fa fa-book push"></i>样书申请</a></li>
     @endif
     @if(in_array('USER',\App\Libraries\PermissionManager::getAdminModules()))

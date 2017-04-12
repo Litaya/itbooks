@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\ConferenceRegister;
 use App\Models\BookRequest;
+use App\Models\Book;
+use App\Models\Department;
+
+use App\Helpers\FileHelper;
+
+use Input;
 use Excel;
 use URL;
 use DB;
@@ -13,14 +20,102 @@ use Session;
 
 use App\Helpers\CrossDomainHelper;
 
+use App\Libraries\PermissionManager as PM;
+
 class DatabaseController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
     }
 
-    public function importBooks(){
+    public function importBooks(Request $request){
+        $this->validate($request, [
+            "excel" => "required",
+        ]);
 
+        $key_map = [
+            "isbn" => "isbn号",
+            "name" => "书名",
+            "price" => "定价",
+            "department_id" => "编辑室",
+            "product_number" => "产品编号",
+            "editor_name" => "现负责人",
+            "authors" => "作者",
+            "type" => "图书类别",
+            "publish_time" => "出版日期",
+        ];
+
+        $all_depts = Department::all();
+        $dept_map = [];
+        foreach($all_depts as $dept){
+            $dept_map[(string)$dept->code] = $dept->id;
+        }
+        
+        $all_books = Book::all();
+        $isbn_set = [];
+        foreach($all_books as $book){
+            array_push($isbn_set, $book->isbn);
+        }
+
+
+
+        $file = Input::file('excel')->getRealPath();
+        $results = Excel::load($file, function($reader){})->get();
+
+        $n_total = count($results);
+        $n_success = 0;
+        $n_duplicate = 0;
+        $errors = [];
+        
+        $i_row = 0;
+        foreach($results as $row)
+        {
+            $i_row += 1;
+            $book = [];
+            
+            foreach(array_keys($key_map) as $key){
+                $book[$key] = $row[$key_map[$key]];
+            }
+
+            if(!array_key_exists($book['department_id'], $dept_map)){
+                array_push($errors, "[ID:".$i_row."] 不存在的编辑室编号: ".$book['department_id']);
+                continue;
+            }
+            
+            $book['department_id'] = $dept_map[$book['department_id']];
+            $book['type'] = ($book['type'] == "教材") ? 1 : 2;
+
+            // check duplicate
+            if(!in_array($book['isbn'], $isbn_set)){
+                try{
+                    DB::table("book")->insert($book);
+                    $n_success += 1;
+                } catch (\Exception $e) {
+                    array_push($errors, $e);
+                }
+            }
+            else {
+                // array_push($errors, "[ID:".$i_row."] 重复的书目: ".$book['isbn']);
+                $n_duplicate += 1;
+            }
+        }
+
+        $n_failure = $n_total - $n_success;
+
+        // import log
+        if(!is_dir(public_path('logs'))){
+            mkdir(public_path('logs'), 0777);
+        }
+        $log_name = "logs/import_log_".time().".txt";
+        $log_file = public_path($log_name);
+        $log_handle = fopen($log_file, "w");
+        foreach($errors as $error){
+            fwrite($log_handle, "$error"."\r\n");
+        }
+        fclose($log_handle);
+
+        Session::flash('success', "共$n_total 条记录，成功导入$n_success 条，重复$n_duplicate 条，失败$n_failure 条。");
+        return response()->download(public_path($log_name));
     }
 
     public function testCheckUrl($product_number){
@@ -62,10 +157,20 @@ class DatabaseController extends Controller
     }
 
     public function exportBookRequestPackagingTable(){
-        $requests = BookRequest::acceptedButNotSent()
-                               ->select('receiver', 'address', 'phone')
-                               ->groupBy('receiver', 'address', 'phone')
-                               ->get()->toArray();
+        $ar = PM::getAdminRole();
+        if($ar == "SUPERADMIN"){
+            $requests = BookRequest::acceptedButNotSent()
+                                ->select('receiver', 'address', 'phone')
+                                ->groupBy('receiver', 'address', 'phone')
+                                ->get()->toArray();
+        }
+        else if($ar == "DEPTADMIN"){
+            $requests = BookRequest::ofDepartmentCode(PM::getAdminDepartmentCode())
+                                ->acceptedButNotSent()
+                                ->select('receiver', 'address', 'phone')
+                                ->groupBy('receiver', 'address', 'phone')
+                                ->get()->toArray();
+        }
 
         if(count($requests) == 0){
             Session::flash('warning', '没有需要导出的样书申请信息');
@@ -77,7 +182,7 @@ class DatabaseController extends Controller
         }
 
         $filename = date("Y-m-d")."快递打印单_".time();
-        return Excel::create($filename, function($excel) use ($requests){
+        $export = Excel::create($filename, function($excel) use ($requests){
             $excel->sheet("快递信息", function($sheet) use ($requests){
                 $sheet->setAutoSize(true);
                 $sheet->row(1, ["收件人", "地址", "联系电话"]);
@@ -90,14 +195,31 @@ class DatabaseController extends Controller
                 }
             });
         })->download("xlsx");
+        
+        return $export;
     }
 
     public function exportBookRequestBookTable(){
-        $books = BookRequest::acceptedButNotSent()
-                               ->leftJoin('book', 'book.id', '=', 'book_id')
-                               ->select('book.id', 'book.isbn as isbn', 'book.name as name', 'book.price as price', 'receiver')
-                               ->get()
-                               ->toArray();
+        $ar = PM::getAdminRole();
+        if($ar == "SUPERADMIN"){
+            $books = BookRequest::acceptedButNotSent()
+                                ->leftJoin('book', 'book.id', '=', 'book_id')
+                                ->select('book.id', 'book.isbn as isbn', 'book.name as name', 'book.price as price', 'receiver')
+                                ->get()
+                                ->toArray();
+        }
+        else if($ar == "DEPTADMIN"){
+            $books = BookRequest::acceptedButNotSent()
+                                ->leftJoin('book', 'book.id', '=', 'book_id')
+                                ->leftJoin('department', 'department.id', '=', 'book.department_id')
+					            ->whereRaw('department.code like \''.PM::getAdminDepartmentCode().'%\'')
+                                ->select('book.id', 'book.isbn as isbn', 'book.name as name', 'book.price as price', 'receiver')
+                                ->get()
+                                ->toArray();
+        }
+        else{
+            return redirect()->route("admin.index");
+        }
 
         if(count($books) == 0){
             Session::flash('warning', '没有需要导出的样书申请信息');
@@ -106,6 +228,7 @@ class DatabaseController extends Controller
         for($i = 0; $i < count($books); $i++){
             $books[$i] = (array)$books[$i];
         }
+
 
         $dict = [];
         foreach($books as $item){
@@ -129,10 +252,8 @@ class DatabaseController extends Controller
 
         $books = $dict;
 
-        // return $books['9787302348290'];
-
         $filename = date("Y-m-d")."库房发书单_".time();
-        return Excel::create($filename, function($excel) use ($books){
+        $export = Excel::create($filename, function($excel) use ($books){
             $excel->sheet("书目", function($sheet) use ($books){
 
                 $sheet->setAutoSize(true);
@@ -164,6 +285,8 @@ class DatabaseController extends Controller
                 ));
             });
         })->export("xlsx")->download("xlsx");
+
+        return $export;
     }
 
 }
