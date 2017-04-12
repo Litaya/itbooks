@@ -68,8 +68,10 @@ class WechatMessageHandler{
         $openid            = $this->message->FromUserName;
         $material_list_url = url('/material')."?openid=$openid"; 
         $content           = strtolower($content);
-        switch($content){
-            case 'test':
+
+	    $bookreq_url       = url('/bookreq')."?openid=$openid";
+	    $certificate_url   = url('/cert/create')."?openid=$openid";
+	    switch($content){
             case '文章列表':
                 $news = new News([
                         'title'       => '文章列表',
@@ -79,7 +81,25 @@ class WechatMessageHandler{
                 ]);
                 $reply = $news;           
                 break;
-            default:
+	        case '申请样书':
+		        $news = new News([
+			        'title'       => '申请样书',
+			        'description' => "点此申请样书",
+			        'url'         => $bookreq_url,
+			        'image'       => route('image',['src'=>'public/bookreq.png']),
+		        ]);
+		        $reply = $news;
+		        break;
+	        case "身份认证":
+		        $news = new News([
+			        'title'       => '身份认证',
+			        'description' => "点此认证您的身份",
+			        'url'         => $certificate_url,
+			        'image'       => route('image',['src'=>'public/cert.png']),
+		        ]);
+		        $reply = $news;
+	        	break;
+	        default:
                 break;
         }
         return $reply;
