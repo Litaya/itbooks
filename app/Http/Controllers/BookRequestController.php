@@ -81,12 +81,6 @@ class BookRequestController extends Controller
 	    	$book_req->save();
 	    }
 
-	    // $user_json['address'] = [
-		//     'receiver' => $receiver,
-		//     'location'  => $address,
-		//     'phone'    => $phone
-	    // ];
-
 	    $user_json['teacher']['book_limit'] -= sizeof($book_ids);
 	    $user->json_content = json_encode($user_json);
 	    $user->save();
@@ -191,11 +185,14 @@ class BookRequestController extends Controller
     public function destroy($id)
     {
         $req = BookRequest::find($id);
-        $bookname = $req->book->name;
-        $req->delete();
-
-        Session::flash('success', '您已经取消了对'.$bookname.'的样书申请');
-        
+        $limit_result = $req->user->changeBookLimit(+1);
+        if($limit_result) {
+	        $req->delete();
+	        $bookname = $req->book->name;
+	        Session::flash('success', '您已经取消了对' . $bookname . '的样书申请');
+        }else{
+	        Session::flash('danger', '取消失败!');
+        }
         return redirect()->route('bookreq.record');
     }
 }
