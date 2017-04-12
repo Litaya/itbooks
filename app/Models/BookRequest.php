@@ -36,4 +36,12 @@ class BookRequest extends Model
 					 ->select('book_request.*');
 	}
 
+	public function scopeUnhandled($query){
+		return $query->where('status', 0);
+	}
+
+	public function scopeAcceptedButNotSent($query){
+		return $query->where('status', 1)->whereRaw('isnull(order_number) or LENGTH(order_number) = 0');
+	}
+
 }

@@ -15,7 +15,7 @@
         <li>参会须知: {{$conference->detail_url}}</li>
         <li>会议介绍: <p>{{$conference->description}}</p></li>
         </ul>
-        <a href="{{route('admin.conference.export', $conference->id)}}"><button class="btn btn-success btn-md" onclick="exportAndDownload()">导出报名表</button></a>
+        <a href="{{route('admin.conference.export', $conference->id)}}"><button class="btn btn-success btn-md" onclick="">导出报名表</button></a>
         <div id="download-link"></div>
     </div>
 

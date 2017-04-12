@@ -115,7 +115,7 @@
                 </div>
             @endif
             <div class="col-md-2">
-                <a href="{{route('bookreq.record')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
+                <a href="{{route('admin.bookreq.index')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
             </div>
 
         </div>

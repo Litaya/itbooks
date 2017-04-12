@@ -7,11 +7,16 @@
     <div class="container">
         <div class="row">
             <!-- SEARCH BAR -->
-            <div class="col-md-8"> 
+            <div class="col-md-4"> 
             {!! Form::open(["route"=>"admin.bookreq.index", "method"=>"GET"]) !!}
             {{ Form::text("search", null, ["placeholder"=>"ISBN、书名、用户名..."]) }}
             {{ Form::submit("搜索") }}
             {!! Form::close() !!}
+            </div>
+            
+            <div class="col-md-4 pull-right">
+            <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn-default">导出快递打印单</button></a>
+            <a href="{{route('admin.bookreq.export.book')}}"><button class="btn-default">导出库房发书单</button></a>
             </div>
             <!-- END SEARCH BAR -->
         </div>
