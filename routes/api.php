@@ -27,3 +27,4 @@ Route::group(["prefix"=>"admin"], function(){
 	Route::get('getadminrolemapping', 'AdminAdminController@getAdminRoleMapping')->name('api.admin.get_admin_role_mapping');
 	Route::get('getallprovinces', "DistrictController@getProvinces")->name('api.admin.get_all_provinces');
 });
+

@@ -50,6 +50,17 @@ class BookRequestAdminController extends Controller
                 case "EDITOR": // currently unknown
                     break;
                 
+                case "REPRESENTATIVE":
+                    $prov_id = PM::getAdminDistrict();
+                    $bookreqs = BookRequest::ofDistrict($prov_id)
+                                            ->join('book', 'book_request.book_id', '=', 'book.id')
+                                            ->join('user', 'book_request.user_id', '=', 'user.id')
+                                            ->where('user.username', 'like', "%$search%")
+                                            ->orWhere('book.name', 'like', "%$search%")
+                                            ->orderBy('id', 'desc')
+                                            ->paginate(20, ['book_request.*']);
+                    break;
+
                 default: // reaching here should cause an error
                     break;
             }
@@ -66,6 +77,10 @@ class BookRequestAdminController extends Controller
                     $bookreqs = BookRequest::ofDepartmentCode($code)->orderBy('id', 'desc')->paginate(20, ['book_request.*']);
                     break;
                 case "EDITOR": // unknown
+                    break;
+                case "REPRESENTATIVE":
+                    $prov_id = PM::getAdminDistrict();
+                    $bookreqs = BookRequest::ofDistrict($prov_id)->orderBy('id', 'desc')->paginate(20, ['book_request.*']);
                     break;
                 default: // error
                     break;

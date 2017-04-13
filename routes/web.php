@@ -124,6 +124,8 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
 	Route::post('bookreq/{id}/shipping', 'BookRequestAdminController@shipping')->name('admin.bookreq.shipping');
+	Route::get('bookreq/export/packaging', "DatabaseController@exportBookRequestPackagingTable")->name('admin.bookreq.export.packaging');
+	Route::get('bookreq/export/book', "DatabaseController@exportBookRequestBookTable")->name('admin.bookreq.export.book');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
 	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
@@ -141,7 +143,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::put('{id}', 'BookAdminController@update')->name('admin.book.update');
 		Route::delete('{id}', 'BookAdminController@destroy')->name('admin.book.destroy');
 		Route::get('{id}/edit', 'BookAdminController@edit')->name('admin.book.edit');
-		Route::get('import', 'DatabaseController@importBooks')->name('admin.book.import');
+		Route::post('import', 'DatabaseController@importBooks')->name('admin.book.import');
 		Route::get('{id}/updatekj', 'BookAdminController@updateKejian')->name('admin.book.updatekj');
 	});
 

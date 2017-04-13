@@ -54,7 +54,9 @@
         {{ Form::label("product_number", "出版号:") }} {{ Form::text("product_number", null, ["class"=>"form-control"]) }}
         {{ Form::label("publish_time", "出版时间:")}} {{Form::text("publish_time", null, ["class"=>"form-control"]) }}
         {{ Form::label("editor_name", "编辑:") }} {{ Form::text("editor_name", null, ["class"=>"form-control"]) }}
+        @if(in_array(PM::getAdminRole(), ["SUPERADMIN"])
         {{ Form::label("weight", "权重:")}} (不填默认为0)
+        @endif
         {{ Form::number("weight", null, ["class"=>"form-control"]) }}
         {{ Form::label("img_upload", "修改配图:")}}  (若不修改请不要添加此项)
         {{ Form::file("img_upload", ["class"=>"form-control"]) }}

@@ -24,7 +24,7 @@
 
             <div class="col-md-2 pull-right">
             <a href="{{route('admin.book.create')}}"><button class="btn btn-default push-left">创建新书</button></a>
-            <a href="{{route('admin.book.import')}}"><button class="btn btn-default push-left">批量导入</button></a>
+            <button class="btn btn-default push-left" data-toggle="modal" data-target="#import-modal">批量导入</button>
             </div>
         </div>
         
@@ -59,6 +59,30 @@
         </div>
         </div>  
     </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="import-modal"
+tabindex="-1" role="dialog"
+aria-labelledby="import-modal-label">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="import-label">批量导入图书条目</h4>
+            </div>
+            <div class="modal-body">
+
+            {!! Form::open(["route"=>"admin.book.import", "method"=>"POST", "files"=>true]) !!}
+            {{ Form::label("excel", "上传EXCEL文档") }}
+            {{ Form::file("excel", ["class"=>"form-control"]) }}
+            <br>
+            {{ Form::submit("确定", ['class'=>'btn-primary btn-block'])}}
+            {!! Form::close() !!}
+            </div>
+        </div>
     </div>
 </div>
 
