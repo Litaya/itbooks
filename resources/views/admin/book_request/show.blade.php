@@ -21,7 +21,7 @@
                                 {{$bookreq->status==0?'审核中':($bookreq->status==1?'已通过':'未通过')}}
                             </span>
                         </p>
-                        <p><strong>写书计划:</strong> {{empty(json_decode($bookreq->message)->book_plan)?"未填写":json_decode($bookreq->message)->book_plan}} </p>
+                        <p><strong>目前教材使用情况:</strong> {{empty(json_decode($bookreq->message)->book_plan)?"未填写":json_decode($bookreq->message)->book_plan}} </p>
                         <p><strong>留言:</strong> {{empty(json_decode($bookreq->message)->remarks)?"未填写":json_decode($bookreq->message)->remarks}} </p>
                             @if($bookreq->status==2)
                             <p><strong>拒绝理由:</strong>
@@ -115,7 +115,7 @@
                 </div>
             @endif
             <div class="col-md-2">
-                <a href="{{route('bookreq.record')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
+                <a href="{{route('admin.bookreq.index')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
             </div>
 
         </div>

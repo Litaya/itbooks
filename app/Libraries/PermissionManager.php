@@ -16,10 +16,14 @@ use Illuminate\Support\Facades\Log;
 class PermissionManager
 {
 
+	/** NEW GLOBAL FUNCTION ADDED 2014-04-08 **/
+	// static
+
 	/**
-	 * @param $permission_string string 权限字符串, 形如 BOOK_CURD_803
+	 * @param $permission_string string 权限字符串, 形如 BOOK_CURD_D803
 	 */
 	static public function resolve($permission_string){
+
 		$permission_string = trim(strtolower($permission_string));
 
 		$isSuperAdmin = 0;
@@ -63,6 +67,19 @@ class PermissionManager
 				$user_permission = $curd_permission;
 			}
 
+		}
+
+		$curd = ['c', 'u', 'r', 'd'];
+		
+		$permissions["book"]["permission"] = [];
+		
+		foreach($curd as $i){
+			if(!empty($book_department_permissions[$i]))
+				$permissions["book"]["permission"][$i] = $book_department_permissions[$i];
+			else if(!empty($book_district_permissions[$i]))
+				$permissions["book"]["permission"][$i] = $book_district_permissions[$i];
+			else
+				$permissions["book"]["permission"][$i] = 0;
 		}
 
 		$permissions["book"]["department"] = $book_department_permissions;
@@ -114,7 +131,7 @@ class PermissionManager
 	// 获取登录管理员用户管辖的省、直辖市、自治州,返回id数组
 	static public function getAuthorizedProvinces(){}
 
-	static public function hasPermission($entity,$operation="",$entity_id = null){
+	static public function DEPRECATED_hasPermission($entity,$operation="",$entity_id = null){
 		switch ($entity){
 			case 'book':
 				return self::hasBookPermission($operation,$entity_id);
@@ -124,6 +141,26 @@ class PermissionManager
 				return self::hasUserPermission($operation);
 			case 'department':
 				return self::hasDepartmentPermission($operation,$entity_id);
+			case 'admin':
+				return self::isSuperAdmin();
+			default:
+				break;
+		}
+		return true;
+	}
+
+	static public function hasPermission($entity,$operation="",$entity_id = null){
+		switch ($entity){
+			case 'book':
+				return in_array(self::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]);
+			case 'bookreq':
+				return in_array(self::getAdminRole(), ["SUPERADMIN", "DEPTADMIN", "REPRESENTATIVE"]);
+			case 'user':
+				return in_array(self::getAdminRole(), ["SUPERADMIN"]);
+			case 'department':
+				return in_array(self::getAdminRole(), ["SUPERADMIN"]);
+			case 'admin':
+				return in_array(self::getAdminRole(), ["SUPERADMIN"]);
 			default:
 				break;
 		}
@@ -137,6 +174,8 @@ class PermissionManager
 				return true;
 			case 'DEPARTMENT_ADMIN':
 				return true;
+			case 'EDITOR':
+				return false;
 			case 'REPRESENTATIVE':
 				if(!empty($operation)){
 					$book = Book::where('id',$book_id)->first();
@@ -157,10 +196,12 @@ class PermissionManager
 				return true;
 			case 'DEPARTMENT_ADMIN':
 				return true;
+			case 'EDITOR':
+				return false;
 			case 'REPRESENTATIVE':
-				if(!empty($operation) && strstr('cud',$operation)){
-					return false;
-				}
+				// if(!empty($operation) && strstr('cud',$operation)){
+				// 	return false;
+				// }
 				return true;
 			default:
 				break;
@@ -193,15 +234,17 @@ class PermissionManager
 		return 0;
 	}
 
-	//获取登录用户的身份: SUPER_ADMIN|DEPARTMENT_ADMIN|REPRESENTATIVE
+	//获取登录用户的身份: SUPER_ADMIN|DEPARTMENT_ADMIN|REPRESENTATIVE|EDITOR
 	static public function getAdminIdentity(){
 		if (self::isSuperAdmin()){
 			return 'SUPER_ADMIN';
 		}
 		$permission = session('permission');
 		if(in_array('book',$permission)){
-			if(!empty($permission['book']['department']))
+			if(!empty($permission['book']['department'] && !empty($permission['user'])))
 				return 'DEPARTMENT_ADMIN';
+			if(!empty($permission['book']['department']))
+				return 'EDITOR';
 			if(!empty($permission['book']['district']))
 				return 'REPRESENTATIVE';
 		}
@@ -218,16 +261,59 @@ class PermissionManager
 				$modules = ['BOOK','BOOKREQ'];
 				break;
 			case 'REPRESENTATIVE':
-				$modules = ['BOOK','BOOKREQ'];
+				$modules = ['USER'];
+				break;
+			case 'EDITOR':
+				$modules = ['BOOK'];
 				break;
 			default:
 				break;
 		}
 		return $modules;
 	}
-//
-//	static public function getUserIdentity(){
-//
-//	}
+
+	// 判断是否在前端显示某个模块
+	static public function hasModule($module_name){
+
+		$name = strtolower($module_name);
+
+		if(!empty(session('permission'))){
+			if($name == "book"){
+				$hasAuth = false;
+				foreach(session('permission')["book"]["permission"] as $i)
+					if($i == 1) return true;
+			}
+			else if($name == "material")
+			{
+				if(self::getAdminIdentity() == "SUPER_ADMIN") return true;
+			}
+			else{
+				$hasAuth = false;
+				foreach(session('permission')[$name] as $i)
+					if($i == 1) return true;
+			}
+		}
+
+		return false;
+	}
+
+	/* MODIFIED ON 2017-04-08 */
+	static public function getAdminRole(){
+		return session('adminrole');
+	}
+
+	static public function getAdminDistrict(){
+		return session('admindist');
+	}
+
+	static public function getAdminDepartmentId(){
+		return session('admindept');
+	}
+
+	static public function getAdminDepartmentCode(){
+		return session('admindeptcode');
+	}
+	/* END MODIFICATION */
+
 
 }

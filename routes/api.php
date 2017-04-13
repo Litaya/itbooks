@@ -21,3 +21,10 @@ Route::group(["prefix"=>'book'],function (){
 	Route::post('/search/{search_string}','BookController@getBooksBySearch')->name('api.book.search');
 	Route::post('/search_teaching/{search_string}','BookController@getTeachingMaterialsBySearch')->name('api.book.search_teaching');
 });
+
+Route::group(["prefix"=>"admin"], function(){
+	Route::get('getalldepartments', 'AdminAdminController@getAllDepartments')->name('api.admin.get_all_departments');
+	Route::get('getadminrolemapping', 'AdminAdminController@getAdminRoleMapping')->name('api.admin.get_admin_role_mapping');
+	Route::get('getallprovinces', "DistrictController@getProvinces")->name('api.admin.get_all_provinces');
+});
+

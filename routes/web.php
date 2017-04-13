@@ -124,6 +124,8 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
 	Route::post('bookreq/{id}/shipping', 'BookRequestAdminController@shipping')->name('admin.bookreq.shipping');
+	Route::get('bookreq/export/packaging', "DatabaseController@exportBookRequestPackagingTable")->name('admin.bookreq.export.packaging');
+	Route::get('bookreq/export/book', "DatabaseController@exportBookRequestBookTable")->name('admin.bookreq.export.book');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
 	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
@@ -141,7 +143,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::put('{id}', 'BookAdminController@update')->name('admin.book.update');
 		Route::delete('{id}', 'BookAdminController@destroy')->name('admin.book.destroy');
 		Route::get('{id}/edit', 'BookAdminController@edit')->name('admin.book.edit');
-		Route::get('import', 'DatabaseController@importBooks')->name('admin.book.import');
+		Route::post('import', 'DatabaseController@importBooks')->name('admin.book.import');
 		Route::get('{id}/updatekj', 'BookAdminController@updateKejian')->name('admin.book.updatekj');
 	});
 
@@ -160,9 +162,15 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	 * user routes
 	 */
 	Route::group(['prefix'=>'user'],function (){
-		Route::get('/', 'Admin\AdminUserController@index')->name("admin.user.index");
+		Route::get('/', 'UserAdminController@index')->name("admin.user.index");
+		Route::post('promote', 'UserAdminController@promote')->name("admin.user.promote");
+		Route::get('{id}', 'UserAdminController@show')->name('admin.user.show');
+	});
 
-		Route::post('/create','Admin\AdminUserController@create')->name('admin.user.create');
+	Route::group(['prefix'=>'admin'], function(){
+		Route::get('/', 'AdminAdminController@index')->name('admin.admin.index');
+		Route::post('/changerole', 'AdminAdminController@update')->name('admin.admin.changerole');
+		Route::post('/demote', 'AdminAdminController@demote')->name('admin.admin.demote');
 	});
 
 	Route::group(['prefix'=>'department'],function (){
@@ -187,8 +195,11 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
 	Route::group(['prefix'=>'material'], function() {
 		Route::get('/','Wechat\WechatMaterialAdminController@index')->name('admin.material.index');
+		Route::get('/search','Wechat\WechatMaterialAdminController@search')->name('admin.material.search');
 		Route::get('/{id}','Wechat\WechatMaterialAdminController@show')->name('admin.material.show');
 		Route::post('/sync','Wechat\WechatMaterialAdminController@sync')->name('admin.material.sync');
+		Route::post('/{id}/set_display','Wechat\WechatMaterialAdminController@set_display')->name('admin.material.set_display');
+		Route::post('/{id}/drop','Wechat\WechatMaterialAdminController@drop')->name('admin.material.drop');
 	});
 }); // end admin
 

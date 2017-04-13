@@ -12,7 +12,7 @@ git clone到本地之后，需要进行以下配置
 	
 	shuquan(master)> chmod a+w storage/logs/laravel.log
 
-### 修改Auth的Login逻辑
+### 修改Auth的Login逻辑（WechatAuth也相同）
 由于本项目修改了原本框架的Login逻辑（Login之后讲permission解析，并加入到session中）, 而`vendor`又默认添加在了	`.gitignore`里面，因此，需要手动在 `vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php`中添加几行代码
 
 首先
@@ -27,6 +27,7 @@ git clone到本地之后，需要进行以下配置
 
 我们需要将这段代码修改为：
 
+[2017-03-01 版本(作废，见2017-04-08)]
 	if ($this->attemptLogin($request)) {
 		// 增添以下三行
 		$user = Auth::user();
@@ -35,6 +36,33 @@ git clone到本地之后，需要进行以下配置
 		
 		return $this->sendLoginResponse($request);
 	}
+
+[2017-04-08 版本] 因采用了新的admin表，故需要将此段代码修改为
+	    if ($this->attemptLogin($request)) {
+			/* 旧版本已有的 */
+            $user = Auth::user();
+		    $permission = PermissionManager::resolve($user->permission_string);
+		    $request->session()->put("permission",$permission);
+
+
+            /* 2017-04-08 新增的修改 */
+            if(!empty($user->permission_string) and strlen($user->permission_string) > 0){
+                $admin = \App\Models\Admin::where('user_id', '=', $user->id)->first();
+                $request->session()->put("adminrole", $admin->role);
+				switch($admin->role){
+					case "DEPTADMIN":
+						$code = \App\Models\Department::find($admin->department_id)->code;
+						$request->session()->put("admindept", $admin->department_id);
+						$request->session()->put("admindeptcode", $code);
+						break;
+					case "REPRESENTATIVE":
+						$request->session()->put("admindist", $admin->district_id);
+						break;
+				}
+            }
+
+            return $this->sendLoginResponse($request);
+        }
 
 ### 在.env中添加微信验证的配置信息
 在配置完常规的.env内容后，需要添加微信验证的配置信息。

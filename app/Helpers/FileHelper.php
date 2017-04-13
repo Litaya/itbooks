@@ -107,5 +107,13 @@ class FileHelper {
 		Image::make($url)->save(storage_path($folder.$filename));
 		return '/image/'.$folder.$filename;
 	}
+
+	public static function saveExcel($file){
+		$filename = "book_import" .'_'. time() . '.' . $file->getClientOriginalExtension();
+		$location = 'excel/'.$filename;
+		Storage::disk('public')->put($location, file_get_contents($file));
+		return storage_path('app/public') . "/$location";
+	}
+
 }
 

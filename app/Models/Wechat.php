@@ -216,4 +216,41 @@ class Wechat
 		}
 		return $news_sum;
 	}
+
+	public function storeWechatUserToDB(){
+
+		$userService = $this->app->user;
+        #$next_openid = "oG09KxI_62wEES5uv_-KV-XnWEzQ";
+        #$next_openid = "oG09KxFmqgCS3j838CtmpFVt6Ab0";
+        #$next_openid = "oG09KxN8I0Oqxndi6iTnoVy-gCko";
+        $next_openid = "oG09KxDiYemhUEwuYCksw6nM9kDw";
+		$data        = $userService->lists($next_openid);
+        $openids     = $data["data"]["openid"];
+        $next_openid = $data["next_openid"];
+
+        $count = 0;
+
+		foreach ($openids as $openid){
+            $count += 1;
+			$user = User::where('openid',$openid)->get();
+			if(sizeof($user) == 0){
+				$user = $userService->get($openid);
+				User::create([
+					'openid'     => $openid,
+					'username'   => $user["nickname"],
+					'gender'     => $user["sex"],
+					'headimgurl' => $user["headimgurl"],
+					'subscribed' => 1,
+					'source'     => 'wechat'
+				]);
+			}else{
+				User::where('openid',$openid)->update(['subscribed'=>1]);
+			}
+            //Log::info($openid);
+            if($count % 100 == 0){
+                Log::info($count);
+            }
+		}
+        Log::info("next_openid:".$next_openid);      
+	}
 }

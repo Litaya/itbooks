@@ -18,9 +18,32 @@ class WechatMaterialAdminController extends Controller
 		return view('admin.material.index',compact('materials'));
 	}
 
+	public function search(Request $request){
+		$search = $request->get('search');
+		$materials = Material::search($search);
+		return view('admin.material.index',compact('materials','search'));
+	}
+
+	public function set_display(Request $request,$id){
+		$this->validate($request,[
+			"display" => "required"
+		]);
+		$display  = $request->get('display');
+		Material::where('id',$id)->update(['display'=>$display]);
+		$request->session()->flash('notice_message','操作成功');
+		$request->session()->flash('notice_status','success');
+		return 'success';
+	}
+
+	public function drop(Request $request,$id){
+		Material::destroy($id);
+		$request->session()->flash('notice_message','操作成功');
+		$request->session()->flash('notice_status','success');
+		return 'success';
+	}
+
 	// 图文详情页
 	public function show(Request $request, $id){
-		// TODO 获取图文消息内容
 		$material = Material::where('id',$id)->first();
 		return view('admin.material.show',compact('material'));
 	}
@@ -33,9 +56,9 @@ class WechatMaterialAdminController extends Controller
 		}else{
 			$news_sum = $wechatModel->storeWechatNewsToDB();
 		}
-        $request->session()->flash('notice_message',"已更新 $news_sum 篇图文");
-        $request->session()->flash('notice_status','success');
-        return 'success';
+		$request->session()->flash('notice_message',"已更新 $news_sum 篇图文");
+		$request->session()->flash('notice_status','success');
+		return 'success';
 	}
 
 	// 评论详情页
@@ -77,7 +100,7 @@ class WechatMaterialAdminController extends Controller
 		# 数据库里最新的记录，断点标记
 		$newest_media_id    = -1;
 		$newest_in_db       = Material::orderBy('wechat_update_time','desc')->first();
-        Log::info($newest_in_db);
+		Log::info($newest_in_db);
 		if(!empty($newest_in_db))
 			$newest_media_id    = $newest_in_db->media_id;
 
@@ -86,7 +109,7 @@ class WechatMaterialAdminController extends Controller
 		$count      = 10;
 		$item_count = -1;    # 每次取出的item数量
 		$finish     = false; # 是否到了断点
-        $news_sum   = 0;
+		$news_sum   = 0;
 		while (1){
 			$lists = $material->lists('news',$offset,$count);
 
@@ -107,12 +130,12 @@ class WechatMaterialAdminController extends Controller
 
 				# 对于多图文结构体，每条图文均需单独存库
 				# $news = $list->content->news_item;
-                $news = $material->get($list->media_id);
-                $news = (object)$news["news_item"];
+				$news = $material->get($list->media_id);
+				$news = (object)$news["news_item"];
 				foreach ($news as $new){
-                    $new = (object)$new;
+					$new = (object)$new;
 					Material::create([
-                        'media_id'           => $list->media_id,
+						'media_id'           => $list->media_id,
 						'title'              => $new->title,
 						'cover_path'         => '',#$this->storeCover($temporary,$list->media_id),
 						'show_cover_pic'     => $new->show_cover_pic,
@@ -124,7 +147,7 @@ class WechatMaterialAdminController extends Controller
 						'category_id'        => 0,
 						'wechat_update_time'  => date('Y-m-d H:i:s',$list->update_time) # 该素材在微信后台的最后更新时间
 					]);
-                    $news_sum += 1; # 统计更新的图文条数
+					$news_sum += 1; # 统计更新的图文条数
 				}# end foreach
 			}# end foreach
 			# 如果已经到了断点，结束更新
@@ -132,7 +155,7 @@ class WechatMaterialAdminController extends Controller
 			$offset += $count;
 			break; #先测试一个例子
 		} # end while
-        return $news_sum;
+		return $news_sum;
 	}
 
 	// 存储封面图

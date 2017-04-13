@@ -74,4 +74,25 @@ class User extends Authenticatable
 	public function userInfo(){
 		return $this->hasOne('App\Models\UserInfo','user_id','id');
 	}
+
+	public function scopeNonAdmin($query){
+		return $query->whereRaw('LENGTH(permission_string) = 0');
+	}
+
+	public function scopeAdmin($query){
+		return $query->whereRaw('LENGTH(permission_string) > 0');
+	}
+
+	public function changeBookLimit($x){
+		$user_json  = json_decode($this->json_content,true);
+		$book_limit = $user_json['teacher']['book_limit'];
+		if($book_limit + $x >=0 && $book_limit - $x <=10){
+			$user_json['teacher']['book_limit'] += $x;
+			$this->json_content = json_encode($user_json);
+			$this->save();
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

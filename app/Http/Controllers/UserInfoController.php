@@ -89,7 +89,9 @@ class UserInfoController extends Controller
         $userinfo->address = $new_info->address;
         $userinfo->json_content = $new_info->json_content;
         $userinfo->province_id = $new_info->province_id;
+        if($userinfo->province_id == "") $userinfo->province_id = null;
         $userinfo->city_id = $new_info->city_id;
+        if($userinfo->city_id == "") $userinfo->city_id = null;
         $userinfo->img_upload = $new_info->img_upload;
 
         $userinfo->update();

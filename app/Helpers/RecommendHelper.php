@@ -22,7 +22,8 @@ class RecommendHelper {
     }
 
     public static function getHotBooks($limit=4){
-        return self::getBookRecommend(NULL, $limit);
+        $books = Book::orderBy('weight', 'desc')->limit($limit)->get();
+        return $books;
     }
 
     public static function getBookRecommend($user, $limit=10){
@@ -35,5 +36,10 @@ class RecommendHelper {
         return $books;
     }
     
+    public static function classifyUserDepartment($user){
+
+    }
+
+
 }
 

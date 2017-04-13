@@ -20,12 +20,12 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message' || $uri_arr[1] == 'wechat' || $uri_arr[1]=='district' || $uri_arr[1] == 'email'){
+		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message' || $uri_arr[1] == 'wechat' || $uri_arr[1]=='district' || $uri_arr[1] == 'email' || $uri_arr[1] == 'api'){
 			return $next($request);
 		}
 		if(Auth::check()){
 			$user = Auth::user();
-			if($uri_arr[1]=='admin' ){
+			if($uri_arr[1]=='admin'){
 				if($user->permission_string == "" )
 					return redirect('/');
 			}elseif ($user->permission_string != ""){
@@ -67,7 +67,7 @@ class Permission
 					if($certification != 'TEACHER'){
 						$request->session()->flash('warning', '申请样书需先认证教师身份');
 						//$request->session()->flash('notice_status', 'danger');
-						return redirect()->route('cert.create');
+						return redirect()->route('userinfo.basic');
 					}
 				}
 			}

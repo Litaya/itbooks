@@ -3,6 +3,14 @@
 @section('title', '样书申请')
 
 @section('content')
+
+    <div class="row">
+        <div class="panel panel-danger hidden" id="warning_box">
+            <div class="panel-body" id="warning_msg">
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-xs-12">
             {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN、书名、作者检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
@@ -37,8 +45,8 @@
                            value="{{ isset($userinfo->phone)?$userinfo->phone:"" }}">
                 </div>
                 <div class="form-group">
-                    <label for="book_plan">图书编写计划(可选)</label>
-                    <textarea class="form-control" name="book_plan" id="book_plan" placeholder="近期是否有图书编写计划，书名是什么？"></textarea>
+                    <label for="book_plan">目前教材使用情况(可选)</label>
+                    <textarea class="form-control" name="book_plan" id="book_plan" placeholder="使用教材的书名、作者、出版社"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="remarks">备注(可选)</label>
@@ -80,16 +88,22 @@
 
         function book_select(book_id,book_name,book_isbn){
             books_num ++;
-            changeBookNum(-1);
-            var icon_delete = "<i class='fa fa-times' style='color:red' onclick='remove_selected("+book_id+")'/>&nbsp;&nbsp;";
-            // var radio_boxes = "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=1 checked='checked' required> 教材</label>";
-            // radio_boxes += "<label class='radio-inline'><input type='radio' name='typeOf"+book_id+"' value=2 required> 教辅</label> <br/>";
-            var check_boxes = "<input type='checkbox' id='book_ids_"+book_id+"' name='book-ids[]' value="+book_id+" checked='checked'>";
-            var p_book_isbn = "<small style='color:grey'>ISBN号："+book_isbn+"</small>";
+            if(checkNum(-1)){
+                changeBookNum(-1);
+                var icon_delete = "<i class='fa fa-times' style='color:red' onclick='remove_selected("+book_id+")'/>&nbsp;&nbsp;";
+                var check_boxes = "<input type='checkbox' id='book_ids_"+book_id+"' name='book-ids[]' value="+book_id+" checked='checked'>";
+                var p_book_isbn = "<small style='color:grey'>ISBN号："+book_isbn+"</small>";
+                $("#selected_books").append("<li class='list-group-item' id='selected_"+book_id+"'>" + icon_delete + book_name+"<br/> "+p_book_isbn+"</li>");
+                $("#checkboxes").append(check_boxes);
 
-            //$("#selected_books").append("<li class='list-group-item' id='selected_"+book_id+"'>" + icon_delete + radio_boxes+book_name+"<br/> "+p_book_isbn+"</li>");
-            $("#selected_books").append("<li class='list-group-item' id='selected_"+book_id+"'>" + icon_delete + book_name+"<br/> "+p_book_isbn+"</li>");
-            $("#checkboxes").append(check_boxes);
+                $("#warning_box").addClass("hidden");
+                $("#warning_msg").html("");
+
+            }else{
+                $("#warning_box").removeClass("hidden");
+                $("#warning_msg").html("您的申请额度已经用完！");
+            }
+
         }
 
         function remove_selected(book_id){
@@ -103,6 +117,12 @@
             var i = parseInt($("#books_num").html());
             i = i+x;
             $("#books_num").html(i);
+        }
+
+        function checkNum(x){
+            var i = parseInt($("#books_num").html());
+            if(i+x < 0 || i+x > 10) return false;
+            return true;
         }
     </script>
 @stop
