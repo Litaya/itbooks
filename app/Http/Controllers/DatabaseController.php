@@ -89,7 +89,7 @@ class DatabaseController extends Controller
                     DB::table("book")->insert($book);
                     $n_success += 1;
                 } catch (\Exception $e) {
-                    array_push($errors, $e);
+                    array_push($errors, $e->getMessage());
                 }
             }
             else {
@@ -108,7 +108,7 @@ class DatabaseController extends Controller
         $log_file = public_path($log_name);
         $log_handle = fopen($log_file, "w");
         if(count($errors) == 0){
-            fwrite($log_handle, "全部书目已经成功导入\r\n");
+            fwrite($log_handle, iconv("UTF-8", "GBK", "全部书目已经成功导入\r\n"));
         }
         foreach($errors as $error){
             fwrite($log_handle, "$error"."\r\n");
