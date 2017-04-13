@@ -69,7 +69,7 @@ class WechatMessageHandler{
         $material_list_url = url('/material')."?openid=$openid"; 
         $content           = strtolower($content);
 
-	    $bookreq_url       = url('/bookreq')."?openid=$openid";
+	    $bookreq_url       = url('/bookreq/record')."?openid=$openid";
 	    $certificate_url   = url('/cert/create')."?openid=$openid";
         $book_url        = url('/home')."?openid=$openid";
 	    switch($content){
@@ -82,9 +82,9 @@ class WechatMessageHandler{
                 ]);
                 $reply = $news;           
                 break;
-	        case '申请样书':
-            case '样书':
-            case '样书申请':
+	        case '=申请样书':
+            #case '样书':
+            #case '样书申请':
 		        $news = new News([
 			        'title'       => '申请样书',
 			        'description' => "点此申请样书",
@@ -102,9 +102,9 @@ class WechatMessageHandler{
 		        ]);
 		        $reply = $news;
 	        	break;
-            case "课件":
-            case "习题":
-            case "答案":
+            #case "课件":
+            #case "习题":
+            case "=答案":
                 $news = new News([
                         'title'       => '图书资源',
                         'description' => "点此查看图书资源",
@@ -154,7 +154,7 @@ class WechatMessageHandler{
 		$openid = $this->message->FromUserName;
 		$key = $this->message->EventKey;
 		$reply = '';
-		$bookreq_url     = url('/bookreq')."?openid=$openid";
+		$bookreq_url     = url('/bookreq/record')."?openid=$openid";
 		$certificate_url = url('/cert/create')."?openid=$openid";
         $book_url        = url('/home')."?openid=$openid";
         $material_url    = url('/material')."?openid=$openid";
