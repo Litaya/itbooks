@@ -4,6 +4,8 @@ namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatTextHandler;
 use App\Models\WechatAutoReply;
+use App\Models\WechatNews;
+use EasyWeChat\Message\News;
 
 
 class AutoReply extends WechatTextHandler{
@@ -13,10 +15,24 @@ class AutoReply extends WechatTextHandler{
 		$auto_replies = WechatAutoReply::all();
 		$matched      = false;
 		$reply        = "";
+
 		foreach ($auto_replies as $auto_reply){
 			if(preg_match($auto_reply->regex,$message)){
-				$matched = true;
-				$reply   = $auto_reply->reply;
+				$matched  = true;
+				$rep_type = $auto_reply->type;
+				$content  = $auto_reply->content;
+				switch ($rep_type){
+					case 0: # 文字
+					case 2: # 图片
+						$reply = $content;
+						break;
+					case 1: # 图文
+						$reply = $this->getNews($content);
+						break;
+					default:
+						$reply = "";
+						break;
+				}
 				break;
 			}
 		}
@@ -42,5 +58,25 @@ class AutoReply extends WechatTextHandler{
 	public function name()
 	{
 		return 'AutoReply';
+	}
+
+	/**
+	 * @param $content string Json数组，需要解析为news_ids
+	 * @return array
+	 */
+	private function getNews($content){
+		$news_ids = json_decode($content,true);
+		$news = [];
+		foreach ($news_ids as $news_id){
+			$wechatNews = WechatNews::where('id',$news_id)->first();
+			$new  = new News([
+				'title'       => $wechatNews->title,
+				'description' => $wechatNews->desc,
+				'url'         => $wechatNews->url,
+				'image'       => $wechatNews->image,
+			]);
+			array_push($news,$new);
+		}
+		return $news;
 	}
 }

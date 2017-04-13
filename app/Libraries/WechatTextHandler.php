@@ -49,8 +49,10 @@ abstract class WechatTextHandler{
 				$pre_handler = $handler;
 				$first   = false;
 			}else{
-				$pre_handler->setSuccessor($module_handler);
-				$pre_handler = $module_handler;
+				if($module->status == 1){
+					$pre_handler->setSuccessor($module_handler);
+					$pre_handler = $module_handler;
+				}
 			}
 		}
 

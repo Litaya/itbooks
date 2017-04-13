@@ -30,9 +30,8 @@ class DatabaseSeeder extends Seeder
 
 		DB::table('admin')->insert([
 			'id'                => 1,
-			'username'          => '超级管理员',
-			'permission_string' => 'all',
-			'certificate_as'    => 'SUPER_ADMIN'
+			'user_id'           => 1,
+			'role'              => 'SUPERADMIN',
 		]);
 
 		DB::table('user_info')->insert([
@@ -57,9 +56,9 @@ class DatabaseSeeder extends Seeder
 		]);
 		DB::table('admin')->insert([
 			'id'                => 3,
-			'username'          => '部门管理员#1',
-			'permission_string' => 'book_curd_d1|bookreq_curd_d1',
-			'certificate_as'    => 'DEPARTMENT_ADMIN'
+			'user_id'           => 3,
+			'role'              => 'DEPARTMENTADMIN',
+			'department_id'     => 1
 		]);
 		DB::table('user_info')->insert([
 			'user_id'=>3
@@ -82,10 +81,10 @@ class DatabaseSeeder extends Seeder
 			'source'            => 'web',
 		]);
 		DB::table('admin')->insert([
-			'id'                =>3,
-			'username'          => '院校代表#1',
-			'permission_string' => 'book_r_p1|bookreq_r_p1',
-			'certificate_as'    => 'REPRESENTATIVE'
+			'id'                => 4,
+			'user_id'           => 4,
+			'role'              => 'REPRESENTATIVE',
+			'district_id'       => 1
 		]);
 		DB::table('user_info')->insert([
 			'user_id'=>4

@@ -18,6 +18,7 @@ class CreateWechatModuleTable extends Migration
 	        $table->string('module');
         	$table->string('name');
         	$table->string('weight');
+        	$table->integer('status')->default(1)->comment('0：未启用，1：启用');
         	$table->timestamps();
         });
     }
