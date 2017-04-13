@@ -166,7 +166,9 @@ return [
         /*
          * Package Service Providers...
          */
-
+         //全文检索
+        Laravel\Scout\ScoutServiceProvider::class,
+        DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         //
 
         /*
@@ -187,8 +189,6 @@ return [
         // Excel-Mysql support 
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
-	    //全文检索
-		Laravel\Scout\ScoutServiceProvider::class,
     ],
 
     /*

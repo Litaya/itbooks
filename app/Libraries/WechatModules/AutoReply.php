@@ -24,7 +24,7 @@ class AutoReply extends WechatTextHandler{
 				switch ($rep_type){
 					case 0: # 文字
 					case 1: # 图片
-						$reply = $content;
+                        $reply = preg_replace("/openidvalue/",$openid,$content);
 						break;
 					case 2: # 图文
 						$reply = $this->getNews($openid,$content);

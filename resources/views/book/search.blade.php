@@ -47,8 +47,8 @@
             </div>
 
         </div>
-
+	    <div class="row" style="text-align:center">
         {!! $books->appends(Input::except('page'))->links('vendor.pagination.default') !!}
-
+        </div>
     </div>
 @endsection

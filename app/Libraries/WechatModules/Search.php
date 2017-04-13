@@ -17,15 +17,16 @@ class Search extends WechatTextHandler{
 				'title'       => "查询到".sizeof($book_result)."本相关图书",
 				'description' => "点此查看相关图书列表",
 				'url'         => route('book.index')."?search=".$message."&openid=$openid",
-				'image'       => route('image',['src'=>'public/book_search.png'])
+				'image'       => route('image',['src'=>'public/book.png'])
 			]);
 			$material_new = new News([
 				'title'       => "查询到".sizeof($material_result)."篇相关文章",
 				'description' => "点此查看相关文章列表",
 				'url'         => route('material.index')."?search=".$message."&openid=$openid",
-				'image'       => route('image',['src'=>'public/material_search.png'])
+				'image'       => route('image',['src'=>'public/material.png'])
 			]);
-			return [$book_new,$material_new];
+			# return [$book_new,$material_new];
+            return $book_new;
 		}
 		if(!empty($this->successor)){
 			return $this->successor->handle($openid,$message);
