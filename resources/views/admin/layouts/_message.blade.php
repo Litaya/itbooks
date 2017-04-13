@@ -34,6 +34,6 @@
 
 @if(Session::has('reportfile'))
     <div class="alert alert-warning" role="alert">
-    <a href="{{Session::get('downloadable')}}">查看错误报告</a>
+    <a href="{{Session::get('reportfile')}}">查看错误报告</a>
     </div>
 @endif
