@@ -107,6 +107,9 @@ class DatabaseController extends Controller
         $log_name = "logs/import_log_".time().".txt";
         $log_file = public_path($log_name);
         $log_handle = fopen($log_file, "w");
+        if(count($errors) == 0){
+            fwrite($log_handle, "全部书目已经成功导入\r\n");
+        }
         foreach($errors as $error){
             fwrite($log_handle, "$error"."\r\n");
         }
