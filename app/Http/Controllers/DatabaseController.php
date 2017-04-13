@@ -57,8 +57,6 @@ class DatabaseController extends Controller
             array_push($isbn_set, $book->isbn);
         }
 
-
-
         $file = Input::file('excel')->getRealPath();
         $results = Excel::load($file, function($reader){})->get();
 
@@ -115,7 +113,8 @@ class DatabaseController extends Controller
         fclose($log_handle);
 
         Session::flash('success', "共$n_total 条记录，成功导入$n_success 条，重复$n_duplicate 条，失败$n_failure 条。");
-        return response()->download(public_path($log_name));
+        Session::flash('reportfile', asset("logs/import_log_".time().".txt"));
+        return redirect()->route('admin.book.index');
     }
 
     public function testCheckUrl($product_number){
