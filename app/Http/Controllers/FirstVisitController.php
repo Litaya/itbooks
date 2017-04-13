@@ -30,7 +30,7 @@ class FirstVisitController extends Controller
         if($request->role == "teacher") {
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email",
+                "email" => "required|email|unique:user,email",
                 "qqnumber" => "digits_between:5,14",
                 "phone" => "digits_between:11,15",
                 "workplace" => "required",
@@ -70,7 +70,7 @@ class FirstVisitController extends Controller
         if($request->role == "student"){
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email",
+                "email" => "required|email|unique:user,email",
                 "school" => "required",
                 "department" => "required",
             ]);
@@ -96,7 +96,7 @@ class FirstVisitController extends Controller
         if($request->role == "other"){
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email"
+                "email" => "required|email|unique:user,email"
             ]);
 
             $user = Auth::user();
@@ -111,7 +111,6 @@ class FirstVisitController extends Controller
             $info->json_content = json_encode($jdata);
 
             UserInfoController::update_user_info($info);
-
 
             return redirect()->route("register.welcome")->withRole("other");
         }
