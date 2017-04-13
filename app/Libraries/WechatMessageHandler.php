@@ -71,6 +71,7 @@ class WechatMessageHandler{
 
 	    $bookreq_url       = url('/bookreq')."?openid=$openid";
 	    $certificate_url   = url('/cert/create')."?openid=$openid";
+        $book_url        = url('/home')."?openid=$openid";
 	    switch($content){
             case '文章列表':
                 $news = new News([
@@ -82,6 +83,8 @@ class WechatMessageHandler{
                 $reply = $news;           
                 break;
 	        case '申请样书':
+            case '样书':
+            case '样书申请':
 		        $news = new News([
 			        'title'       => '申请样书',
 			        'description' => "点此申请样书",
@@ -99,6 +102,17 @@ class WechatMessageHandler{
 		        ]);
 		        $reply = $news;
 	        	break;
+            case "课件":
+            case "习题":
+            case "答案":
+                $news = new News([
+                        'title'       => '图书资源',
+                        'description' => "点此查看图书资源",
+                        'url'         => $book_url,
+                        'image'       => route('image',['src'=>'public/book.png']),
+                ]);
+                $reply = $news;
+                break;
 	        default:
                 break;
         }
@@ -142,6 +156,7 @@ class WechatMessageHandler{
 		$reply = '';
 		$bookreq_url     = url('/bookreq')."?openid=$openid";
 		$certificate_url = url('/cert/create')."?openid=$openid";
+        $book_url        = url('/home')."?openid=$openid";
 		switch ($key){
 			case 'bookreq':
 				$news = new News([
@@ -161,6 +176,15 @@ class WechatMessageHandler{
                 ]);
 				$reply = $news;
 				break;
+            case 'book':
+                $news = new News([
+                        'title'       => '图书资源',
+                        'description' => "点此查看图书资源",
+                        'url'         => $book_url,
+                        'image'       => route('image',['src'=>'public/book.png']),
+                ]);
+                $reply = $news;
+                break;
 			default:
 				$reply = "";
 				break;
