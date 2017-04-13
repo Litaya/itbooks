@@ -77,9 +77,6 @@ class UserInfoController extends Controller
         $userinfo = UserInfo::find($user->id);
 
         if($user->email != $new_info->email){
-            $this->validate($user, [
-                "email" => "unique:user,email"
-            ]);
             $user->email = $new_info->email;
             $user->email_status = 0;
             $user->update();
