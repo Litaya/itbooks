@@ -196,7 +196,7 @@ class DatabaseController extends Controller
             });
         })->download("xlsx");
         
-        return $export;
+        return redirect()->route("admin.bookreq.index");
     }
 
     public function exportBookRequestBookTable(){
@@ -284,9 +284,9 @@ class DatabaseController extends Controller
                     'E' => '@',
                 ));
             });
-        })->export("xlsx")->download("xlsx");
+        })->download('xlsx');
 
-        return $export;
+        return redirect()->route("admin.bookreq.index");
     }
 
 }
