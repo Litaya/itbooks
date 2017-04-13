@@ -194,7 +194,8 @@ class DatabaseController extends Controller
                         ]);
                 }
             });
-        })->download("xlsx");
+        })->store('xlsx')->export('xlsx');
+        //->download("xlsx");
         
         return redirect()->route("admin.bookreq.index");
     }
@@ -284,7 +285,8 @@ class DatabaseController extends Controller
                     'E' => '@',
                 ));
             });
-        })->download('xlsx');
+        })->store('xlsx')->export('xlsx');
+        //->download('xlsx');
 
         return redirect()->route("admin.bookreq.index");
     }
