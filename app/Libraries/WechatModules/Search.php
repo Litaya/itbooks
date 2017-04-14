@@ -14,22 +14,28 @@ class Search extends WechatHandler {
 		$openid  = $this->message->FromUserName;
 		if($msg_type == 'text'){
 			$search_msg  = $this->message->Content;
-			$book_result = Book::search($search_msg)->get();
-			if(sizeof($book_result)!=0){
+			$book_results = Book::search($search_msg)->orderBy('weight','desc')->orderBy('publish_time','desc')->get();
+			if(sizeof($book_results)!=0){
+				$book_news = [];
+				foreach ($book_results as $book_result){
+					if(sizeof($book_news) < 5){
+						array_push($book_news,new News([
+							'title'       => $book_result->title,
+							'description' => '',
+							'url'         => route('book.show',$book_result->id),
+							'image'       => empty($book_result->img_upload)?route('image',['src'=>'public/book.png']):$book_result->img_upload
+						]));
+					}else
+						break;
+				}
 				$book_new = new News([
-					'title'       => "查询到".sizeof($book_result)."本相关图书",
+					'title'       => "共查询到".sizeof($book_result)."本相关图书",
 					'description' => "点此查看相关图书列表",
 					'url'         => route('book.index')."?search=".$search_msg."&openid=$openid",
 					'image'       => route('image',['src'=>'public/book.png'])
 				]);
-//				$material_new = new News([
-//					'title'       => "查询到".sizeof($material_result)."篇相关文章",
-//					'description' => "点此查看相关文章列表",
-//					'url'         => route('material.index')."?search=".$message."&openid=$openid",
-//					'image'       => route('image',['src'=>'public/material.png'])
-//				]);
-				# return [$book_new,$material_new];
-				return $book_new;
+				array_push($book_news,$book_new);
+				return $book_news;
 			}
 		}
 		if(!empty($this->successor)){
