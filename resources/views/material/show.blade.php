@@ -27,7 +27,7 @@
         $("iframe").each(function () {
             $(this).attr("width",'100%');
             $(this).attr("height",'300px;');
-        })
+        });
         $("img[data-src]").each(function () {
             console.log("hi"+$(this).attr("data-s"));
             var max_width = parseInt($(this).attr("data-s").split(",")[0]);
