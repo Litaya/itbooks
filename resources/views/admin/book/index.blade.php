@@ -26,11 +26,43 @@
         <div class="row">
         <table class="table" style="column-width: 10px">
         <thead>
-            <th onclick="orderBy('id')"><label class="unselectable" id="id-label">ID</label></th>
-            <th onclick="orderBy('name')"><label class="unselectable" id="name-label">书名</label></th>
-            <th onclick="orderBy('authors')"><label class="unselectable" id="authors-label">作者</label></th>
-            <th onclick="orderBy('isbn')"><label class="unselectable" id="isbn-label">作者</label></th>
-            <th onclick="orderBy('type')"><label class="unselectable" id="type-label">分类</label></th>
+            <th onclick="orderBy('id')">
+            <label class="unselectable" id="id-label">ID</label>
+            @if(Request::get("orderby", "") == 'id')
+            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            @endif
+            </th>
+
+            <th onclick="orderBy('name')">
+            <label class="unselectable" id="name-label">书名</label>
+            @if(Request::get("orderby", "") == 'name')
+            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            @endif
+            </th>
+
+            <th onclick="orderBy('authors')">
+            <label class="unselectable" id="authors-label">作者</label>
+            @if(Request::get("orderby", "") == 'authors')
+            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            @endif
+            </th>
+
+
+            <th onclick="orderBy('isbn')">
+            <label class="unselectable" id="isbn-label">ISBN</label>
+            @if(Request::get("orderby", "") == 'isbn')
+            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            @endif
+            </th>
+
+
+            <th onclick="orderBy('type')">
+            <label class="unselectable" id="type-label">分类</label>
+            @if(Request::get("orderby", "") == 'type')
+            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            @endif
+            </th>
+
             <th></th>
         </thead>
         <tbody>
@@ -83,32 +115,6 @@ aria-labelledby="import-modal-label">
 
 <script>
 
-var bAsc = true;
-var orderedBy = "";
-var triangleUp = document.createElement('span');
-triangleUp.setAttribute("class", "glyphicon glyphicon-triangle-top");
-var triangleDown = document.createElement('span');
-triangleDown.setAttribute("class", "glyphicon glyphicon-triangle-bottom");
-
-function orderBy(item){
-    if(item != orderedBy){
-        if(orderedBy != ""){
-            var old_label = document.getElementById(orderedBy+"-label");
-            old_label.parentElement.removeChild(bAsc ? triangleUp : triangleDown);
-        }
-        var new_label = document.getElementById(item + "-label");
-        new_label.parentElement.appendChild(triangleUp);
-        
-        orderedBy = item;
-        bAsc = true;
-    }
-    else{
-        var label = document.getElementById(orderedBy+"-label");
-        label.parentElement.removeChild(bAsc ? triangleUp : triangleDown);
-        bAsc = !bAsc;
-        label.parentElement.appendChild(bAsc ? triangleUp : triangleDown);
-    }
-}
 
 </script>
 
