@@ -30,9 +30,13 @@
         });
         $("img[data-src]").each(function () {
             console.log("hi"+$(this).attr("data-s"));
-            var max_width = parseInt($(this).attr("data-s").split(",")[0]);
-            if($(this).attr("data-w")>max_width){
+            if($(this).attr("data-s")==undefined){
                 $(this).attr("width",'100%');
+            }else{
+                var max_width = parseInt($(this).attr("data-s").split(",")[0]);
+                if($(this).attr("data-w")>max_width){
+                    $(this).attr("width",'100%');
+                }
             }
         });
     </script>
