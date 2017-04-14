@@ -16,13 +16,13 @@ abstract class WechatHandler{
 	protected $message;
 	protected $app;
 
-	public function __construct($app,$message)
+	public function __construct($app=NULL,$message=NULL)
 	{
 		$this->app     = $app;
 		$this->message = $message;
 	}
 
-	public function setSuccessor(WechatTextHandler $successor){
+	public function setSuccessor(WechatHandler $successor){
 		$this->successor = $successor;
 	}
 

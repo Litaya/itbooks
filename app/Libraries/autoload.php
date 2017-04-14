@@ -12,7 +12,8 @@ while (($filename = readdir($dic_handler)) !== false){
 		# 如果还未存库
 		if(sizeof($module_models)==0){
 			$class_name = 'App\Libraries\WechatModules\\'.$module_class_name;
-			$module = new $class_name;
+            Illuminate\Support\Facades\Log::info($class_name);
+			$module = new $class_name();
 			$weight = $module->weight();
 			$name   = $module->name();
 			\App\Models\WechatModuleModel::create([
