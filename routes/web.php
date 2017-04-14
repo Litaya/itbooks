@@ -116,7 +116,6 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		return view('admin.index');
 	})->name('admin.index');
 	Route::get('/errors',"PermissionController@admin_permission_error")->name('admin.errors.index');
-	Route::post('/logout','Admin\AdminAuthController@logout')->name('admin.logout');
 	Route::get('/logout','Admin\AdminAuthController@logout')->name('admin.logout');
 
 	Route::get('bookreq', 'BookRequestAdminController@getIndex')->name('admin.bookreq.index');
