@@ -16,9 +16,9 @@ class BookReq extends WechatTextHandler{
 					'<a href="http://www.itshuquan.com/bookreq/record?openid='.$openid.'">查看样书记录</a>\n '.
 					'<a href="http://www.itshuquan.com/home?openid=openidvalue">搜索课程教材</a>';
 			}else if($user->certificate_as==""){
-				$reply = '只有认证的教师才可以申请教材样书（样书会在5个工作日内处理）\n <a href="http://www.itshuquan.com/userinfo/basic?openid='.$openid.'">点此认证教师身份</a>';
+				$reply = '请先认证您的身份，<a href="http://www.itshuquan.com/userinfo/basic?openid='.$openid.'">点此进行认证身份</a>';
 			}else{
-				$reply = "只有教师用户才可申请样书";
+				$reply = "您当前认证的身份为：$user->certificate_as，只有教师用户才可申请样书";
 			}
 			return $reply;
 		}
