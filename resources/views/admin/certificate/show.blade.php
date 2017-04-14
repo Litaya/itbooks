@@ -22,7 +22,7 @@
                         <p>教学情况</p>
                         <ol>
                             @for($i = 1; $i <= 3; $i++)
-                            @if($cert->json_content["course_name_".$i])
+                            @if(array_key_exists($cert->join_content, "course_name_".$i) && $cert->json_content["course_name_".$i])
                             <li>{{$cert->json_content["course_name_".$i]}}, 学生人数 {{$cert->json_content["number_stud_".$i]}}</li>
                             @endif
                             @endfor
