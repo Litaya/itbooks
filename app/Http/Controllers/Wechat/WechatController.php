@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Wechat;
 
 use App\Libraries\WechatHandler;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Libraries\WechatMessageHandler;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Support\Facades\Log;
 
 class WechatController extends Controller
 {
 	protected $app;
-
 	public function index(){
 		return $this->check();
 	}
