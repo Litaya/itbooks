@@ -50,11 +50,10 @@ class WechatMessageHandler{
 	}
 
 	private function messageHandler(){
-        $reply = '';
-        Log::info($this->message);
 		switch ($this->message->MsgType){
 			case 'text':
-                $reply = $this->textHandler($this->message->Content);
+				$reply = WechatTextHandler::getMessageHandler()->handle($this->message->FromUserName,$this->message->Content);
+//                $reply = $this->textHandler($this->message->Content);
 				break;
 			default:
                 $reply = '';

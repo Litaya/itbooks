@@ -6,6 +6,7 @@
 /.idea
 /database/sqls/script.sql
 /storage/fileupload
+public/logs
 Homestead.json
 Homestead.yaml
 /composer.lock

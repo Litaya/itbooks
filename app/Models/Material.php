@@ -47,8 +47,7 @@ class Material extends Model
 		$materials = self::where('title','like',"%$message%")
 			->orWhere('author','like',"%$message%")
 			->orWhere('digest','like',"%$message%")
-			->orderBy('wechat_update_time','desc')
-			->paginate(10);
+			->orderBy('wechat_update_time','desc');
 		return $materials;
 	}
 
