@@ -30,7 +30,7 @@ class Book extends WechatHandler{
 	}
 
 	private function canHandle(){
-		if(($this->message->MsgType == 'text' && strstr($this->message->Content,'图书资源'))||($this->message->MsgType == 'event' && $this->message->Event == 'click' && $this->message->EventKey=='book'))
+		if(($this->message->MsgType == 'text' && strstr($this->message->Content,'图书资源'))||($this->message->MsgType == 'event' && $this->message->Event == 'CLICK' && $this->message->EventKey=='book'))
 			return true;
 		return false;
 	}

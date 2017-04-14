@@ -13,10 +13,10 @@ class BookReq extends WechatHandler {
 		if ($this->canHandle()){
 			$user = User::where('openid',$openid)->first();
 			if(strpos($user->certificate_as,'TEACHER')!==false){
-				$reply = '只有认证的教师才可以申请教材样书（样书会在5个工作日内处理）。\n'.
-					'<a href="http://www.itshuquan.com/bookreq?openid='.$openid.'">申请教材样书</a>'.
-					'<a href="http://www.itshuquan.com/bookreq/record?openid='.$openid.'">查看样书记录</a>\n '.
-					'<a href="http://www.itshuquan.com/home?openid=openidvalue">搜索课程教材</a>';
+				$reply = "只有认证的教师才可以申请教材样书（样书会在5个工作日内处理）。\n".
+					"<a href='http://www.itshuquan.com/bookreq?openid=".$openid."'>申请教材样书</a>\n".
+					"<a href='http://www.itshuquan.com/bookreq/record?openid=".$openid."'>查看样书记录</a>\n ".
+					"<a href='http://www.itshuquan.com/home?openid=".$openid."'>搜索课程教材</a>";
 			}else if($user->certificate_as==""){
 				$reply = '请先认证您的身份，<a href="http://www.itshuquan.com/userinfo/basic?openid='.$openid.'">点此进行认证身份</a>';
 			}else{
@@ -34,7 +34,7 @@ class BookReq extends WechatHandler {
 	}
 
 	private function canHandle(){
-		if(($this->message->MsgType == 'text' && strstr($this->message->Content,'样书'))||($this->message->MsgType == 'event' && $this->message->Event == 'click' && $this->message->EventKey=='bookreq'))
+		if(($this->message->MsgType == 'text' && strstr($this->message->Content,'样书'))||($this->message->MsgType == 'event' && $this->message->Event == 'CLICK' && $this->message->EventKey=='bookreq'))
 			return true;
 		return false;
 	}

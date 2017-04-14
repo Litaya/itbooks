@@ -10,6 +10,7 @@ namespace App\Libraries\WechatModules;
 
 use App\Models\User;
 use App\Models\UserInfo;
+use App\Libraries\WechatHandler;
 
 class Subscribe extends WechatHandler {
 

@@ -35,7 +35,7 @@ class Material extends WechatHandler{
 	}
 
 	private function canHandle(){
-		if(($this->message->MsgType == 'text' && strstr($this->message->Content,'文章列表'))||($this->message->MsgType == 'event' && $this->message->Event == 'click' && $this->message->EventKey=='material'))
+		if(($this->message->MsgType == 'text' && strstr($this->message->Content,'文章列表'))||($this->message->MsgType == 'event' && $this->message->Event == 'CLICK' && $this->message->EventKey=='material'))
 			return true;
 		return false;
 	}

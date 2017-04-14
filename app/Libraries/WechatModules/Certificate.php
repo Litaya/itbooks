@@ -39,7 +39,7 @@ class Certificate extends WechatHandler {
 		$event    = $this->message->Event;
 		$eventKey = $this->message->EventKey;
 
-		if($msg_type == 'event' &&  $event== 'click' && $eventKey=='certificate'){
+		if($msg_type == 'event' &&  $event== 'CLICK' && $eventKey=='certificate'){
 			return true;
 		}
 		return false;
