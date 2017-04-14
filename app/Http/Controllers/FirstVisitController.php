@@ -129,7 +129,7 @@ class FirstVisitController extends Controller
         $user = Auth::user();
         $info = UserInfoController::get_user_info($user);
         $info->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
-        $info->update();
+        UserInfoController::update_user_info($info);
         
         $old_cr = CertRequest::where("user_id", "=", $user->id)->where("status","<>",2)->get();
         
