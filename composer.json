@@ -14,7 +14,8 @@
         "maatwebsite/excel": "~2.1.0",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/scout": "2.*",
-        "damiantw/laravel-scout-mysql-driver": "^1.0"
+        "damiantw/laravel-scout-mysql-driver": "^1.0",
+        "fukuball/jieba-php": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

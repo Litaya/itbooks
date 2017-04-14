@@ -21,8 +21,8 @@ class WechatMaterialController extends Controller
 
 	public function show(Request $request,$id){
 		$material = Material::where('id',$id)->first();
-//		$material->reading_quantity ++;
-//		$material->save();
+		$material->reading_quantity ++;
+		$material->save();
 		return view('material.show',compact('material'));
 	}
 

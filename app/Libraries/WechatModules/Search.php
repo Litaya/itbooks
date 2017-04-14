@@ -5,6 +5,7 @@ use App\Libraries\WechatHandler;
 use App\Models\Book;
 use App\Models\Material;
 use EasyWeChat\Message\News;
+use Illuminate\Support\Facades\Log;
 
 class Search extends WechatHandler {
 
@@ -35,12 +36,15 @@ class Search extends WechatHandler {
 					'image'       => route('image',['src'=>'public/book.png'])
 				]);
 				array_push($book_news,$book_new);
+                Log::info('处理模块: Search');
 				return $book_news;
 			}
 		}
 		if(!empty($this->successor)){
+            Log::info('模块['.$this->name().']无法处理，传递给下一个模块');
 			return $this->successor->handle();
 		}else{
+            Log::info('模块['.$this->name().']是最后一个模块');
 			return "";
 		}
 	}

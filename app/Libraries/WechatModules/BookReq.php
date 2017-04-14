@@ -3,6 +3,7 @@ namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatHandler;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class BookReq extends WechatHandler {
 	public function handle()
@@ -12,7 +13,7 @@ class BookReq extends WechatHandler {
 		// 如果有样书
 		if ($this->canHandle()){
 			$user = User::where('openid',$openid)->first();
-			if(strpos($user->certificate_as,'TEACHER')!==false){
+			if(!empty($user)&&strpos($user->certificate_as,'TEACHER')!==false){
 				$reply = "只有认证的教师才可以申请教材样书（样书会在5个工作日内处理）。\n".
 					"<a href='http://www.itshuquan.com/bookreq?openid=".$openid."'>申请教材样书</a>\n".
 					"<a href='http://www.itshuquan.com/bookreq/record?openid=".$openid."'>查看样书记录</a>\n ".
@@ -22,13 +23,16 @@ class BookReq extends WechatHandler {
 			}else{
 				$reply = "您当前认证的身份为：$user->certificate_as，只有教师用户才可申请样书";
 			}
+            Log::info("处理模块: BookReq");
 			return $reply;
 		}
 
 		# 责任链没有断的情况下，继续向下处理
 		if(!empty($this->successor)){
+            Log::info('模块['.$this->name().']无法处理，传递给下一个模块');
 			return $this->successor->handle();
 		}else{ # 没有下一个处理模块，则返回空串
+            Log::info('模块['.$this->name().']是最后一个模块');
 			return "";
 		}
 	}

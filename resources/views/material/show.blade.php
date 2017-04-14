@@ -29,7 +29,6 @@
             $(this).attr("height",'300px;');
         });
         $("img[data-src]").each(function () {
-            console.log("hi"+$(this).attr("data-s"));
             if($(this).attr("data-s")==undefined){
                 $(this).attr("width",'100%');
             }else{
