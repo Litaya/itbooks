@@ -35,18 +35,20 @@
     <td>{{$user->username}}</td>
     <td>{{$user->email}}</td>
     <td>
-    @if($user->userinfo->role == "teacher")
-    教师
-    @elseif($user->userinfo->role == "student")
-    学生
-    @elseif($user->userinfo->role == "staff")
-    职员
-    @elseif($user->userinfo->role == "other")
-    其他
+    @if(!empty($user->userinfo))
+        @if($user->userinfo->role == "teacher")
+        教师
+        @elseif($user->userinfo->role == "student")
+        学生
+        @elseif($user->userinfo->role == "staff")
+        职员
+        @elseif($user->userinfo->role == "other")
+        其他
+        @endif
     @endif
     </td>
     <td>
-    @if($user->userinfo->realname)
+    @if(!empty($user->userinfo) && $user->userinfo->realname)
     {{$user->userinfo->realname}}
     @else
     未填写
