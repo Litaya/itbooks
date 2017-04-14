@@ -25,6 +25,8 @@ class Material extends Model
 	    'wechat_update_time',
     ];
 
+    public $timestamps = false;
+
     public function category(){
     	return $this->belongsTo('App\Models\Category','category_id','id');
     }

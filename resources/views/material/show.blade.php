@@ -30,10 +30,12 @@
         });
         $("img[data-src]").each(function () {
             if($(this).attr("data-s")==undefined){
+                $(this).css('max-width','100%');
                 $(this).attr("width",'100%');
             }else{
                 var max_width = parseInt($(this).attr("data-s").split(",")[0]);
                 if($(this).attr("data-w")>max_width){
+                    $(this).css('max-width','100%');
                     $(this).attr("width",'100%');
                 }
             }
