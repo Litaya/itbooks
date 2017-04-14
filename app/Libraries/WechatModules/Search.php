@@ -20,7 +20,7 @@ class Search extends WechatHandler {
 				foreach ($book_results as $book_result){
 					if(sizeof($book_news) < 5){
 						array_push($book_news,new News([
-							'title'       => $book_result->title,
+							'title'       => substr($book_result->name."|".$book_result->authors,0,100),
 							'description' => '',
 							'url'         => route('book.show',$book_result->id),
 							'image'       => empty($book_result->img_upload)?route('image',['src'=>'public/book.png']):$book_result->img_upload
@@ -29,7 +29,7 @@ class Search extends WechatHandler {
 						break;
 				}
 				$book_new = new News([
-					'title'       => "共查询到".sizeof($book_result)."本相关图书",
+					'title'       => "共查询到".sizeof($book_results)."本相关图书",
 					'description' => "点此查看相关图书列表",
 					'url'         => route('book.index')."?search=".$search_msg."&openid=$openid",
 					'image'       => route('image',['src'=>'public/book.png'])
