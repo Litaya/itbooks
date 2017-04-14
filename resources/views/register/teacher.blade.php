@@ -7,8 +7,16 @@
 
 {!! Form::open(["id"=>"file-form", "route"=>"register.teacher.save", "method"=>"post", "files"=>true]) !!}
 
+<p>请上传可证明高校教师身份的照片，完成认证，例如</p>
+<ol>
+<li>教师证</li>
+<li>教师校园卡</li>
+<li>清华出版社会议代表证</li>
+<li>教务系统个人页面</li>
+<li>其他</li>
+</ol>
+
 {{ Form::label("img_upload", "文件上传") }}
-<small>请上传教师证、校园卡等可以证明教师身份的图片材料</small>
 {{ Form::file("img_upload", ["class"=>"form-control"]) }}
 
 {!! Form::close() !!}
