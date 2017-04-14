@@ -12,7 +12,9 @@
                     <div class="col-md-6">
                         <p>真实姓名: {{$cert->realname}}</p>
                         <p>工作单位: {{$cert->workplace}}</p>
-                        <p>申请类型: {{$cert->cert_name=="teacher"?"教师":"作者"}}</p>
+                        <p>申请类型: @if($cert->cert_name=="teacher")
+                                    教师
+                                    @endif
                         @if($cert->cert_name == "teacher")
                         <hr>
                         <p>院系名称: {{ $cert->json_content["department"] }}</p>
