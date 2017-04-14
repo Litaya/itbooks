@@ -43,7 +43,22 @@
                         <td>{{$cert->username}}</td>
                         <td>{{$cert->realname}}</td>
                         <td>{{$cert->workplace}}</td>
-                        <td>{{strtoupper($cert->cert_name)=="TEACHER"?"教师":"作者"}}</td>
+                        <td>
+                        @if(!empty($cert->cert_name))
+                            @if(strtoupper($cert->cert_name)=="TEACHER")
+                            教师
+                            @endif
+                            @if(strtoupper($cert->cert_name)=="STUDENT")
+                            学生
+                            @endif
+                            @if(strtoupper($cert->cert_name)=="STAFF")
+                            职员
+                            @endif
+                            @if(strtoupper($cert->cert_name)=="OTHER")
+                            其它
+                            @endif
+                        @endif
+                        </td>
                         @if($cert->status==1)
                         <td>通过 <a href="javascript:$('#deprive-form-{{$cert->id}}').submit()">收回</a>
                         </td>
