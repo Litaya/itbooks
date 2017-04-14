@@ -35,6 +35,7 @@
                         <p><strong>上传证件</strong></p>
                         <p><img src="{{route('image', $cert->img_upload)}}" class="img-responsive" style="width: 75%"></img></p>
                     </div>
+                    
                 </div>
                 <hr>
                 <div class="row">
