@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Wechat;
 
+use App\Libraries\WechatHandler;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Libraries\WechatMessageHandler;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class WechatController extends Controller
 {
+	protected $app;
+
 	public function index(){
 		return $this->check();
 	}
@@ -51,7 +54,7 @@ class WechatController extends Controller
 		$server = $app->server;
 		$this->app = $app;
 		$server->setMessageHandler(function($message){
-				$handler = new WechatMessageHandler($this->app,$message);
+				$handler = WechatHandler::getMessageHandler($this->app,$message);
 				$reply = $handler->handle();
                 return $reply;
 				});

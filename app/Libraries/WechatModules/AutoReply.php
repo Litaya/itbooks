@@ -2,50 +2,60 @@
 
 namespace App\Libraries\WechatModules;
 
-use App\Libraries\WechatTextHandler;
+use App\Libraries\WechatHandler;
 use App\Models\WechatAutoReply;
 use App\Models\WechatNews;
 use EasyWeChat\Message\News;
 use Illuminate\Support\Facades\Log;
 
-class AutoReply extends WechatTextHandler{
+class AutoReply extends WechatHandler {
 
-	public function handle($openid,$message)
+	// TODO 修改为继承自WechatHandler
+	public function handle()
 	{
-		$auto_replies = WechatAutoReply::all();
-		$matched      = false;
-		$reply        = "";
+		$matched   = false;
+		$reply     = "";
 
-		foreach ($auto_replies as $auto_reply){
-			if(preg_match("/$auto_reply->regex/",$message)){
-				$matched  = true;
-				$rep_type = $auto_reply->type;
-				$content  = $auto_reply->content;
-				switch ($rep_type){
-					case 0: # 文字
-					case 1: # 图片
-                        $reply = preg_replace("/openidvalue/",$openid,$content);
-						break;
-					case 2: # 图文
-						$reply = $this->getNews($openid,$content);
-						break;
-					default:
-						$reply = "";
-						break;
+		$msg_type  = $this->message->MsgType;
+		$input_msg = $this->message->Content;
+		$openid    = $this->message->FromUserName;
+
+		if($msg_type == 'text'){
+			$auto_replies = WechatAutoReply::all();
+			foreach ($auto_replies as $auto_reply){
+				if(preg_match("/$auto_reply->regex/",$input_msg)){
+					$matched  = true;
+					$rep_type = $auto_reply->type;
+					$content  = $auto_reply->content;
+					switch ($rep_type){
+						case 0: # 文字
+						case 1: # 图片
+							$reply = preg_replace("/openidvalue/",$openid,$content);
+							break;
+						case 2: # 图文
+							$reply = $this->getNews($openid,$content);
+							break;
+						default:
+							$reply = "";
+							break;
+					}
+					break;
 				}
-				break;
 			}
 		}
 
 		# 本模块能处理的情况下，不考虑其他模块
 		if($matched){
+            Log::info("处理模块: AutoReply");
 			return $reply;
 		}
 
 		# 责任链没有断的情况下，继续向下处理
 		if(!empty($this->successor)){
-			return $this->successor->handle($openid,$message);
+            Log::info('模块[AutoReply]无法处理，传递给下一个模块');
+			return $this->successor->handle();
 		}else{ # 没有下一个处理模块，则返回空串
+            Log::info('模块[AutoReply]是最后一个模块');
 			return "";
 		}
 	}

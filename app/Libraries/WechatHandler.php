@@ -1,13 +1,28 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: zhangxinru
+ * Date: 14/04/2017
+ * Time: 10:55 AM
+ */
+
 namespace App\Libraries;
 
 use App\Models\WechatModuleModel;
 
-abstract class WechatTextHandler{
+abstract class WechatHandler{
 
 	protected $successor;
+	protected $message;
+	protected $app;
 
-	public function setSuccessor(WechatTextHandler $successor){
+	public function __construct($app=NULL,$message=NULL)
+	{
+		$this->app     = $app;
+		$this->message = $message;
+	}
+
+	public function setSuccessor(WechatHandler $successor){
 		$this->successor = $successor;
 	}
 
@@ -16,7 +31,7 @@ abstract class WechatTextHandler{
 	 * @param $message
 	 * @return mixed
 	 */
-	abstract public function handle($openid,$message);
+	abstract public function handle();
 
 	/**
 	 * 每个模块有自己的默认权重，自动加载微信处理模块的时候按照权重形成责任链。
@@ -31,9 +46,10 @@ abstract class WechatTextHandler{
 	abstract public function name();
 
 	/**
+	 * @param $message
 	 * 按照权重的高低组织消息处理链
 	 */
-	public static function getMessageHandler(){
+	public static function getMessageHandler($app,$message){
 
 		$modules       = WechatModuleModel::orderBy('weight','desc')->get();
 		$module_prefix = '\App\Libraries\WechatModules\\';
@@ -43,7 +59,7 @@ abstract class WechatTextHandler{
 
 		foreach ($modules as $module){
 			$module_class = $module_prefix.$module->module;
-			$module_handler = new $module_class();
+			$module_handler = new $module_class($app,$message);
 			if($first){
 				$handler     = $module_handler;
 				$pre_handler = $handler;

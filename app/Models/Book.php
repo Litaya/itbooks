@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Book extends Model
 {
@@ -13,6 +14,13 @@ class Book extends Model
 
 	public function searchableAs(){
 		return 'book_index';
+	}
+
+	public function toSearchableArray()
+	{
+        $array = ['isbn'=>NULL,'name'=>NULL,'product_number'=>NULL,'editor_name'=>NULL,'authors'=>NULL,'img_upload'=>NULL,'kj_url'=>NULL];
+        // `isbn`,`name`,`product_number`,`editor_name`,`authors`,`img_upload`,`kj_url`
+		return $array;
 	}
 
 	protected $fillable = [
@@ -34,7 +42,7 @@ class Book extends Model
 
 	public function scopeOfDepartmentCode($query, $code){
 		return $query->leftJoin('department', 'department.id', '=', 'book.department_id')
-					 ->whereRaw('department.code like \''.$code.'%\'')->select('book.*');
+			->whereRaw('department.code like \''.$code.'%\'')->select('book.*');
 	}
 	// what about editor ?
 }
