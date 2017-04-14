@@ -1,14 +1,16 @@
 <?php
 namespace App\Libraries\WechatModules;
 
-use App\Libraries\WechatTextHandler;
+use App\Libraries\WechatHandler;
 use App\Models\User;
 
-class BookReq extends WechatTextHandler{
-	public function handle($openid, $message)
+class BookReq extends WechatHandler {
+	public function handle()
 	{
+		$openid   = $this->message->FromUserName;
+
 		// 如果有样书
-		if (strstr($message,'样书')){
+		if ($this->canHandle()){
 			$user = User::where('openid',$openid)->first();
 			if(strpos($user->certificate_as,'TEACHER')!==false){
 				$reply = '只有认证的教师才可以申请教材样书（样书会在5个工作日内处理）。\n'.
@@ -25,11 +27,16 @@ class BookReq extends WechatTextHandler{
 
 		# 责任链没有断的情况下，继续向下处理
 		if(!empty($this->successor)){
-			return $this->successor->handle($openid,$message);
+			return $this->successor->handle();
 		}else{ # 没有下一个处理模块，则返回空串
 			return "";
 		}
+	}
 
+	private function canHandle(){
+		if(($this->message->MsgType == 'text' && strstr($this->message->Content,'样书'))||($this->message->MsgType == 'event' && $this->message->Event == 'click' && $this->message->EventKey=='bookreq'))
+			return true;
+		return false;
 	}
 
 	public function name()
