@@ -2,11 +2,6 @@
 @section('title', '图书管理')
 @section('content')
 
-<style>
-
-
-</style>
-
 
 <div class="container">
     <div class="row">
@@ -31,11 +26,11 @@
         <div class="row">
         <table class="table" style="column-width: 10px">
         <thead>
-            <th>ID</th>
-            <th>书名</th>
-            <th>作者</th>
-            <th>ISBN</th>
-            <th>分类</th>
+            <th onclick="orderBy('id')"><label class="unselectable" id="id-label">ID</label></th>
+            <th onclick="orderBy('name')"><label class="unselectable" id="name-label">书名</label></th>
+            <th onclick="orderBy('authors')"><label class="unselectable" id="authors-label">作者</label></th>
+            <th onclick="orderBy('isbn')"><label class="unselectable" id="isbn-label">作者</label></th>
+            <th onclick="orderBy('type')"><label class="unselectable" id="type-label">分类</label></th>
             <th></th>
         </thead>
         <tbody>
@@ -85,5 +80,36 @@ aria-labelledby="import-modal-label">
         </div>
     </div>
 </div>
+
+<script>
+
+var bAsc = true;
+var orderedBy = "";
+var triangleUp = document.createElement('span');
+triangleUp.setAttribute("class", "glyphicon glyphicon-triangle-top");
+var triangleDown = document.createElement('span');
+triangleDown.setAttribute("class", "glyphicon glyphicon-triangle-bottom");
+
+function orderBy(item){
+    if(item != orderedBy){
+        if(orderedBy != ""){
+            var old_label = document.getElementById(orderedBy+"-label");
+            old_label.parentElement.removeChild(bAsc ? triangleUp : triangleDown);
+        }
+        var new_label = document.getElementById(item + "-label");
+        new_label.parentElement.appendChild(triangleUp);
+        
+        orderedBy = item;
+        bAsc = true;
+    }
+    else{
+        var label = document.getElementById(orderedBy+"-label");
+        label.parentElement.removeChild(bAsc ? triangleUp : triangleDown);
+        bAsc = !bAsc;
+        label.parentElement.appendChild(bAsc ? triangleUp : triangleDown);
+    }
+}
+
+</script>
 
 @endsection
