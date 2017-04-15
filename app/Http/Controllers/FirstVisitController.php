@@ -25,7 +25,10 @@ class FirstVisitController extends Controller
     public function postSaveBasic(Request $request){
         // save basic
         Session::flash("last-picked-role", $request->role);
-        
+
+        $this->validate($request, [
+            "role" => "required"
+        ]);
 
         if($request->role == "teacher") {
             $this->validate($request, [
@@ -83,9 +86,9 @@ class FirstVisitController extends Controller
             $info->role = $request->role;
             $info->email = $request->email;
             $info->realname = $request->realname;
-            $info->json_content = json_encode($jdata);
             $jdata['school'] = $request->school;
             $jdata['department'] = $request->department;
+            $info->json_content = json_encode($jdata);
 
             UserInfoController::update_user_info($info);
 
@@ -128,6 +131,11 @@ class FirstVisitController extends Controller
 
         $user = Auth::user();
         $info = UserInfoController::get_user_info($user);
+        if($info->role != "teacher"){
+            Session::flash('warning', "您的角色选择未成功，请稍候在个人信息页中补全");
+            redirect()->route("register.welcome")->withRole("teacher");
+        }
+
         $info->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
         UserInfoController::update_user_info($info);
         

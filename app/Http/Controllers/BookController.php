@@ -79,7 +79,7 @@ class BookController extends Controller
     public function getBooksBySearch(Request $request,$search_string){
 	    $books = Book::where('isbn','like',"%$search_string%")
 		    ->orWhere('name','like',"%$search_string%")
-		    ->orWhere("authors","like","%$search_string%")->where('type','1')->paginate(5);
+		    ->orWhere("authors","like","%$search_string%")->paginate(5);
 	    return \GuzzleHttp\json_encode($books);
     }
 
@@ -87,9 +87,8 @@ class BookController extends Controller
      * for api
      */
     public function getTeachingMaterialsBySearch(Request $request,$search_string){
-	    $books = Book::where('isbn','like',"%$search_string%")
-		    ->orWhere('name','like',"%$search_string%")
-		    ->orWhere("authors","like","%$search_string%")->where('type','1')->paginate(5);
+	    $books = Book::whereRaw("type = 1 and ((isbn like '%$search_string%') or (name like '%$search_string%') or (authors like '%$search_string%'))")
+		        ->paginate(5);
 	    return \GuzzleHttp\json_encode($books);
     }
 
