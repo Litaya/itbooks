@@ -58,78 +58,89 @@ class BookController extends Controller
             foreach($kj_url_list as $kj_url)
                 if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; $info_changed = true; break; }
         }
-        // if($info_changed) $book->update(); // got error 'Driver [mysql] is not supported'
+		// if($info_changed) $book->update(); // got error 'Driver [mysql] is not supported'
 
-        if(!empty($book->kj_url)) $book->kj_url = route("navigate", ["url"=>$book->kj_url]);
-        
-        $like = NULL; $read = NULL;
-        if(Auth::check()) {
-            $like = DB::select('select id from user_like_book where user_id = ? and book_id = ?', [Auth::id(), $book->id]);
-            $like = count($like) > 0;
-            $read = DB::select('select id from user_read_book where user_id = ? and book_id = ?', [Auth::id(), $book->id]);
-            $read = count($read) > 0;
-        }
+		if(!empty($book->kj_url)) $book->kj_url = route("navigate", ["url"=>$book->kj_url]);
 
-        return view("book.show")->withBook($book)->withUserlike($like)->withUserread($read);
+		$like = NULL; $read = NULL;
+		if(Auth::check()) {
+			$like = DB::select('select id from user_like_book where user_id = ? and book_id = ?', [Auth::id(), $book->id]);
+			$like = count($like) > 0;
+			$read = DB::select('select id from user_read_book where user_id = ? and book_id = ?', [Auth::id(), $book->id]);
+			$read = count($read) > 0;
+		}
+
+		return view("book.show")->withBook($book)->withUserlike($like)->withUserread($read);
+	}
+
+	/*
+	 * for api
+	 */
+	public function getBooksBySearch(Request $request,$search_string){
+		$books = Book::where('type',1)->where(function($query){
+				$query->where('isbn','like',"%$search_string%")
+				->orWhere('name','like',"%$search_string%")
+				->orWhere("authors","like","%$search_string%");
+				})->paginate(5);
+		return \GuzzleHttp\json_encode($books);
+	}
+
+    public function getTeachingBookBySearch(Request $request,$search_string){
+        $books = Book::where('type',1)->where(function($query){
+                $query->where('isbn','like',"%$search_string%")
+                ->orWhere('name','like',"%$search_string%")
+                ->orWhere("authors","like","%$search_string%");
+                })->paginate(5);
+        return \GuzzleHttp\json_encode($books);
     }
 
-    /*
-     * for api
-     */
-    public function getBooksBySearch(Request $request,$search_string){
-	    $books = Book::where('isbn','like',"%$search_string%")
-		    ->orWhere('name','like',"%$search_string%")
-		    ->orWhere("authors","like","%$search_string%")->paginate(5);
-	    return \GuzzleHttp\json_encode($books);
-    }
+	/*
+	 * for api
+	 */
+	public function getTeachingMaterialsBySearch(Request $request,$search_string){
+		$books = Book::whereRaw("type = 1 and ((isbn like '%$search_string%') or (name like '%$search_string%') or (authors like '%$search_string%'))")
+			->paginate(5);
+		return \GuzzleHttp\json_encode($books);
+	}
 
-    /*
-     * for api
-     */
-    public function getTeachingMaterialsBySearch(Request $request,$search_string){
-	    $books = Book::whereRaw("type = 1 and ((isbn like '%$search_string%') or (name like '%$search_string%') or (authors like '%$search_string%'))")
-		        ->paginate(5);
-	    return \GuzzleHttp\json_encode($books);
-    }
+	public function updateKejian($id){
+		if(!Auth::check()){
+			return 'denied';
+		}
 
-    public function updateKejian($id){
-        if(!Auth::check()){
-            return 'denied';
-        }
+		$book = Book::find($id);
+		$kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",
+			"http://www.tup.com.cn/upload/books/kj/".$book->product_number.".zip"];
+		$real_url = null;
+		$old_url = $book->kj_url;
+		foreach($kj_url_list as $kj_url) if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
+		if($book->kj_url != $old_url) {  
+			$book->update();
+			Session::flash('success', '找到并更新了配套课件');
+		}
+		elseif($real_url === null)
+			Session::flash('warning', '社网上找不到本书的配套课件');
+		elseif($real_url == $old_url)
+			Session::flash('warning', '当前课件链接已经是最新的');
 
-        $book = Book::find($id);
-        $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",
-                        "http://www.tup.com.cn/upload/books/kj/".$book->product_number.".zip"];
-        $real_url = null;
-        $old_url = $book->kj_url;
-        foreach($kj_url_list as $kj_url) if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
-        if($book->kj_url != $old_url) {  
-            $book->update();
-            Session::flash('success', '找到并更新了配套课件');
-        }
-        elseif($real_url === null)
-            Session::flash('warning', '社网上找不到本书的配套课件');
-        elseif($real_url == $old_url)
-            Session::flash('warning', '当前课件链接已经是最新的');
+		return 'success';
+	}
 
-        return 'success';
-    }
+	// getSearch
+	public function search(Request $request){
+		$search = $request->search;
+		$books = Book::where('name', 'like', "%$search%")->orWhere('authors', 'liek', "%$search%")->paginate(10);
+		return view("book.search")->withBooks($books);
+	}
 
-    // getSearch
-    public function search(Request $request){
-        $search = $request->search;
-        $books = Book::where('name', 'like', "%$search%")->orWhere('authors', 'liek', "%$search%")->paginate(10);
-        return view("book.search")->withBooks($books);
-    }
-
-    private function grabImages(&$books){
-        for($i=0;$i<count($books);$i++) {
-            if(empty($books[$i]->img_upload)){
-                $books[$i]->img_upload = asset('test_images/book_empty.jpg');
-                $imurl = "http://www.tup.com.cn/upload/bigbookimg/".$books[$i]->product_number.".jpg";
-                if(CrossDomainHelper::url_exists($imurl, $imurl)){ $books[$i]->img_upload = $imurl; $info_changed = true; }
-            }
-        }
-    }
+	private function grabImages(&$books){
+		for($i=0;$i<count($books);$i++) {
+			if(empty($books[$i]->img_upload)){
+				$books[$i]->img_upload = asset('test_images/book_empty.jpg');
+				$imurl = "http://www.tup.com.cn/upload/bigbookimg/".$books[$i]->product_number.".jpg";
+				if(CrossDomainHelper::url_exists($imurl, $imurl)){ $books[$i]->img_upload = $imurl; $info_changed = true; }
+			}
+		}
+	}
 
 }
