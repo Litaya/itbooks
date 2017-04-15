@@ -84,7 +84,7 @@
                         @endif
                         &nbsp;&nbsp;
                         <small><a href="javascript:void(0)" style="color:red"
-                            onclick="drop_material('{{ route("admin.material.drop",$material->id) }}')"><i class="fa fa-times"></i> 删除文章</a></small>
+                                  onclick="drop_material('{{ route("admin.material.drop",$material->id) }}')"><i class="fa fa-times"></i> 删除文章</a></small>
                     </span>
                 </p>
                 <small>{{ $material->digest }}</small><br>
@@ -113,28 +113,22 @@
     <script type="text/javascript">
         function syncNews(url) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var start_time = Date.parse($("#start_datetime").val());
-            var end_time   = Date.parse($("#end_datetime").val());
-            if(start_time > end_time){
-                alert("起始时间不能晚于结束时间");
-            }else{
-                $("#btn-sync").attr('disabled','disabled');
-                $("#btn-sync").html('正在同步...');
-                $.ajax({
-                    method:'post',
-                    url:url,
-                    data: {
-                        _token: CSRF_TOKEN,
-                        start_time: start_time,
-                        end_time: end_time
-                    },
-                    success:function () {
-                        $("#btn-sync").removeAttr('disabled');
-                        $("#btn-sync").html('同步列表');
-                        location.reload();
-                    }
-                });
-            }
+            $("#btn-sync").attr('disabled','disabled');
+            $("#btn-sync").html('正在同步...');
+            $.ajax({
+                method:'post',
+                url:url,
+                data: {
+                    _token: CSRF_TOKEN,
+                    start_time: $("#start_datetime").val(),
+                    end_time: $("#end_datetime").val()
+                },
+                success:function () {
+                    $("#btn-sync").removeAttr('disabled');
+                    $("#btn-sync").html('同步列表');
+                    location.reload();
+                }
+            });
         }
 
         ;(function($){

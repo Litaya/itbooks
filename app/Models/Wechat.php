@@ -162,9 +162,8 @@ class Wechat
 	}
 
 	public function storeWechatNewsToDBbyTime($start_time, $end_time){
-        Log::info("start: $start_time...... end: $end_time");
-        $start_time = intval(substr($start_time,0,10));
-        $end_time   = intval(substr($end_time,0,10));
+        $start_time = strtotime($start_time);
+        $end_time   = strtotime($end_time);
 
 #        Log::info("start: $start_time...... end: $end_time");
 		$this->storeWechatImagesToDB(); // 先将所有的图片素材存库
