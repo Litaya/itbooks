@@ -201,7 +201,12 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::post('/{id}/set_display','Wechat\WechatMaterialAdminController@set_display')->name('admin.material.set_display');
 		Route::post('/{id}/drop','Wechat\WechatMaterialAdminController@drop')->name('admin.material.drop');
 	});
-}); // end admin
+
+	Route::group(['prefix'=>'wechat'], function() {
+		Route::get('/','Admin\Wechat\WechatController@index')->name('admin.wechat.index');
+		Route::post('/module/update_status','Admin\Wechat\WechatModuleController@changeModuleStatus')->name('admin.wechat.module.changestatus');
+	});
+	}); // end admin
 
 Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
 	Route::get('/',"UserController@index")->name('user.index');
