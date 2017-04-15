@@ -170,12 +170,16 @@ class Wechat
 			$lists = $this->getMaterialLists('news',$offset,$count);
 			$news  = $lists['item'];
 
-			$flag = false; # 标志是否结束
 			# 对于获取到的素材列表中的每一条素材
-            $update_time    = time();
+            $smallest = time()+7200;
+            $largest  = 0;
 			foreach ($news as $new){
 				$media_id    = $new['media_id'];
 				$update_time = intval($new['update_time']);
+
+				# 更新本次获取的列表中的最大、最小时间.
+				if($smallest > $update_time) $smallest = $update_time;
+				if($largest  < $update_time) $largest  = $update_time;
 
 				# 如果本条时间不在目标时间内，跳过
 				if($update_time > $end_time || $update_time < $start_time) {
@@ -209,9 +213,10 @@ class Wechat
 					$news_sum += 1;
 				}
 			}
-            if($update_time < $end_time){
+
+			# 如果本次更新的最晚时间早于时间段的开始端，或者本次更新的最早时间大于时间段的结束端，则更新
+			if($largest < $start_time || $smallest > $end_time)
                 break;
-            }
 			$offset += $count;
 		}
 		return $news_sum;
