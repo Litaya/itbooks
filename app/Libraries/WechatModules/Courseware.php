@@ -3,6 +3,7 @@
 namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatHandler;
+use App\Models\Book;
 use Illuminate\Support\Facades\Log;
 
 class Courseware extends WechatHandler{
@@ -17,22 +18,41 @@ class Courseware extends WechatHandler{
 				if($content_arr[0] == '课件'){
 					$isbn   = $content_arr[1];
 					$book   = Book::where('isbn','like',"%$isbn")->first();
+					if(empty($book)){
+						Log::info('处理模块：Courseware');
+						return '该书不存在，如果有问题请在后台联系管理员';
+					}
 					$code   = $book->department->code;
 					$kj_url = \App\Models\Courseware::getCourseware($book->id);
+					if(empty($kj_url)){
+						Log::info('处理模块：Courseware');
+						return '本书没有课件';
+					}
 					$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
+					Log::info('处理模块：Courseware');
 					return "课件下载地址：$kj_url \n 课件密码：$pass";
 				}
 				if($content_arr[0] == '密码'){
 					$isbn   = $content_arr[1];
 					$book   = Book::where('isbn','like',"%$isbn")->first();
+					if(empty($book)) {
+						Log::info('处理模块：Courseware');
+						return '该书不存在，如果有问题请在后台联系管理员';
+					}
 					$code   = $book->department->code;
+					$kj_url = \App\Models\Courseware::getCourseware($book->id);
+					if(empty($kj_url)){
+						Log::info('处理模块：Courseware'); 
+						return '本书没有课件';
+					}
 					$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
+					Log::info('处理模块：Courseware');		
 					return "课件密码：$pass";
 				}
 			}
 		}
 
-		# 责任链没有断的情况下，继续向下处理
+# 责任链没有断的情况下，继续向下处理
 		if(!empty($this->successor)){
 			Log::info('模块['.$this->name().']无法处理，传递给下一个模块');
 			return $this->successor->handle();

@@ -24,9 +24,6 @@ class Courseware
 		if(substr($book->department->code,0,3) == '804'){
 			return 'http://www.tupwk.com.cn/downpage/index.asp';
 		}
-		if($book->kj_url === null){
-			return '本书没有课件';
-		}
 		return $book->kj_url;
 	}
 
