@@ -162,8 +162,11 @@ class Wechat
 	}
 
 	public function storeWechatNewsToDBbyTime($start_time, $end_time){
+        Log::info("start: $start_time...... end: $end_time");
         $start_time = intval(substr($start_time,0,10));
         $end_time   = intval(substr($end_time,0,10));
+
+#        Log::info("start: $start_time...... end: $end_time");
 		$this->storeWechatImagesToDB(); // 先将所有的图片素材存库
 		$offset = 0; $count = 20; $news_sum = 0;
 		while (1){
@@ -176,6 +179,8 @@ class Wechat
 			foreach ($news as $new){
 				$media_id    = $new['media_id'];
 				$update_time = intval($new['update_time']);
+
+                #Log::info("start: $start_time...... end: $end_time........update_time:$update_time");
 
 				# 更新本次获取的列表中的最大、最小时间.
 				if($smallest > $update_time) $smallest = $update_time;
