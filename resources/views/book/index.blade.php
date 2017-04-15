@@ -64,7 +64,7 @@
                 定价: {{$topbooks[0]->price}}<br>
                 <br>
                 <p><small>{{$topbooks[0]->description}}</small></p>
-                <small>
+                </small>
             </div>
         </div>
         @endif

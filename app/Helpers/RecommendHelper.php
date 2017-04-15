@@ -17,7 +17,7 @@ class RecommendHelper {
     }
 
     public static function getNewBooks($limit=4){
-        $books = Book::orderBy('created_at', 'desc')->limit($limit)->get();
+        $books = Book::orderBy('publish_time', 'desc')->limit($limit)->get();
         return $books;
     }
 
