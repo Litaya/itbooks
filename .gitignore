@@ -13,3 +13,4 @@ Homestead.yaml
 /.env
 *.swp
 *.DS_Store
+/public/D:\\Code\\itbooks\\storage\\logs\\userbehavior.log
