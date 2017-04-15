@@ -36,8 +36,7 @@ class BookController extends Controller
 
         else{
             $search = $request->search;
-            $books = Book::where('name','like',"%$search%")->orWhere('authors','like',"%$search%")->orWhere('isbn','like',"%$search%")->paginate(10);
-            #$books = Book::search($search)->paginate(10);
+            $books = Book::search($search)->paginate(10);
             return view("book.search")->withBooks($books);
         }
     }

@@ -44,5 +44,9 @@ class Book extends Model
 		return $query->leftJoin('department', 'department.id', '=', 'book.department_id')
 			->whereRaw('department.code like \''.$code.'%\'')->select('book.*');
 	}
-	// what about editor ?
+
+	public static function search($search){
+		$books = Book::where('name','like',"%$search%")->orWhere('authors','like',"%$search%")->orWhere('isbn','like',"%$search%")->orderBy('weight','desc')->orderBy('publish_time','desc');
+		return $books;
+	}
 }
