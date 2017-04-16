@@ -4,6 +4,8 @@ namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatHandler;
 use App\Models\Book;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class Courseware extends WechatHandler{
@@ -14,6 +16,15 @@ class Courseware extends WechatHandler{
 			$content = $this->message->Content;
 			$content = trim($content);
 			if(preg_match("/[^#]+#[0-9]+/",$content)) {
+
+				$openid = $this->message->FromUserName;
+				$user   = User::where('openid',$openid)->first();
+				$user_info = $user->user_info;
+				if(empty($user_info) || empty($user_info->role)){
+					Log::info('处理模块: Course');
+					return "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
+				}
+
 				$content_arr = explode('#',$content);
 				if($content_arr[0] == '课件'){
 					$isbn   = $content_arr[1];
