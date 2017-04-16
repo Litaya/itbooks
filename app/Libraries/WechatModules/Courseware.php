@@ -68,7 +68,7 @@ class Courseware extends WechatHandler{
 							}
 						}
 					}
-					$reply = $reply."\n<a href='".$book_url."'>更多图书资源</a>";
+					$reply = $reply."\n<a href='".$book_url."'>查看更多图书资源</a>";
 				}
 			}
 		}
