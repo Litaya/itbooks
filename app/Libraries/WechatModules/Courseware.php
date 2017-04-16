@@ -5,6 +5,7 @@ namespace App\Libraries\WechatModules;
 use App\Libraries\WechatHandler;
 use App\Models\Book;
 use App\Models\User;
+use App\Models\UserInfo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +20,7 @@ class Courseware extends WechatHandler{
 
 				$openid = $this->message->FromUserName;
 				$user   = User::where('openid',$openid)->first();
-				$user_info = $user->user_info;
+				$user_info = UserInfo::where('user_id',$user->id)->first();
 				if(empty($user_info) || empty($user_info->role)){
 					Log::info('处理模块: Course');
 					return "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
