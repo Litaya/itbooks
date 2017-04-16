@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Log;
 class Courseware extends WechatHandler{
 	public function handle()
 	{
+
 		$msg_type = $this->message->MsgType;
+		$match    = false;
+		$reply    = "";
 		if($msg_type == 'text'){
 			$content = $this->message->Content;
 			$content = trim($content);
@@ -22,46 +25,62 @@ class Courseware extends WechatHandler{
 				$user   = User::where('openid',$openid)->first();
 				$user_info = UserInfo::where('user_id',$user->id)->first();
 				if(empty($user_info) || empty($user_info->role)){
-					Log::info('处理模块: Course');
-					return "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
+					$match = true;
+					$reply = "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
 				}
 
 				$content_arr = explode('#',$content);
-				if($content_arr[0] == '课件'){
+				if(!$match && $content_arr[0] == '课件'){
 					$isbn   = $content_arr[1];
 					$book   = Book::where('isbn','like',"%$isbn")->first();
-					if(empty($book)){
-						Log::info('处理模块：Courseware');
-						return '该书不存在，如果有问题请在后台联系管理员';
+					$book_url = url('/home')."?openid=$openid";					
+
+					if(!$match && empty($book)){
+						$match = true;
+						$reply = "该书不存在，如果有问题请在后台联系管理员\n<a href='".$book_url."'>更多图书资源</a>";
 					}
-					$code   = $book->department->code;
-					$kj_url = \App\Models\Courseware::getCourseware($book->id);
-					if(empty($kj_url)){
-						Log::info('处理模块：Courseware');
-						return '本书没有课件';
+
+					if(!empty($book) && !$match && empty($kj_url)){
+						$code   = $book->department->code;
+						$kj_url = \App\Models\Courseware::getCourseware($book->id);				
+						$match = true;
+						$reply = "本书没有课件\n<a href='".$book_url."'>更多图书资源</a>";
 					}
-					$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
-					Log::info('处理模块：Courseware');
-					return "课件下载地址：$kj_url \n 课件密码：$pass";
+					if(!$match){
+						$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
+						$match = true;
+						$reply = "课件下载地址：$kj_url \n 课件密码：$pass\n<a href='".$book_url."'>更多图书资源</a>";
+					}
 				}
+
 				if($content_arr[0] == '密码'){
 					$isbn   = $content_arr[1];
 					$book   = Book::where('isbn','like',"%$isbn")->first();
-					if(empty($book)) {
-						Log::info('处理模块：Courseware');
+					if(!$match && empty($book)) {
+						$match = true;
+						$reply = '该书不存在，如果有问题请在后台联系管理员'."\n<a href='".$book_url."'>更多图书资源</a>";
 						return '该书不存在，如果有问题请在后台联系管理员';
 					}
+
 					$code   = $book->department->code;
 					$kj_url = \App\Models\Courseware::getCourseware($book->id);
-					if(empty($kj_url)){
-						Log::info('处理模块：Courseware'); 
-						return '本书没有课件';
+					if(!$match && empty($kj_url)){
+						$match = true;
+						$reply ='本书没有课件'."\n<a href='".$book_url."'>更多图书资源</a>";
 					}
-					$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
-					Log::info('处理模块：Courseware');		
-					return "课件密码：$pass";
+
+					if(!$match){
+						$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
+						$match = true;
+						$reply = "课件密码：$pass\n<a href='".$book_url."'>更多图书资源</a>";
+					}
 				}
 			}
+		}
+
+		if($match){
+			Log::info("处理模块：Courseware");
+			return $reply;
 		}
 
 # 责任链没有断的情况下，继续向下处理
