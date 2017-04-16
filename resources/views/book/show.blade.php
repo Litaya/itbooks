@@ -175,7 +175,7 @@ function downloadCourseware(book_id) {
             book_id: book_id
         },
         success:function () {
-            $("#downloadcw").attr('href',"javascript:void(0)").removeAttr("onclick").html("已将课件地址、解压密码发送到公众号聊天窗口<br/>");
+            $("#downloadcw").attr('href',"javascript:void(0)").removeAttr("onclick").css('color','#999').html("已将课件地址、解压密码发送到公众号聊天窗口<br/>");
         },
         error:function () {
             $("#downloadcw").html("下载失败，点击重试<br/>");
