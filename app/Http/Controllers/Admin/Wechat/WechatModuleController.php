@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 
 class WechatModuleController extends Controller
 {
-    public function index(){}
+    public function index(){
+	    $wechat_modules      = WechatModuleModel::orderBy('weight','desc')->get();
+	    return view('admin.wechat.wechat_module',compact('wechat_modules'));
+    }
 
     public function changeModuleStatus(Request $request){
     	$this->validate($request,[
