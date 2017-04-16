@@ -13,6 +13,9 @@
     @if(in_array('MATERIAL',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/material')?'sidebar-active':''}}"><a href="{{ route('admin.material.index') }}"> <i class="fa fa-university push"></i>微信文章</a></li>
     @endif
+    @if(in_array('MATERIAL',\App\Libraries\PermissionManager::getAdminModules()))
+        <li class="{{Request::is('admin/wechat')?'sidebar-active':''}}"><a href="{{ route('admin.wechat.index') }}"> <i class="fa fa-weixin push"></i>微信后台</a></li>
+    @endif
     @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
         <li class="{{Request::is('admin/resource')?'sidebar-active':''}}"><a href="{{ route('admin.resource.index') }}"> <i class="fa fa-briefcase push"></i>资源管理</a></li>
     @endif
@@ -20,13 +23,13 @@
         <li class="{{Request::is('admin/conference')?'sidebar-active':''}}"><a href="{{ route('admin.conference.index') }}"> <i class="fa fa-street-view push"></i>会议管理</a></li>
     @endif
     @if(in_array(PM::getAdminRole(), ["SUPERADMIN"]))
-    <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user push"></i>用户管理</a>
-          <ul class="dropdown-menu">
-            <li class="{{Request::is('admin/user')?'sidebar-active':''}}"><a href="{{ route('admin.user.index') }}">普通用户</a></li>
-            <li class="{{Request::is('admin/admin')?'sidebar-active':''}}"><a href="{{ route('admin.admin.index') }}">管理员</a></li>
-          </ul>
-    </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user push"></i>用户管理</a>
+            <ul class="dropdown-menu">
+                <li class="{{Request::is('admin/user')?'sidebar-active':''}}"><a href="{{ route('admin.user.index') }}">普通用户</a></li>
+                <li class="{{Request::is('admin/admin')?'sidebar-active':''}}"><a href="{{ route('admin.admin.index') }}">管理员</a></li>
+            </ul>
+        </li>
     @else
         @if(in_array(PM::getAdminRole(), ["IMPOSSIBLE"]))
             <li class="{{Request::is('admin/user')?'sidebar-active':''}}"><a href="{{ route('admin.user.index') }}"> <i class="fa fa-user push"></i>用户管理</a></li>

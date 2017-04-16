@@ -18,8 +18,8 @@
             <h4><a href="{{ route('admin.wechat.index') }}"><i class="fa fa-weixin push"></i>微信管理</a></h4>
             <hr>
             <ul>
-                <li><a href="#">功能模块</a></li>
-                <li><a href="#">自定义回复</a></li>
+                <li><a href="{{ route('admin.wechat.module.index') }}">功能模块</a></li>
+                <li><a href="{{ route('admin.wechat.auto_reply.index') }}">自定义回复</a></li>
             </ul>
         </div>
         <div class="col-lg-10" id="wechat_content">
