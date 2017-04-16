@@ -69,6 +69,7 @@ Route::group(["prefix"=>"book"], function(){
 	Route::get("/", "BookController@index")->name("book.index");
 	Route::get("{id}", "BookController@show")->name("book.show");
 	Route::get('{id}/updatekj', 'BookController@updateKejian')->name('book.updatekj');
+	Route::post('/downloadcw', 'BookController@downloadCourseWare')->name('book.downloadcw');
 	// Route::get('search', 'BookController@search')->name('book.search');
 });
 
