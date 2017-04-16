@@ -46,7 +46,7 @@ class Courseware extends WechatHandler{
 							}else{
 								$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
 								$match = true;
-								$reply = "课件下载地址：$kj_url \n 课件密码：$pass";
+								$reply = "课件下载地址：$kj_url \n课件密码：$pass";
 							}
 						}
 					} else if($content_arr[0] == '密码'){
