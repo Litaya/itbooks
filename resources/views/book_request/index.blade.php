@@ -17,7 +17,7 @@
             <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
             </ul>
             @if(strpos($user->certificate_as, "TEACHER") !== false)
-            <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书</small></p>
+            <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书（教师每年最多只能申请10本样书）</small></p>
             @elseif(strpos($user->certificate_as, "AUTHOR") !== false)
             <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->author->book_limit }}</span>&nbsp;本书</small></p>
             @endif
