@@ -81,7 +81,11 @@
                 <a href="javascript:updateKjUrl();">扫描课件变更</a></p>
             @endif
             <!-- if the book is open to reservations, and the user has enough privilege -->
+            @if(Auth::check())
             <a href="{{route('bookreq.record')}}"><button class="btn btn-primary btn-xs">申请样书</button></a>
+            @else
+            <a href="https://itbook.kuaizhan.com/39/60/p332015340738c5"><button class="btn btn-primary btn-xs">申请样书</button></a>
+            @endif
             <!-- end if -->
             <a href="{{route('home')}}"><button class="btn btn-default btn-xs">返回首页</button></a>
         </div>
