@@ -15,7 +15,7 @@
                 @if(!empty($material->content_source_url))
                     <a href="{{ $material->content_source_url }}">阅读原文</a>&nbsp;&nbsp;
                 @endif
-                {{-- 阅读: {{ $material->reading_quantity }}&nbsp;&nbsp;评论: 0 --}}
+                 阅读: {{ $material->reading_quantity }}&nbsp;&nbsp;评论: 0
             </p>
         </div>
     </div>

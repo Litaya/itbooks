@@ -201,6 +201,8 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::post('/sync','Wechat\WechatMaterialAdminController@sync')->name('admin.material.sync');
 		Route::post('/{id}/set_display','Wechat\WechatMaterialAdminController@set_display')->name('admin.material.set_display');
 		Route::post('/{id}/drop','Wechat\WechatMaterialAdminController@drop')->name('admin.material.drop');
+		Route::post('/update_cate','Wechat\WechatMaterialAdminController@updateCategory')->name('admin.material.update_cate');
+
 	});
 
 	Route::group(['prefix'=>'wechat'], function() {
@@ -212,7 +214,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
 		Route::get('/module','Admin\Wechat\WechatModuleController@index')->name('admin.wechat.module.index');
 	});
-	}); // end admin
+}); // end admin
 
 Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
 	Route::get('/',"UserController@index")->name('user.index');
@@ -240,4 +242,8 @@ Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
 	Route::get('/','Wechat\WechatMaterialController@index')->name('material.index');
 	Route::get('/search','Wechat\WechatMaterialController@search')->name('material.search');
 	Route::get("/{id}/",'Wechat\WechatMaterialController@show')->name('material.show');
+});
+
+Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
+	Route::post('/create','CategoryController@create')->name('category.create');
 });

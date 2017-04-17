@@ -10,7 +10,8 @@ class Label extends Model
 
 	protected $fillable = [
 		'id',
-		'name'
+		'name',
+		'user_id'
 	];
 
 	public function materials(){
