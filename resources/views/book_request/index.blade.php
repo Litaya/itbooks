@@ -121,7 +121,7 @@
 
         function checkNum(x){
             var i = parseInt($("#books_num").html());
-            if(i+x < 0 || i+x > 10) return false;
+            if(i+x < 0) return false;
             return true;
         }
     </script>
