@@ -15,9 +15,9 @@
             </div>
             
             @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
-            <div class="col-md-4 pull-right">
-            <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn-default">导出快递打印单</button></a>
-            <a href="{{route('admin.bookreq.export.book')}}"><button class="btn-default">导出库房发书单</button></a>
+            <div class="col-md-4 col-md-offset-4">
+                <a href="{{route('admin.bookreq.export.book')}}"><button class="btn-default move-right">导出库房发书单</button></a>
+                <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn-default move-right">导出快递打印单</button></a>
             </div>
             @endif
             <!-- END SEARCH BAR -->
@@ -27,11 +27,16 @@
                 <table class="table"> 
                 <thead>
                     <tr>
-                        <th style="width: 10%">用户名</th>
-                        <th style="width: 25%">书名</th>   
-                        <th>状态</th>
+                        <th width="6%">用户</th>
+                        <th>书名</th>
+                        <th>ISBN</th>
+                        <th>作者</th>
+                        <th width="6%">编辑</th>
+                        <th width="8%">所属分社</th>
+                        <th width="8%">申请时间</th>
+                        <th width="6%">状态</th>
                         <th>留言</th>
-                        <th style="width: 20%"></th>
+                        <th style="width: 18%">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,6 +44,11 @@
                     <tr>
                         <td>{{$bookreq->user->username}}</td>
                         <td>{{$bookreq->book->name}}</td>
+                        <td>{{$bookreq->book->isbn}}</td>
+                        <td>{{$bookreq->book->authors}}</td>
+                        <td>{{$bookreq->book->editor}}</td>
+                        <td>{{$bookreq->book->department->name}}</td>
+                        <td>{{$bookreq->created_at}}</td>
                         <td>{{$bookreq->status==0?"待审核":($bookreq->status==1?"通过":"未通过")}}</td>
                         @if(!empty(json_decode($bookreq->message)))
                         <td>{{mb_strlen(json_decode($bookreq->message)->remarks)>30?mb_substr(json_decode($bookreq->message)->remarks, 0, 27)."...":json_decode($bookreq->message)->remarks}}</td>
@@ -47,7 +57,7 @@
                         @endif
                         <td>
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-xs-2 col-md-2">
                                 <a href="{{route('admin.bookreq.show', $bookreq->id)}}">
                                     <button class="btn btn-primary btn-xs">详情</button>
                                 </a>
@@ -55,13 +65,13 @@
                             <!-- IF HAS PASS PERMISSION -->
                         @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
                             @if($bookreq->status==0)
-                            <div class="col-md-2">
+                            <div class="col-xs-2 col-md-2">
                                 {!! Form::open(['route'=>['admin.bookreq.pass', $bookreq->id], 'method'=>'POST']) !!}
                                 {!! Form::submit('通过', ['class'=>'btn btn-success btn-xs']) !!}
                                 {!! Form::close() !!}
                             </div>
                             <!-- END IF HAS PASS PERMISSION -->
-                            <div class="col-md-2">
+                            <div class="col-xs-2 col-md-2">
                             <button type="button"
                                     class="btn btn-danger btn-xs"
                                     data-toggle="modal"
