@@ -20,45 +20,35 @@ class BookRequestAdminController extends Controller
         $this->middleware('auth');  // TODO: change to admin later
     }
 
-    public function getIndex(Request $request){
-
-        $ar = PM::getAdminRole();
-        
-        if($request->search){
-            $search = $request->search;
+    public static function getSearchResultBuilder($search, $ar, $spec_code){
+        if($search != NULL){
             switch($ar){
                 case "SUPERADMIN":
                     $bookreqs = BookRequest::join('user', 'book_request.user_id', '=', 'user.id')
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%")
-                                            ->orderBy('id', 'desc')
-                                            ->paginate(20, ['book_request.*']);
+                                            ->orWhere('book.name', 'like', "%$search%");
                     break;
 
                 case "DEPTADMIN":
-                    $code = PM::getAdminDepartmentCode();
+                    $code = $spec_code;
                     $bookreqs = BookRequest::ofDepartmentCode($code)
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%")
-                                            ->orderBy('id', 'desc')
-                                            ->paginate(20, ['book_request.*']);
+                                            ->orWhere('book.name', 'like', "%$search%");
                     break;
                 
                 case "EDITOR": // currently unknown
                     break;
                 
                 case "REPRESENTATIVE":
-                    $prov_id = PM::getAdminDistrict();
+                    $prov_id = $spec_code;
                     $bookreqs = BookRequest::ofDistrict($prov_id)
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%")
-                                            ->orderBy('id', 'desc')
-                                            ->paginate(20, ['book_request.*']);
+                                            ->orWhere('book.name', 'like', "%$search%");
                     break;
 
                 default: // reaching here should cause an error
@@ -66,26 +56,41 @@ class BookRequestAdminController extends Controller
             }
 
         }
-
         else {
             switch($ar){
                 case "SUPERADMIN":
-                    $bookreqs = BookRequest::orderBy('id', 'desc')->paginate(20);
+                    $bookreqs = BookRequest::query();
                     break;
                 case "DEPTADMIN":
-                    $code = PM::getAdminDepartmentCode();
-                    $bookreqs = BookRequest::ofDepartmentCode($code)->orderBy('id', 'desc')->paginate(20, ['book_request.*']);
+                    $code = $spec_code;
+                    $bookreqs = BookRequest::ofDepartmentCode($code);
                     break;
                 case "EDITOR": // unknown
                     break;
                 case "REPRESENTATIVE":
-                    $prov_id = PM::getAdminDistrict();
-                    $bookreqs = BookRequest::ofDistrict($prov_id)->orderBy('id', 'desc')->paginate(20, ['book_request.*']);
+                    $prov_id = $spec_code;
+                    $bookreqs = BookRequest::ofDistrict($prov_id);
                     break;
                 default: // error
                     break;
             }
         }
+
+        return $bookreqs;
+    }
+
+    public function getIndex(Request $request){
+
+        $search = $request->get('search');
+        $ar = PM::getAdminRole();
+        $code = "";
+        if($ar == "DEPTADMIN") 
+            $code = PM::getAdminDepartmentCode();
+        else if($ar == "REPRESENTATIVE") 
+            $code = PM::getAdminDistrict();
+
+        $req_builder = self::getSearchResultBuilder($search, $ar, $code);
+        $bookreqs = $req_builder->orderBy('book_request.id', 'desc')->paginate(20);
 
         return view('admin.book_request.index')->withBookreqs($bookreqs);
     }
