@@ -53,6 +53,7 @@
                                 </a>
                             </div>
                             <!-- IF HAS PASS PERMISSION -->
+                        @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
                             @if($bookreq->status==0)
                             <div class="col-md-2">
                                 {!! Form::open(['route'=>['admin.bookreq.pass', $bookreq->id], 'method'=>'POST']) !!}
@@ -76,9 +77,11 @@
                                 {!! Form::close() !!}
                             </div>
                             <!-- END IF HAS DELETE PERMISSION -->
+                        @endif
                         </div>
                         </td>
                     </tr>
+                    @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
                         <div class="modal fade" id="reject-modal-{{$bookreq->id}}"
                             tabindex="-1" role="dialog"
                             aria-labelledby="reject-modal-label">
@@ -100,6 +103,7 @@
                                 </div>
                             </div>
                         </div>
+                    @endif
                 @endforeach
                 </tbody>
                 </table>

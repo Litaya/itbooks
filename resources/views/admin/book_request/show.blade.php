@@ -99,6 +99,7 @@
             </div>
         </div>
         <div class="row">
+        @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
             @if($bookreq->status==0)
                 <div class="col-md-2">
                     {!!Form::open(["route"=>["admin.bookreq.pass", $bookreq->id], "method"=>"POST"]) !!}
@@ -114,6 +115,7 @@
                             </button>
                 </div>
             @endif
+        @endif
             <div class="col-md-2">
                 <a href="{{route('admin.bookreq.index')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
             </div>
