@@ -2,7 +2,6 @@
 @section('title', '图书管理')
 @section('content')
 
-
 <div class="container">
     <div class="row">
     <div class="col-md-12">
@@ -29,21 +28,21 @@
             <th onclick="orderBy('id')">
             <label class="unselectable" id="id-label">ID</label>
             @if(Request::get("orderby", "") == 'id')
-            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
             @endif
             </th>
 
             <th onclick="orderBy('name')">
             <label class="unselectable" id="name-label">书名</label>
             @if(Request::get("orderby", "") == 'name')
-            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
             @endif
             </th>
 
             <th onclick="orderBy('authors')">
             <label class="unselectable" id="authors-label">作者</label>
             @if(Request::get("orderby", "") == 'authors')
-            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
             @endif
             </th>
 
@@ -51,7 +50,7 @@
             <th onclick="orderBy('isbn')">
             <label class="unselectable" id="isbn-label">ISBN</label>
             @if(Request::get("orderby", "") == 'isbn')
-            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
             @endif
             </th>
 
@@ -59,7 +58,7 @@
             <th onclick="orderBy('type')">
             <label class="unselectable" id="type-label">分类</label>
             @if(Request::get("orderby", "") == 'type')
-            <span class="{{Input::get('asc') == 'true' ? 'glyphicon glyphicon-triangle-top' : 'glyphicon glyphicon-triangle-bottom' }}"></span>
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
             @endif
             </th>
 
@@ -115,6 +114,32 @@ aria-labelledby="import-modal-label">
 
 <script>
 
+var input_keys = new Array();
+var input_values = new Array();
+var seg0 = "{{route('admin.book.index')}}";
+
+var old_orderby = "{{Request::get("orderby", "")}}";
+var old_asc = "{{Request::get("asc", "false")}}";
+
+@foreach(Input::except(["page", "orderby", "asc"]) as $key => $value)
+input_keys.push("{{$key}}");
+input_values.push("{{$value}}");
+@endforeach
+
+function orderBy(col){
+    var url = seg0;
+    var i;
+    for(i=0; i<input_keys.length;i++){
+        var k = input_keys[i];
+        var v = input_values[i];
+        if(k == "page") continue;
+        url += (i==0?"?":"&") + k + "=" + v;
+    }
+    url += (i==0?"?":"&") + "orderby="+col;
+    if(col != old_orderby) url += "&asc=true";
+    else url += "&asc=" + (old_asc=="true"?"false":"true");
+    window.location.href = url;
+}
 
 </script>
 
