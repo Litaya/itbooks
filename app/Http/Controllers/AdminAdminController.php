@@ -200,10 +200,20 @@ class AdminAdminController extends Controller
 
     /** API: 获取所有部门 **/
     public function getAllDepartments(){
-        $departments = Department::whereRaw('LENGTH(code) = 1')->get();
+        $departments = Department::whereRaw('LENGTH(code) <= 3')->get();
         $data = [];
         for($i = 0; $i < count($departments); $i++){
-            $data[$departments[$i]->id] = $departments[$i]->name;
+            $code = $departments[$i]->code;
+            if($code[0] != '8'){
+                if(strlen($code) == 1){
+                    $data[$departments[$i]->id] = $departments[$i]->name;
+                }
+            }
+            else if($code[0] == '8'){
+                if(strlen($code) == 3){
+                    $data[$departments[$i]->id] = $departments[$i]->name;
+                }
+            }
         }
         return response()->json($data, 200);
     }
