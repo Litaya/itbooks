@@ -35,12 +35,13 @@
                 </div>
 
 
+            @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
                 @if($bookreq->status==1)
                     <div class="panel panel-default">
                         <div class="panel-heading">物流详情</div>
                         <div class="panel-body">
                             @if(empty($bookreq->order_number))
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                             <button type="button"
                                     class="btn btn-danger btn-block"
                                     data-toggle="modal"
@@ -60,8 +61,8 @@
 
                         </div>
                     </div>
-                @endif
-
+                @endif <!-- END STATUS=1 -->
+            @endif <!-- END GET ROLE -->
             </div>
 
             <div class="col-md-6">
