@@ -111,10 +111,11 @@
 
     <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript">
+
+        // 点击同步按钮
         function syncNews(url) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $("#btn-sync").attr('disabled','disabled');
-            $("#btn-sync").html('正在同步...');
+            $("#btn-sync").attr('disabled','disabled').html('正在同步...');
             $.ajax({
                 method:'post',
                 url:url,
@@ -124,8 +125,7 @@
                     end_time: $("#end_datetime").val()
                 },
                 success:function () {
-                    $("#btn-sync").removeAttr('disabled');
-                    $("#btn-sync").html('同步列表');
+                    $("#btn-sync").removeAttr('disabled').html('同步列表');
                     location.reload();
                 }
             });
@@ -153,6 +153,7 @@
             format: 'yyyy-mm-dd hh:ii'
         });
 
+        // 设为微信文章/系统文章. 1:设置为系统文章，2 设置为微信文章
         function set_display(url,display) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -168,6 +169,7 @@
             });
         }
 
+        // 删除图文素材
         function drop_material(url){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             console.log(url,CSRF_TOKEN);
@@ -182,5 +184,7 @@
                 }
             });
         }
+
+
     </script>
 @endsection
