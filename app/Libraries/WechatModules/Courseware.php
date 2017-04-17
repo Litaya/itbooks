@@ -19,7 +19,7 @@ class Courseware extends WechatHandler{
 		if($msg_type == 'text'){
 			$content = $this->message->Content;
 			$content = trim($content);
-			if(preg_match("/[^#]+#[0-9]+/",$content)) {
+			if(preg_match("/[^#]+#[0-9]+/",$content) || preg_match("/[^＃]+＃[0-9]+/",$content)) {
 
 				$openid = $this->message->FromUserName;
 				$user   = User::where('openid',$openid)->first();
@@ -30,6 +30,9 @@ class Courseware extends WechatHandler{
 					$reply = "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
 				}else{
 					$content_arr = explode('#',$content);
+					if(preg_match("/[^＃]+＃[0-9]+/",$content)){
+						$content_arr = explode('＃',$content);
+					}
 					if($content_arr[0] == '课件'){
 						$isbn   = $content_arr[1];
 						$book   = Book::where('isbn','like',"%$isbn")->first();
