@@ -46,7 +46,7 @@
                         <td>{{$bookreq->book->name}}</td>
                         <td>{{$bookreq->book->isbn}}</td>
                         <td>{{$bookreq->book->authors}}</td>
-                        <td>{{$bookreq->book->editor}}</td>
+                        <td>{{$bookreq->book->editor_name}}</td>
                         <td>{{$bookreq->book->department->name}}</td>
                         <td>{{$bookreq->created_at}}</td>
                         <td>{{$bookreq->status==0?"待审核":($bookreq->status==1?"通过":"未通过")}}</td>
