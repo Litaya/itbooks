@@ -53,6 +53,7 @@ class Courseware extends WechatHandler{
 							}
 						}
 					} else if($content_arr[0] == '密码'){
+						$match = true;
 						$isbn   = $content_arr[1];
 						$book   = Book::where('isbn','like',"%$isbn")->first();
 						$code   = $book->department->code;
