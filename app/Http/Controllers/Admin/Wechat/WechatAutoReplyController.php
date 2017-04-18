@@ -52,10 +52,19 @@ class WechatAutoReplyController extends Controller
 			foreach ($p_tag_content_arr as $text){
 				$inner_content = $inner_content.$text;
 			}
+
+            # 消除 target = "_blank"
+			$inner_content_2 = "";
+			$a_tag_content_arr = explode('target="_blank"',$inner_content);
+			foreach ($a_tag_content_arr as $text){
+				$inner_content_2 = $inner_content_2.$text;
+			}
+
+			$inner_content = $inner_content_2;
 			$inner_content = trim($inner_content);
 			if(empty($inner_content)) continue;
 
-			# 添加换行符
+            # 添加换行符
 			if(!$first){
 				$reply = $reply."\n".$inner_content;
 			}else{
