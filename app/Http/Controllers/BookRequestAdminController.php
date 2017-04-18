@@ -102,8 +102,21 @@ class BookRequestAdminController extends Controller
 
     public function pass($id){
         $bookreq = BookRequest::find($id);
+        
+        // 权限检查
+        if(!in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
+            return redirect()->back()->withErrors(["您没有处理样书申请的权限"]);
+        if(PM::getAdminRole() == "DEPTADMIN"){
+            $book_code = Book::find($bookreq->book_id)->department->code;
+            $admin_code = PM::getAdminDepartmentCode();
+            if(strpos($book_code, $admin_code) !== 0)
+                return redirect()->back->withErrors(["您没有处理此样书申请的权限"]);
+        }
+        // 权限检查通过
+
         if($bookreq->status == 0){
             $bookreq->status = 1;
+            $bookreq->handler_id = Auth::id();
             $bookreq->update();
             Session::flash('success', '您通过了一项样书申请');
         }
@@ -115,8 +128,22 @@ class BookRequestAdminController extends Controller
 
     public function reject($id, Request $request){
         $bookreq = BookRequest::find($id);
+
+        // 权限检查
+        if(!in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
+            return redirect()->back()->withErrors(["您没有处理样书申请的权限"]);
+        if(PM::getAdminRole() == "DEPTADMIN"){
+            $book_code = Book::find($bookreq->book_id)->department->code;
+            $admin_code = PM::getAdminDepartmentCode();
+            if(strpos($book_code, $admin_code) !== 0)
+                return redirect()->back->withErrors(["您没有处理此样书申请的权限"]);
+        }
+        // 权限检查通过
+
+
         if($bookreq->status == 0){
             $bookreq->status = 2;
+            $bookreq->handler_id = Auth::id();
             if($request->message){
                 $js = json_decode($bookreq->message, true);
                 $js["admin_reply"] = $request->message;
