@@ -240,7 +240,6 @@ class BookAdminController extends Controller
     {
         $book = Book::find($id);
         $book->delete();
-
         Session::flash('success', '成功移除图书');
         return redirect()->route('admin.book.index');
     }
@@ -278,4 +277,5 @@ class BookAdminController extends Controller
         }
         return $this->department_array;
     }
+
 }
