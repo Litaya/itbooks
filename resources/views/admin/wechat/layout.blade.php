@@ -11,6 +11,10 @@
         #wechat_content{
             padding: 20px 0 40px 50px;
         }
+        ._side_item{
+            text-align: left;
+            padding-left: 5px;
+        }
     </style>
 
     <div class="container" style="margin:-40px 0 -40px -50px;">
@@ -18,8 +22,8 @@
             <h4><a href="{{ route('admin.wechat.index') }}"><i class="fa fa-weixin push"></i>微信管理</a></h4>
             <hr>
             <ul>
-                <li><a href="{{ route('admin.wechat.module.index') }}">功能模块</a></li>
-                <li><a href="{{ route('admin.wechat.auto_reply.index') }}">自定义回复</a></li>
+                <li class="_side_item"><a href="{{ route('admin.wechat.module.index') }}"><i class="fa fa-th push"></i>功能模块</a></li>
+                <li class="_side_item"><a href="{{ route('admin.wechat.auto_reply.index') }}"><i class="fa fa-reply push"></i>自定义回复</a></li>
             </ul>
         </div>
         <div class="col-lg-10" id="wechat_content">

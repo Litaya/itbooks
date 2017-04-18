@@ -33,3 +33,7 @@ Route::group(["prefix"=>"category"], function(){
 	Route::get('/exist','CategoryController@cateExist')->name('api.category.exist');
 });
 
+Route::group(["prefix"=>'material'], function (){
+	Route::get('/cate_materials',"MaterialController@getCateMaterials")->name("material.catematerials");
+});
+

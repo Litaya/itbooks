@@ -202,7 +202,6 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::post('/{id}/set_display','Wechat\WechatMaterialAdminController@set_display')->name('admin.material.set_display');
 		Route::post('/{id}/drop','Wechat\WechatMaterialAdminController@drop')->name('admin.material.drop');
 		Route::post('/update_cate','Wechat\WechatMaterialAdminController@updateCategory')->name('admin.material.update_cate');
-
 	});
 
 	Route::group(['prefix'=>'wechat'], function() {
@@ -213,6 +212,20 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::post('/module/update_status','Admin\Wechat\WechatModuleController@changeModuleStatus')->name('admin.wechat.module.changestatus');
 
 		Route::get('/module','Admin\Wechat\WechatModuleController@index')->name('admin.wechat.module.index');
+	});
+
+	Route::group(['prefix'=>'forum'], function (){
+		Route::get('/','Admin\Forum\HomeController@index')->name('admin.forum.index');
+		Route::get('/category','Admin\Forum\CategoryController@forum_index')->name('admin.forum.category.index');
+
+		Route::group(['prefix'=>'material'], function() {
+			Route::get('/','Admin\Forum\MaterialController@index')->name('admin.forum.material.index');
+			Route::get('/{id}','Admin\Forum\MaterialController@show')->name('admin.forum.material.show');
+			Route::post('/sync','Admin\Forum\MaterialController@sync')->name('admin.forum.material.sync');
+			Route::post('/{id}/set_display','Admin\Forum\MaterialController@set_display')->name('admin.forum.material.set_display');
+			Route::post('/{id}/drop','Admin\Forum\MaterialController@drop')->name('admin.forum.material.drop');
+			Route::post('/update_cate','Admin\Forum\MaterialController@updateCategory')->name('admin.forum.material.update_cate');
+		});
 	});
 }); // end admin
 
@@ -245,5 +258,7 @@ Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
 });
 
 Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
+	Route::get('/','CategoryController@index')->name('category.index');
 	Route::post('/create','CategoryController@create')->name('category.create');
+	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
 });

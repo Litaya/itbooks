@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Wechat;
+namespace App\Http\Controllers\Admin\Forum;
 
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
@@ -10,7 +10,7 @@ use EasyWeChat\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class WechatMaterialAdminController extends Controller
+class MaterialController extends Controller
 {
 	// 图文管理首页
 	public function index(Request $request){
@@ -21,7 +21,7 @@ class WechatMaterialAdminController extends Controller
 			$search    = "";
 			$materials = Material::orderBy('wechat_update_time','desc')->paginate(10);
 		}
-		return view('admin.material.index',compact('materials','search'));
+		return view('admin.forum.material.index',compact('materials','search'));
 	}
 
 	public function set_display(Request $request,$id){
@@ -45,7 +45,7 @@ class WechatMaterialAdminController extends Controller
 	// 图文详情页
 	public function show(Request $request, $id){
 		$material = Material::where('id',$id)->first();
-		return view('admin.material.show',compact('material'));
+		return view('admin.forum.material.show',compact('material'));
 	}
 
 	// 同步微信图文列表
