@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Category;
+use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -43,8 +44,19 @@ class CategoryController extends Controller
 	public function show(){
 	}
 
-	public function drop(){
-		// TODO 一定要把相关联的素材的分类都改为未分类 0
+	public function drop(Request $request,$id=null)
+	{
+		if(empty($id)){
+			if($request->has('cate_id'))
+				$id = $request->get('cate_id');
+			else
+				return 'failed';
+		}
+		Category::where('id', $id)->delete();
+		Material::where('category_id', $id)->update(['category_id' => 0]);
+		$request->session()->flash('forum_message','操作成功');
+		$request->session()->flash('forum_status','success');
+		return 'success';
 	}
 
 	// for api

@@ -10,6 +10,9 @@
     @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
         <li class="{{Request::is('admin/book')?'sidebar-active':''}}"><a href="{{ route('admin.book.index') }}"> <i class="fa fa-book push"></i>图书管理</a></li>
     @endif
+    @if(in_array('FORUM',\App\Libraries\PermissionManager::getAdminModules()))
+        <li class="{{Request::is('admin/forum')?'sidebar-active':''}}"><a href="{{ route('admin.forum.index') }}"> <i class="fa fa-comments push"></i>论坛管理</a></li>
+    @endif
     @if(in_array('MATERIAL',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/material')?'sidebar-active':''}}"><a href="{{ route('admin.material.index') }}"> <i class="fa fa-university push"></i>微信文章</a></li>
     @endif
