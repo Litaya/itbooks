@@ -16,6 +16,7 @@ class CreateCategoryTable extends Migration
 	    Schema::create('category', function(Blueprint $table){
 		    $table->increments('id');
 		    $table->string('name',64);
+		    $table->unsignedInteger('user_id')->comment('创建人，如果为0表示管理员创建');
 		    $table->timestamps();
 	    });
     }

@@ -115,5 +115,6 @@ return [
 		'department' => '院系名称',
 		'jobtitle' => '职称',
 		'role' => '角色',
+		'cate_name' => '分类名'
 	],
 ];

@@ -10,7 +10,8 @@ class Category extends Model
 
     protected $fillable = [
         'id',
-	    'name'
+	    'name',
+	    'user_id'
     ];
 
     public function material()

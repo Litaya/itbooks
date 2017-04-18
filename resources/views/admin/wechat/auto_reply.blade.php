@@ -21,11 +21,11 @@
             @if(sizeof($wechat_auto_replies)>0)
                 <table class="table table-bordered table-hover">
                     <tr style="font-weight:bold;">
-                        <td>回复规则</td>
-                        <td>回复类型</td>
+                        <td style="min-width: 80px;">回复规则</td>
+                        <td style="min-width: 80px;">回复类型</td>
                         <td>回复内容</td>
-                        <td>触发次数</td>
-                        <td>操作</td>
+                        <td style="min-width: 80px;">触发次数</td>
+                        <td style="min-width: 120px;">操作</td>
                     </tr>
                     @foreach($wechat_auto_replies as $wechat_auto_reply)
                         <tr>
