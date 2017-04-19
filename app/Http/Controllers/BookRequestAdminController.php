@@ -90,6 +90,14 @@ class BookRequestAdminController extends Controller
             $code = PM::getAdminDistrict();
 
         $req_builder = self::getSearchResultBuilder($search, $ar, $code);
+
+        if(!empty($request->category)){
+            if($request->category == "handled")
+                $req_builder = $req_builder->where('book_request.status', '<>', 0);
+            else
+                $req_builder = $req_builder->where('book_request.status', '=', 0);
+        }
+
         $bookreqs = $req_builder->orderBy('book_request.id', 'desc')->paginate(20);
 
         return view('admin.book_request.index')->withBookreqs($bookreqs);
@@ -110,7 +118,7 @@ class BookRequestAdminController extends Controller
             $book_code = Book::find($bookreq->book_id)->department->code;
             $admin_code = PM::getAdminDepartmentCode();
             if(strpos($book_code, $admin_code) !== 0)
-                return redirect()->back->withErrors(["您没有处理此样书申请的权限"]);
+                return redirect()->back()->withErrors(["您没有处理此样书申请的权限"]);
         }
         // 权限检查通过
 
@@ -136,7 +144,7 @@ class BookRequestAdminController extends Controller
             $book_code = Book::find($bookreq->book_id)->department->code;
             $admin_code = PM::getAdminDepartmentCode();
             if(strpos($book_code, $admin_code) !== 0)
-                return redirect()->back->withErrors(["您没有处理此样书申请的权限"]);
+                return redirect()->back()->withErrors(["您没有处理此样书申请的权限"]);
         }
         // 权限检查通过
 
@@ -185,11 +193,24 @@ class BookRequestAdminController extends Controller
     }
     
     public function shipping($id, Request $request){
-        $req = BookRequest::find($id);
+
+        $bookreq = BookRequest::find($id);
+
+        // 权限检查
+        if(!in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
+            return redirect()->back()->withErrors(["您没有处理样书申请的权限"]);
+        if(PM::getAdminRole() == "DEPTADMIN"){
+            $book_code = Book::find($bookreq->book_id)->department->code;
+            $admin_code = PM::getAdminDepartmentCode();
+            if(strpos($book_code, $admin_code) !== 0)
+                return redirect()->back()->withErrors(["您没有处理此样书申请的权限"]);
+        }
+        // 权限检查通过
+
         $order_number = $request->order_number;
-        if($req->status == 1){
-            $req->order_number = $order_number;
-            $req->update();
+        if($bookreq->status == 1){
+            $bookreq->order_number = $order_number;
+            $bookreq->update();
             Session::flash('success', '成功绑定订单号');
         }
         else{
@@ -199,4 +220,37 @@ class BookRequestAdminController extends Controller
         return redirect()->route('admin.bookreq.show', $id);
     }
     
+
+    public function passAndBindOrder($id, Request $request){
+        $this->validate($request, [
+            "order_number" => "required"
+        ]);
+        
+        $bookreq = BookRequest::find($id);
+
+        // 权限检查
+        if(!in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
+            return redirect()->back()->withErrors(["您没有处理样书申请的权限"]);
+        if(PM::getAdminRole() == "DEPTADMIN"){
+            $book_code = Book::find($bookreq->book_id)->department->code;
+            $admin_code = PM::getAdminDepartmentCode();
+            if(strpos($book_code, $admin_code) !== 0)
+                return redirect()->back()->withErrors(["您没有处理此样书申请的权限"]);
+        }
+        // 权限检查通过
+
+        if($bookreq->status == 0){
+            $bookreq->status = 1;
+            $bookreq->handler_id = Auth::id();
+            $bookreq->order_number = $request->order_number;
+            $bookreq->update();
+            Session::flash('success', '成功绑定订单号');
+        }
+        else
+            Session::flash('warning', '此申请已经被审批过');
+
+        if(!empty($request->category))
+            return redirect()->route("admin.bookreq.index", ["category" => $request->category]);
+        return redirect()->route("admin.bookreq.index");
+    }
 }

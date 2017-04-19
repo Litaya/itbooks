@@ -161,14 +161,14 @@ class DatabaseController extends Controller
     public function exportBookRequestPackagingTable(){
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
-            $requests = BookRequest::acceptedButNotSent()
+            $requests = BookRequest::unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
                                 ->get()->toArray();
         }
         else if($ar == "DEPTADMIN"){
             $requests = BookRequest::ofDepartmentCode(PM::getAdminDepartmentCode())
-                                ->acceptedButNotSent()
+                                ->unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
                                 ->get()->toArray();
@@ -205,14 +205,14 @@ class DatabaseController extends Controller
     public function exportBookRequestBookTable(){
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
-            $books = BookRequest::acceptedButNotSent()
+            $books = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_id')
                                 ->select('book.id', 'book.isbn as isbn', 'book.name as name', 'book.price as price', 'receiver')
                                 ->get()
                                 ->toArray();
         }
         else if($ar == "DEPTADMIN"){
-            $books = BookRequest::acceptedButNotSent()
+            $books = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_id')
                                 ->leftJoin('department', 'department.id', '=', 'book.department_id')
 					            ->whereRaw('department.code like \''.PM::getAdminDepartmentCode().'%\'')

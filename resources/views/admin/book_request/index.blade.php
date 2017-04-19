@@ -9,7 +9,8 @@
             <!-- SEARCH BAR -->
             <div class="col-md-4"> 
             {!! Form::open(["route"=>"admin.bookreq.index", "method"=>"GET"]) !!}
-            {{ Form::text("search", null, ["placeholder"=>"ISBN、书名、用户名..."]) }}
+            {{ Form::text("search", Input::get('search'), ["placeholder"=>"ISBN、书名、用户名..."]) }}
+            {{ Form::select("category", [""=>"-类别-", "handled"=>"已处理", "unhandled"=>"未处理"], Input::get('category')) }}
             {{ Form::submit("搜索") }}
             {!! Form::close() !!}
             </div>
@@ -30,7 +31,7 @@
                         <th width="6%">用户</th>
                         <th width="15%">书名</th>
                         <th width="8%">ISBN</th>
-                        <th width="15%">作者</th>
+                        <!-- th width="15%">作者</th -->
                         <th width="6%">编辑</th>
                         <th width="8%">所属分社</th>
                         <th width="8%">申请时间</th>
@@ -49,19 +50,21 @@
                         <!-- BOOK INFO -->
                         @if(!empty($bookreq->book))
                             <td>{{$bookreq->book->name}}</td>
-                            <td>{{$bookreq->book->isbn}}</td>
+                            <td>{{substr($bookreq->book->isbn, strlen($bookreq->book->isbn) - 6)}}</td>
+                            <!-- 不需要显示作者了
                             @if(preg_match("/[a-z].*/", $bookreq->book->authors))
-                                <!-- ENGLISH TITLE -->
+                                <!-- ENGLISH TITLE ->
                                 <td>{{strlen($bookreq->book->authors) > 30 ? substr($bookreq->book->authors, 0, 27) . "..." : $bookreq->book->authors}}</td>
                             @else
-                                <!-- CHINESE TITLE -->
+                                <!-- CHINESE TITLE ->
                                 <td>{{mb_strlen($bookreq->book->authors) > 10 ? mb_substr($bookreq->book->authors, 0, 7) . "..." : $bookreq->book->authors}}</td>
                             @endif
+                            -->
                             <td>{{$bookreq->book->editor_name}}</td>
                         @else
                             <td><span style="color: #AAA;"><small>不存在</small></span></td>
                             <td><span style="color: #AAA;"><small>不存在</small></span></td>
-                            <td><span style="color: #AAA;"><small>不存在</small></span></td>
+                            <!-- td><span style="color: #AAA;"><small>不存在</small></span></td -->
                             <td><span style="color: #AAA;"><small>不存在</small></span></td>
                         @endif
                         
@@ -103,9 +106,12 @@
                             @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"])) 
                                 @if($bookreq->status==0)
                                     <div class="col-xs-2 col-md-2">
-                                        {!! Form::open(['route'=>['admin.bookreq.pass', $bookreq->id], 'method'=>'POST']) !!}
-                                        {!! Form::submit('通过', ['class'=>'btn btn-success btn-xs']) !!}
-                                        {!! Form::close() !!}
+                                    <button type="button"
+                                            class="btn btn-success btn-xs"
+                                            data-toggle="modal"
+                                            data-target="#order-modal-{{$bookreq->id}}">
+                                            通过
+                                    </button>
                                     </div>
                                     <div class="col-xs-2 col-md-2">
                                     <button type="button"
@@ -117,11 +123,11 @@
                                     </div>
                                 @endif
 
-                                <!--div class="col-md-2">
+                                <div class="col-md-2">
                                     {!! Form::open(['route'=>['admin.bookreq.destroy', $bookreq->id], 'method'=>'DELETE']) !!}
                                     {!! Form::submit('删除', ['class'=>'btn btn-default btn-xs']) !!}
                                     {!! Form::close() !!}
-                                </div-->
+                                </div>
                             @endif
                             <!-- END ROLE CHECK FOR REQUEST PROCESS -->
 
@@ -130,6 +136,28 @@
                     </tr>
                     <!-- BEGIN ROLE CHECK FOR MODAL PAGE -->
                     @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]) and $bookreq->status==0)
+                        <div class="modal fade" id="order-modal-{{$bookreq->id}}"
+                            tabindex="-1" role="dialog"
+                            aria-labelledby="order-modal-label">
+                            <div class="modal-dialog" role="dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="order-modal-label">输入订单号</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                    {!! Form::open(["route"=>["admin.bookreq.passorder", $bookreq->id], "method"=>"POST"]) !!}
+                                    {{ Form::label("order_number", "订单号:") }}
+                                    {{ Form::text("order_number", null, ["class"=>"form-control"]) }}
+                                    <input type="hidden" name="category" value="{{Input::get('category')}}">
+                                    {{ Form::submit('确认', ['class'=>'btn btn-success btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
+                                    {!! Form::close() !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="modal fade" id="reject-modal-{{$bookreq->id}}"
                             tabindex="-1" role="dialog"
                             aria-labelledby="reject-modal-label">
