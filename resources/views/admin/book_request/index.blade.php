@@ -94,18 +94,11 @@
 
                         <td>
                         <div class="row">
-                            @if(!empty($bookreq->book) and !empty($bookreq->book->department))
-                            <div class="col-xs-2 col-md-2">
-                                <a href="{{route('admin.bookreq.show', $bookreq->id)}}">
-                                    <button class="btn btn-primary btn-xs">详情</button>
-                                </a>
-                            </div>
-                            @endif
 
                             <!-- BEGIN ROLE CHECK FOR REQUEST PROCESS-->
                             @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"])) 
                                 @if($bookreq->status==0)
-                                    <div class="col-xs-2 col-md-2">
+                                    <div class="col-xs-5 col-md-2">
                                     <button type="button"
                                             class="btn btn-success btn-xs"
                                             data-toggle="modal"
@@ -113,7 +106,7 @@
                                             通过
                                     </button>
                                     </div>
-                                    <div class="col-xs-2 col-md-2">
+                                    <div class="col-xs-5 col-md-2">
                                     <button type="button"
                                             class="btn btn-danger btn-xs"
                                             data-toggle="modal"
@@ -123,7 +116,15 @@
                                     </div>
                                 @endif
 
-                                <div class="col-md-2">
+                                @if(!empty($bookreq->book) and !empty($bookreq->book->department))
+                                <div class="col-xs-5 col-md-2">
+                                    <a href="{{route('admin.bookreq.show', $bookreq->id)}}">
+                                        <button class="btn btn-primary btn-xs">详情</button>
+                                    </a>
+                                </div>
+                                @endif
+
+                                <div class="col-xs-5 col-md-2">
                                     {!! Form::open(['route'=>['admin.bookreq.destroy', $bookreq->id], 'method'=>'DELETE']) !!}
                                     {!! Form::submit('删除', ['class'=>'btn btn-default btn-xs']) !!}
                                     {!! Form::close() !!}
