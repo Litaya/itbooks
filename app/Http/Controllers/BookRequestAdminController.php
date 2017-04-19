@@ -28,7 +28,8 @@ class BookRequestAdminController extends Controller
                     $bookreqs = BookRequest::join('user', 'book_request.user_id', '=', 'user.id')
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%");
+                                            ->orWhere('book.name', 'like', "%$search%")
+                                            ->select('book_request.*');
                     break;
 
                 case "DEPTADMIN":
@@ -37,7 +38,8 @@ class BookRequestAdminController extends Controller
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%");
+                                            ->orWhere('book.name', 'like', "%$search%")
+                                            ->select('book_request.*');
                     break;
                 
                 case "EDITOR": // currently unknown
@@ -49,7 +51,8 @@ class BookRequestAdminController extends Controller
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%");
+                                            ->orWhere('book.name', 'like', "%$search%")
+                                            ->select('book_request.*');
                     break;
 
                 default: // reaching here should cause an error
