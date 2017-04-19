@@ -126,6 +126,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
 	Route::post('bookreq/{id}/shipping', 'BookRequestAdminController@shipping')->name('admin.bookreq.shipping');
+	Route::post('bookreq/{id}/passorder', 'BookRequestAdminController@passAndBindOrder')->name('admin.bookreq.passorder');
 	Route::get('bookreq/export/packaging', "DatabaseController@exportBookRequestPackagingTable")->name('admin.bookreq.export.packaging');
 	Route::get('bookreq/export/book', "DatabaseController@exportBookRequestBookTable")->name('admin.bookreq.export.book');
 
