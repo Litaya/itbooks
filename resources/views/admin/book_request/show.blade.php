@@ -11,6 +11,7 @@
                     <div class="panel-heading">申请情况</div>
                     <div class="panel-body">
                         <p><strong>申请书目:</strong> {{$bookreq->book->name}}</p>
+                        <p><strong>ISBN:</strong> {{$bookreq->book->isbn}} </p>
                         <p><strong>申请用户:</strong> {{$bookreq->user->username}}</p>
                         <p><strong>发起时间:</strong> {{$bookreq->created_at}}</p>
                         <p><strong>收件人:</strong>   {{$bookreq->receiver}}</p>
