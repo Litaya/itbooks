@@ -61,28 +61,11 @@
 
     <script>
         var books_num = 0;
-        $("#search_box").on('input',function () {
-            var search_string = $("#search_box").val();
-            $.ajax({
-                'url': "/api/book/search_teaching/"+search_string,
-                'method': 'post'
-            }).done(function(result){
+        var search_timer = null;
 
-                var books = JSON.parse(result);
-                books = books['data'];
-                $("#result_place").html("");
-                for(var i in books){
-
-                    var book_com_name = books[i]["name"];
-                    var book_name = books[i]["name"].length>=20?books[i]["name"].substring(0,20)+"...":books[i]["name"];
-                    var book_id   = books[i]['id'];
-                    var book_isbn = books[i]['isbn'];
-
-                    $("#result_place").append("<li><a href='javascript:void(0)' class='book_item' id='book_"+book_id
-                            +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\",\""+book_isbn+"\")'>"+book_name+"</a></li>");
-                }
-
-            });
+        $("#search_box").on('input', function () {
+            if(search_timer != null) clearTimeout(search_timer);
+            search_timer = setTimeout(search, 500);
         });
         $("#search_box").trigger("input");
 
@@ -104,6 +87,30 @@
                 $("#warning_msg").html("您的申请额度已经用完！");
             }
 
+        }
+
+        function search(){
+            var search_string = $("#search_box").val();
+            $.ajax({
+                'url': "/api/book/search_teaching/"+search_string,
+                'method': 'post'
+            }).done(function(result){
+
+                var books = JSON.parse(result);
+                books = books['data'];
+                $("#result_place").html("");
+                for(var i in books){
+
+                    var book_com_name = books[i]["name"];
+                    var book_name = books[i]["name"].length>=20?books[i]["name"].substring(0,20)+"...":books[i]["name"];
+                    var book_id   = books[i]['id'];
+                    var book_isbn = books[i]['isbn'];
+
+                    $("#result_place").append("<li><a href='javascript:void(0)' class='book_item' id='book_"+book_id
+                            +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\",\""+book_isbn+"\")'>"+book_name+"</a></li>");
+                }
+
+            });
         }
 
         function remove_selected(book_id){
