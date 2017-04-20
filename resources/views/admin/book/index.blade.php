@@ -2,12 +2,6 @@
 @section('title', '图书管理')
 @section('content')
 
-<style>
-
-
-</style>
-
-
 <div class="container">
     <div class="row">
     <div class="col-md-12">
@@ -31,11 +25,43 @@
         <div class="row">
         <table class="table" style="column-width: 10px">
         <thead>
-            <th>ID</th>
-            <th>书名</th>
-            <th>作者</th>
-            <th>ISBN</th>
-            <th>分类</th>
+            <th onclick="orderBy('id')">
+            <label class="unselectable" id="id-label">ID</label>
+            @if(Request::get("orderby", "") == 'id')
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
+            @endif
+            </th>
+
+            <th onclick="orderBy('name')">
+            <label class="unselectable" id="name-label">书名</label>
+            @if(Request::get("orderby", "") == 'name')
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
+            @endif
+            </th>
+
+            <th onclick="orderBy('authors')">
+            <label class="unselectable" id="authors-label">作者</label>
+            @if(Request::get("orderby", "") == 'authors')
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
+            @endif
+            </th>
+
+
+            <th onclick="orderBy('isbn')">
+            <label class="unselectable" id="isbn-label">ISBN</label>
+            @if(Request::get("orderby", "") == 'isbn')
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
+            @endif
+            </th>
+
+
+            <th onclick="orderBy('type')">
+            <label class="unselectable" id="type-label">分类</label>
+            @if(Request::get("orderby", "") == 'type')
+            <i class="{{Input::get('asc')=='true'?'fa fa-caret-up':'fa fa-caret-down'}}": aria-hidden="true"></i>
+            @endif
+            </th>
+
             <th></th>
         </thead>
         <tbody>
@@ -85,5 +111,36 @@ aria-labelledby="import-modal-label">
         </div>
     </div>
 </div>
+
+<script>
+
+var input_keys = new Array();
+var input_values = new Array();
+var seg0 = "{{route('admin.book.index')}}";
+
+var old_orderby = "{{Request::get("orderby", "")}}";
+var old_asc = "{{Request::get("asc", "false")}}";
+
+@foreach(Input::except(["page", "orderby", "asc"]) as $key => $value)
+input_keys.push("{{$key}}");
+input_values.push("{{$value}}");
+@endforeach
+
+function orderBy(col){
+    var url = seg0;
+    var i;
+    for(i=0; i<input_keys.length;i++){
+        var k = input_keys[i];
+        var v = input_values[i];
+        if(k == "page") continue;
+        url += (i==0?"?":"&") + k + "=" + v;
+    }
+    url += (i==0?"?":"&") + "orderby="+col;
+    if(col != old_orderby) url += "&asc=true";
+    else url += "&asc=" + (old_asc=="true"?"false":"true");
+    window.location.href = url;
+}
+
+</script>
 
 @endsection

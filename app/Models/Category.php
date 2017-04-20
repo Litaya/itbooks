@@ -10,11 +10,12 @@ class Category extends Model
 
     protected $fillable = [
         'id',
-	    'name'
+	    'name',
+	    'user_id'
     ];
 
-    public function material()
+    public function materials()
     {
-	    return $this->hasMany('App\Models\Material', "target_id", "id");
+	    return $this->hasMany('App\Models\Material', "category_id", "id");
     }
 }

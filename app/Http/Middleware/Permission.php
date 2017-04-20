@@ -20,9 +20,9 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-		if($uri_arr[1]=='image'||$uri_arr[1] == 'mail' || $uri_arr[1]=='message' || $uri_arr[1] == 'wechat' || $uri_arr[1]=='district' || $uri_arr[1] == 'email' || $uri_arr[1] == 'api'){
-			return $next($request);
-		}
+        if(in_array($uri_arr[1],['image','mail','message','wechat','district','email','api','category'])){
+        	return $next($request);
+        }
 		if(Auth::check()){
 			$user = Auth::user();
 			if($uri_arr[1]=='admin'){
@@ -53,7 +53,7 @@ class Permission
 							break;
 					}
 				}
-			}else 
+			}else
 			{
 				// 首次登录访问控制
 				if(strpos($uri_arr[1],'register') === false and empty($user->email)){
@@ -71,7 +71,7 @@ class Permission
 					}
 				}
 			}
-			
+
 		}
 
 		return $next($request);

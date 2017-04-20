@@ -39,12 +39,12 @@
                     </div>
                     <div class="col-xs-9 item-content">
                         <p class="item-title">{{ \Illuminate\Support\Str::limit($material->title,30) }}</p>
-                        <small class="item-hint" style="position: absolute; bottom: 2px;">阅读 0 &nbsp;&nbsp;&nbsp;&nbsp; 评论 0</small>
+                        <small class="item-hint" style="position: absolute; bottom: 2px;">阅读 {{ $material->reading_quantity  }}</small>
                         <small class="item-hint" style="position: absolute; bottom: 2px; right: 5px;">{{ $material->wechat_update_time }}</small>
                     </div>
                 </div>
             </a>
         @endforeach
-        <div class="row" style="text-align:center">{{ $materials->links() }}</div>
+        <div class="row" style="text-align:center">{{ $materials->appends(Input::except('page'))->links('vendor.pagination.simple-default')  }}</div>
     @endif
 @stop

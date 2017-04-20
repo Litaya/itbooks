@@ -18,7 +18,11 @@
             <div class="list-group">
                 @foreach(Auth::user()->bookRequests as $bookreq)
                     <a href="{{ route('bookreq.show', $bookreq->id) }}" class="list-group-item">
-                        <h5 class="list-group-item-heading">{{ $bookreq->book->name }}</h5>
+                        @if(!empty($bookreq->book))
+                            <h5 class="list-group-item-heading">{{ $bookreq->book->name }}</h5>
+                        @else
+                            <h5 class="list-group-item-heading">[本社不再提供此书]</h5>
+                        @endif
                         <small class="list-group-item-text">
                             {{ $bookreq->created_at }}&nbsp;
                             <span style="color:{{ $bookreq->status==0?"#7098DA":($bookreq->status==1?"green":"red") }}">

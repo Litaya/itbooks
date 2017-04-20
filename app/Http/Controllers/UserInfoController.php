@@ -114,11 +114,15 @@ class UserInfoController extends Controller
 
     public function getAuthor(){
         $userinfo = self::get_user_info(Auth::user());
+        if($userinfo->role != "author")
+            return redirect()->route("userinfo.basic");
         return view("userinfo.author")->withUserinfo($userinfo);
     }
     
     public function getTeacher(){
         $userinfo = self::get_user_info(Auth::user());
+        if($userinfo->role != "teacher")
+            return redirect()->route("userinfo.basic");
         return view("userinfo.teacher")->withUserinfo($userinfo);
     }
 
@@ -177,13 +181,13 @@ class UserInfoController extends Controller
         $this->validate($request, [
             "email" => "required|email",
             "phone" => "required",
-            "role" => "in:teacher,author,student,staff,other",
+            "role" => "required|in:teacher,author,student,staff,other",
         ]);
 
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
-        if(empty($userinfo->role) and empty($request->role)){
-            return redirect()->back()->withError("角色字段必须选择");
-        }
+        // if(empty($userinfo->role) and empty($request->role)){
+        //     return redirect()->back()->withErrors("角色字段必须选择");
+        // }
         if($request->email != $userinfo->email)
         {
             $this->validate($request, [
@@ -224,6 +228,11 @@ class UserInfoController extends Controller
 
     public function postSaveTeacher(Request $request){
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
+        if($userinfo->role != "teacher"){
+            Session::flash('warning', "您没有选择教师角色，请回到本页进行选择");
+            return redirect()->route('userinfo.basic');
+        }
+
         $userinfo->realname = $request->realname;
         $userinfo->workplace = $request->workplace;
 
@@ -268,6 +277,10 @@ class UserInfoController extends Controller
 
     public function postSaveAuthor(Request $request){
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
+        if($userinfo->role != "author"){
+            Session::flash('warning', "您没有选择作者角色，请回到本页进行选择");
+            return redirect()->route('userinfo.basic');
+        }
 
         $userinfo->realname = $request->realname;
         $userinfo->workplace = $request->workplace;

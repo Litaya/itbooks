@@ -240,6 +240,7 @@ class PermissionManager
 			return 'SUPER_ADMIN';
 		}
 		$permission = session('permission');
+		if(empty($permission)) return 'UNKNOWN'; //??
 		if(in_array('book',$permission)){
 			if(!empty($permission['book']['department'] && !empty($permission['user'])))
 				return 'DEPARTMENT_ADMIN';
@@ -255,7 +256,7 @@ class PermissionManager
 		$modules = [];
 		switch (self::getAdminIdentity()){
 			case 'SUPER_ADMIN':
-				$modules = ['BOOK','DEPARTMENT','USER','BOOKREQ','MATERIAL'];
+				$modules = ['BOOK','DEPARTMENT','USER','BOOKREQ','MATERIAL','FORUM'];
 				break;
 			case 'DEPARTMENT_ADMIN':
 				$modules = ['BOOK','BOOKREQ'];

@@ -12,7 +12,9 @@
                     <div class="col-md-6">
                         <p>真实姓名: {{$cert->realname}}</p>
                         <p>工作单位: {{$cert->workplace}}</p>
-                        <p>申请类型: {{$cert->cert_name=="teacher"?"教师":"作者"}}</p>
+                        <p>申请类型: @if($cert->cert_name=="teacher")
+                                    教师
+                                    @endif
                         @if($cert->cert_name == "teacher")
                         <hr>
                         <p>院系名称: {{ $cert->json_content["department"] }}</p>
@@ -22,7 +24,7 @@
                         <p>教学情况</p>
                         <ol>
                             @for($i = 1; $i <= 3; $i++)
-                            @if($cert->json_content["course_name_".$i])
+                            @if(array_key_exists("course_name_".$i, $cert->json_content) && $cert->json_content["course_name_".$i])
                             <li>{{$cert->json_content["course_name_".$i]}}, 学生人数 {{$cert->json_content["number_stud_".$i]}}</li>
                             @endif
                             @endfor
@@ -35,6 +37,7 @@
                         <p><strong>上传证件</strong></p>
                         <p><img src="{{route('image', $cert->img_upload)}}" class="img-responsive" style="width: 75%"></img></p>
                     </div>
+                    
                 </div>
                 <hr>
                 <div class="row">

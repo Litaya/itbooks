@@ -25,12 +25,15 @@ class FirstVisitController extends Controller
     public function postSaveBasic(Request $request){
         // save basic
         Session::flash("last-picked-role", $request->role);
-        
+
+        $this->validate($request, [
+            "role" => "required"
+        ]);
 
         if($request->role == "teacher") {
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email",
+                "email" => "required|email|unique:user,email",
                 "qqnumber" => "digits_between:5,14",
                 "phone" => "digits_between:11,15",
                 "workplace" => "required",
@@ -70,7 +73,7 @@ class FirstVisitController extends Controller
         if($request->role == "student"){
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email",
+                "email" => "required|email|unique:user,email",
                 "school" => "required",
                 "department" => "required",
             ]);
@@ -83,9 +86,9 @@ class FirstVisitController extends Controller
             $info->role = $request->role;
             $info->email = $request->email;
             $info->realname = $request->realname;
-            $info->json_content = json_encode($jdata);
             $jdata['school'] = $request->school;
             $jdata['department'] = $request->department;
+            $info->json_content = json_encode($jdata);
 
             UserInfoController::update_user_info($info);
 
@@ -96,7 +99,7 @@ class FirstVisitController extends Controller
         if($request->role == "other"){
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email"
+                "email" => "required|email|unique:user,email"
             ]);
 
             $user = Auth::user();
@@ -111,7 +114,6 @@ class FirstVisitController extends Controller
             $info->json_content = json_encode($jdata);
 
             UserInfoController::update_user_info($info);
-
 
             return redirect()->route("register.welcome")->withRole("other");
         }
@@ -129,8 +131,14 @@ class FirstVisitController extends Controller
 
         $user = Auth::user();
         $info = UserInfoController::get_user_info($user);
-        $info->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
+        if($info->role != "teacher"){
+            Session::flash('warning', "您的角色选择未成功，请稍候在个人信息页中补全");
+            redirect()->route("register.welcome")->withRole("teacher");
+        }
 
+        $info->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
+        UserInfoController::update_user_info($info);
+        
         $old_cr = CertRequest::where("user_id", "=", $user->id)->where("status","<>",2)->get();
         
         if(count($old_cr) == 0){

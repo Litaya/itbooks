@@ -45,18 +45,18 @@
             <span class="pull-right">
                 @if(!empty($userlike) and $userlike)
                 <button id="like-button" class="btn btn-xs btn-default" style="color: #F77">
-                <i id="like-icon" class="fa fa-heart" aria-hidden="true"></i>&nbsp;想读</a></button>
+                <i id="like-icon" class="fa fa-heart" aria-hidden="true"></i>&nbsp;想读</button>
                 @else
                 <button id="like-button" class="btn btn-xs btn-default">
-                <i id="like-icon" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;想读</a></button>
+                <i id="like-icon" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;想读</button>
                 @endif <!-- END LIKE IF -->
 
                 @if(!empty($userread) and $userread)
                 <button id="read-button" class="btn btn-xs btn-default" style="color: #F77" onclick="unread()">
-                <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</a></button>
+                <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</button>
                 @else
                 <button id="read-button" class="btn btn-xs btn-default" onclick="read()">
-                <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</a></button>
+                <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</button>
                 @endif <!-- END READ IF -->
             </span>
             </div>
@@ -75,13 +75,18 @@
             @if(Auth::check())
             <p>课件: 
                 @if(!empty($book->kj_url))
-                <a href="{{$book->kj_url}}">下载课件</a>
+                {{--<a href="{{$book->kj_url}}">下载课件</a>--}}
+                    <a id="downloadcw" href="javascript:void(0)" onclick="downloadCourseware({{ $book->id }})">下载课件</a>
                 @endif
                 &nbsp;&nbsp;
                 <a href="javascript:updateKjUrl();">扫描课件变更</a></p>
             @endif
             <!-- if the book is open to reservations, and the user has enough privilege -->
+            @if(Auth::check())
             <a href="{{route('bookreq.record')}}"><button class="btn btn-primary btn-xs">申请样书</button></a>
+            @else
+            <a href="https://itbook.kuaizhan.com/39/60/p332015340738c5"><button class="btn btn-primary btn-xs">申请样书</button></a>
+            @endif
             <!-- end if -->
             <a href="{{route('home')}}"><button class="btn btn-default btn-xs">返回首页</button></a>
         </div>
@@ -101,7 +106,7 @@ function updateKjUrl(){
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
             location.reload();
-    }
+    };
     xmlhttp.open("GET", "{{route('book.updatekj', $book->id)}}", true);
     xmlhttp.send();
 }
@@ -124,7 +129,7 @@ function like(){
             $('#like-button').attr("onclick", "unlike()");
             $('#like-button').css({"color": "#F77"});
             $('#like-icon').attr("class", "fa fa-heart");
-        },
+        }
     });
 }
 
@@ -160,6 +165,25 @@ function unread() {
             $('#read-button').attr("onclick", "read()");
             $('#read-button').css({"color": "#777"});
         },
+    });
+}
+
+function downloadCourseware(book_id) {
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    var url = "{{ route('book.downloadcw') }}";
+    $.ajax({
+        method:'post',
+        url:url,
+        data: {
+            _token: CSRF_TOKEN,
+            book_id: book_id
+        },
+        success:function () {
+            $("#downloadcw").attr('href',"javascript:void(0)").removeAttr("onclick").css('color','#999').html("已将课件地址、解压密码发送到公众号聊天窗口<br/>");
+        },
+        error:function () {
+            $("#downloadcw").html("下载失败，点击重试<br/>");
+        }
     });
 }
 </script>

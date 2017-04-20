@@ -16,6 +16,7 @@ class CreateLabelTable extends Migration
 	    Schema::create('label', function(Blueprint $table){
 		    $table->increments('id');
 		    $table->string('name',64);
+		    $table->unsignedInteger('user_id')->comment('用户创建的标签，0表示管理员创建的');
 		    $table->timestamps();
 	    });
     }

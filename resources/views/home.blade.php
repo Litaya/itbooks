@@ -3,9 +3,14 @@
 @section('title','首页')
 
 @section('content')
-    {!! Form::open(["route"=>"book.index", "method"=>"GET"]) !!}
-    {{ Form::text('search', null, ['placeholder'=>'发现更多好书', "class"=>"form-control", "style"=>"margin: 0;"]) }}
-    {!! Form::close() !!}
+    <form action="{{ route('book.index') }}" method="get" class="form-inline">
+        <div class="form-group col-lg-10 col-xs-10" style="padding:0;">
+            {{ Form::text('search', null, ['placeholder'=>'发现更多好书', "class"=>"form-control", "style"=>"margin: 0;"]) }}
+        </div>
+        <div class="form-group col-lg-2 col-xs-2" style="padding: 0;">
+            <input type="submit" class="btn btn-default" value="搜索">
+        </div>
+    </form>
     <br>
     <div class="row" style="padding:0 20px 0 20px;">
         <h4>主编推荐</h4>

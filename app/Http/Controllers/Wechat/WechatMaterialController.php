@@ -14,15 +14,15 @@ class WechatMaterialController extends Controller
 		$message   = "";
 		if($request->has('search')){
 			$message   = $request->get('search');
-			$materials = Material::search($message);
+			$materials = Material::search($message)->simplePaginate(10);
 		}
 		return view('material.index',compact('materials','message'));
 	}
 
 	public function show(Request $request,$id){
 		$material = Material::where('id',$id)->first();
-//		$material->reading_quantity ++;
-//		$material->save();
+		$material->reading_quantity ++;
+		$material->save();
 		return view('material.show',compact('material'));
 	}
 

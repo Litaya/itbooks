@@ -63,6 +63,12 @@ git clone到本地之后，需要进行以下配置
 
             return $this->sendLoginResponse($request);
         }
+[2017-04-14] 使用了laravel-scout-mysql-driver，可能因为版本冲突的问题，需要改相关框架内容
+
+    # /vendor/damiantw/laravel-scout-mysql-driver/src/Services/IndexService.php 第5，12行
+    将 DetectsApplicationNamespace 改为 AppNamespaceDetectorTrait
+    
+    
 
 ### 在.env中添加微信验证的配置信息
 在配置完常规的.env内容后，需要添加微信验证的配置信息。

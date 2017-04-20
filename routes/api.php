@@ -28,3 +28,12 @@ Route::group(["prefix"=>"admin"], function(){
 	Route::get('getallprovinces', "DistrictController@getProvinces")->name('api.admin.get_all_provinces');
 });
 
+Route::group(["prefix"=>"category"], function(){
+	Route::get('/all','CategoryController@getAll')->name('api.category.all');
+	Route::get('/exist','CategoryController@cateExist')->name('api.category.exist');
+});
+
+Route::group(["prefix"=>'material'], function (){
+	Route::get('/cate_materials',"MaterialController@getCateMaterials")->name("material.catematerials");
+});
+

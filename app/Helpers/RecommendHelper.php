@@ -7,22 +7,22 @@ use App\Models\Book;
 class RecommendHelper {
 
     public static function getManuallySetTopBook($limit=1){
-        $books = Book::where('type','<>', 1)->orderBy('weight', 'desc')->limit($limit)->get();
+        $books = Book::where('type','<>', 1)->orderBy('weight', 'desc')->orderBy('publish_time', 'desc')->limit($limit)->get();
         return $books;
     }
 
     public static function getManuallySetTopTextbook($limit=1){
-        $books = Book::where('type','=', 1)->orderBy('weight', 'desc')->limit($limit)->get();
+        $books = Book::where('type','=', 1)->orderBy('weight', 'desc')->orderBy('publish_time', 'desc')->limit($limit)->get();
         return $books;
     }
 
     public static function getNewBooks($limit=4){
-        $books = Book::orderBy('created_at', 'desc')->limit($limit)->get();
+        $books = Book::orderBy('publish_time', 'desc')->orderBy('weight','desc')->limit($limit)->get();
         return $books;
     }
 
     public static function getHotBooks($limit=4){
-        $books = Book::orderBy('weight', 'desc')->limit($limit)->get();
+        $books = Book::orderBy('weight', 'desc')->orderBy('publish_time', 'desc')->limit($limit)->get();
         return $books;
     }
 

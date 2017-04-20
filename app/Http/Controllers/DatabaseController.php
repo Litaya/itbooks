@@ -57,8 +57,6 @@ class DatabaseController extends Controller
             array_push($isbn_set, $book->isbn);
         }
 
-
-
         $file = Input::file('excel')->getRealPath();
         $results = Excel::load($file, function($reader){})->get();
 
@@ -91,7 +89,7 @@ class DatabaseController extends Controller
                     DB::table("book")->insert($book);
                     $n_success += 1;
                 } catch (\Exception $e) {
-                    array_push($errors, $e);
+                    array_push($errors, $e->getMessage());
                 }
             }
             else {
@@ -109,13 +107,17 @@ class DatabaseController extends Controller
         $log_name = "logs/import_log_".time().".txt";
         $log_file = public_path($log_name);
         $log_handle = fopen($log_file, "w");
+        if(count($errors) == 0){
+            fwrite($log_handle, iconv("UTF-8", "GBK", "全部书目已经成功导入\r\n"));
+        }
         foreach($errors as $error){
             fwrite($log_handle, "$error"."\r\n");
         }
         fclose($log_handle);
 
         Session::flash('success', "共$n_total 条记录，成功导入$n_success 条，重复$n_duplicate 条，失败$n_failure 条。");
-        return response()->download(public_path($log_name));
+        Session::flash('reportfile', asset("logs/import_log_".time().".txt"));
+        return redirect()->route('admin.book.index');
     }
 
     public function testCheckUrl($product_number){
@@ -159,14 +161,14 @@ class DatabaseController extends Controller
     public function exportBookRequestPackagingTable(){
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
-            $requests = BookRequest::acceptedButNotSent()
+            $requests = BookRequest::unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
                                 ->get()->toArray();
         }
         else if($ar == "DEPTADMIN"){
             $requests = BookRequest::ofDepartmentCode(PM::getAdminDepartmentCode())
-                                ->acceptedButNotSent()
+                                ->unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
                                 ->get()->toArray();
@@ -194,22 +196,23 @@ class DatabaseController extends Controller
                         ]);
                 }
             });
-        })->download("xlsx");
+        })->store('xlsx')->export('xlsx');
+        //->download("xlsx");
         
-        return $export;
+        return redirect()->route("admin.bookreq.index");
     }
 
     public function exportBookRequestBookTable(){
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
-            $books = BookRequest::acceptedButNotSent()
+            $books = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_id')
                                 ->select('book.id', 'book.isbn as isbn', 'book.name as name', 'book.price as price', 'receiver')
                                 ->get()
                                 ->toArray();
         }
         else if($ar == "DEPTADMIN"){
-            $books = BookRequest::acceptedButNotSent()
+            $books = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_id')
                                 ->leftJoin('department', 'department.id', '=', 'book.department_id')
 					            ->whereRaw('department.code like \''.PM::getAdminDepartmentCode().'%\'')
@@ -284,9 +287,10 @@ class DatabaseController extends Controller
                     'E' => '@',
                 ));
             });
-        })->export("xlsx")->download("xlsx");
+        })->store('xlsx')->export('xlsx');
+        //->download('xlsx');
 
-        return $export;
+        return redirect()->route("admin.bookreq.index");
     }
 
 }

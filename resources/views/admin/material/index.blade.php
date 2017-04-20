@@ -46,7 +46,7 @@
     {{-- 搜索框 --}}
     <div class="row">
         <hr>
-        <form action="{{ route('admin.material.search') }}" class="form-horizontal" method="get">
+        <form action="{{ route('admin.material.index') }}" class="form-horizontal" method="get">
             <input type="text" name="search" class="form-control" placeholder="请输入标题、正文、或作者搜索">
         </form>
     </div>
@@ -84,7 +84,7 @@
                         @endif
                         &nbsp;&nbsp;
                         <small><a href="javascript:void(0)" style="color:red"
-                            onclick="drop_material('{{ route("admin.material.drop",$material->id) }}')"><i class="fa fa-times"></i> 删除文章</a></small>
+                                  onclick="drop_material('{{ route("admin.material.drop",$material->id) }}')"><i class="fa fa-times"></i> 删除文章</a></small>
                     </span>
                 </p>
                 <small>{{ $material->digest }}</small><br>
@@ -106,35 +106,29 @@
     @endforeach
 
     <div class="row" id="pages">
-        {{ $materials->links() }}
+        {{ $materials->appends(Input::except('page'))->links('vendor.pagination.default')  }}
     </div>
 
     <script type="text/javascript" src="/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript">
+
+        // 点击同步按钮
         function syncNews(url) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var start_time = Date.parse($("#start_datetime").val());
-            var end_time   = Date.parse($("#end_datetime").val());
-            if(start_time > end_time){
-                alert("起始时间不能晚于结束时间");
-            }else{
-                $("#btn-sync").attr('disabled','disabled');
-                $("#btn-sync").html('正在同步...');
-                $.ajax({
-                    method:'post',
-                    url:url,
-                    data: {
-                        _token: CSRF_TOKEN,
-                        start_time: start_time,
-                        end_time: end_time
-                    },
-                    success:function () {
-                        $("#btn-sync").removeAttr('disabled');
-                        $("#btn-sync").html('同步列表');
-                        location.reload();
-                    }
-                });
-            }
+            $("#btn-sync").attr('disabled','disabled').html('正在同步...');
+            $.ajax({
+                method:'post',
+                url:url,
+                data: {
+                    _token: CSRF_TOKEN,
+                    start_time: $("#start_datetime").val(),
+                    end_time: $("#end_datetime").val()
+                },
+                success:function () {
+                    $("#btn-sync").removeAttr('disabled').html('同步列表');
+                    location.reload();
+                }
+            });
         }
 
         ;(function($){
@@ -159,6 +153,7 @@
             format: 'yyyy-mm-dd hh:ii'
         });
 
+        // 设为微信文章/系统文章. 1:设置为系统文章，2 设置为微信文章
         function set_display(url,display) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -174,6 +169,7 @@
             });
         }
 
+        // 删除图文素材
         function drop_material(url){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             console.log(url,CSRF_TOKEN);
@@ -188,5 +184,7 @@
                 }
             });
         }
+
+
     </script>
 @endsection

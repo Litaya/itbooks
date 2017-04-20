@@ -1,14 +1,17 @@
 /node_modules
 /public/storage
 /public/fileupload
+/public/logs
 /storage
 /vendor
 /.idea
 /database/sqls/script.sql
 /storage/fileupload
+public/logs
 Homestead.json
 Homestead.yaml
 /composer.lock
 /.env
 *.swp
 *.DS_Store
+/public/D:\\Code\\itbooks\\storage\\logs\\userbehavior.log

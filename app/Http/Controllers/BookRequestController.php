@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserInfo;
 use Illuminate\Http\Request;
 
 use App\Models\User;
@@ -80,6 +81,8 @@ class BookRequestController extends Controller
 	    	}
 	    	$book_req->save();
 	    }
+
+	    UserInfo::where('user_id',$user->id)->update(['address'=>$address]);
 
 	    $user_json['teacher']['book_limit'] -= sizeof($book_ids);
 	    $user->json_content = json_encode($user_json);
