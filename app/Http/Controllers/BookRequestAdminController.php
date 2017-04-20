@@ -26,22 +26,24 @@ class BookRequestAdminController extends Controller
                 case "SUPERADMIN":
                     $bookreqs = BookRequest::join('user', 'book_request.user_id', '=', 'user.id')
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
-                                            ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book_request.receiver', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%")
-                                            ->orWhere('book.isbn', 'like', "%$search%")
+                                            ->whereRaw(
+                                                "((user.username like '%$search%')
+                                                  or (book_request.receiver like '%$search%')
+                                                  or (book.name like '%$search%')
+                                                  or (book.isbn like '%$search%'))")
                                             ->select('book_request.*');
                     break;
 
                 case "DEPTADMIN":
                     $code = $spec_code;
                     $bookreqs = BookRequest::ofDepartmentCode($code)
-                                            ->join('book', 'book_request.book_id', '=', 'book.id')
+                                            //->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
-                                            ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book_request.receiver', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%")
-                                            ->orWhere('book.isbn', 'like', "%$search%")
+                                            ->whereRaw(
+                                                "((user.username like '%$search%')
+                                                  or (book_request.receiver like '%$search%')
+                                                  or (book.name like '%$search%')
+                                                  or (book.isbn like '%$search%'))")
                                             ->select('book_request.*');
                     break;
                 
@@ -53,10 +55,11 @@ class BookRequestAdminController extends Controller
                     $bookreqs = BookRequest::ofDistrict($prov_id)
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
-                                            ->where('user.username', 'like', "%$search%")
-                                            ->orWhere('book_request.receiver', 'like', "%$search%")
-                                            ->orWhere('book.name', 'like', "%$search%")
-                                            ->orWhere('book.isbn', 'like', "%$search%")
+                                            ->whereRaw(
+                                                "((user.username like '%$search%')
+                                                  or (book_request.receiver like '%$search%')
+                                                  or (book.name like '%$search%')
+                                                  or (book.isbn like '%$search%'))")
                                             ->select('book_request.*');
                     break;
 
@@ -101,9 +104,9 @@ class BookRequestAdminController extends Controller
 
         if(!empty($request->category)){
             if($request->category == "handled")
-                $req_builder = $req_builder->where('book_request.status', '<>', 0);
-            else
-                $req_builder = $req_builder->where('book_request.status', '=', 0);
+                $req_builder = $req_builder->whereRaw('book_request.status <> 0');
+            elseif($request->category == "unhandled")
+                $req_builder = $req_builder->whereRaw('book_request.status = 0');
         }
 
         $bookreqs = $req_builder->orderBy('book_request.id', 'desc')->paginate(20);
