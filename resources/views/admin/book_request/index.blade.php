@@ -35,6 +35,7 @@
                         <th width="6%">编辑</th>
                         <th width="8%">所属分社</th>
                         <th width="8%">申请时间</th>
+                        <th width="10%">收货人</th>
                         <th width="10%">状态</th>
                         <th style="width: 18%">操作</th>
                     </tr>
@@ -75,6 +76,7 @@
                         @endif
 
                         <td>{{$bookreq->created_at}}</td>
+                        <td>{{$bookreq->receiver}}</td>
                         
                         @if($bookreq->status==0)
                             <td>待审核</td>
