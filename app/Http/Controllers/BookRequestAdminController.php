@@ -28,6 +28,7 @@ class BookRequestAdminController extends Controller
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->where('user.username', 'like', "%$search%")
                                             ->orWhere('book.name', 'like', "%$search%")
+                                            ->orWhere('book.isbn', 'like', "%$search%")
                                             ->select('book_request.*');
                     break;
 
@@ -38,6 +39,7 @@ class BookRequestAdminController extends Controller
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
                                             ->orWhere('book.name', 'like', "%$search%")
+                                            ->orWhere('book.isbn', 'like', "%$search%")
                                             ->select('book_request.*');
                     break;
                 
@@ -51,13 +53,13 @@ class BookRequestAdminController extends Controller
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
                                             ->orWhere('book.name', 'like', "%$search%")
+                                            ->orWhere('book.isbn', 'like', "%$search%")
                                             ->select('book_request.*');
                     break;
 
                 default: // reaching here should cause an error
                     break;
             }
-
         }
         else {
             switch($ar){
