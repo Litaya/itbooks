@@ -27,6 +27,7 @@ class BookRequestAdminController extends Controller
                     $bookreqs = BookRequest::join('user', 'book_request.user_id', '=', 'user.id')
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->where('user.username', 'like', "%$search%")
+                                            ->orWhere('book_request.receiver', 'like', "%$search%")
                                             ->orWhere('book.name', 'like', "%$search%")
                                             ->orWhere('book.isbn', 'like', "%$search%")
                                             ->select('book_request.*');
@@ -38,6 +39,7 @@ class BookRequestAdminController extends Controller
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
+                                            ->orWhere('book_request.receiver', 'like', "%$search%")
                                             ->orWhere('book.name', 'like', "%$search%")
                                             ->orWhere('book.isbn', 'like', "%$search%")
                                             ->select('book_request.*');
@@ -52,6 +54,7 @@ class BookRequestAdminController extends Controller
                                             ->join('book', 'book_request.book_id', '=', 'book.id')
                                             ->join('user', 'book_request.user_id', '=', 'user.id')
                                             ->where('user.username', 'like', "%$search%")
+                                            ->orWhere('book_request.receiver', 'like', "%$search%")
                                             ->orWhere('book.name', 'like', "%$search%")
                                             ->orWhere('book.isbn', 'like', "%$search%")
                                             ->select('book_request.*');
