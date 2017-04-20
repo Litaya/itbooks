@@ -17,7 +17,7 @@
             <h4>申请记录</h4>
             <div class="list-group">
                 @foreach(Auth::user()->bookRequests as $bookreq)
-                    <a href="{{ route('bookreq.show', $bookreq->id) }}" class="list-group-item">
+                    <a href="{{ !empty($bookreq->book) ? route('bookreq.show', $bookreq->id) : '#' }}" class="list-group-item">
                         @if(!empty($bookreq->book))
                             <h5 class="list-group-item-heading">{{ $bookreq->book->name }}</h5>
                         @else
