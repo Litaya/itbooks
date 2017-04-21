@@ -7,7 +7,7 @@
 
 {!! Form::open(["id"=>"file-form", "route"=>"register.teacher.save", "method"=>"post", "files"=>true]) !!}
 
-<p>请上传可证明高校教师身份的照片，完成认证</p>
+<p><b style="color:#F33;">请上传可证明高校教师身份的照片，完成认证</b></p>
 <ol>
 <li>教师证</li>
 <li>教师校园卡</li>
