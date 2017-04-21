@@ -83,4 +83,22 @@ class WechatAutoReplyController extends Controller
 		$request->session()->flash('wechat_status','success');
 		return 'success';
 	}
+
+	public function storeEdit(Request $request){
+		$this->validate($request,[
+			'auto_reply_id',
+			'alter_regex',
+			'alter_reply'
+		]);
+		$regex = $request->get('alter_regex');
+		$reply = $request->get('alter_reply');
+		$reply_id = $request->get('auto_reply_id');
+
+		WechatAutoReply::where('id',$reply_id)->update(['regex'=>$regex,'content'=>$reply]);
+		$request->session()->flash('notice_message','成功！');
+		$request->session()->flash('notice_status','success');
+
+		return redirect()->route('admin.wechat.auto_reply.index');
+	}
+
 }
