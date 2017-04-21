@@ -159,7 +159,6 @@ class BookRequestAdminController extends Controller
         }
         // 权限检查通过
 
-
         if($bookreq->status == 0){
             $bookreq->status = 2;
             $bookreq->handler_id = Auth::id();
@@ -182,7 +181,12 @@ class BookRequestAdminController extends Controller
         else
             Session::flash('warning', '此申请已经被审批过');
 
-        return redirect()->route("admin.bookreq.index");
+        $args = [];
+        if(!empty($request->category)) $args["category"] = $request->category;
+        if(!empty($request->search)) $args["search"] = $request->search;
+        if(!empty($request->page)) $args["page"] = $request->page;
+
+        return redirect()->route("admin.bookreq.index", $args);
     }
 
     public function destroy($id){
@@ -200,7 +204,12 @@ class BookRequestAdminController extends Controller
         }
 	    Session::flash('success', '您删除了一个样书申请');
         
-        return redirect()->route('bookreq.index');
+        $args = [];
+        if(!empty($request->category)) $args["category"] = $request->category;
+        if(!empty($request->search)) $args["search"] = $request->search;
+        if(!empty($request->page)) $args["page"] = $request->page;
+
+        return redirect()->route("admin.bookreq.index", $args);
     }
     
     public function shipping($id, Request $request){
@@ -237,7 +246,7 @@ class BookRequestAdminController extends Controller
             "order_number" => "required"
         ]);
         
-        $bookreq = BookRequest::find($id);
+        // $bookreq = BookRequest::find($id);
 
         // 权限检查
         if(!in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
@@ -260,8 +269,43 @@ class BookRequestAdminController extends Controller
         else
             Session::flash('warning', '此申请已经被审批过');
 
-        if(!empty($request->category))
-            return redirect()->route("admin.bookreq.index", ["category" => $request->category]);
-        return redirect()->route("admin.bookreq.index");
+        $args = [];
+        if(!empty($request->category)) $args["category"] = $request->category;
+        if(!empty($request->search)) $args["search"] = $request->search;
+        if(!empty($request->page)) $args["page"] = $request->page;
+
+        return redirect()->route("admin.bookreq.index", $args);
+    }
+
+
+    public function resetStatus($id, Request $request){
+        $bookreq = BookRequest::find($id);
+
+        // 权限检查
+        if(!in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
+            return redirect()->back()->withErrors(["您没有处理样书申请的权限"]);
+        if(PM::getAdminRole() == "DEPTADMIN"){
+            $book_code = Book::find($bookreq->book_id)->department->code;
+            $admin_code = PM::getAdminDepartmentCode();
+            if(strpos($book_code, $admin_code) !== 0)
+                return redirect()->back()->withErrors(["您没有处理此样书申请的权限"]);
+        }
+
+        if($bookreq->status != 0){
+            $bookreq->status = 0;
+            $bookreq->order_number = "";
+            $bookreq->handler_id = Auth::id();
+            $bookreq->update();
+        }
+        else
+            Session::flash('warning', '此申请是未处理状态，无需重置');
+
+        $args = [];
+        if(!empty($request->category)) $args["category"] = $request->category;
+        if(!empty($request->search)) $args["search"] = $request->search;
+        if(!empty($request->page)) $args["page"] = $request->page;
+
+        return redirect()->route("admin.bookreq.index", $args);
+
     }
 }
