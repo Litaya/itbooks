@@ -65,7 +65,7 @@ class Permission
 					$certificate_as = $user->certificate_as;
 					$certification = explode('|',$certificate_as)[0];
 					if($certification != 'TEACHER'){
-						$request->session()->flash('warning', '申请样书需先认证教师身份');
+						$request->session()->flash('warning', '申请样书需先在“教师附加信息”中上传教师身份的照片，完成认证');
 						//$request->session()->flash('notice_status', 'danger');
 						return redirect()->route('userinfo.basic');
 					}
