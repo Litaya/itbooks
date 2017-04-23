@@ -53,7 +53,7 @@ class WechatAutoReplyController extends Controller
 
             # 添加换行符
 			if(substr($inner_content,strlen($inner_content)-1,1)!=="\n"){
-				$reply = $reply."\n".$inner_content;
+				$reply = $reply.$inner_content."\n";
 			}else{
 				$reply = $reply.$inner_content;
 			}
