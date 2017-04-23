@@ -26,6 +26,8 @@ class AutoReply extends WechatHandler {
 				// 1模糊匹配; 0 精确匹配
 				if(($auto_reply->regex_type == 1 && preg_match("/$auto_reply->regex/",$input_msg)) || ($auto_reply->regex_type == 0 && $auto_reply->regex == $input_msg)){
 					$matched  = true;
+					$auto_reply->trigger_quantity = $auto_reply->trigger_quantity + 1;
+					$auto_reply->save();
 					$rep_type = $auto_reply->type;
 					$content  = $auto_reply->content;
 					switch ($rep_type){
