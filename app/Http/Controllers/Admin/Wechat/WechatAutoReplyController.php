@@ -41,40 +41,24 @@ class WechatAutoReplyController extends Controller
 	private function resolveEditorText($content){
 		$html   = new Htmldom($content);
 		$p_tags = $html->find('p');
-		$first  = true;
 		$reply  = "";
 		foreach ($p_tags as $p_tag){
-			$p_tag_content = $p_tag->innertext;
+			$p_tag_content = trim($p_tag->innertext);
 
-			# 消除<br>
-			$inner_content = "";
-			$p_tag_content_arr = explode('<br>',$p_tag_content);
-			foreach ($p_tag_content_arr as $text){
-				$inner_content = $inner_content.$text;
-			}
+			# 修改<br>为\n
+			$inner_content = str_replace("<br>","\n",$p_tag_content);
 
             # 消除 target = "_blank"
-			$inner_content_2 = "";
-			$a_tag_content_arr = explode('target="_blank"',$inner_content);
-			foreach ($a_tag_content_arr as $text){
-				$inner_content_2 = $inner_content_2.$text;
-			}
-
-			$inner_content = $inner_content_2;
-			$inner_content = trim($inner_content);
-			if(empty($inner_content)) continue;
+			$inner_content = str_replace('target="_blank"','',$inner_content);
 
             # 添加换行符
-			if(!$first){
+			if(substr($inner_content,strlen($inner_content)-1,1)!=="\n"){
 				$reply = $reply."\n".$inner_content;
 			}else{
-				$reply = $inner_content;
-			}
-			if(!empty($inner_content)){
-				$first = false;
+				$reply = $reply.$inner_content;
 			}
 		}
-		return $reply;
+		return trim($reply);
 	}
 
 	public function destroy(Request $request,$id){
@@ -91,7 +75,9 @@ class WechatAutoReplyController extends Controller
 			'alter_reply'
 		]);
 		$regex = $request->get('alter_regex');
-		$reply = $request->get('alter_reply');
+//		$reply = $request->get('alter_reply');
+		$replyhtml = new Htmldom($request->get('alter_reply'));
+		$reply = $this->resolveEditorText((string)$replyhtml);
 		$reply_id = $request->get('auto_reply_id');
 
 		WechatAutoReply::where('id',$reply_id)->update(['regex'=>$regex,'content'=>$reply]);
