@@ -23,7 +23,8 @@ class AutoReply extends WechatHandler {
 		if($msg_type == 'text'){
 			$auto_replies = WechatAutoReply::all();
 			foreach ($auto_replies as $auto_reply){
-				if(preg_match("/$auto_reply->regex/",$input_msg)){
+				// 1模糊匹配; 0 精确匹配
+				if(($auto_reply->regex_type == 1 && preg_match("/$auto_reply->regex/",$input_msg)) || ($auto_reply->regex_type == 0 && $auto_reply->regex == $input_msg)){
 					$matched  = true;
 					$rep_type = $auto_reply->type;
 					$content  = $auto_reply->content;
