@@ -74,7 +74,7 @@ class RecommendHelper {
             $L = count($indexes);
             $limit = min($L, $limit);
 
-            $id_list = self.PickRandom($indexes, $limit);
+            $id_list = self::PickRandom($indexes, $limit);
             $books = Book::whereIn("id", $id_list)->get();
         }
 
