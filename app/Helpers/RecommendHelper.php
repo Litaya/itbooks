@@ -105,6 +105,9 @@ class RecommendHelper {
 
     private static function PickRandom($arr, $limit, $ordered=true){
         $L = count($arr);
+        if($limit > $L) 
+            return $arr;
+            
         $id_shuffle = range(0, $L);                         // shuffle to get top 5
         for($i = 1; $i < $L; $i++){
             $r = rand() % $i;
