@@ -72,21 +72,19 @@ class RecommendHelper {
         $indexes = self::cmdGetRecommend($user);
         if($indexes !== false){
             $L = count($indexes);
-            // $limit = min($L, $limit);
 
             $id_list = self::PickRandom($indexes, $limit);
-            $books = Book::whereIn("id", $id_list)->get();
             if($L < $limit){
                 $nexts = Book::orderBy("weight", "desc")->orderBy('publish_time', 'desc')->limit($limit)->get();
                 foreach($nexts as $b){
                     if(!in_array($b->id, $id_list)){
                         array_push($id_list, $b->id);
-                        // array_push($books, $b);
                         $L++;
                         if($L == $limit) break;
                     }
                 }
             }
+            $books = Book::whereIn("id", $id_list)->get();
         }
 
         /** Recommend service failed or cold start, fallback to default method **/
