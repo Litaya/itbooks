@@ -107,12 +107,17 @@
 
 
         <div class="panel-body">
-        <div class="row">
+            <div class="list-group">
             @foreach($similar_books as $s_book)
-            <div class="col-xs-2">
-                <a href="{{route('book.show', $s_book->id)}}">{{$s_book->name}}</a>
-            </div>
+                <a class="list-group-item" href="{{route('book.show', $s_book->id)}}">
+                    @if(preg_match("/^[A-Za-z0-9]+/", $s_book->name))
+                        {{$s_book->name}}
+                    @else
+                        {{mb_strlen($s_book->name) >= 18 ? mb_substr($s_book->name, 0, 15)."..." : $s_book->name }}
+                    @endif
+                </a>
             @endforeach
+            </div>
         </div>
         </div>
 
