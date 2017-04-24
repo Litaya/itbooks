@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('sockettest', "RecommenderController@getSimilarBooks");
+Route::get('sockettest', "RecommenderController@getTestMessage");
 
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
