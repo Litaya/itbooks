@@ -70,11 +70,20 @@ class RecommendHelper {
     public static function getRecommendation($user, $limit = 5){
         $L = 10;
         $indexes = self::cmdGetRecommend($user);
-        if($indexes && count($indexes) > $limit){
+        if($indexes !== false){
             $L = count($indexes);
-            $limit = min($L, $limit);
 
             $id_list = self::PickRandom($indexes, $limit);
+            if($L < $limit){
+                $nexts = Book::orderBy("weight", "desc")->orderBy('publish_time', 'desc')->limit($limit)->get();
+                foreach($nexts as $b){
+                    if(!in_array($b->id, $id_list)){
+                        array_push($id_list, $b->id);
+                        $L++;
+                        if($L == $limit) break;
+                    }
+                }
+            }
             $books = Book::whereIn("id", $id_list)->get();
         }
 
@@ -94,6 +103,9 @@ class RecommendHelper {
 
     private static function PickRandom($arr, $limit, $ordered=true){
         $L = count($arr);
+        if($limit > $L) 
+            return $arr;
+
         $id_shuffle = range(0, $L);                         // shuffle to get top 5
         for($i = 1; $i < $L; $i++){
             $r = rand() % $i;
@@ -157,6 +169,7 @@ class RecommendHelper {
         }
 
         if(count($records) == 0) return false;
+        else $records = self::PickRandom($records, 10);
         
         $request = ["command" => "GET RECOMMEND", "records" => implode(",", $records)];
         $response = self::SocketRequest($request);
