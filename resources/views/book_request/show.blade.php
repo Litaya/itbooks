@@ -31,7 +31,7 @@
 
                 @if($bookreq->status==1)
                     <div class="panel panel-default">
-                    <div class="panel-heading">物流详情</div>
+                    <div class="panel-heading">物流详情[默认韵达快递公司]</div>
                     <div class="panel-body">
                         @if(empty($bookreq->order_number))
                         <div class="col-md-2">
