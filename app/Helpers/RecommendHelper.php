@@ -72,7 +72,7 @@ class RecommendHelper {
         $indexes = self::cmdGetRecommend($user);
         if($indexes !== false){
             $L = count($indexes);
-            $limit = min($L, $limit);
+            // $limit = min($L, $limit);
 
             $id_list = self::PickRandom($indexes, $limit);
             $books = Book::whereIn("id", $id_list)->get();
@@ -107,7 +107,7 @@ class RecommendHelper {
         $L = count($arr);
         if($limit > $L) 
             return $arr;
-            
+
         $id_shuffle = range(0, $L);                         // shuffle to get top 5
         for($i = 1; $i < $L; $i++){
             $r = rand() % $i;
