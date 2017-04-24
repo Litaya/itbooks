@@ -81,7 +81,7 @@ class RecommendHelper {
                 foreach($nexts as $b){
                     if(!in_array($b->id, $id_list)){
                         array_push($id_list, $b->id);
-                        array_push($books, $b);
+                        // array_push($books, $b);
                         $L++;
                         if($L == $limit) break;
                     }
