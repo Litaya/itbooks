@@ -246,7 +246,7 @@ class BookRequestAdminController extends Controller
             "order_number" => "required"
         ]);
         
-        // $bookreq = BookRequest::find($id);
+        $bookreq = BookRequest::find($id);
 
         // 权限检查
         if(!in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
