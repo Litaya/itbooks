@@ -110,7 +110,7 @@
         <div class="row">
             @foreach($similar_books as $s_book)
             <div class="col-xs-2">
-                {{$s_book->name}}
+                <a href="{{route('book.show', $s_book->id)}}">{{$s_book->name}}</a>
             </div>
             @endforeach
         </div>
