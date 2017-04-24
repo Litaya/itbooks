@@ -53,6 +53,8 @@
 
 </table>
 
+{{$users->appends(Input::except("page"))->links()}}
+
 </div>
 
 </div>
