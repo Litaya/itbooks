@@ -95,4 +95,8 @@ class User extends Authenticatable
 			return false;
 		}
 	}
+
+	public function bookLikes(){
+		return $this->hasMany('App\Models\Like', 'user_id', 'id');
+	}
 }

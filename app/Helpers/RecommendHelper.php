@@ -3,6 +3,9 @@
 namespace App\Helpers;
 
 use App\Models\Book;
+use App\Models\Like;
+use App\Models\BookRequest;
+
 
 class RecommendHelper {
 
@@ -27,7 +30,7 @@ class RecommendHelper {
     }
 
     public static function getBookRecommend($user, $limit=10){
-        $books = Book::inRandomOrder()->limit($limit)->get();
+        $books = self::getRecommendation($user, $limit);
         return $books;
     }
 
@@ -64,6 +67,30 @@ class RecommendHelper {
         return $books;
     }
     
+    public static function getRecommendation($user, $limit = 5){
+        $L = 10;
+        $indexes = self::cmdGetRecommend($user);
+        if($indexes && count($indexes) > $limit){
+            $L = count($indexes);
+            $limit = min($L, $limit);
+
+            $id_list = self.PickRandom($indexes, $limit);
+            $books = Book::whereIn("id", $id_list)->get();
+        }
+
+        /** Recommend service failed or cold start, fallback to default method **/
+        else
+        {
+            $books = Book::orderBy("weight", "desc")->orderBy('publish_time', 'desc')->limit($L * 5)->get();
+            $L = count($books);
+            $limit = min($L, $limit);
+
+            $books = self::PickRandom($books, $limit);
+        }
+
+        return $books;
+    }
+
 
     private static function PickRandom($arr, $limit, $ordered=true){
         $L = count($arr);
@@ -114,6 +141,33 @@ class RecommendHelper {
         return $book_id_list;
     }
 
+
+    private static function cmdGetRecommend($user){
+        $records = [];
+        $bookreqs = $user->bookRequests;
+        $likes = $user->bookLikes;
+        foreach($bookreqs as $r){
+            if(!in_array($r->book_id, $records))
+                array_push($records, (string)$r->book_id);
+        }
+
+        foreach($likes as $r){
+            if(!in_array($r->book_id, $records))
+                array_push($records, (string)$r->book_id);
+        }
+
+        if(count($records) == 0) return false;
+        
+        $request = ["command" => "GET RECOMMEND", "records" => implode(",", $records)];
+        $response = self::SocketRequest($request);
+        if(!$response["success"]) return false;
+        if(strtoupper(substr($response["data"], 0, 4)) == "BUSY") return false;
+
+        $book_id_list = explode(",", $response["data"]);
+        foreach($book_id_list as $i) $i = intval($i);
+
+        return $book_id_list;
+    }
 
 }
 
