@@ -73,7 +73,8 @@ class BookController extends Controller
 			$read = count($read) > 0;
 		}
 
-		return view("book.show")->withBook($book)->withUserlike($like)->withUserread($read);
+		$similar = RecommendHelper::getSimilarBooks($book, 5);
+		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar]);
 	}
 
 	/*

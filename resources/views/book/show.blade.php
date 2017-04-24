@@ -94,6 +94,32 @@
     </div>
 </div>
 
+@if(!empty($similar_books))
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-7">
+            相似图书
+            </div>
+        </div>
+        </div>
+
+
+        <div class="panel-body">
+        <div class="row">
+            @foreach($similar_books as $s_book)
+            <div class="col-xs-2">
+                {{$s_book->name}}
+            </div>
+            @endforeach
+        </div>
+        </div>
+
+    </div>
+
+@endif
+
 <script>
 function updateKjUrl(){
     var xmlhttp;
