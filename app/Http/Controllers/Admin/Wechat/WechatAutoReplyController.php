@@ -80,7 +80,7 @@ class WechatAutoReplyController extends Controller
 		$reply = $this->resolveEditorText((string)$replyhtml);
 		$reply_id = $request->get('auto_reply_id');
 
-		WechatAutoReply::where('id',$reply_id)->update(['regex'=>$regex,'content'=>$reply]);
+		WechatAutoReply::where('id',$reply_id)->update(['regex'=>$regex,'content'=>$reply,'type'=>0]);
 		$request->session()->flash('notice_message','成功！');
 		$request->session()->flash('notice_status','success');
 
