@@ -18,6 +18,6 @@ elixir(function(mix){
         .sass(
             ['./resources/assets/sass/admin.scss','./resources/assets/sass/multi-select.scss'], 'public/css/admin.css')
         .webpack(['app.js','jquery-3.2.1.js'])
-        .scripts(['jquery.multi-select.js'],'public/js/jquery-plugin.js') ;
+        .scripts(['jquery.multi-select.js','wangEditor.js'],'public/js/jquery-plugin.js') ;
     //mix.compass();
 });

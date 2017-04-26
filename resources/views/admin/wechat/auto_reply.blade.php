@@ -2,7 +2,6 @@
 
 @section('wechat-content')
     <link rel="stylesheet" href="/editors/css/wangEditor.min.css">
-
     <style>
         table{
             background-color: #fff;
@@ -110,11 +109,9 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="/editors/js/wangEditor.min.js"></script>
     <script type="text/javascript">
 
         function showModal(modal_id,auto_reply_id,regex) {
-            jQuery.noConflict();
             if(modal_id == 'myModal'){
                 $("#myModal").modal('show');
             }else if(modal_id == 'alterReply'){
