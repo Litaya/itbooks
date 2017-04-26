@@ -267,7 +267,7 @@ class UserInfoController extends Controller
 
         self::update_user_info($userinfo);
 
-	    if(!$request->img_upload){
+	    if(!$userinfo->img_upload){
 		    WechatMessageSender::sendText(Auth::user()->openid,
 			    "您还没有上传认证照片，目前暂时无法申请样书，但可以使用其他功能，请尽快上传照片完成认证。\n".
 			    "<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
