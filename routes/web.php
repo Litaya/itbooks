@@ -266,4 +266,5 @@ Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
 	Route::get('/','CategoryController@index')->name('category.index');
 	Route::post('/create','CategoryController@create')->name('category.create');
 	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
+	Route::post('/altername','CategoryController@alterCateName')->name('category.altername');
 });
