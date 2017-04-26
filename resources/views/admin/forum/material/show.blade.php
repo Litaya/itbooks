@@ -25,7 +25,9 @@
     <div class="row" >
         <h4>
             {{ $material->title }}&nbsp;&nbsp;&nbsp;&nbsp;
-            <small class="smaller">阅读: <a href="javascript:void(0)">{{ $material->reading_quantity }}</a>&nbsp; 评论: <a href="javascript:void(0)">0</a>&nbsp; 收藏: <a href="javascript:void(0)">0</a>&nbsp; 来源: 微信</small>
+            <small class="smaller">阅读: <a href="javascript:void(0)">{{ $material->reading_quantity }}</a>&nbsp;
+                {{--评论: <a href="javascript:void(0)">0</a>&nbsp; 收藏: <a href="javascript:void(0)">0</a>&nbsp; --}}
+                来源: 微信</small>
         </h4>
         <p>
             <small style="margin-right: 20px; padding: 5px 0">
@@ -34,39 +36,42 @@
                     <option value="0">未分类</option>
                 </select>
                 <span id="category_name">{{ empty($material->category)?'未分类':$material->category->name }}</span>
-                <a href="javascript:void(0)" class="smaller" onclick="alterCategory()" id="alter_category_btn">修改</a>
-                <a href="javascript:void(0)" class="smaller hidden" onclick="saveCategory()" id="save_category_btn">保存</a>
+                <a href="javascript:void(0)" class="smaller" onclick="alterCategory({{$material->category_id}})" id="alter_category_btn"><i class="fa fa-edit"></i>修改</a>
+                <a href="javascript:void(0)" class="smaller hidden" onclick="saveCategory()" id="save_category_btn"><i class="fa fa-check"></i>保存</a>&nbsp;&nbsp;
                 <a href="javascript:void(0)" class="smaller" data-toggle="modal" data-target="#addCategory">添加分类</a>
             </small>
-            <span class="category-item">标签1</span>
-            <span class="category-item">标签2</span>
-            <a href="javascript:void(0)"><span class="category-item"><i class="fa fa-plus"></i></span></a>
+            {{--<span class="category-item">标签1</span>--}}
+            {{--<span class="category-item">标签2</span>--}}
+            {{--<a href="javascript:void(0)"><span class="category-item"><i class="fa fa-plus"></i></span></a>--}}
         </p>
         <hr>
     </div>
     <div class="row" >
-        <div class="col-xs-7 shadow"style="background-color: white;">
+        <div class="col-xs-7 shadow"style="background-color: white; padding: 20px;">
             <div class="col-xs-12" id="body"></div>
         </div>
         {{--评论部分--}}
-        <div class="col-xs-5">
-            <div class="col-xs-12 shadow" style="background-color: white;">
+        <div class="col-xs-5" >
+            <div class="col-xs-12 shadow" style="background-color: white; padding-bottom: 20px;">
                 <h4>评论列表</h4>
                 <hr>
-                <div class="col-lg-12" style="padding: 0;height: 70px;">
-                    <img src="/img/avatar.png" alt="" style="width:50px;height: 50px;border-radius: 25px; position: absolute; left: 0;"/>
-                    <p style="position: absolute;left: 70px;"><a href="javascript:void(0)">张馨如</a>：雷哥很给力
-                        <br>
-                        <small>2015-01-01&nbsp;12:32:12</small>
-                    </p>
+                <div class="col-lg-12">
+                    暂无评论
                 </div>
-                <div class="col-lg-12" style="padding: 0;height: 70px;">
-                    <img src="/img/avatar.png" alt="" style="width:50px;height: 50px;border-radius: 25px; position: absolute; left: 0;"/>
-                    <p style="position: absolute;left: 70px;"><a href="javascript:void(0)">丛硕</a>回复<a href="javascript:void(0)">张馨如</a>：我同意
-                        <br>
-                        <small>2015-01-01&nbsp;12:32:12</small>
-                    </p>
-                </div>
+                {{--<div class="col-lg-12" style="padding: 0;height: 70px;">--}}
+                    {{--<img src="/img/avatar.png" alt="" style="width:50px;height: 50px;border-radius: 25px; position: absolute; left: 0;"/>--}}
+                    {{--<p style="position: absolute;left: 70px;"><a href="javascript:void(0)">张馨如</a>：雷哥很给力--}}
+                        {{--<br>--}}
+                        {{--<small>2015-01-01&nbsp;12:32:12</small>--}}
+                    {{--</p>--}}
+                {{--</div>--}}
+                {{--<div class="col-lg-12" style="padding: 0;height: 70px;">--}}
+                    {{--<img src="/img/avatar.png" alt="" style="width:50px;height: 50px;border-radius: 25px; position: absolute; left: 0;"/>--}}
+                    {{--<p style="position: absolute;left: 70px;"><a href="javascript:void(0)">丛硕</a>回复<a href="javascript:void(0)">张馨如</a>：我同意--}}
+                        {{--<br>--}}
+                        {{--<small>2015-01-01&nbsp;12:32:12</small>--}}
+                    {{--</p>--}}
+                {{--</div>--}}
             </div>
         </div>
         <hr>
@@ -101,7 +106,7 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         // 点击修改按钮事件
-        function alterCategory() {
+        function alterCategory(cate_id) {
             var url = "{{ route('api.category.all') }}";
             $.ajax({
                 method:'get',
@@ -111,7 +116,10 @@
                     $("#select_category").html("");
                     for(var i =0;i<categories.length;i++){
                         var category = categories[i];
-                        $("#select_category").append("<option value='"+category['id']+"'>"+category['name']+"</option>");
+                        if(category['id'] == cate_id)
+                            $("#select_category").append("<option value='"+category['id']+"' selected>"+category['name']+"</option>");
+                        else
+                            $("#select_category").append("<option value='"+category['id']+"'>"+category['name']+"</option>");
                     }
                 }
             });
