@@ -94,7 +94,7 @@ class CertRequestAdminController extends Controller
 			$cr->status = 1;
 			$cr->update();
 
-			WechatMessageSender::sendText(Auth::user()->openid,
+			WechatMessageSender::sendText($userinfo->user->openid,
 				"您的教师资格已经认证通过，您现在可以进行样书申请，并使用其他功能。\n".
 				"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 
@@ -112,8 +112,8 @@ class CertRequestAdminController extends Controller
 			$cr->status = 2;
 			$cr->message = $request->message;
 			$cr->update();
-			WechatMessageSender::sendText(Auth::user()->openid,
-				"您的身份认证申请被拒绝，决绝理由:\n".$request->message);
+			WechatMessageSender::sendText($cr->user->openid,
+				"您的身份认证申请被拒绝:\n".$request->message);
 			Session::flash('success', "已拒绝申请");
 		}
 		else Session::flash('warning', "该申请已经过期");

@@ -273,7 +273,7 @@ class UserInfoController extends Controller
 			    "<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 	    }else{
 		    WechatMessageSender::sendText(Auth::user()->openid,
-			    "您已经提交了认证信息，我们一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n".
+			    "您已经提交了认证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n".
 			    "<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 	    }
 
