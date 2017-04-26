@@ -75,6 +75,10 @@ class User extends Authenticatable
 		return $this->hasOne('App\Models\UserInfo','user_id','id');
 	}
 
+	public function certRequest(){
+		return $this->hasOne('App\Models\CertRequest','user_id','id');
+	}
+
 	public function scopeNonAdmin($query){
 		return $query->whereRaw('LENGTH(permission_string) = 0');
 	}
