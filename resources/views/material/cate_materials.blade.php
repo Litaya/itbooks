@@ -40,7 +40,7 @@
                                 <img class="item-img" src="{{ $material['cover_path'] }}" alt="">
                             </div>
                             <div class="col-xs-9 item-content">
-                                <p class="item-title">{{ \Illuminate\Support\Str::limit($material['title'],30) }}</p>
+                                <p class="item-title">{{ \Illuminate\Support\Str::limit($material['title'],50) }}</p>
                                 <small class="item-hint" style="position: absolute; bottom: 2px;">阅读 {{ $material['reading_quantity']  }}</small>
                                 <small class="item-hint" style="position: absolute; bottom: 2px; right: 5px;">{{ $material['wechat_update_time']}}</small>
                             </div>
@@ -81,7 +81,7 @@
         }
         function constructItem(material) {
             var href_url = material["display"]==1?"{{ route("material.show",$material['id']) }}":material["url"];
-            var title    = material['title'].substr(0,30);
+            var title    = material['title'].substr(0,50);
             return '<a href="'+href_url+'">'+
                 '<div class="col-xs-12 item">'+
                 '<div class="col-xs-3" style="padding: 0;"><img class="item-img" src="'+material['cover_path']+'" alt=""></div>'+
