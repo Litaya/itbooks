@@ -6,7 +6,7 @@
         {{--<img src='/img/avatar.png' alt="" style="margin: 0; padding: 0; width: 45px; height: 45px; border-radius: 25px" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"/>--}}
         <img src="{{ isset(Auth::user()->headimgurl)?Auth::user()->headimgurl:'/img/avatar.png' }}" alt="" style="margin: 0; padding: 0; width: 45px; height: 45px; border-radius: 25px" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false"/>
       </button>
-      <a class="navbar-brand" href="{{route('index')}}">书圈</a>
+      <a class="navbar-brand" href="{{route('index')}}">书圈@yield('sub-title')</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->

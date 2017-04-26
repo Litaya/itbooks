@@ -17,7 +17,7 @@ elixir(function(mix){
     mix.sass('app.scss')
         .sass(
             ['./resources/assets/sass/admin.scss','./resources/assets/sass/multi-select.scss'], 'public/css/admin.css')
-        .webpack(['app.js','jquery.js'])
-        .scripts(['jquery.multi-select.js','juery.quicksearch.js'],'public/js/jquery-plugin.js') ;
+        .webpack(['app.js','jquery-3.2.1.js'])
+        .scripts(['jquery.multi-select.js'],'public/js/jquery-plugin.js') ;
     //mix.compass();
 });
