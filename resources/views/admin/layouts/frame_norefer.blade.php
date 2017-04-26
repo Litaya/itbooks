@@ -6,13 +6,14 @@
     <meta name="referrer" content="never">
     <link rel="stylesheet" href="/css/admin.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <script src="/js/all.js"></script>
+
     <title> @yield('title') </title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
 <body>
 
-<script src="/js/all.js"></script>
 <script src="/js/jquery-plugin.js"></script>
 
 @include('admin.layouts._header')

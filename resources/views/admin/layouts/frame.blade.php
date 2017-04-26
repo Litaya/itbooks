@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/css/admin.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/all.js"></script>
 
     <title> @yield('title') </title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -13,7 +14,6 @@
 
 <body>
 
-<script src="/js/all.js"></script>
 <script src="/js/jquery-plugin.js"></script>
 
 @include('admin.layouts._header')

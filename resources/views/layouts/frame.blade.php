@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="/js/all.js"></script>
     <title> @yield('title') </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -26,8 +27,6 @@
     @yield('content')
 </div>
 
-<script src="/js/all.js"></script>
-<script src="/js/swipe.min.js"></script>
 
 </body>
 
