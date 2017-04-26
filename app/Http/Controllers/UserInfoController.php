@@ -383,7 +383,7 @@ class UserInfoController extends Controller
 
 
         // check duplicate
-        $tmp = s::where("user_id", "=", $user->id)->where("status","<>", 2)->first();
+        $tmp = CertRequest::where("user_id", "=", $user->id)->where("status","<>", 2)->first();
         if(empty($tmp)){
             $cr = new CertRequest;
             $cr->user_id = $user->id;
