@@ -35,7 +35,7 @@
                            value="{{ isset($userinfo->realname)?$userinfo->realname:"" }}">
                 </div>
                 <div class="form-group">
-                    <label for="address">收件地址</label>
+                    <label for="address">收件地址（写清：省、市、区、路详细地址）</label>
                     <input type="text" class="form-control" name="address" id="address" placeholder="请填写详细地址方便寄送"
                            value="{{ isset($userinfo->address)?$userinfo->address:"" }}">
                 </div>
