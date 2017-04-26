@@ -1,6 +1,9 @@
 @extends('admin.wechat.layout')
 
 @section('wechat-content')
+
+    <script src="/js/jquery-plugin.js"></script>
+
     <link rel="stylesheet" href="/editors/css/wangEditor.min.css">
     <style>
         table{

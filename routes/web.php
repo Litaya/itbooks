@@ -256,7 +256,7 @@ Route::group(["prefix" => "message"],function (){
 	Route::get('/',"MessageController@index")->name('message.index');
 });
 
-Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
+Route::group(["prefix" => "material"],function (){
 	Route::get('/','Wechat\WechatMaterialController@index')->name('material.index');
 	Route::get('/cate/{cate_id}','Wechat\WechatMaterialController@cateMaterials')->name('material.cate_materials');
 	Route::get('/search','Wechat\WechatMaterialController@search')->name('material.search');

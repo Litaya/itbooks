@@ -14,8 +14,6 @@
 
 <body>
 
-<script src="/js/jquery-plugin.js"></script>
-
 @include('admin.layouts._header')
 <div class="container">
     <div class="col-lg-2" id="side-bar">
