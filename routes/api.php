@@ -34,6 +34,6 @@ Route::group(["prefix"=>"category"], function(){
 });
 
 Route::group(["prefix"=>'material'], function (){
-	Route::get('/cate_materials',"MaterialController@getCateMaterials")->name("material.catematerials");
+	Route::get('/cate_materials',"MaterialController@getCateMaterials")->name("api.material.catematerials");
 });
 

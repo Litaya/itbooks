@@ -11,8 +11,9 @@
 </head>
 
 <body>
-<script src="/js/app.js"></script>
+
 <script src="/js/all.js"></script>
+<script src="/js/jquery-plugin.js"></script>
 
 @include('admin.layouts._header')
 <div class="container">

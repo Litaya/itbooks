@@ -68,7 +68,7 @@
             </div>
             <div class="col-lg-10" style="padding: 10px 0 0 0;height: 100px;">
                 <p>
-                    <a href="{{ route('admin.forum.material.show',$material->id) }}">{{ $material->title }}</a>
+                    <a href="{{ route('admin.forum.material.show',$material->id) }}" target="_blank">{{ $material->title }}</a>
                     <span  style="position: absolute;right: 10px;">
                         @if($material->display == 1)
                             <a href="javascript:void(0)"
