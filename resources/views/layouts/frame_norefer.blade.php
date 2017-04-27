@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+
+	<script src='http://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
     <script src="/js/all.js"></script>
 
     <title> @yield('title') </title>
