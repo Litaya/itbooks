@@ -91,5 +91,69 @@
                 '<small class="item-hint" style="position: absolute; bottom: 2px; right: 5px;">'+material['wechat_update_time']+'</small>'+
                 '</div></div></a>';
         }
+
+        // 以下是微信接口
+        wx.config(<?php echo $wechat_js->config(array('onMenuShareTimeline','onMenuShareQQ', 'onMenuShareWeibo','onMenuShareAppMessage','onMenuShareQZone'), true) ?>);
+
+        wx.onMenuShareTimeline({
+            title: '【书圈】{{ $category->name }}', // 分享标题
+            link: '{{ route('material.cate_materials',['cate_id'=>$category->id]) }}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{ route('index') }}/img/logo.jpeg', // 分享图标
+            success: function () {
+                console.log('分享成功');
+            },
+            cancel: function () {
+                console.log('分享失败');
+            }
+        });
+
+        wx.onMenuShareQQ({
+            title: '【书圈】{{ $category->name }}', // 分享标题
+            link: '{{ route('material.cate_materials',['cate_id'=>$category->id]) }}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{ route('index') }}/img/logo.jpeg', // 分享图标
+            success: function () {
+                console.log('分享成功');
+            },
+            cancel: function () {
+                console.log('分享失败');
+            }
+        });
+
+        wx.onMenuShareWeibo({
+            title: '【书圈】{{ $category->name }}', // 分享标题
+            link: '{{ route('material.cate_materials',['cate_id'=>$category->id]) }}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{ route('index') }}/img/logo.jpeg', // 分享图标
+            success: function () {
+                console.log('分享成功');
+            },
+            cancel: function () {
+                console.log('分享失败');
+            }
+        });
+
+        wx.onMenuShareAppMessage({
+            title: '【书圈】{{ $category->name }}', // 分享标题
+            link: '{{ route('material.cate_materials',['cate_id'=>$category->id]) }}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{ route('index') }}/img/logo.jpeg', // 分享图标
+            success: function () {
+                console.log('分享成功');
+            },
+            cancel: function () {
+                console.log('分享失败');
+            }
+        });
+
+        wx.onMenuShareQZone({
+            title: '【书圈】{{ $category->name }}', // 分享标题
+            link: '{{ route('material.cate_materials',['cate_id'=>$category->id]) }}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '{{ route('index') }}/img/logo.jpeg', // 分享图标
+            success: function () {
+                console.log('分享成功');
+            },
+            cancel: function () {
+                console.log('分享失败');
+            }
+        });
+
     </script>
 @endsection

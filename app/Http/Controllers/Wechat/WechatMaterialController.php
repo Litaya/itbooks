@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Wechat;
 
 use App\Models\Category;
 use App\Models\Material;
+use App\Models\Wechat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -36,8 +37,10 @@ class WechatMaterialController extends Controller
 		}else{
 			$materials = DB::table('materials')->select('id','display','url','cover_path','title','reading_quantity','wechat_update_time')->where('category_id',$cate_id)->orderBy("wechat_update_time",'desc')->take(20)->get();
 		}
-		$category  = Category::find($cate_id);
-		return view('material.cate_materials',compact('materials','category'));
+		$category   = Category::find($cate_id);
+		$wechat_app = Wechat::getInstance()->getApp();
+		$wechat_js  = $wechat_app->js;
+		return view('material.cate_materials',compact('materials','category','wechat_js'));
 	}
 
 	// 图文详情页

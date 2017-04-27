@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.css">
 
-	<script src='http://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
     <script src="/js/all.js"></script>
+    <script src='http://res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
+
     <title> @yield('title') </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
