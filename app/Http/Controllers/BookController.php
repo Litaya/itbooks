@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Libraries\WechatMessageSender;
 use App\Models\Courseware;
 use App\Models\UserInfo;
+use App\Models\Wechat;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Helpers\CrossDomainHelper;
