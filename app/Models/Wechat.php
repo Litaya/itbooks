@@ -226,6 +226,50 @@ class Wechat
 		return $news_sum;
 	}
 
+	public function updateAllWechatMaterials(){
+		$offset = 0;
+		$count  = 20;
+		$sum    = 0;
+		while (1){
+			$lists = $this->getMaterialLists('news',$offset,$count);
+			$news  = $lists['item'];
+			foreach ($news as $new){
+				$media_id    = $new['media_id'];
+				$update_time = $new['update_time'];
+				$items       = $new['content']['news_item'];
+
+				Material::where('media_id',$media_id)->delete();
+				foreach ($items as $item){
+					$thumb_media_id = $item['thumb_media_id'];
+					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
+					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
+					Material::create([
+						'media_id'           => $media_id,
+						'title'              => $item['title'],
+						'thumb_media_id'     => $thumb_media_id,
+						'cover_path'         => $cover_path,
+						'show_cover_pic'     => $item['show_cover_pic'],
+						'author'             => $item['author'],
+						'digest'             => $item['digest'],
+						'content'            => $item['content'],
+						'url'                => $item['url'],
+						'content_source_url' => $item['content_source_url'],
+						'reading_quantity'   => 0,
+						'category_id'        => 0,
+						'wechat_update_time'  => date('Y-m-d H:i:s',$update_time) # 该素材在微信后台的最后更新时间
+					]);
+					$sum += 1;
+					if($sum%100 == 0){
+						Log::info($sum);
+					}
+				}
+			}
+			$offset += $count;
+			if(sizeof($lists < 20))
+				break;
+		}
+	}
+
 	public function storeWechatUserToDB(){
 
 		$userService = $this->app->user;
