@@ -93,7 +93,7 @@
         }
 
         // 以下是微信接口
-        wx.config(<?php echo $wechat_js->config(array('onMenuShareTimeline','onMenuShareQQ', 'onMenuShareWeibo','onMenuShareAppMessage','onMenuShareQZone'), true) ?>);
+        wx.config(<?php echo $wechat_js->config(array('onMenuShareTimeline','onMenuShareQQ', 'onMenuShareWeibo','onMenuShareAppMessage','onMenuShareQZone'), false) ?>);
 
         wx.onMenuShareTimeline({
             title: '【书圈】{{ $category->name }}', // 分享标题
