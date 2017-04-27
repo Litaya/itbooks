@@ -74,7 +74,11 @@ class BookController extends Controller
 		}
 
 		$similar = RecommendHelper::getSimilarBooks($book, 5);
-		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar]);
+
+		$wechat_app = Wechat::getInstance()->getApp();
+		$wechat_js  = $wechat_app->js;
+
+		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar, 'wechat_js'=>$wechat_js]);
 	}
 
 	/*
