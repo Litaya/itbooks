@@ -307,7 +307,8 @@ class DatabaseController extends Controller
                                          "user_info.realname as realname", 
                                          "user_info.phone as phone", 
                                          "user.email as email",
-                                         "user.username as username")
+                                         "user.username as username",
+                                         "user_info.workplace as workplace")
                                 ->get();
         }
         else if($ar == "DEPTADMIN"){
@@ -323,7 +324,8 @@ class DatabaseController extends Controller
                                          "user_info.realname as realname", 
                                          "user_info.phone as phone", 
                                          "user.email as email",
-                                         "user.username as username")
+                                         "user.username as username",
+                                         "user_info.workplace as workplace")
                                 ->get();
         }
         else{
@@ -340,14 +342,15 @@ class DatabaseController extends Controller
             $excel->sheet("下载记录", function($sheet) use ($records){
 
                 $sheet->setAutoSize(true);
-                $sheet->row(1, ["用户名", "真实姓名", "邮箱", "书代号", "书名"]);
+                $sheet->row(1, ["用户名", "真实姓名", "邮箱", "学校", "书代号", "书名"]);
                 foreach($records as $record){
                     $sheet->appendRow([
                             $record->username,
                             $record->realname,
                             $record->email,
+                            $record->workplace,
                             $record->isbn . " ",
-                            $record->bookname
+                            $record->bookname,
                         ]);
                 }
 
