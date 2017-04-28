@@ -162,8 +162,8 @@ class Wechat
 	}
 
 	public function storeWechatNewsToDBbyTime($start_time, $end_time){
-        $start_time = strtotime($start_time);
-        $end_time   = strtotime($end_time);
+		$start_time = strtotime($start_time);
+		$end_time   = strtotime($end_time);
 
 #        Log::info("start: $start_time...... end: $end_time");
 		$this->storeWechatImagesToDB(); // 先将所有的图片素材存库
@@ -173,13 +173,13 @@ class Wechat
 			$news  = $lists['item'];
 
 			# 对于获取到的素材列表中的每一条素材
-            $smallest = time()+7200;
-            $largest  = 0;
+			$smallest = time()+7200;
+			$largest  = 0;
 			foreach ($news as $new){
 				$media_id    = $new['media_id'];
 				$update_time = intval($new['update_time']);
 
-                #Log::info("start: $start_time...... end: $end_time........update_time:$update_time");
+				#Log::info("start: $start_time...... end: $end_time........update_time:$update_time");
 
 				# 更新本次获取的列表中的最大、最小时间.
 				if($smallest > $update_time) $smallest = $update_time;
@@ -191,7 +191,11 @@ class Wechat
 				}
 
 				# 如果在目标时间内，则更新
-				Material::where('media_id',$media_id)->delete();
+				$old_materials = Material::where('media_id',$media_id)->get();
+				$delete_mark   = [];
+				foreach ($old_materials as $old_material){
+					$delete_mark[$old_material->title] = 1;
+				}
 				# 图文入库
 				$items = $new['content']['news_item'];
 				# 对于多图文消息
@@ -199,34 +203,51 @@ class Wechat
 					$thumb_media_id = $item['thumb_media_id'];
 					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
 					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
-					Material::create([
-						'media_id'           => $media_id,
-						'title'              => $item['title'],
-						'thumb_media_id'     => $thumb_media_id,
-						'cover_path'         => $cover_path,
-						'show_cover_pic'     => $item['show_cover_pic'],
-						'author'             => $item['author'],
-						'digest'             => $item['digest'],
-						'content'            => $item['content'],
-						'url'                => $item['url'],
-						'content_source_url' => $item['content_source_url'],
-						'reading_quantity'   => 0,
-						'category_id'        => 0,
-						'wechat_update_time'  => date('Y-m-d H:i:s',$update_time) # 该素材在微信后台的最后更新时间
-					]);
+
+					// 如果获取到的新的素材与库中的某素材同名，则更新同名素材，不同名的，则新建。
+					if(isset($delete_mark[$item['title']])){
+						Material::where('title',$item['title'])->update([
+							'thumb_media_id'     => $thumb_media_id,
+							'cover_path'         => $cover_path,
+							'show_cover_pic'     => $item['show_cover_pic'],
+							'author'             => $item['author'],
+							'digest'             => $item['digest'],
+							'content'            => $item['content'],
+							'url'                => $item['url'],
+							'content_source_url' => $item['content_source_url'],
+							'wechat_update_time'  => date('Y-m-d H:i:s',$update_time) # 该素材在微信后台的最后更新时间
+						]);
+						unset($delete_mark[$item['title']]);
+					} else{
+						Material::create([
+							'media_id'           => $media_id,
+							'title'              => $item['title'],
+							'thumb_media_id'     => $thumb_media_id,
+							'cover_path'         => $cover_path,
+							'show_cover_pic'     => $item['show_cover_pic'],
+							'author'             => $item['author'],
+							'digest'             => $item['digest'],
+							'content'            => $item['content'],
+							'url'                => $item['url'],
+							'content_source_url' => $item['content_source_url'],
+							'reading_quantity'   => 0,
+							'category_id'        => 0,
+							'wechat_update_time'  => date('Y-m-d H:i:s',$update_time) # 该素材在微信后台的最后更新时间
+						]);
+					}
 					$news_sum += 1;
 				}
 			}
 
 			# 如果本次更新的最晚时间早于时间段的开始端，或者本次更新的最早时间大于时间段的结束端，则更新
 			if($largest < $start_time || $smallest > $end_time)
-                break;
+				break;
 			$offset += $count;
 		}
 		return $news_sum;
 	}
 
-    // 更新全部的微信素材
+	// 更新全部的微信素材
 	public function updateAllWechatMaterials(){
 		$offset = 0;
 		$count  = 20;
@@ -234,7 +255,7 @@ class Wechat
 		while (1){
 			$lists = $this->getMaterialLists('news',$offset,$count);
 
-            $has_update = false;
+			$has_update = false;
 
 			$news  = $lists['item'];
 			foreach ($news as $new){
@@ -247,7 +268,7 @@ class Wechat
 					$thumb_media_id = $item['thumb_media_id'];
 					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
 					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
-                    $has_update = true;
+					$has_update = true;
 					Material::create([
 						'media_id'           => $media_id,
 						'title'              => $item['title'],
@@ -269,7 +290,7 @@ class Wechat
 					}
 				}
 			}
-            if(!$has_update) break;
+			if(!$has_update) break;
 			$offset += $count;
 		}
 	}
@@ -277,18 +298,18 @@ class Wechat
 	public function storeWechatUserToDB(){
 
 		$userService = $this->app->user;
-        #$next_openid = "oG09KxI_62wEES5uv_-KV-XnWEzQ";
-        #$next_openid = "oG09KxFmqgCS3j838CtmpFVt6Ab0";
-        #$next_openid = "oG09KxN8I0Oqxndi6iTnoVy-gCko";
-        $next_openid = "oG09KxDiYemhUEwuYCksw6nM9kDw";
+		#$next_openid = "oG09KxI_62wEES5uv_-KV-XnWEzQ";
+		#$next_openid = "oG09KxFmqgCS3j838CtmpFVt6Ab0";
+		#$next_openid = "oG09KxN8I0Oqxndi6iTnoVy-gCko";
+		$next_openid = "oG09KxDiYemhUEwuYCksw6nM9kDw";
 		$data        = $userService->lists($next_openid);
-        $openids     = $data["data"]["openid"];
-        $next_openid = $data["next_openid"];
+		$openids     = $data["data"]["openid"];
+		$next_openid = $data["next_openid"];
 
-        $count = 0;
+		$count = 0;
 
 		foreach ($openids as $openid){
-            $count += 1;
+			$count += 1;
 			$user = User::where('openid',$openid)->get();
 			if(sizeof($user) == 0){
 				$user = $userService->get($openid);
@@ -303,11 +324,11 @@ class Wechat
 			}else{
 				User::where('openid',$openid)->update(['subscribed'=>1]);
 			}
-            //Log::info($openid);
-            if($count % 100 == 0){
-                Log::info($count);
-            }
+			//Log::info($openid);
+			if($count % 100 == 0){
+				Log::info($count);
+			}
 		}
-        Log::info("next_openid:".$next_openid);      
+		Log::info("next_openid:".$next_openid);
 	}
 }

@@ -102,50 +102,6 @@
         </div>
     </div>
 
-
-
-    <div>
-    {{--添加文章到分类--}}
-    {{--<div class="modal fade" id="addMaterialsToCategory" tabindex="-1" role="dialog" aria-labelledby="addMaterialsToCategoryLabel" style="margin-top: 100px;">--}}
-        {{--<div class="modal-dialog" role="document">--}}
-            {{--<div class="modal-content">--}}
-                {{--<div class="modal-header">--}}
-                    {{--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>--}}
-                    {{--<h4 class="modal-title" id="addMaterialsToCategoryLabel">添加文章到本类别</h4>--}}
-                {{--</div>--}}
-                {{--<form class="form form-horizontal" action="#" method="post">--}}
-                    {{--<div class="modal-body" style="padding:10px 40px;">--}}
-                        {{--{{ csrf_field() }}--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="materials_cate">选择类别</label>--}}
-                            {{--<select name="materials_cate" id="materials_cate">--}}
-                                {{--@foreach($categories as $category)--}}
-                                    {{--<option value={{ $category->id }}>{{ $category->name }}</option>--}}
-                                {{--@endforeach--}}
-                            {{--</select>--}}
-                        {{--</div>--}}
-                        {{--<div class="form-group">--}}
-                            {{--<label for="materials">选择文章</label>--}}
-                            {{--<select class="searchable" multiple="multiple" id="materials" name="materials[]">--}}
-                                {{--<option value='elem_1'>elem 1</option>--}}
-                                {{--<option value='elem_2'>elem 2</option>--}}
-                                {{--<option value='elem_3'>elem 3</option>--}}
-                                {{--<option value='elem_4'>elem 4</option>--}}
-                                {{--<option value='elem_100'>elem 100</option>--}}
-                            {{--</select>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                    {{--<div class="modal-footer">--}}
-                        {{--<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>--}}
-                        {{--<button type="button" class="btn btn-primary" onclick="addMaterialsToCategory()">添加分类</button>--}}
-                    {{--</div>--}}
-                {{--</form>--}}
-
-            {{--</div>--}}
-        {{--</div>--}}
-    {{--</div>--}}
-    </div>
-
     <script>
         jQuery(document).ready(function ($) {
             $('#materials').multiSelect();
