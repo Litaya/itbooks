@@ -226,12 +226,16 @@ class Wechat
 		return $news_sum;
 	}
 
+    // 更新全部的微信素材
 	public function updateAllWechatMaterials(){
 		$offset = 0;
 		$count  = 20;
 		$sum    = 0;
 		while (1){
 			$lists = $this->getMaterialLists('news',$offset,$count);
+
+            $has_update = false;
+
 			$news  = $lists['item'];
 			foreach ($news as $new){
 				$media_id    = $new['media_id'];
@@ -243,6 +247,7 @@ class Wechat
 					$thumb_media_id = $item['thumb_media_id'];
 					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
 					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
+i                   $has_update = true;
 					Material::create([
 						'media_id'           => $media_id,
 						'title'              => $item['title'],
@@ -264,9 +269,8 @@ class Wechat
 					}
 				}
 			}
+            if(!$has_update) break;
 			$offset += $count;
-			if(sizeof($lists < 20))
-				break;
 		}
 	}
 
