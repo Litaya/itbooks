@@ -247,7 +247,7 @@ class Wechat
 					$thumb_media_id = $item['thumb_media_id'];
 					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
 					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
-i                   $has_update = true;
+                    $has_update = true;
 					Material::create([
 						'media_id'           => $media_id,
 						'title'              => $item['title'],
