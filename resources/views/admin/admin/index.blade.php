@@ -229,7 +229,6 @@ $(document).ready(function(){
                     updateModal();
                 }
 
-                jQuery.noConflict();
                 $("#change-role-modal").modal();
             });
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\WechatMessageSender;
 use Illuminate\Http\Request;
 use App\Helpers\FileHelper;
 use App\Models\User;
@@ -266,7 +267,17 @@ class UserInfoController extends Controller
 
         self::update_user_info($userinfo);
 
-        if($request->sendrequest == "true"){
+	    if(!$userinfo->img_upload){
+		    WechatMessageSender::sendText(Auth::user()->openid,
+			    "您还没有上传认证照片，目前暂时无法申请样书，但可以使用其他功能，请尽快上传照片完成认证。\n".
+			    "<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
+	    }else{
+		    WechatMessageSender::sendText(Auth::user()->openid,
+			    "您已经提交了认证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n".
+			    "<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
+	    }
+
+	    if($request->sendrequest == "true"){
             return self::createCertRequest(self::get_user_info(Auth::user(), true));
         }
 

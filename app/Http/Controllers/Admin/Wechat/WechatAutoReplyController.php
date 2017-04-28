@@ -51,7 +51,9 @@ class WechatAutoReplyController extends Controller
             # 消除 target = "_blank"
 			$inner_content = str_replace('target="_blank"','',$inner_content);
 
-            # 添加换行符
+			$inner_content = str_replace('&nbsp;',' ',$inner_content);
+
+			# 添加换行符
 			if(substr($inner_content,strlen($inner_content)-1,1)!=="\n"){
 				$reply = $reply.$inner_content."\n";
 			}else{
@@ -80,7 +82,7 @@ class WechatAutoReplyController extends Controller
 		$reply = $this->resolveEditorText((string)$replyhtml);
 		$reply_id = $request->get('auto_reply_id');
 
-		WechatAutoReply::where('id',$reply_id)->update(['regex'=>$regex,'content'=>$reply]);
+		WechatAutoReply::where('id',$reply_id)->update(['regex'=>$regex,'content'=>$reply,'type'=>0]);
 		$request->session()->flash('notice_message','成功！');
 		$request->session()->flash('notice_status','success');
 

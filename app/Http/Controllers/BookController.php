@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Libraries\WechatMessageSender;
 use App\Models\Courseware;
 use App\Models\UserInfo;
+use App\Models\Wechat;
+use App\Models\DownloadRecord;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Helpers\CrossDomainHelper;
@@ -74,7 +76,11 @@ class BookController extends Controller
 		}
 
 		$similar = RecommendHelper::getSimilarBooks($book, 5);
-		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar]);
+
+		$wechat_app = Wechat::getInstance()->getApp();
+		$wechat_js  = $wechat_app->js;
+
+		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar, 'wechat_js'=>$wechat_js]);
 	}
 
 	/*
@@ -162,6 +168,11 @@ class BookController extends Controller
 			if(empty($kj_url)){
 				$reply = "本书没有课件";
 			}else{
+				$record = new DownloadRecord;
+				$record->user_id = $user->id;
+				$record->book_id = $book->id;
+				$record->save();
+				
 				$isbn  = $book->isbn;
 				$pass  = Courseware::getCoursewarePassword($isbn,$code);
 				$reply = "课件下载地址：$kj_url \n 课件密码：$pass";

@@ -20,7 +20,7 @@ class Permission
 	{
 		$uri= $request->getRequestUri();
         $uri_arr = explode('/',$uri);
-        if(in_array($uri_arr[1],['image','mail','message','wechat','district','email','api','category'])){
+        if(in_array($uri_arr[1],['image','mail','material','message','wechat','district','email','api','category'])){
         	return $next($request);
         }
 		if(Auth::check()){

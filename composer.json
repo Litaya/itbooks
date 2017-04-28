@@ -16,7 +16,8 @@
         "laravel/scout": "2.*",
         "damiantw/laravel-scout-mysql-driver": "^1.0",
         "fukuball/jieba-php": "dev-master",
-        "yangqi/htmldom": "dev-master"
+        "yangqi/htmldom": "dev-master",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
