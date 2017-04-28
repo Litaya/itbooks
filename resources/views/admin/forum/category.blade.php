@@ -22,7 +22,7 @@
                 <li role="presentation">
                     <a href="#cate_{{ $category->id }}" aria-controls="cate_{{ $category->id }}" role="tab" data-toggle="tab"
                        onclick="loadMaterials('{{ $category->id }}',1,20)">
-                        {{ $category->name }}({{ sizeof($category->materials) }})
+                        {{ $category->name }}({{ $counts[$category->id] }})
                     </a>
                 </li>
             @endforeach
