@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Forum;
 
 use App\Http\Controllers\Controller;
-use App\Libraries\WechatModules\Material;
+use App\Models\Material;
 use App\Models\Category;
 use Illuminate\Http\Request;
 

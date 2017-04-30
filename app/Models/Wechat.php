@@ -204,6 +204,8 @@ class Wechat
 					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
 					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
 
+                    if($cover_path == '/img/example.jpg') continue;
+
 					// 如果获取到的新的素材与库中的某素材同名，则更新同名素材，不同名的，则新建。
 					if(isset($delete_mark[$item['title']])){
 						Material::where('title',$item['title'])->update([
