@@ -80,7 +80,13 @@ class BookController extends Controller
 		$wechat_app = Wechat::getInstance()->getApp();
 		$wechat_js  = $wechat_app->js;
 
-		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar, 'wechat_js'=>$wechat_js]);
+		$url = "http://www.tup.tsinghua.edu.cn/booksCenter/book_". str_replace("-", "", $book->product_number) .".html";
+		$tmp = "";
+		if(CrossDomainHelper::url_exists($url, $tmp))
+			$book_url = $url;
+		else $book_url = NULL;
+
+		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar, "book_url"=>$book_url, 'wechat_js'=>$wechat_js]);
 	}
 
 	/*

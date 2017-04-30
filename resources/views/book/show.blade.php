@@ -71,6 +71,9 @@
                         <p>定价: {{$book->price}}</p>
                         <p>类别: {{$book->type==0?"其他图书":($book->type==1?"教材":"非教材")}}</p>
                         <p>出版时间: {{$book->publish_time}}</p>
+                        @if(!empty($book_url))
+                        <p><a href="{{$book_url}}">进入官网浏览</a></p>
+                        @endif
                         <hr>
                         @if(Auth::check())
                             <p>课件:
