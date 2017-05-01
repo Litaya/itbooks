@@ -77,4 +77,15 @@ class CategoryController extends Controller
 		if(sizeof($cates)>0) return 'success';
 		return 'failed';
 	}
+
+	public function alterCateName(Request $request){
+		$this->validate($request,[
+			'id',
+			'name'
+		]);
+		Category::where('id',$request->get('id'))->update(['name'=>$request->get('name')]);
+		$request->session()->flash('forum_message','操作成功');
+		$request->session()->flash('forum_status','success');
+		return redirect()->route('admin.forum.category.index');
+	}
 }

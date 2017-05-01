@@ -14,8 +14,9 @@
             </div>
             <!-- END SEARCH BAR -->
 
-            <div class="col-md-2 pull-right">
+            <div class="col-md-6 pull-right">
             <a href="{{route('admin.resource.create')}}"><button class="btn btn-default pull-right">创建资源</button></a>
+            <a href="{{route('admin.resource.export')}}"><button class="btn btn-default pull-right">导出课件使用记录</button></a>
             </div>
         </div>
         <div class="row">

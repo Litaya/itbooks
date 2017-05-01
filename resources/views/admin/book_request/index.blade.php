@@ -35,6 +35,7 @@
                         <th width="6%">编辑</th>
                         <th width="8%">所属分社</th>
                         <th width="8%">申请时间</th>
+                        <th width="10%">收货人</th>
                         <th width="10%">状态</th>
                         <th style="width: 18%">操作</th>
                     </tr>
@@ -75,9 +76,14 @@
                         @endif
 
                         <td>{{$bookreq->created_at}}</td>
+                        <td>{{$bookreq->receiver}}</td>
                         
                         @if($bookreq->status==0)
-                            <td>待审核</td>
+                            <td>待审核
+                                @if(!empty($bookreq->handler))
+                                <b>[{{$bookreq->handler->username}}]</b>
+                                @endif
+                            </td>
                         @elseif($bookreq->status==1)
                             <td>通过
                                 @if(!empty($bookreq->handler))
@@ -126,6 +132,9 @@
 
                                 <div class="col-xs-5 col-md-2">
                                     {!! Form::open(['route'=>['admin.bookreq.destroy', $bookreq->id], 'method'=>'DELETE']) !!}
+                                    <input type="hidden" name="category" value="{{Input::get('category')}}">
+                                    <input type="hidden" name="search" value="{{Input::get('search')}}">
+                                    <input type="hidden" name="page" value="{{Input::get('page')}}">
                                     {!! Form::submit('删除', ['class'=>'btn btn-default btn-xs']) !!}
                                     {!! Form::close() !!}
                                 </div>
@@ -152,6 +161,8 @@
                                     {{ Form::label("order_number", "订单号:") }}
                                     {{ Form::text("order_number", null, ["class"=>"form-control"]) }}
                                     <input type="hidden" name="category" value="{{Input::get('category')}}">
+                                    <input type="hidden" name="search" value="{{Input::get('search')}}">
+                                    <input type="hidden" name="page" value="{{Input::get('page')}}">
                                     {{ Form::submit('确认', ['class'=>'btn btn-success btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
                                     {!! Form::close() !!}
                                     </div>
@@ -174,6 +185,9 @@
                                     {!! Form::open(["route"=>["admin.bookreq.reject", $bookreq->id], "method"=>"POST"]) !!}
                                     {{ Form::label("message", "拒绝理由:") }}
                                     {{ Form::textarea("message", null, ["class"=>"form-control"]) }}
+                                    <input type="hidden" name="category" value="{{Input::get('category')}}">
+                                    <input type="hidden" name="search" value="{{Input::get('search')}}">
+                                    <input type="hidden" name="page" value="{{Input::get('page')}}">
                                     {{ Form::submit('确认', ['class'=>'btn btn-danger btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
                                     {!! Form::close() !!}
                                     </div>

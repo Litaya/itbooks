@@ -56,9 +56,14 @@ class Courseware extends WechatHandler{
 						$match = true;
 						$isbn   = $content_arr[1];
 						$book   = Book::where('isbn','like',"%$isbn")->first();
-						$code   = $book->department->code;
-						$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
-						$reply = "课件密码：$pass";
+						if(empty($book)){
+							$match = true;
+							$reply = "该书不存在，如果有问题请在后台联系管理员";
+						}else{
+							$code   = $book->department->code;
+							$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
+							$reply = "课件密码：$pass";
+						}
 					}
 					$reply = $reply."\n<a href='".$book_url."'>查看更多图书资源</a>";
 				}

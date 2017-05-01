@@ -20,6 +20,11 @@
                         <p><strong>审批状态:</strong>
                             <span style="color: {{$bookreq->status==0?'#777':($bookreq->status==1?'#4E4':'#E44')}}">
                                 {{$bookreq->status==0?'审核中':($bookreq->status==1?'已通过':'未通过')}}
+                                @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
+                                    @if($bookreq->status != 0)
+                                    <button class="btn-xs btn-danger" id="reset-button" data-toggle="modal" data-target="#reset-modal">重置</button>
+                                    @endif
+                                @endif
                             </span>
                         </p>
                         <p><strong>处理人:</strong>
@@ -38,7 +43,6 @@
                                 @endif
                             </p>
                             @endif
-                        
                     </div>
                 </div>
 
@@ -66,7 +70,6 @@
                             </a>
                             </p>
                             @endif
-
                         </div>
                     </div>
                 @endif <!-- END STATUS=1 -->
@@ -132,7 +135,7 @@
         </div>
     </div>
 
-
+    @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
     <div class="modal fade" id="reject-modal"
         tabindex="-1" role="dialog"
         aria-labelledby="reject-modal-label">
@@ -171,12 +174,33 @@
                 {!! Form::model($bookreq, ["route"=>["admin.bookreq.shipping", $bookreq->id], "method"=>"POST"]) !!}
                 {{ Form::label("order_number", "订单号:") }}
                 {{ Form::text("order_number", null, ["class"=>"form-control"]) }}
-                {{ Form::submit('确认', ['class'=>'btn btn-danger btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
+                {{ Form::submit('确认', ['class'=>'btn btn-success btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
                 {!! Form::close() !!}
                 
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="reset-modal"
+        tabindex="-1" role="dialog"
+        aria-labelledby="reset-modal-label">
+        <div class="modal-dialog" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="reset-modal-label">重置样书申请</h4>
+                </div>
+                <div class="modal-body">
+                {!! Form::model($bookreq, ["route"=>["admin.bookreq.reset", $bookreq->id], "method"=>"POST"]) !!}
+                {{ Form::submit('重置', ['class'=>'btn btn-danger btn-md btn-block', 'style'=>"margin-top: 10px"]) }}
+                {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif <!-- END CHECK ROLE -->
+
 
 @endsection

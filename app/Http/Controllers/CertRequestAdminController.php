@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\WechatMessageSender;
 use Illuminate\Http\Request;
 use App\Models\CertRequest;
 use App\Models\Certification; // as wrapper
@@ -93,6 +94,10 @@ class CertRequestAdminController extends Controller
 			$cr->status = 1;
 			$cr->update();
 
+			WechatMessageSender::sendText($userinfo->user->openid,
+				"您的教师资格已经认证通过，您现在可以进行样书申请，并使用其他功能。\n".
+				"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
+
 			Session::flash('success', "已批准申请");
 		}
 		else Session::flash('warning', "该申请已经过期");
@@ -107,6 +112,8 @@ class CertRequestAdminController extends Controller
 			$cr->status = 2;
 			$cr->message = $request->message;
 			$cr->update();
+			WechatMessageSender::sendText($cr->user->openid,
+				"您的身份认证申请被拒绝:\n".$request->message);
 			Session::flash('success', "已拒绝申请");
 		}
 		else Session::flash('warning', "该申请已经过期");
