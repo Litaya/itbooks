@@ -270,3 +270,8 @@ Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
 	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
 	Route::post('/altername','CategoryController@alterCateName')->name('category.altername');
 });
+
+Route::group(["prefix" => "test"],function () {
+	Route::get('/imgupload','TestController@imgUpload')->name('test.imgupload');
+	Route::post('/imgupload','TestController@saveImage')->name('test.saveimage');
+});
