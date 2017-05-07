@@ -80,9 +80,15 @@ class BookController extends Controller
 		$wechat_app = Wechat::getInstance()->getApp();
 		$wechat_js  = $wechat_app->js;
 
-		$book_url = "http://www.tup.tsinghua.edu.cn/booksCenter/book_". str_replace("-", "", $book->product_number) .".html";
+		$book_urls = [
+			"index" => "http://www.tup.tsinghua.edu.cn/booksCenter/book_" . str_replace("-", "", $book->product_number) .".html",
+			"preface" => "http://www.tup.com.cn/booksCenter/preface.html?id=" . str_replace("-", "", $book->product_number),
+			"intro" => "http://www.tup.com.cn/booksCenter/bookbrief.html?id=" . str_replace("-", "", $book->product_number),
+			"catalog" => "http://www.tup.com.cn/booksCenter/bookcatalog.html?id=" . str_replace("-", "", $book->product_number)
+		];
 
-		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar, "book_url"=>$book_url, 'wechat_js'=>$wechat_js]);
+
+		return view("book.show", ["book"=>$book, "userlike"=>$like, "userread"=>$read, "similar_books"=>$similar, "book_urls"=>$book_urls, 'wechat_js'=>$wechat_js]);
 	}
 
 	/*
