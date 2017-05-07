@@ -107,6 +107,7 @@ class UserAdminController extends Controller
     public function destroy(Request $request, $id){
         User::delete($id);
         UserInfo::delete($id);
+        DB::table('book_request')->where('user_id', '=', $id)->delete();
     }
 
     

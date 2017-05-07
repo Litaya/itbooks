@@ -7,13 +7,18 @@
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.css">
 
+    <!-- Include jQuery Mobile stylesheets -->
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+	<!-- Include the jQuery Mobile library -->
+	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script src="/js/all.js"></script>
+
     <title> @yield('title') </title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
 <body>
-<script src="/js/app.js"></script>
-<script src="/js/all.js"></script>
 
 @include('admin.layouts._header')
 <div class="container">

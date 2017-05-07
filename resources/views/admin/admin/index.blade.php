@@ -53,6 +53,8 @@
 
 </table>
 
+{{$users->appends(Input::except("page"))->links()}}
+
 </div>
 
 </div>
@@ -227,7 +229,6 @@ $(document).ready(function(){
                     updateModal();
                 }
 
-                jQuery.noConflict();
                 $("#change-role-modal").modal();
             });
         }

@@ -2,6 +2,7 @@
 namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatHandler;
+use App\Libraries\WechatMessageSender;
 use App\Models\Book;
 use App\Models\Material;
 use EasyWeChat\Message\News;
@@ -18,16 +19,12 @@ class Search extends WechatHandler {
 		if($msg_type == 'text'){
 
 			$search_msg  = $this->message->Content;
-			#$seg_list =  Jieba::cut($search_msg);
-			#$search_msg = "";
-			#foreach($seg_list as $seg){
-			#	$search_msg = $search_msg." ".$seg;
-			#}
 
 			$search_msg = trim($search_msg);
 			$book_results = Book::search($search_msg)->orderBy('weight','desc')->orderBy('publish_time','desc')->get();
+
+			$book_news = [];
 			if(sizeof($book_results)!=0){
-				$book_news = [];
 				foreach ($book_results as $book_result){
 					if(sizeof($book_news) < 5){
 						array_push($book_news,new News([
@@ -47,9 +44,32 @@ class Search extends WechatHandler {
 				]);
 				array_push($book_news,$book_new);
 				Log::info('处理模块: Search');
-				return $book_news;
 			}
+			$material_results = Material::search($search_msg)->orderBy('wechat_update_time','desc')->get();
+            $material_news    = [];
+            foreach ($material_results as $material_result){
+            	if(sizeof($material_news) < 5){
+            		array_push($material_news,new News([
+            			'title'       => substr($material_result->title,0,100),
+			            'description' => '',
+			            'url'         => route('material.show',['id'=>$material_result->id]),
+			            'image'       => url($material_result->cover_path)
+		            ]));
+	            }else{
+            		break;
+	            }
+	            $material_new = new News([
+		            'title'       => '共搜到'.sizeof($material_results).'条相关文章，点此查看',
+		            'description' => '',
+		            'url'         => route('material.index')."?search=$search_msg",
+		            'image'       => route('image',['src'=>'public/material.png'])
+	            ]);
+            	array_push($material_news,$material_new);
+            }
+			WechatMessageSender::sendNews($openid,$book_news);
+			return $material_news;
 		}
+
 		if(!empty($this->successor)){
 			Log::info('模块['.$this->name().']无法处理，传递给下一个模块');
 			return $this->successor->handle();

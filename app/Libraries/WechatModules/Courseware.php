@@ -19,7 +19,7 @@ class Courseware extends WechatHandler{
 		if($msg_type == 'text'){
 			$content = $this->message->Content;
 			$content = trim($content);
-			if(preg_match("/[^#]+#[0-9]+/",$content)) {
+			if(preg_match("/[^#]+#[0-9]+/",$content) || preg_match("/[^＃]+＃[0-9]+/",$content)) {
 
 				$openid = $this->message->FromUserName;
 				$user   = User::where('openid',$openid)->first();
@@ -30,6 +30,9 @@ class Courseware extends WechatHandler{
 					$reply = "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
 				}else{
 					$content_arr = explode('#',$content);
+					if(preg_match("/[^＃]+＃[0-9]+/",$content)){
+						$content_arr = explode('＃',$content);
+					}
 					if($content_arr[0] == '课件'){
 						$isbn   = $content_arr[1];
 						$book   = Book::where('isbn','like',"%$isbn")->first();
@@ -46,17 +49,23 @@ class Courseware extends WechatHandler{
 							}else{
 								$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
 								$match = true;
-								$reply = "课件下载地址：$kj_url \n 课件密码：$pass";
+								$reply = "课件下载地址：$kj_url \n课件密码：$pass";
 							}
 						}
 					} else if($content_arr[0] == '密码'){
+						$match = true;
 						$isbn   = $content_arr[1];
 						$book   = Book::where('isbn','like',"%$isbn")->first();
-						$code   = $book->department->code;
-						$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
-						$reply = "课件密码：$pass";
+						if(empty($book)){
+							$match = true;
+							$reply = "该书不存在，如果有问题请在后台联系管理员";
+						}else{
+							$code   = $book->department->code;
+							$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
+							$reply = "课件密码：$pass";
+						}
 					}
-					$reply = $reply."\n<a href='".$book_url."'>更多图书资源</a>";
+					$reply = $reply."\n<a href='".$book_url."'>查看更多图书资源</a>";
 				}
 			}
 		}

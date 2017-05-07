@@ -51,4 +51,7 @@ class BookRequest extends Model
 		return $query->where('status', 1)->whereRaw('(isnull(order_number) or LENGTH(order_number) = 0)');
 	}
 
+	public function handler(){
+		return $this->hasOne('\App\Models\User', 'id', 'handler_id');
+	}
 }

@@ -41,31 +41,39 @@ class BookAdminController extends Controller
                 case "SUPERADMIN":
                 $books = Book::where('book.ISBN', 'like', "%$search%")
                         ->orWhere('book.name', 'like', "%$search%")
-                        ->orWhere('book.authors', 'like', "%$search%")
-                        ->paginate(20);
+                        ->orWhere('book.authors', 'like', "%$search%");
                 break;
                 case "DEPTADMIN":
                 $code = PM::getAdminDepartmentCode();
                 $books = Book::ofDepartmentCode($code)
                         ->where('book.ISBN', 'like', "%$search%")
                         ->orWhere('book.name', 'like', "%$search%")
-                        ->orWhere('book.authors', 'like', "%$search%")
-                        ->paginate(20);
+                        ->orWhere('book.authors', 'like', "%$search%");
                 break;
             }
         }
         else{
             switch($adminrole){
                 case "SUPERADMIN":
-                    $books = Book::orderBy('id', 'asc')->paginate(20); 
+                    $books = Book::query();
                     break;
                 case "DEPTADMIN":
                     $code = PM::getAdminDepartmentCode();
-                    $books = Book::ofDepartmentCode($code)->orderBy('id', 'asc')->paginate(20); 
+                    $books = Book::ofDepartmentCode($code);
                     break;
             }
         }
+
+        if(!empty($request->orderby) and in_array($request->orderby, ["id", "authors", "name", "isbn", "type"])){
+            $orderby = $request->orderby;
+            $asc = $request->asc == "true" ? "asc" : "desc";
+            $books = $books->orderBy($orderby, $asc);
+        }
+        else{
+            $books = $books->orderBy('id', 'desc');
+        }
         
+        $books = $books->paginate(20);
         return view("admin.book.index")->withBooks($books)->withInput($request->except("page"));
     }
 
@@ -232,7 +240,6 @@ class BookAdminController extends Controller
     {
         $book = Book::find($id);
         $book->delete();
-
         Session::flash('success', '成功移除图书');
         return redirect()->route('admin.book.index');
     }
@@ -270,4 +277,5 @@ class BookAdminController extends Controller
         }
         return $this->department_array;
     }
+
 }

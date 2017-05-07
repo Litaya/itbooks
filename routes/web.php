@@ -11,6 +11,8 @@
 |
 */
 
+// Route::get('sockettest', "RecommenderController@getTestMessage");
+
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
 
 
@@ -126,8 +128,10 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
 	Route::post('bookreq/{id}/shipping', 'BookRequestAdminController@shipping')->name('admin.bookreq.shipping');
+	Route::post('bookreq/{id}/passorder', 'BookRequestAdminController@passAndBindOrder')->name('admin.bookreq.passorder');
 	Route::get('bookreq/export/packaging', "DatabaseController@exportBookRequestPackagingTable")->name('admin.bookreq.export.packaging');
 	Route::get('bookreq/export/book', "DatabaseController@exportBookRequestBookTable")->name('admin.bookreq.export.book');
+	Route::post('bookreq/{id}/reset', "BookRequestAdminController@resetStatus")->name('admin.bookreq.reset');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
 	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
@@ -153,11 +157,12 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::get('/', 'ResourceAdminController@index')->name('admin.resource.index');
 		Route::post('/', 'ResourceAdminController@store')->name('admin.resource.store');
 		Route::get('create', 'ResourceAdminController@create')->name('admin.resource.create');
-		Route::get('{id}', 'ResourceAdminController@show')->name('admin.resource.show');
+		Route::get('{id}', 'ResourceAdminController@show')->name('admin.resource.show')->where('id', '[0-9]+');
 		Route::put('{id}', 'ResourceAdminController@update')->name('admin.resource.update');
 		Route::delete('{id}', 'ResourceAdminController@destroy')->name('admin.resource.destroy');
 		Route::get('{id}/edit', 'ResourceAdminController@edit')->name('admin.resource.edit');
 		Route::post('{id}/download', 'ResourceAdminController@postDownload')->name('admin.resource.download');
+		Route::get('export', 'DatabaseController@exportDownloadRecord')->name('admin.resource.export');
 	});
 
 	/*
@@ -209,6 +214,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::get('/auto_reply','Admin\Wechat\WechatAutoReplyController@index')->name('admin.wechat.auto_reply.index');
 		Route::post('/auto_reply','Admin\Wechat\WechatAutoReplyController@store')->name('admin.wechat.auto_reply.store');
 		Route::post('/auto_reply/{id}/destroy','Admin\Wechat\WechatAutoReplyController@destroy')->name('admin.wechat.auto_reply.destroy');
+		Route::post('/auto_reply/edit','Admin\Wechat\WechatAutoReplyController@storeEdit')->name('admin.wechat.auto_reply.edit');
 		Route::post('/module/update_status','Admin\Wechat\WechatModuleController@changeModuleStatus')->name('admin.wechat.module.changestatus');
 
 		Route::get('/module','Admin\Wechat\WechatModuleController@index')->name('admin.wechat.module.index');
@@ -251,8 +257,9 @@ Route::group(["prefix" => "message"],function (){
 	Route::get('/',"MessageController@index")->name('message.index');
 });
 
-Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
+Route::group(["prefix" => "material"],function (){
 	Route::get('/','Wechat\WechatMaterialController@index')->name('material.index');
+	Route::get('/cate/{cate_id}','Wechat\WechatMaterialController@cateMaterials')->name('material.cate_materials');
 	Route::get('/search','Wechat\WechatMaterialController@search')->name('material.search');
 	Route::get("/{id}/",'Wechat\WechatMaterialController@show')->name('material.show');
 });
@@ -261,4 +268,10 @@ Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
 	Route::get('/','CategoryController@index')->name('category.index');
 	Route::post('/create','CategoryController@create')->name('category.create');
 	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
+	Route::post('/altername','CategoryController@alterCateName')->name('category.altername');
+});
+
+Route::group(["prefix" => "test"],function () {
+	Route::get('/imgupload','TestController@imgUpload')->name('test.imgupload');
+	Route::post('/imgupload','TestController@saveImage')->name('test.saveimage');
 });

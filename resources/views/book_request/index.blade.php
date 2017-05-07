@@ -35,7 +35,7 @@
                            value="{{ isset($userinfo->realname)?$userinfo->realname:"" }}">
                 </div>
                 <div class="form-group">
-                    <label for="address">收件地址</label>
+                    <label for="address">收件地址（写清：省、市、区、路单位名称或住址）</label>
                     <input type="text" class="form-control" name="address" id="address" placeholder="请填写详细地址方便寄送"
                            value="{{ isset($userinfo->address)?$userinfo->address:"" }}">
                 </div>
@@ -61,28 +61,11 @@
 
     <script>
         var books_num = 0;
-        $("#search_box").on('input',function () {
-            var search_string = $("#search_box").val();
-            $.ajax({
-                'url': "/api/book/search_teaching/"+search_string,
-                'method': 'post'
-            }).done(function(result){
+        var search_timer = null;
 
-                var books = JSON.parse(result);
-                books = books['data'];
-                $("#result_place").html("");
-                for(var i in books){
-
-                    var book_com_name = books[i]["name"];
-                    var book_name = books[i]["name"].length>=20?books[i]["name"].substring(0,20)+"...":books[i]["name"];
-                    var book_id   = books[i]['id'];
-                    var book_isbn = books[i]['isbn'];
-
-                    $("#result_place").append("<li><a href='javascript:void(0)' class='book_item' id='book_"+book_id
-                            +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\",\""+book_isbn+"\")'>"+book_name+"</a></li>");
-                }
-
-            });
+        $("#search_box").on('input', function () {
+            if(search_timer != null) clearTimeout(search_timer);
+            search_timer = setTimeout(search, 500);
         });
         $("#search_box").trigger("input");
 
@@ -106,6 +89,30 @@
 
         }
 
+        function search(){
+            var search_string = $("#search_box").val();
+            $.ajax({
+                'url': "/api/book/search_teaching/"+search_string,
+                'method': 'post'
+            }).done(function(result){
+
+                var books = JSON.parse(result);
+                books = books['data'];
+                $("#result_place").html("");
+                for(var i in books){
+
+                    var book_com_name = books[i]["name"];
+                    var book_name = books[i]["name"].length>=20?books[i]["name"].substring(0,20)+"...":books[i]["name"];
+                    var book_id   = books[i]['id'];
+                    var book_isbn = books[i]['isbn'];
+
+                    $("#result_place").append("<li><a href='javascript:void(0)' class='book_item' id='book_"+book_id
+                            +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\",\""+book_isbn+"\")'>"+book_name+"</a></li>");
+                }
+
+            });
+        }
+
         function remove_selected(book_id){
             books_num -- ;
             changeBookNum(1);
@@ -121,7 +128,7 @@
 
         function checkNum(x){
             var i = parseInt($("#books_num").html());
-            if(i+x < 0 || i+x > 10) return false;
+            if(i+x < 0) return false;
             return true;
         }
     </script>

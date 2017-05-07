@@ -11,6 +11,7 @@
                     <div class="panel-heading">申请情况</div>
                     <div class="panel-body">
                         <p><strong>申请书目:</strong> {{$bookreq->book->name}}</p>
+                        <p><strong>ISBN:</strong> {{$bookreq->book->isbn}} </p>
                         <p><strong>申请用户:</strong> {{$bookreq->user->username}}</p>
                         <p><strong>发起时间:</strong> {{$bookreq->created_at}}</p>
                         <p><strong>收件人:</strong>   {{$bookreq->receiver}}</p>
@@ -19,7 +20,19 @@
                         <p><strong>审批状态:</strong>
                             <span style="color: {{$bookreq->status==0?'#777':($bookreq->status==1?'#4E4':'#E44')}}">
                                 {{$bookreq->status==0?'审核中':($bookreq->status==1?'已通过':'未通过')}}
+                                @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
+                                    @if($bookreq->status != 0)
+                                    <button class="btn-xs btn-danger" id="reset-button" data-toggle="modal" data-target="#reset-modal">重置</button>
+                                    @endif
+                                @endif
                             </span>
+                        </p>
+                        <p><strong>处理人:</strong>
+                            @if(!empty($bookreq->handler))
+                                {{$bookreq->handler->username}}
+                            @else
+                                <span style="color:#AAA;">[未记录]</span>
+                            @endif
                         </p>
                         <p><strong>目前教材使用情况:</strong> {{empty(json_decode($bookreq->message)->book_plan)?"未填写":json_decode($bookreq->message)->book_plan}} </p>
                         <p><strong>留言:</strong> {{empty(json_decode($bookreq->message)->remarks)?"未填写":json_decode($bookreq->message)->remarks}} </p>
@@ -30,17 +43,17 @@
                                 @endif
                             </p>
                             @endif
-                        
                     </div>
                 </div>
 
 
+            @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
                 @if($bookreq->status==1)
                     <div class="panel panel-default">
                         <div class="panel-heading">物流详情</div>
                         <div class="panel-body">
                             @if(empty($bookreq->order_number))
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                             <button type="button"
                                     class="btn btn-danger btn-block"
                                     data-toggle="modal"
@@ -57,11 +70,10 @@
                             </a>
                             </p>
                             @endif
-
                         </div>
                     </div>
-                @endif
-
+                @endif <!-- END STATUS=1 -->
+            @endif <!-- END GET ROLE -->
             </div>
 
             <div class="col-md-6">
@@ -99,6 +111,7 @@
             </div>
         </div>
         <div class="row">
+        @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
             @if($bookreq->status==0)
                 <div class="col-md-2">
                     {!!Form::open(["route"=>["admin.bookreq.pass", $bookreq->id], "method"=>"POST"]) !!}
@@ -114,6 +127,7 @@
                             </button>
                 </div>
             @endif
+        @endif
             <div class="col-md-2">
                 <a href="{{route('admin.bookreq.index')}}"><div class="btn btn-primary btn-block">返回列表</div></a>
             </div>
@@ -121,7 +135,7 @@
         </div>
     </div>
 
-
+    @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
     <div class="modal fade" id="reject-modal"
         tabindex="-1" role="dialog"
         aria-labelledby="reject-modal-label">
@@ -160,12 +174,33 @@
                 {!! Form::model($bookreq, ["route"=>["admin.bookreq.shipping", $bookreq->id], "method"=>"POST"]) !!}
                 {{ Form::label("order_number", "订单号:") }}
                 {{ Form::text("order_number", null, ["class"=>"form-control"]) }}
-                {{ Form::submit('确认', ['class'=>'btn btn-danger btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
+                {{ Form::submit('确认', ['class'=>'btn btn-success btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
                 {!! Form::close() !!}
                 
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="reset-modal"
+        tabindex="-1" role="dialog"
+        aria-labelledby="reset-modal-label">
+        <div class="modal-dialog" role="dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="reset-modal-label">重置样书申请</h4>
+                </div>
+                <div class="modal-body">
+                {!! Form::model($bookreq, ["route"=>["admin.bookreq.reset", $bookreq->id], "method"=>"POST"]) !!}
+                {{ Form::submit('重置', ['class'=>'btn btn-danger btn-md btn-block', 'style'=>"margin-top: 10px"]) }}
+                {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif <!-- END CHECK ROLE -->
+
 
 @endsection

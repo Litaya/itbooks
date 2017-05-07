@@ -8,6 +8,7 @@ use App\Models\ConferenceRegister;
 use App\Models\BookRequest;
 use App\Models\Book;
 use App\Models\Department;
+use App\Models\DownloadRecord;
 
 use App\Helpers\FileHelper;
 
@@ -161,14 +162,14 @@ class DatabaseController extends Controller
     public function exportBookRequestPackagingTable(){
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
-            $requests = BookRequest::acceptedButNotSent()
+            $requests = BookRequest::unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
                                 ->get()->toArray();
         }
         else if($ar == "DEPTADMIN"){
             $requests = BookRequest::ofDepartmentCode(PM::getAdminDepartmentCode())
-                                ->acceptedButNotSent()
+                                ->unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
                                 ->get()->toArray();
@@ -205,14 +206,14 @@ class DatabaseController extends Controller
     public function exportBookRequestBookTable(){
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
-            $books = BookRequest::acceptedButNotSent()
+            $books = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_id')
                                 ->select('book.id', 'book.isbn as isbn', 'book.name as name', 'book.price as price', 'receiver')
                                 ->get()
                                 ->toArray();
         }
         else if($ar == "DEPTADMIN"){
-            $books = BookRequest::acceptedButNotSent()
+            $books = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_id')
                                 ->leftJoin('department', 'department.id', '=', 'book.department_id')
 					            ->whereRaw('department.code like \''.PM::getAdminDepartmentCode().'%\'')
@@ -291,6 +292,79 @@ class DatabaseController extends Controller
         //->download('xlsx');
 
         return redirect()->route("admin.bookreq.index");
+    }
+
+    public function exportDownloadRecord(){
+        $ar = PM::getAdminRole();
+        if($ar == "SUPERADMIN"){
+            $records = DownloadRecord::leftJoin('book', 'book.id', '=', 'book_id')
+                                ->leftJoin('user', 'user.id', '=', 'user_id')
+                                ->leftJoin('user_info', 'user_info.user_id', '=', 'user.id')
+                                ->select("download_record.user_id as user_id", 
+                                         "download_record.book_id as book_id", 
+                                         "book.name as bookname", 
+                                         "book.isbn as isbn", 
+                                         "user_info.realname as realname", 
+                                         "user_info.phone as phone", 
+                                         "user.email as email",
+                                         "user.username as username",
+                                         "user_info.workplace as workplace")
+                                ->get();
+        }
+        else if($ar == "DEPTADMIN"){
+            $records = DownloadRecord::leftJoin('book', 'book.id', '=', 'book_id')
+                                ->leftJoin('department', 'department.id', '=', 'book.department_id')
+                                ->leftJoin('user', 'user.id', '=', 'user_id')
+                                ->leftJoin('user_info', 'user_info.user_id', '=', 'user.id')
+					            ->whereRaw('department.code like \''.PM::getAdminDepartmentCode().'%\'')
+                                ->select("download_record.user_id as user_id",
+                                         "download_record.book_id as book_id",
+                                         "book.name as bookname", 
+                                         "book.isbn as isbn", 
+                                         "user_info.realname as realname", 
+                                         "user_info.phone as phone", 
+                                         "user.email as email",
+                                         "user.username as username",
+                                         "user_info.workplace as workplace")
+                                ->get();
+        }
+        else{
+            return redirect()->route("admin.index");
+        }
+
+        if(count($records) == 0){
+            Session::flash('warning', '没有需要导出的下载信息');
+            return redirect()->route("admin.resource.index");
+        }
+
+        $filename = date("Y-m-d")."_下载记录_".time();
+        $export = Excel::create($filename, function($excel) use ($records){
+            $excel->sheet("下载记录", function($sheet) use ($records){
+
+                $sheet->setAutoSize(true);
+                $sheet->row(1, ["用户名", "真实姓名", "邮箱", "学校", "书代号", "书名"]);
+                foreach($records as $record){
+                    $sheet->appendRow([
+                            $record->username,
+                            $record->realname,
+                            $record->email,
+                            $record->workplace,
+                            $record->isbn . " ",
+                            $record->bookname,
+                        ]);
+                }
+
+                $sheet->setColumnFormat(array(
+                    'A' => '@',
+                    'B' => '@',
+                    'C' => '0',
+                    'D' => '0.00',
+                    'E' => '@',
+                ));
+            });
+        })->store('xlsx')->export('xlsx');
+
+        return redirect()->route("admin.resource.index");
     }
 
 }

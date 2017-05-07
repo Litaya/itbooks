@@ -22,6 +22,7 @@ class Material extends Model
 	    'content_source_url',
 	    'reading_quantity',
 	    'category_id',
+	    'display',
 	    'wechat_update_time',
     ];
 
