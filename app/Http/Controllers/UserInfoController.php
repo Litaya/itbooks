@@ -282,11 +282,11 @@ class UserInfoController extends Controller
 		if(empty(Auth::user()->certificate_as)){
 			if(!$userinfo->img_upload){
 				WechatMessageSender::sendText(Auth::user()->openid,
-					"您还没有上传认证照片，目前暂时无法申请样书，但可以使用其他功能，请尽快上传照片完成认证。\n".
+					"信息保存成功！您还没有上传认证照片，请尽快上传以完成认证。\n".
 					"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
-			}else{
+			}else if($request->sendrequest == "false"){
 				WechatMessageSender::sendText(Auth::user()->openid,
-					"您已经提交了/证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n".
+					"信息保存成功！请尽快提交您的认证申请。\n".
 					"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 			}
 		}
@@ -421,6 +421,9 @@ class UserInfoController extends Controller
 			$cr->user_id = $user->id;
 			$cr->status = 0;
 			$cr->save();
+			WechatMessageSender::sendText(Auth::user()->openid,
+				"您已经提交了认证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n" .
+				"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 			Session::flash("success", "提交申请成功");
 		}
 		else{

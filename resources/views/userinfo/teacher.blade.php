@@ -76,7 +76,7 @@
     {!! Form::close() !!}
 
     <script>
-        wx.config(<?php echo $js->config(array('chooseImage', 'uploadImage'), true) ?>);
+        wx.config(<?php echo $js->config(array('chooseImage', 'uploadImage'), false) ?>);
 
         function chooseImage(){
             wx.chooseImage({
