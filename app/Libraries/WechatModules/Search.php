@@ -28,44 +28,46 @@ class Search extends WechatHandler {
 				foreach ($book_results as $book_result){
 					if(sizeof($book_news) < 3){
 						array_push($book_news,new News([
-									'title'       => "图书|".substr($book_result->name." ".$book_result->authors,0,100),
-									'description' => '',
-									'url'         => route('book.show',$book_result->id),
-									'image'       => empty($book_result->img_upload)?route('image',['src'=>'public/book.png']):$book_result->img_upload
+							'title'       => "图书|".substr($book_result->name." ".$book_result->authors,0,100),
+							'description' => '',
+							'url'         => route('book.show',$book_result->id),
+							'image'       => empty($book_result->img_upload)?route('image',['src'=>'public/book.png']):$book_result->img_upload
 						]));
 					}else
 						break;
 				}
 				$book_new = new News([
-						'title'       => "图书|共查询到".sizeof($book_results)."本相关图书",
-						'description' => "点此查看相关图书列表",
-						'url'         => route('book.index')."?search=".$search_msg."&openid=$openid",
-						'image'       => route('image',['src'=>'public/book.png'])
+					'title'       => "图书|共查询到".sizeof($book_results)."本相关图书",
+					'description' => "点此查看相关图书列表",
+					'url'         => route('book.index')."?search=".$search_msg."&openid=$openid",
+					'image'       => route('image',['src'=>'public/book.png'])
 				]);
 				array_push($book_news,$book_new);
 				Log::info('处理模块: Search');
 			}
 			$material_results = Material::search($search_msg)->orderBy('wechat_update_time','desc')->get();
-            $material_news    = [];
-            foreach ($material_results as $material_result){
-            	if(sizeof($material_news) < 3){
-            		array_push($material_news,new News([
-            			'title'       => "文章|".substr($material_result->title,0,100),
-			            'description' => '',
-			            'url'         => route('material.show',['id'=>$material_result->id]),
-			            'image'       => url($material_result->cover_path)
-		            ]));
-	            }else{
-            		break;
-	            }
-            }
-			$material_new = new News([
-				'title'       => '文章|共搜到'.sizeof($material_results).'条相关文章，点此查看',
-				'description' => '',
-				'url'         => route('material.index')."?search=$search_msg",
-				'image'       => route('image',['src'=>'public/material.png'])
-			]);
-			array_push($material_news,$material_new);
+			$material_news    = [];
+			foreach ($material_results as $material_result){
+				if(sizeof($material_news) < 3){
+					array_push($material_news,new News([
+						'title'       => "文章|".substr($material_result->title,0,100),
+						'description' => '',
+						'url'         => route('material.show',['id'=>$material_result->id]),
+						'image'       => url($material_result->cover_path)
+					]));
+				}else{
+					break;
+				}
+			}
+			if(sizeof($material_news)>0){
+				$material_new = new News([
+					'title'       => '文章|共搜到'.sizeof($material_results).'条相关文章，点此查看',
+					'description' => '',
+					'url'         => route('material.index')."?search=$search_msg",
+					'image'       => route('image',['src'=>'public/material.png'])
+				]);
+				array_push($material_news,$material_new);
+			}
 			return array_merge($book_news,$material_news);
 		}
 
