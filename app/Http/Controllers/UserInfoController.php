@@ -13,7 +13,7 @@ use App\Models\CertRequest;
 use App\Models\District;
 use Auth;
 use Session;
-
+use Illuminate\Support\Facades\Log;
 
 class UserInfoController extends Controller
 {
@@ -247,8 +247,8 @@ class UserInfoController extends Controller
 			$app       = Wechat::getInstance()->getApp();
 			$temporary = $app->material_temporary;
 			$folder    = FileHelper::userCertificateFolder(Auth::user());
-			$filename  = time().".";
-			$temporary->download($request->image_media_id, $folder, $filename);
+			$filename  = time();
+			$filename  = $temporary->download($request->image_media_id, storage_path($folder), $filename);
 			$userinfo->img_upload = $folder.$filename;
 		}
 
@@ -286,7 +286,7 @@ class UserInfoController extends Controller
 					"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 			}else{
 				WechatMessageSender::sendText(Auth::user()->openid,
-					"您已经提交了认证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n".
+					"您已经提交了/证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n".
 					"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 			}
 		}
@@ -312,14 +312,15 @@ class UserInfoController extends Controller
 		if($request->img_upload){
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
 		}
-		if($request->image_media_id){
-			$app       = Wechat::getInstance()->getApp();
-			$temporary = $app->material_temporary;
-			$folder    = FileHelper::userCertificateFolder(Auth::user());
-			$filename  = time().".";
-			$temporary->download($request->image_media_id, $folder, $filename);
-			$userinfo->img_upload = $folder.$filename;
-		}
+        if($request->image_media_id){
+            Log::info($request->image_media_id);
+            $app       = Wechat::getInstance()->getApp();
+            $temporary = $app->material_temporary;
+            $folder    = FileHelper::userCertificateFolder(Auth::user());
+            $filename  = time();
+            $filename  = $temporary->download($request->image_media_id, storage_path($folder), $filename);
+            $userinfo->img_upload = $folder.$filename;
+        }
 
 		$data = empty($userinfo->json_content) ? [] : json_decode($userinfo->json_content, true);
 		$data["book_plan"] = $request->book_plan;
@@ -363,15 +364,16 @@ class UserInfoController extends Controller
 		$set_obj($userinfo, "realname", $request->realname);
 		if($request->img_upload)
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
-		if($request->image_media_id){
-			$app       = Wechat::getInstance()->getApp();
-			$temporary = $app->material_temporary;
-			$folder    = FileHelper::userCertificateFolder(Auth::user());
-			$filename  = time().".";
-			$temporary->download($request->image_media_id, $folder, $filename);
-			$userinfo->img_upload = $folder.$filename;
-		}
 
+        if($request->image_media_id){
+            Log::info($request->image_media_id);
+            $app       = Wechat::getInstance()->getApp();
+            $temporary = $app->material_temporary;
+            $folder    = FileHelper::userCertificateFolder(Auth::user());
+            $filename  = time();
+            $filename  = $temporary->download($request->image_media_id, storage_path($folder), $filename);
+            $userinfo->img_upload = $folder.$filename;
+        }
 		self::update_user_info($userinfo);
 
 		Session::flash("success", "信息保存成功");

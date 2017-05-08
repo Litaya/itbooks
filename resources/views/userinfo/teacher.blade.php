@@ -62,10 +62,10 @@
         @endif
         {{ Form::label("img_upload", "上传图片材料", ["class"=>"form-spacing-top"]) }}
         <small>(请上传教师证、校网个人主页截图等可供验证教师身份的图片)</small>
-        {{ Form::file("img_upload", ["class"=>"form-control"])}}
-
+        {{ Form::file("img_upload", ["class"=>"form-control hidden"])}}
+ 
         {{ Form::text('image_media_id',null,["id"=>"image_media_id","hidden"=>"hidden"]) }}
-        <button class="btn btn-default btn-sm" onclick="chooseImage()">选择图片</button>
+        <a href="javascript:void(0)" class="btn btn-default btn-sm" onclick="chooseImage()">选择图片</a>
 
         {{ Form::submit("保存", ["class"=>"btn btn-primary btn-block form-spacing-top"])}}
 
