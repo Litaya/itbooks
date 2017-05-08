@@ -50,7 +50,7 @@ class Search extends WechatHandler {
             foreach ($material_results as $material_result){
             	if(sizeof($material_news) < 3){
             		array_push($material_news,new News([
-            			'title'       => "文章".substr($material_result->title,0,100),
+            			'title'       => "文章|".substr($material_result->title,0,100),
 			            'description' => '',
 			            'url'         => route('material.show',['id'=>$material_result->id]),
 			            'image'       => url($material_result->cover_path)
@@ -58,14 +58,14 @@ class Search extends WechatHandler {
 	            }else{
             		break;
 	            }
-	            $material_new = new News([
-		            'title'       => '文章|共搜到'.sizeof($material_results).'条相关文章，点此查看',
-		            'description' => '',
-		            'url'         => route('material.index')."?search=$search_msg",
-		            'image'       => route('image',['src'=>'public/material.png'])
-	            ]);
-            	array_push($material_news,$material_new);
             }
+			$material_new = new News([
+				'title'       => '文章|共搜到'.sizeof($material_results).'条相关文章，点此查看',
+				'description' => '',
+				'url'         => route('material.index')."?search=$search_msg",
+				'image'       => route('image',['src'=>'public/material.png'])
+			]);
+			array_push($material_news,$material_new);
 			return array_merge($book_news,$material_news);
 		}
 
