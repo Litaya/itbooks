@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libraries\WechatMessageSender;
+use App\Models\Wechat;
 use Illuminate\Http\Request;
 use App\Helpers\FileHelper;
 use App\Models\User;
@@ -121,10 +122,12 @@ class UserInfoController extends Controller
 	}
 
 	public function getTeacher(){
+		$app      = Wechat::getInstance()->getApp();
+		$js       = $app->js;
 		$userinfo = self::get_user_info(Auth::user());
 		if($userinfo->role != "teacher")
 			return redirect()->route("userinfo.basic");
-		return view("userinfo.teacher")->withUserinfo($userinfo);
+		return view("userinfo.teacher",compact('js'))->withUserinfo($userinfo);
 	}
 
 	public function getMissing(Request $request){
@@ -237,8 +240,17 @@ class UserInfoController extends Controller
 		$userinfo->realname = $request->realname;
 		$userinfo->workplace = $request->workplace;
 
-		if($request->img_upload)
+		if($request->img_upload){
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
+		}
+		if($request->image_media_id){
+			$app       = Wechat::getInstance()->getApp();
+			$temporary = $app->material_temporary;
+			$folder    = FileHelper::userCertificateFolder(Auth::user());
+			$filename  = time().".";
+			$temporary->download($request->image_media_id, $folder, $filename);
+			$userinfo->img_upload = $folder.$filename;
+		}
 
 		if($request->number_stud_1 && !$request->course_name_1)
 			return redirect()->back()->withErrors("请填写第一课程名称")->withInput();
@@ -300,6 +312,14 @@ class UserInfoController extends Controller
 		if($request->img_upload){
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
 		}
+		if($request->image_media_id){
+			$app       = Wechat::getInstance()->getApp();
+			$temporary = $app->material_temporary;
+			$folder    = FileHelper::userCertificateFolder(Auth::user());
+			$filename  = time().".";
+			$temporary->download($request->image_media_id, $folder, $filename);
+			$userinfo->img_upload = $folder.$filename;
+		}
 
 		$data = empty($userinfo->json_content) ? [] : json_decode($userinfo->json_content, true);
 		$data["book_plan"] = $request->book_plan;
@@ -343,6 +363,14 @@ class UserInfoController extends Controller
 		$set_obj($userinfo, "realname", $request->realname);
 		if($request->img_upload)
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
+		if($request->image_media_id){
+			$app       = Wechat::getInstance()->getApp();
+			$temporary = $app->material_temporary;
+			$folder    = FileHelper::userCertificateFolder(Auth::user());
+			$filename  = time().".";
+			$temporary->download($request->image_media_id, $folder, $filename);
+			$userinfo->img_upload = $folder.$filename;
+		}
 
 		self::update_user_info($userinfo);
 
