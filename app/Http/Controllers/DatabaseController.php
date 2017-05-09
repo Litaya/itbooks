@@ -165,6 +165,7 @@ class DatabaseController extends Controller
             $requests = BookRequest::unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
+                                ->orderBy('book_request.created_at', desc)
                                 ->get()->toArray();
         }
         else if($ar == "DEPTADMIN"){
@@ -172,6 +173,7 @@ class DatabaseController extends Controller
                                 ->unhandled()
                                 ->select('receiver', 'address', 'phone')
                                 ->groupBy('receiver', 'address', 'phone')
+                                ->orderBy('book_request.created_at', desc)
                                 ->get()->toArray();
         }
 
