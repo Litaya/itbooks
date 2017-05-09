@@ -33,14 +33,15 @@
             @foreach($categories as $category)
                 <div role="tabpanel" class="tab-pane" id="cate_{{ $category->id }}"  style=" padding-top: 20px;">
                     <div class="col-lg-12">
+                        <button class="btn btn-primary btn-sm" onclick="changeCateUrlStatus({{ $category->id }})">显示本类url</button>
                         <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#alterCategory{{$category->id}}">修改类别名</button>
                         <button class="btn btn-danger btn-sm" onclick="removeCate({{ $category->id }})">删除类别</button>
                     </div>
-                    <hr>
+                    <div id="cate_{{ $category->id }}_url" class="col-lg-12 hidden" style="margin-top: 20px;">
+                        <p>http://shuquan.app/material/cate/{{ $category->id }}</p>
+                    </div><hr>
                     <div class="col-lg-12">
-                        <ul class="list-group" id="cate{{ $category->id }}_table">
-
-                        </ul>
+                        <ul class="list-group" id="cate{{ $category->id }}_table"></ul>
                         <p id="cate{{ $category->id }}_load_more" class="hidden" style="text-align: center"><a href="javascript:void(0)">点击加载更多</a></p>
                     </div>
                 </div>
@@ -143,6 +144,10 @@
         });
 
 
+        function changeCateUrlStatus(cate){
+            $("#cate_"+cate+"_url").removeClass('hidden');
+        }
+
         $('#myTabs a').click(function (e) {
             e.preventDefault();
             $(this).tab('show')
@@ -224,7 +229,7 @@
                 }
             });
         }
-        
+
         function alterCategory() {
 
         }
