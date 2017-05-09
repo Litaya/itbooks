@@ -163,15 +163,17 @@ class DatabaseController extends Controller
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
             $requests = BookRequest::unhandled()
-                                ->select('receiver', 'address', 'phone')
-                                ->groupBy('receiver', 'address', 'phone')
+                                ->leftJoin('book', 'book.id', '=', 'book_request.book_id')
+                                ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname')
+                                ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
         else if($ar == "DEPTADMIN"){
             $requests = BookRequest::ofDepartmentCode(PM::getAdminDepartmentCode())
                                 ->unhandled()
-                                ->select('receiver', 'address', 'phone')
-                                ->groupBy('receiver', 'address', 'phone')
+                                //->leftJoin('book', 'book.id', '=', 'book_request.book_id') //joined in scope
+                                ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname')
+                                ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
 
@@ -180,21 +182,24 @@ class DatabaseController extends Controller
             return redirect()->route("admin.bookreq.index");
         }
 
+
+        $aggregate = [];
+        
         for($i = 0; $i < count($requests); $i++){
             $requests[$i] = (array)$requests[$i];
+            $key = $requests[$i]["receiver"] . "_@_" . $requests[$i]["address"] . "_@_" . $requests[$i]["phone"];
+            $aggregate[$key][] = $requests[$i]["bookname"]; 
         }
 
         $filename = date("Y-m-d")."快递打印单_".time();
-        $export = Excel::create($filename, function($excel) use ($requests){
-            $excel->sheet("快递信息", function($sheet) use ($requests){
+        $export = Excel::create($filename, function($excel) use ($aggregate){
+            $excel->sheet("快递信息", function($sheet) use ($aggregate){
                 $sheet->setAutoSize(true);
-                $sheet->row(1, ["收件人", "地址", "联系电话"]);
-                foreach($requests as $request){
-                    $sheet->appendRow([
-                            $request["receiver"],
-                            $request["address"],
-                            $request["phone"]
-                        ]);
+                $sheet->row(1, ["收件人", "地址", "联系电话", "书名"]);
+                foreach($aggregate as $key=>$booklist){
+                    $rap = explode('_@_', $key);
+                    array_push($rap, implode("\r\n", $booklist));
+                    $sheet->appendRow($rap);
                 }
             });
         })->store('xlsx')->export('xlsx');
