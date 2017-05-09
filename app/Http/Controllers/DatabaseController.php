@@ -196,8 +196,6 @@ class DatabaseController extends Controller
             $excel->sheet("快递信息", function($sheet) use ($aggregate){
                 $sheet->setAutoSize(true);
                 $sheet->row(1, ["收件人", "地址", "联系电话", "书名"]);
-                $L = count($aggregate) + 1;
-                $sheet->getStyle('D2:D'.$L)->getAlignment()->setWrapText(true);
                 foreach($aggregate as $key=>$booklist){
                     $rap = explode('_@_', $key);
                     array_push($rap, implode("\r\n", $booklist));
