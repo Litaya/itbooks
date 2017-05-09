@@ -188,8 +188,7 @@ class DatabaseController extends Controller
         for($i = 0; $i < count($requests); $i++){
             $requests[$i] = (array)$requests[$i];
             $key = $requests[$i]["receiver"] . "_@_" . $requests[$i]["address"] . "_@_" . $requests[$i]["phone"];
-            if(!in_array($key, $aggregate)) $aggregate[$key] = [];
-            array_push($aggregate[$key], $requests[$i]["bookname"]); 
+            $aggregate[$key][] = $requests[$i]["bookname"]; 
         }
 
         $filename = date("Y-m-d")."快递打印单_".time();
