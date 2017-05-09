@@ -198,7 +198,7 @@ class DatabaseController extends Controller
                 $sheet->setAutoSize(true);
                 $sheet->row(1, ["收件人", "地址", "联系电话"]);
                 foreach($aggregate as $key=>$booklist){
-                    $rap = explode($key, '_@_');
+                    $rap = explode('_@_', $key);
                     array_push($rap, implode('\r\n', $booklist));
                     $sheet->appendRow($rap);
                 }
