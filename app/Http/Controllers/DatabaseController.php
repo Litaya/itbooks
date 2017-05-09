@@ -187,14 +187,14 @@ class DatabaseController extends Controller
         
         for($i = 0; $i < count($requests); $i++){
             $requests[$i] = (array)$requests[$i];
-            $key = $request[$i]["receiver"] . "_@_" . $request[$i]["address"] . "_@_" . $request[$i]["phone"];
+            $key = $requests[$i]["receiver"] . "_@_" . $requests[$i]["address"] . "_@_" . $requests[$i]["phone"];
             if(!in_array($key, $aggregate)) $aggregate[$key] = [];
-            array_push($aggregate[$key], $request[$i]["bookname"]); 
+            array_push($aggregate[$key], $requests[$i]["bookname"]); 
         }
 
         $filename = date("Y-m-d")."快递打印单_".time();
-        $export = Excel::create($filename, function($excel) use ($requests){
-            $excel->sheet("快递信息", function($sheet) use ($requests){
+        $export = Excel::create($filename, function($excel) use ($aggregate){
+            $excel->sheet("快递信息", function($sheet) use ($aggregate){
                 $sheet->setAutoSize(true);
                 $sheet->row(1, ["收件人", "地址", "联系电话"]);
                 foreach($aggregate as $key=>$booklist){
