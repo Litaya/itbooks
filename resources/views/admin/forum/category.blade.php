@@ -38,7 +38,7 @@
                         <button class="btn btn-danger btn-sm" onclick="removeCate({{ $category->id }})">删除类别</button>
                     </div>
                     <div id="cate_{{ $category->id }}_url" class="col-lg-12 hidden" style="margin-top: 20px;">
-                        <p>http://shuquan.app/material/cate/{{ $category->id }}</p>
+                        <p>{{ route("material.cate_materials",["cate_id"=>$category->id]) }}</p>
                     </div><hr>
                     <div class="col-lg-12">
                         <ul class="list-group" id="cate{{ $category->id }}_table"></ul>
