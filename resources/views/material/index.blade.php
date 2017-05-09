@@ -23,7 +23,31 @@
         .item-hint{
             color: #cccccc;;
         }
+        #cate-nav{
+            min-height: 30px;
+            margin: -22px -20px 22px -20px;
+            background-color: #FAFAFA;
+            box-shadow: 0 1px 5px #ccc;
+        }
+        .cate-nav-item{
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+        }
+        .cate-nav-item.active{
+            color: #99ccff;
+            border-bottom: 3px solid #99ccff;
+        }
     </style>
+
+    {{--<div class="row" id="cate-nav">--}}
+        {{--<div class="col-xs-3 cate-nav-item active" style="border-left:none;">全部</div>--}}
+        {{--@foreach($categories as $category)--}}
+            {{--<div class="col-xs-3 cate-nav-item">{{ $category->name }}</div>--}}
+        {{--@endforeach--}}
+    {{--</div>--}}
+
+
     <form action="{{ route('material.index') }}" class="form" method="get">
         <input type="text" class="form-control" name="search" placeholder="您对什么感兴趣？">
     </form>
