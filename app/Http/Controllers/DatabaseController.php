@@ -165,7 +165,6 @@ class DatabaseController extends Controller
             $requests = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_request.book_id')
                                 ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname')
-                                ->groupBy('receiver', 'address', 'phone', 'book_request.created_at')
                                 ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
@@ -174,7 +173,6 @@ class DatabaseController extends Controller
                                 ->unhandled()
                                 //->leftJoin('book', 'book.id', '=', 'book_request.book_id') //joined in scope
                                 ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname')
-                                ->groupBy('receiver', 'address', 'phone', 'book_request.created_at', 'book.name')
                                 ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
