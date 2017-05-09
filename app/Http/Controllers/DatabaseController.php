@@ -163,16 +163,16 @@ class DatabaseController extends Controller
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
             $requests = BookRequest::unhandled()
-                                ->select('receiver', 'address', 'phone')
-                                ->groupBy('receiver', 'address', 'phone')
+                                ->select('receiver', 'address', 'phone', 'created_at')
+                                ->groupBy('receiver', 'address', 'phone', 'created_at')
                                 ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
         else if($ar == "DEPTADMIN"){
             $requests = BookRequest::ofDepartmentCode(PM::getAdminDepartmentCode())
                                 ->unhandled()
-                                ->select('receiver', 'address', 'phone')
-                                ->groupBy('receiver', 'address', 'phone')
+                                ->select('receiver', 'address', 'phone', 'created_at')
+                                ->groupBy('receiver', 'address', 'phone', 'created_at')
                                 ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
