@@ -199,7 +199,7 @@ class DatabaseController extends Controller
                 $sheet->row(1, ["收件人", "地址", "联系电话"]);
                 foreach($aggregate as $key=>$booklist){
                     $rap = explode('_@_', $key);
-                    array_push($rap, implode(', ', $booklist));
+                    array_push($rap, count($booklist));
                     $sheet->appendRow($rap);
                 }
             });
