@@ -30,7 +30,15 @@ class BookRequestController extends Controller
         $userinfo = UserInfoController::get_user_info($user);
     	if(!empty($user->json_content))
     	    $user->json_content = json_decode($user->json_content);
-		return view('book_request.index', ['user'=>$user, 'userinfo'=>$userinfo]);
+        
+        $args = ['user'=>$user, 'userinfo'=>$userinfo];
+
+        if(!empty($request->addbook)){
+            $book = Book::find($request->addbook);
+            if(!empty($book)) $args['addbook'] = $book;
+        }
+
+		return view('book_request.index', $args);
     }
 
     public function storeMultiple(Request $request){
