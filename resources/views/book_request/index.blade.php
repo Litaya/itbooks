@@ -132,4 +132,11 @@
             return true;
         }
     </script>
+
+    @if(!empty($addbook))
+    <script>
+    book_select("{{$addbook->id}}", "{{$addbook->name}}", "{{$addbook->isbn}}");
+    </script>
+    @endif
+    
 @stop

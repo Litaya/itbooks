@@ -42,23 +42,23 @@
                         @if(Auth::check())
                             <div class="row">
                                 <div class="col-xs-12">
-            <span class="pull-right">
-                @if(!empty($userlike) and $userlike)
-                    <button id="like-button" class="btn btn-xs btn-default" style="color: #F77">
-                <i id="like-icon" class="fa fa-heart" aria-hidden="true"></i>&nbsp;想读</button>
-                @else
-                    <button id="like-button" class="btn btn-xs btn-default">
-                <i id="like-icon" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;想读</button>
-                @endif <!-- END LIKE IF -->
+                                <span class="pull-right">
+                                    @if(!empty($userlike) and $userlike)
+                                        <button id="like-button" class="btn btn-xs btn-default" style="color: #F77">
+                                    <i id="like-icon" class="fa fa-heart" aria-hidden="true"></i>&nbsp;想读</button>
+                                    @else
+                                        <button id="like-button" class="btn btn-xs btn-default">
+                                    <i id="like-icon" class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;想读</button>
+                                    @endif <!-- END LIKE IF -->
 
-                @if(!empty($userread) and $userread)
-                    <button id="read-button" class="btn btn-xs btn-default" style="color: #F77" onclick="unread()">
-                <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</button>
-                @else
-                    <button id="read-button" class="btn btn-xs btn-default" onclick="read()">
-                <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</button>
-            @endif <!-- END READ IF -->
-            </span>
+                                    @if(!empty($userread) and $userread)
+                                        <button id="read-button" class="btn btn-xs btn-default" style="color: #F77" onclick="unread()">
+                                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</button>
+                                    @else
+                                        <button id="read-button" class="btn btn-xs btn-default" onclick="read()">
+                                    <i class="fa fa-history" aria-hidden="true"></i>&nbsp;读过</button>
+                                @endif <!-- END READ IF -->
+                                </span>
                                 </div>
                             </div>
                         @endif
@@ -89,7 +89,7 @@
                         @endif
                     <!-- if the book is open to reservations, and the user has enough privilege -->
                         @if(Auth::check())
-                            <a href="{{route('bookreq.record')}}"><button class="btn btn-primary btn-xs">申请样书</button></a>
+                            <a href="{{route('bookreq.index', ['addbook'=>$book->id])}}"><button class="btn btn-primary btn-xs">申请样书</button></a>
                         @else
                             <a href="https://itbook.kuaizhan.com/39/60/p332015340738c5"><button class="btn btn-primary btn-xs">申请样书</button></a>
                     @endif
