@@ -83,6 +83,11 @@
                                 @if(!empty($bookreq->handler))
                                 <b>[{{$bookreq->handler->username}}]</b>
                                 @endif
+                                @if(!empty($j = json_decode($bookreq->message)))
+                                    @if(!empty($j->remarks))
+                                    <br>(有备注)
+                                    @endif
+                                @endif
                             </td>
                         @elseif($bookreq->status==1)
                             <td>通过
