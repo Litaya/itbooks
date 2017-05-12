@@ -1,6 +1,6 @@
 @extends('admin.layouts.frame')
 
-@section('title', '会议管理 | '.$user->username)
+@section('title', '用户管理 | '.$user->username)
 
 @section('content')
 <div class="container">
@@ -27,6 +27,34 @@
             @if($user->userinfo->address)
             <li>地址: {{$user->userinfo->address}} </li>
             @endif
+
+            @if(!empty($j = json_decode($user->userinfo->json_content, true)))
+            @foreach($j as $k=>$v)
+                @if(!empty($v))
+                    @if($k == "position")
+                    <li>职称: {{$v}}</li>
+                    @elseif($k == "course_name_1")
+                    <li>教授课程1: {{$v}}</li>
+                    <li>学生人数1: {{$j["number_stud_1"]}}</li>
+                    @elseif($k == "course_name_2")
+                    <li>教授课程2: {{$v}}</li>
+                    <li>学生人数2: {{$j["number_stud_2"]}}</li>
+                    @elseif($k == "course_name_3")
+                    <li>教授课程3: {{$v}}</li>
+                    <li>学生人数3: {{$j["number_stud_3"]}}</li>
+                    @elseif($k == "book_plan")
+                    <li>著书计划: {{$v}}</li>
+                    @elseif($k == "department")
+                    <li>院系: {{$v}}</li>
+                    @elseif($k == "jobtitle")
+                    <li>职位: {{$v}}</li>
+                    @elseif($k == "qqnumber")
+                    <li>QQ号: {{$v}}</li>
+                    @endif
+                @endif
+            @endforeach
+            @endif
+
         </ul>
     </div>
 
