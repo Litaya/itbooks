@@ -136,14 +136,23 @@ class RecommendHelper {
         return $response;
     }
 
-    private static function cmdFitCluster($n_clusters){
-        $response = self::SocketRequest(["command" => "FIT CLUSTER", "n_clusters" => "15"]);
+
+    private static function cmdFitCluster($n_clusters = 15){
+        $response = self::SocketRequest(["command" => "FIT CLUSTER", "n_clusters" => $n_clusters]);
         if(!$response["success"]) return false;
         return (strtoupper($response["data"]) == "TASK STARTED");
     }
 
-    private static function cmdGetSimilar($name, $topk){
-        $response = self::SocketRequest(["command" => "GET SIMILAR", "name"=>$name, "topk" => "20"]);
+
+    private static function cmdFitCF(){
+        $response = self::SocketRequest(["command" => "FIT CF"]);
+        if(!$response["success"]) return false;
+        return (strtoupper($response["data"]) == "TASK STARTED");
+    }
+
+
+    private static function cmdGetSimilar($name, $topk = 20){
+        $response = self::SocketRequest(["command" => "GET SIMILAR", "name"=>$name, "topk" => $topk]);
         if(!$response["success"]) return false;
         if(strtoupper(substr($response["data"], 0, 4)) == "BUSY") return false;
         
