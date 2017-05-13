@@ -24,8 +24,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call(function(){
+            \App\Helpers\RecommendHelper::cmdFitCluster();
+        })->weekly()->saturdays()->at('03:00');
+
+        $schedule->call(function(){
+            \App\Helpers\RecommendHelper::cmdFitCF();
+        })->daily()->at('01:00');
+
     }
 
     /**
