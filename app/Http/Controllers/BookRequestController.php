@@ -201,8 +201,8 @@ class BookRequestController extends Controller
 	        $req->delete();
 	        $bookname = $req->book->name;
 	        Session::flash('success', '您已经取消了对' . $bookname . '的样书申请');
-        }else{
-	        Session::flash('danger', '取消失败!');
+        } else {
+	        return redirect()->route('bookreq.record')->withErrors(["取消失败"]);
         }
         return redirect()->route('bookreq.record');
     }
