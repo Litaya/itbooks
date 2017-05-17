@@ -23,6 +23,8 @@ class DistrictController extends Controller
 
     // AJAX GET
     public function getCities(Request $request){
+        if(empty($request->province_id)) return response()->json([]);
+        
         $province = District::find($request->province_id);
 
         $d_array = [];
