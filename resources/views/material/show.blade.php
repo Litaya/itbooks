@@ -1,7 +1,8 @@
 @extends('layouts.frame_norefer')
 
-@section('title','书圈-文章')
+@section('title','书圈-'.$material->title)
 @section('content')
+    <meta name="description" content="{{$material->title}}">
     <div class="row" style="background-color: white;">
         <div class="col-xs-12">
             <h3>{{ $material->title }}</h3>
@@ -20,7 +21,8 @@
         </div>
     </div>
     <script>
-        $("#body").html('<?php echo $material->content?>');
+        wx.config(<?php echo $js->config(array('onMenuShareTimeline','onMenuShareQQ', 'onMenuShareWeibo','onMenuShareAppMessage','onMenuShareQZone'), false) ?>);
+        $("#body").html(<?php echo json_encode($material->content)?>);
         $("[data-src]").each(function () {
             $(this).attr("src",$(this).attr('data-src'));
         });
@@ -28,15 +30,22 @@
             $(this).attr("width",'100%');
             $(this).attr("height",'300px;');
         });
+        count = 0;
         $("img[data-src]").each(function () {
+            count = count + 1;
             if($(this).attr("data-s")==undefined){
                 $(this).css('max-width','100%');
                 $(this).attr("width",'100%');
             }else{
                 var max_width = parseInt($(this).attr("data-s").split(",")[0]);
-                if($(this).attr("data-w")>max_width){
+                if($(this).attr("data-w")==""){
                     $(this).css('max-width','100%');
                     $(this).attr("width",'100%');
+                }else{
+                    if($(this).attr("data-w")>max_width){
+                        $(this).css('max-width','100%');
+                        $(this).attr("width",'100%');
+                    } 
                 }
             }
         });

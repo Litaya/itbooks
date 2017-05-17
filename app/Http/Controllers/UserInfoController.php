@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Libraries\WechatMessageSender;
+use App\Models\Wechat;
 use Illuminate\Http\Request;
 use App\Helpers\FileHelper;
 use App\Models\User;
@@ -12,7 +13,7 @@ use App\Models\CertRequest;
 use App\Models\District;
 use Auth;
 use Session;
-
+use Illuminate\Support\Facades\Log;
 
 class UserInfoController extends Controller
 {
@@ -121,10 +122,12 @@ class UserInfoController extends Controller
 	}
 
 	public function getTeacher(){
+		$app      = Wechat::getInstance()->getApp();
+		$js       = $app->js;
 		$userinfo = self::get_user_info(Auth::user());
 		if($userinfo->role != "teacher")
 			return redirect()->route("userinfo.basic");
-		return view("userinfo.teacher")->withUserinfo($userinfo);
+		return view("userinfo.teacher",compact('js'))->withUserinfo($userinfo);
 	}
 
 	public function getMissing(Request $request){
@@ -237,8 +240,17 @@ class UserInfoController extends Controller
 		$userinfo->realname = $request->realname;
 		$userinfo->workplace = $request->workplace;
 
-		if($request->img_upload)
+		if($request->img_upload){
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
+		}
+		if($request->image_media_id){
+			$app       = Wechat::getInstance()->getApp();
+			$temporary = $app->material_temporary;
+			$folder    = FileHelper::userCertificateFolder(Auth::user());
+			$filename  = time();
+			$filename  = $temporary->download($request->image_media_id, storage_path($folder), $filename);
+			$userinfo->img_upload = $folder.$filename;
+		}
 
 		if($request->number_stud_1 && !$request->course_name_1)
 			return redirect()->back()->withErrors("请填写第一课程名称")->withInput();
@@ -270,11 +282,11 @@ class UserInfoController extends Controller
 		if(empty(Auth::user()->certificate_as)){
 			if(!$userinfo->img_upload){
 				WechatMessageSender::sendText(Auth::user()->openid,
-					"您还没有上传认证照片，目前暂时无法申请样书，但可以使用其他功能，请尽快上传照片完成认证。\n".
+					"信息保存成功！您还没有上传认证照片，请尽快上传以完成认证。\n".
 					"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
-			}else{
+			}else if($request->sendrequest == "false"){
 				WechatMessageSender::sendText(Auth::user()->openid,
-					"您已经提交了认证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n".
+					"信息保存成功！请尽快提交您的认证申请。\n".
 					"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 			}
 		}
@@ -300,6 +312,15 @@ class UserInfoController extends Controller
 		if($request->img_upload){
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
 		}
+        if($request->image_media_id){
+            Log::info($request->image_media_id);
+            $app       = Wechat::getInstance()->getApp();
+            $temporary = $app->material_temporary;
+            $folder    = FileHelper::userCertificateFolder(Auth::user());
+            $filename  = time();
+            $filename  = $temporary->download($request->image_media_id, storage_path($folder), $filename);
+            $userinfo->img_upload = $folder.$filename;
+        }
 
 		$data = empty($userinfo->json_content) ? [] : json_decode($userinfo->json_content, true);
 		$data["book_plan"] = $request->book_plan;
@@ -344,6 +365,15 @@ class UserInfoController extends Controller
 		if($request->img_upload)
 			$userinfo->img_upload = FileHelper::saveUserImage(Auth::user(), $request->file("img_upload"), "certificate");
 
+        if($request->image_media_id){
+            Log::info($request->image_media_id);
+            $app       = Wechat::getInstance()->getApp();
+            $temporary = $app->material_temporary;
+            $folder    = FileHelper::userCertificateFolder(Auth::user());
+            $filename  = time();
+            $filename  = $temporary->download($request->image_media_id, storage_path($folder), $filename);
+            $userinfo->img_upload = $folder.$filename;
+        }
 		self::update_user_info($userinfo);
 
 		Session::flash("success", "信息保存成功");
@@ -391,6 +421,9 @@ class UserInfoController extends Controller
 			$cr->user_id = $user->id;
 			$cr->status = 0;
 			$cr->save();
+			WechatMessageSender::sendText(Auth::user()->openid,
+				"您已经提交了认证信息，我们将于一个工作日内完成审核！您目前暂时无法申请样书，但可以使用其他功能。\n" .
+				"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>");
 			Session::flash("success", "提交申请成功");
 		}
 		else{

@@ -90,6 +90,8 @@
                 <small style="position: absolute;bottom:5px; color:#ccc">
                     阅读: {{ $material->reading_quantity }}&nbsp; 评论: <?php echo sizeof($material->comments) ?>
                     &nbsp;&nbsp;
+                    {{ $material->category->name }}
+                    &nbsp;&nbsp;
                     @if($material->display == 1)
                         <strong style="color: orange">系统文章</strong>
                     @elseif($material->display == 2)

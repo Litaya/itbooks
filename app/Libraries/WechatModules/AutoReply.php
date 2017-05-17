@@ -17,14 +17,14 @@ class AutoReply extends WechatHandler {
 		$reply     = "";
 
 		$msg_type  = $this->message->MsgType;
-		$input_msg = $this->message->Content;
+		$input_msg = strtolower($this->message->Content);
 		$openid    = $this->message->FromUserName;
 
 		if($msg_type == 'text'){
 			$auto_replies = WechatAutoReply::all();
 			foreach ($auto_replies as $auto_reply){
 				// 1模糊匹配; 0 精确匹配
-				if(($auto_reply->regex_type == 1 && preg_match("/$auto_reply->regex/",$input_msg)) || ($auto_reply->regex_type == 0 && $auto_reply->regex == $input_msg)){
+				if(($auto_reply->regex_type == 1 && preg_match("/".strtolower($auto_reply->regex)."/",$input_msg)) || ($auto_reply->regex_type == 0 && strtolower($auto_reply->regex) == $input_msg)){
 					$matched  = true;
 					$auto_reply->trigger_quantity = $auto_reply->trigger_quantity + 1;
 					$auto_reply->save();

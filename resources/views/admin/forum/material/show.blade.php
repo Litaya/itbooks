@@ -212,7 +212,7 @@
         });
 
         // 修改图文页面的显示问题
-        $("#body").html('<?php echo $material->content?>');
+        $("#body").html(<?php echo json_encode($material->content)?>);
         $("[data-src]").each(function () {
             $(this).attr("src",$(this).attr('data-src'));
         });
