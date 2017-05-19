@@ -164,6 +164,9 @@ class RecommendHelper {
 
 
     private static function cmdGetRecommend($user){
+
+        if(empty($user)) return false; // fallback
+
         $records = [];
         $bookreqs = $user->bookRequests;
         $likes = $user->bookLikes;
