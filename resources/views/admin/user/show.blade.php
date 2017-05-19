@@ -63,6 +63,13 @@
         <div class="col-md-8">
         <p>创建时间: {{date('Y-m-d', strtotime($user->created_at))}}</p>
         <p>修改时间: {{date('Y-m-d', strtotime($user->updated_at))}}</p>
+        <button type="button"
+                class="btn btn-danger btn-md btn-block"
+                data-toggle="modal"
+                data-target="#change-userinfo-modal">
+                强制修改
+        </button>
+        <br>
         </div>
         </div>
         <div class="row">
@@ -75,6 +82,34 @@
 
     </div>
 </div>
+
+
+<div class="modal fade" id="change-userinfo-modal"
+    tabindex="-1" role="dialog"
+    aria-labelledby="order-modal-label">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="change-userinfo-modal">修改用户角色</h4>
+            </div>
+            <div class="modal-body">
+            {!! Form::open(["route"=>["admin.user.update", $user->id], "method"=>"POST"]) !!}
+            {{ Form::label("role", "用户角色") }}
+            {{ Form::select('role', ['TEACHER' => '教师', 'STUDENT' => '学生', "OTHER" => "其他", "STAFF" => "职员"], $user->certificate_as, ['placeholder' => '选择用户角色']) }}
+            @if($user->certificate_as == "TEACHER")
+            <br>
+            {{ Form::label("book_limit", "教师样书申请限额") }}
+            {{ Form::number('book_limit', json_decode($user->json_content)->teacher->book_limit) }}
+            @endif
+            {{ Form::submit('确认', ['class'=>'btn btn-success btn-lg btn-block', 'style'=>"margin-top: 10px"]) }}
+            {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
 

@@ -10,7 +10,7 @@ use App\Models\BookRequest;
 class RecommendHelper {
 
     public static function getManuallySetTopBook($limit=1){
-        $books = Book::orderBy('weight', 'desc')->limit($limit)->get();
+        $books = Book::where('type','<>', 1)->orderBy('weight', 'desc')->limit($limit)->get();
         return $books;
     }
 

@@ -72,8 +72,70 @@ class UserAdminController extends Controller
         // 没有指定管理员可以修改的用户信息
     }
 
-    public function update($id){
-        // 没有指定管理员可以修改的用户信息
+    public function update($id, Request $request){
+        
+        if(!empty($request->role)){
+            $user = User::find($id);
+            switch($request->role){
+                case "TEACHER":
+                {
+                    $user->certificate_as = "TEACHER";
+                    if(empty($user->json_content)){
+                        $jdata = [];
+                        $jdata["teacher"] = [];
+                        $jdata["teacher"]["book_limit"] = 10;
+                        $user->json_content = json_encode($jdata);
+                    } else {
+                        $jdata = json_decode($user->json_content, true);
+                        if(!array_key_exists("teacher", $jdata))
+                            $jdata["teacher"] = [];
+                        if(!array_key_exists("book_limit", $jdata["teacher"]))
+                            $jdata["teacher"] = 10;
+                        $user->json_content = json_encode($jdata);
+                    }
+                    $user->update();
+                }
+                break;
+
+                case "STUDENT":
+                {
+                    $user->certificate_as = "STUDENT";
+                    $user->update();
+                }
+                break;
+
+                case "STAFF":
+                {
+                    $user->certificate_as = "STAFF";
+                    $user->update();
+                }
+                break;
+
+                case "OTHER":
+                {
+                    $user->certificate_as = "OTHER";
+                    $user->update();
+                }
+                break;
+
+                default:
+                    break; // bad code
+            }
+        }
+
+        if(!empty($request->book_limit)){
+            $user = User::find($id);
+            if($user->certificate_as == "TEACHER"){
+                $limit = $request->book_limit;
+                $jdata = json_decode($user->json_content, true);
+                $jdata["teacher"]["book_limit"] = $limit;
+                $user->json_content = json_encode($jdata);
+                $user->update();
+            }
+        }
+
+        Session::flash('success', '成功修改用户信息');
+        return redirect()->route("admin.user.show", $id);
     }
 
     // POST
