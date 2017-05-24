@@ -73,7 +73,7 @@
             <p>出版时间: {{$book->publish_time}}</p>
             <hr>
             @if(Auth::check())
-            <p>课件: 
+            <p>课件:
                 @if(!empty($book->kj_url))
                 {{--<a href="{{$book->kj_url}}">下载课件</a>--}}
                     <a id="downloadcw" href="javascript:void(0)" onclick="downloadCourseware({{ $book->id }})">下载课件</a>
@@ -90,7 +90,7 @@
             <!-- end if -->
             <a href="{{route('home')}}"><button class="btn btn-default btn-xs">返回首页</button></a>
         </div>
-        
+
     </div>
 </div>
 
@@ -132,7 +132,7 @@ function updateKjUrl(){
         xmlhttp=new XMLHttpRequest();
     else
         xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    
+
     xmlhttp.onreadystatechange=function()
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
@@ -152,7 +152,7 @@ $(document).ready(function(){
 
 });
 
-function like(){ 
+function like(){
     response = $.ajax({
         url : '{{route('like', ['book_id'=>$book->id])}}',
         async : false,
@@ -174,10 +174,10 @@ function unlike(){
             $('#like-icon').attr("class", "fa fa-heart-o");
         }
     });
-    
+
 }
 
-function read(){ 
+function read(){
     response = $.ajax({
         url : '{{route('read', ['book_id'=>$book->id])}}',
         async : false,

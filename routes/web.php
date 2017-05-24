@@ -267,3 +267,17 @@ Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
 	Route::post('/create','CategoryController@create')->name('category.create');
 	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
 });
+
+//评论路由
+Route::group(["prefix" => "comment",'middleware' => ['auth']],function (){
+	//Route::get('/','EBookMall\CommentController@index')->name('comment.index');
+	Route::get("/{bookid}",'EBookMall\CommentController@show')->name('comment.show');
+	Route::get('/{bookid}/create', 'EBookMall\CommentController@create')->name('comment.create');
+	Route::post('/{bookid}/store', 'EBookMall\CommentController@store')->name('comment.store');
+});
+
+//收藏路由
+Route::group(["prefix" => "favorite",'middleware' => ['auth']],function (){
+	Route::get('/manage','EBookMall\FavoriteController@show')->name('favorite.manage');
+	Route::post('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
+});
