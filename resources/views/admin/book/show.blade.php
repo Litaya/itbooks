@@ -47,6 +47,7 @@
             <p>出版号: {{$book->product_number}}</p>
             <p>出版时间: {{date('Y-m-d', strtotime($book->publish_time))}}</p>
             <p>编辑: {{$book->editor_name}}</p>
+            <p>所属分社: {{$book->department->name}}</p>
             <hr>
             <p>课件: 
                 @if(!empty($book->kj_url))

@@ -18,16 +18,30 @@
                                 {{$bookreq->status==0?'审核中':($bookreq->status==1?'已通过':'未通过')}}
                             </span>
                         </p>
+                        @if($bookreq->status==2)
+                        <p><strong>拒绝理由:</strong>
+                            @if(!empty(json_decode($bookreq->message)->admin_reply))
+                            {{json_decode($bookreq->message)->admin_reply}}
+                            @endif
+                        </p>
+                        @endif
                     </div>
                 </div>
 
 
                 @if($bookreq->status==1)
                     <div class="panel panel-default">
-                        <div class="panel-heading">物流详情</div>
-                        <div class="panel-body">
-                            当审批通过后，这里将会显示当前样书的物流状态。
+                    <div class="panel-heading">物流详情[默认韵达快递公司]</div>
+                    <div class="panel-body">
+                        @if(empty($bookreq->order_number))
+                        <div class="col-md-2">
+                        <strong>暂未发货</strong>
                         </div>
+                        @else
+                        <p><strong>订单号:</strong>{{$bookreq->order_number}}</p>
+                        
+                        @endif
+                    </div>
                     </div>
                 @endif
 

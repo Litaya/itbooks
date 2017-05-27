@@ -108,15 +108,18 @@
 
 
 <div class="row">
+
 {{ Form::label("province", "省份", ["class"=>"col-xs-3 control-label form-spacing-top"])}}
 <div class="col-xs-5">
-{{ Form::text("province", null, ["class"=>"form-control form-spacing-top"])}}
+<select id="province-select" name="province" class="form-control form-spacing-top"></select>
 </div>
 </div>
 <div class="row">
 {{ Form::label("city", "城市", ["class"=>"col-xs-3 control-label form-spacing-top"])}}
 <div class="col-xs-5">
-{{ Form::text("city", null, ["class"=>"form-control form-spacing-top"])}}
+<select id="city-select" name="city" class="form-control form-spacing-top">
+<option value="" selected>请先选择省份</option>
+</select>
 </div>
 </div>
 
@@ -136,7 +139,12 @@
 </div>
 
 
-
+<div class="row">
+{{ Form::label("position", "职务", ["class"=>"col-xs-3 control-label form-spacing-top"]) }}
+<div class="col-xs-5">
+{{ Form::select("position", ["院长"=>"院长", "副院长"=>"副院长", "主任"=>"主任", "副主任"=>"副主任", "教学秘书"=>"教学秘书", "普通教师"=>"普通教师", "其他"=>"其他"], null, ["class"=>"form-control form-spacing-top", "placeholder"=>"请选择职务"]) }}
+</div>
+</div>
 
 
 <div class="row">
@@ -188,8 +196,60 @@ $(document).ready(function(){
 
     $("input[name='role']:checked").click();
 
+    function getProvinces(){
+        $.get("{{route('district.getprovinces')}}",
+            function(data, status){
+                var s = document.getElementById("province-select");
+                for(var i = s.options.length-1; i>=0; i--) s.remove(i);
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.text  = "请选择";
+                defaultOption.selected = "selected";
+
+                s.onchange = getCities;
+                s.appendChild(defaultOption);
+
+                for(key in data){
+                    var opt = document.createElement("option");
+                    opt.text = data[key];
+                    opt.value = key;
+                    s.appendChild(opt);
+                }
+            }
+        );
+    }
+
+    function getCities(){
+        var s = document.getElementById("province-select");
+        var v = s.options[s.selectedIndex].value;
+        $.get("{{route('district.getcities')}}"+"?province_id="+v,
+            function(data, status){
+                s = document.getElementById("city-select");
+                for(var i = s.options.length-1; i >= 0; i--) s.remove(i);
+                var defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.text = "请选择";
+                defaultOption.selected = "selected";
+                s.appendChild(defaultOption);
+
+                for(key in data){
+                    var opt = document.createElement("option");
+                    opt.text = data[key];
+                    opt.value = key;
+                    s.appendChild(opt);
+                }
+            }
+        );
+    }
+
+    getProvinces();
+
 });
 
+
+
+
 </script>
+
 
 @endsection

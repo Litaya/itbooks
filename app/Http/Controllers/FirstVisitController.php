@@ -25,19 +25,22 @@ class FirstVisitController extends Controller
     public function postSaveBasic(Request $request){
         // save basic
         Session::flash("last-picked-role", $request->role);
-        
+
+        $this->validate($request, [
+            "role" => "required"
+        ]);
 
         if($request->role == "teacher") {
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email",
+                "email" => "required|email|unique:user,email",
                 "qqnumber" => "digits_between:5,14",
                 "phone" => "digits_between:11,15",
                 "workplace" => "required",
                 "department" => "required",
                 "jobtitle" => "required",
                 "course_name_1" =>"required",
-                "number_stud_1" =>"required"
+                "number_stud_1" =>"required",
             ]);
             
             $user = Auth::user();
@@ -52,9 +55,13 @@ class FirstVisitController extends Controller
             $info->workplace = $request->workplace;
             $jdata['department'] = $request->department;
             $jdata['jobtitle'] = $request->jobtitle;
+            $jdata['position'] = $request->position;
             $jdata['course_name_1'] = $request->course_name_1;
             $jdata['number_stud_1'] = $request->number_stud_1;
-            $info->district_name = $request->province . "," . $request->city;
+            $info->province_id = $request->province;
+            if($info->province_id == "") $info->province_id = null;
+            $info->city_id = $request->city;
+            if($info->city_id == "") $info->city_id = null;
             
             $info->json_content = json_encode($jdata);
             UserInfoController::update_user_info($info);
@@ -66,7 +73,7 @@ class FirstVisitController extends Controller
         if($request->role == "student"){
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email",
+                "email" => "required|email|unique:user,email",
                 "school" => "required",
                 "department" => "required",
             ]);
@@ -79,9 +86,9 @@ class FirstVisitController extends Controller
             $info->role = $request->role;
             $info->email = $request->email;
             $info->realname = $request->realname;
-            $info->json_content = json_encode($jdata);
             $jdata['school'] = $request->school;
             $jdata['department'] = $request->department;
+            $info->json_content = json_encode($jdata);
 
             UserInfoController::update_user_info($info);
 
@@ -92,7 +99,7 @@ class FirstVisitController extends Controller
         if($request->role == "other"){
             $this->validate($request, [
                 "realname" => "required",
-                "email" => "required|email"
+                "email" => "required|email|unique:user,email"
             ]);
 
             $user = Auth::user();
@@ -107,7 +114,6 @@ class FirstVisitController extends Controller
             $info->json_content = json_encode($jdata);
 
             UserInfoController::update_user_info($info);
-
 
             return redirect()->route("register.welcome")->withRole("other");
         }
@@ -125,8 +131,14 @@ class FirstVisitController extends Controller
 
         $user = Auth::user();
         $info = UserInfoController::get_user_info($user);
-        $info->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
+        if($info->role != "teacher"){
+            Session::flash('warning', "您的角色选择未成功，请稍候在个人信息页中补全");
+            redirect()->route("register.welcome")->withRole("teacher");
+        }
 
+        $info->img_upload = FileHelper::saveUserImage($user, $request->file("img_upload"), "certificate");
+        UserInfoController::update_user_info($info);
+        
         $old_cr = CertRequest::where("user_id", "=", $user->id)->where("status","<>",2)->get();
         
         if(count($old_cr) == 0){

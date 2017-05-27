@@ -30,6 +30,10 @@
 {{ Form::text("department", null, ["class"=>"form-control"]) }}
 </div></div>
 
+<div class="form-inline"><div class="form-group">
+{{ Form::label("position", "职务") }}
+{{ Form::select("position", ["院长"=>"院长", "副院长"=>"副院长", "主任"=>"主任", "副主任"=>"副主任", "教学秘书"=>"教学秘书", "普通教师"=>"普通教师", "其他"=>"其他"], null, ["class"=>"form-control", "placeholder"=>"请选择职务"]) }}
+</div></div>
 
 <div class="form-inline"><div class="form-group">
 {{ Form::label("jobtitle", "职称") }}

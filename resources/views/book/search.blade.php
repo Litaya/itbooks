@@ -27,12 +27,14 @@
     <div class="container">
         <div class="container-fluid marginless">
             <div class="row">
-                {!! Form::open(["route"=>"book.index", "method"=>"GET"]) !!}
-                <div class="col-xs-12 col-md-12" style="padding: 0; margin: 0;">
-                    {{ Form::text('search', null, ['placeholder'=>'发现更多好书', "class"=>"form-control", "style"=>"margin: 0;"]) }}
-                </div>
-                {{--<div class="col-xs-3 col-md-3" style="padding: 0; margin: 0;">--}}
-                {{--{{ Form::submit('搜索', ["class"=>"form-control", "style"=>"margin: 0;"]) }}--}}
+                <form action="{{ route('book.index') }}" method="get" class="form-inline">
+                    <div class="col-xs-10 col-md-10 col-xs-10 form-group" style="padding: 0; margin: 0;">
+                        {{ Form::text('search', null, ['placeholder'=>'发现更多好书', "class"=>"form-control"]) }}
+                    </div>
+                    <div class="col-xs-2 col-md-2 form-group" style="padding: 0; margin: 0;">
+                        <button type="submit" class="btn btn-default">搜索</button>
+                    </div>
+                </form>
             </div>
         </div>
         {!! Form::close() !!}
@@ -41,14 +43,21 @@
             <div class="col-xs-12">
                 <ul class="list-group">
                     @foreach($books as $book)
-                        <a href="{{route('book.show', $book->id)}}" class="list-group-item">{{$book->name}}</a>
+                        <a href="{{route('book.show', $book->id)}}" class="list-group-item">
+                            <div>
+                                {{$book->name}}<br>
+                                <small style="color:#999">isbn: {{ $book->isbn }}</small>
+                                <br>
+                                <small style="color:#999">作者: {{$book->authors}}</small>
+                            </div>
+                        </a>
                     @endforeach
                 </ul>
             </div>
 
         </div>
-
-        {!! $books->appends(Input::except('page'))->links('vendor.pagination.default') !!}
-
+        <div class="row" style="text-align:center">
+            {!! $books->appends(Input::except('page'))->links('vendor.pagination.default') !!}
+        </div>
     </div>
 @endsection

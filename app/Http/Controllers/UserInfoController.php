@@ -65,6 +65,7 @@ class UserInfoController extends Controller
             $userinfo->department = $get($data, "department");
             $userinfo->jobtitle = $get($data, "jobtitle");
             $userinfo->qqnumber = $get($data, "qqnumber");
+            $userinfo->position = $get($data, "position");
         }
 
         return $userinfo;
@@ -87,15 +88,15 @@ class UserInfoController extends Controller
         $userinfo->workplace = $new_info->workplace;
         $userinfo->address = $new_info->address;
         $userinfo->json_content = $new_info->json_content;
-        $userinfo->district_name = $new_info->district_name;
+        $userinfo->province_id = $new_info->province_id;
+        if($userinfo->province_id == "") $userinfo->province_id = null;
+        $userinfo->city_id = $new_info->city_id;
+        if($userinfo->city_id == "") $userinfo->city_id = null;
         $userinfo->img_upload = $new_info->img_upload;
 
         $userinfo->update();
     }
 
-    private function make_district($province, $city){
-        return $province." ".$city;
-    }
 
     public function getBasic(){
         $userinfo = self::get_user_info(Auth::user());  // 需要显示，默认展开json_content，下同
@@ -113,11 +114,15 @@ class UserInfoController extends Controller
 
     public function getAuthor(){
         $userinfo = self::get_user_info(Auth::user());
+        if($userinfo->role != "author")
+            return redirect()->route("userinfo.basic");
         return view("userinfo.author")->withUserinfo($userinfo);
     }
     
     public function getTeacher(){
         $userinfo = self::get_user_info(Auth::user());
+        if($userinfo->role != "teacher")
+            return redirect()->route("userinfo.basic");
         return view("userinfo.teacher")->withUserinfo($userinfo);
     }
 
@@ -176,13 +181,13 @@ class UserInfoController extends Controller
         $this->validate($request, [
             "email" => "required|email",
             "phone" => "required",
-            "role" => "in:teacher,author,student,staff,other",
+            "role" => "required|in:teacher,author,student,staff,other",
         ]);
 
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
-        if(empty($userinfo->role) and empty($request->role)){
-            return redirect()->back()->withError("角色字段必须选择");
-        }
+        // if(empty($userinfo->role) and empty($request->role)){
+        //     return redirect()->back()->withErrors("角色字段必须选择");
+        // }
         if($request->email != $userinfo->email)
         {
             $this->validate($request, [
@@ -205,8 +210,10 @@ class UserInfoController extends Controller
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
         $userinfo->realname = $request->realname;
         $userinfo->workplace = $request->workplace;
-        $userinfo->district_name = self::make_district($request->province, $request->city);
         $userinfo->address = $request->address;
+
+        $userinfo->province_id = $request->province;
+        $userinfo->city_id = $request->city;
 
         $data = empty($userinfo->json_content) ? [] : json_decode($userinfo->json_content, true);
         $data["qqnumber"] = $request->qqnumber;
@@ -221,6 +228,11 @@ class UserInfoController extends Controller
 
     public function postSaveTeacher(Request $request){
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
+        if($userinfo->role != "teacher"){
+            Session::flash('warning', "您没有选择教师角色，请回到本页进行选择");
+            return redirect()->route('userinfo.basic');
+        }
+
         $userinfo->realname = $request->realname;
         $userinfo->workplace = $request->workplace;
 
@@ -248,6 +260,7 @@ class UserInfoController extends Controller
         $data["course_name_3"] = $request->course_name_3;
         $data["number_stud_3"] = $request->number_stud_3;
         $data["jobtitle"] = $request->jobtitle;
+        $data["position"] = $request->position;
         $data["department"] = $request->department;
         $userinfo->json_content = json_encode($data);
 
@@ -264,6 +277,10 @@ class UserInfoController extends Controller
 
     public function postSaveAuthor(Request $request){
         $userinfo = self::get_user_info(Auth::user(), false); // 只修改不显示，不需要展开
+        if($userinfo->role != "author"){
+            Session::flash('warning', "您没有选择作者角色，请回到本页进行选择");
+            return redirect()->route('userinfo.basic');
+        }
 
         $userinfo->realname = $request->realname;
         $userinfo->workplace = $request->workplace;

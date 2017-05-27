@@ -12,7 +12,10 @@ use App\Helpers\FileHelper;
 use App\Helpers\CrossDomainHelper;
 use Faker\Factory as Faker;
 
+use Auth;
 use Image;
+
+use app\Libraries\PermissionManager as PM;
 
 class BookAdminController extends Controller
 {
@@ -22,6 +25,7 @@ class BookAdminController extends Controller
         $this->middleware('auth');
     }
 
+
     /**
      * Display a listing of the resource.
      *
@@ -29,15 +33,47 @@ class BookAdminController extends Controller
      */
     public function index(Request $request)
     {
+        $adminrole = PM::getAdminRole();
+
         if($request->search){
             $search = $request->search;
-            $books = Book::where('ISBN', 'like', "%$search%")
-                        ->orWhere('name', 'like', "%$search%")
-                        ->orWhere('authors', 'like', "%$search%")
-                        ->paginate(20);
+            switch($adminrole){
+                case "SUPERADMIN":
+                $books = Book::where('book.ISBN', 'like', "%$search%")
+                        ->orWhere('book.name', 'like', "%$search%")
+                        ->orWhere('book.authors', 'like', "%$search%");
+                break;
+                case "DEPTADMIN":
+                $code = PM::getAdminDepartmentCode();
+                $books = Book::ofDepartmentCode($code)
+                        ->where('book.ISBN', 'like', "%$search%")
+                        ->orWhere('book.name', 'like', "%$search%")
+                        ->orWhere('book.authors', 'like', "%$search%");
+                break;
+            }
         }
-        else $books = Book::orderBy('id', 'asc')->paginate(20);
+        else{
+            switch($adminrole){
+                case "SUPERADMIN":
+                    $books = Book::query();
+                    break;
+                case "DEPTADMIN":
+                    $code = PM::getAdminDepartmentCode();
+                    $books = Book::ofDepartmentCode($code);
+                    break;
+            }
+        }
+
+        if(!empty($request->orderby) and in_array($request->orderby, ["id", "authors", "name", "isbn", "type"])){
+            $orderby = $request->orderby;
+            $asc = $request->asc == "true" ? "asc" : "desc";
+            $books = $books->orderBy($orderby, $asc);
+        }
+        else{
+            $books = $books->orderBy('id', 'desc');
+        }
         
+        $books = $books->paginate(20);
         return view("admin.book.index")->withBooks($books)->withInput($request->except("page"));
     }
 
@@ -94,8 +130,8 @@ class BookAdminController extends Controller
 
         $book->save();  // $book->id is first set here!!
 
-        // FileHelper::saveBookImage() make use of $book->id
-        // so it has to be update() afterwards!!
+        // FileHelper::saveBookImage() make use of $book->id so it has to be update() afterwards
+        // $book = Book::find($book->id);  // to replace the dirty $book ?
         $book->img_upload = empty($request->img_upload) ? null :
                             FileHelper::saveBookImage($book, $request->img_upload);
         $book->update();
@@ -116,14 +152,14 @@ class BookAdminController extends Controller
         $book = Book::find($id);
         if(empty($book->img_upload)){
             $imurl = "http://www.tup.com.cn/upload/bigbookimg/".$book->product_number.".jpg";
-            if(CrossDomainHelper::url_exists($imurl, $imurl)){ $book->img_upload = $imurl; $book->update(); }
+            if(CrossDomainHelper::url_exists($imurl, $imurl)){ $book->img_upload = $imurl; }
         }
 
         if(empty($book->kj_url)){
             $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",
                         "http://www.tup.com.cn/upload/books/kj/".$book->product_number.".zip"];
             foreach($kj_url_list as $kj_url) 
-                if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; $book->update(); break; }
+                if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
         }
         
         return view("admin.book.show")->withBook($book);
@@ -178,11 +214,11 @@ class BookAdminController extends Controller
         $book->publish_time = empty($request->publish_time) ? null : $request->publish_time;
         $book->kj_url = null;
         $book->weight = empty($request->weight) ? 0 : $request->weight;
-        $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
-                        "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
-        $real_url = null;
-        foreach($kj_url_list as $kj_url)
-            if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
+        // $kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$request->product_number.".rar",
+        //                 "http://www.tup.com.cn/upload/books/kj/".$request->product_number.".zip"];
+        // $real_url = null;
+        // foreach($kj_url_list as $kj_url)
+        //     if(CrossDomainHelper::url_exists($kj_url, $real_url)){ $book->kj_url = $real_url; break; }
         
         if($request->img_upload) {
             // FileHelper::removeBookImage($book, $book->img_upload); // TODO: implement this
@@ -204,7 +240,6 @@ class BookAdminController extends Controller
     {
         $book = Book::find($id);
         $book->delete();
-
         Session::flash('success', '成功移除图书');
         return redirect()->route('admin.book.index');
     }
@@ -242,4 +277,5 @@ class BookAdminController extends Controller
         }
         return $this->department_array;
     }
+
 }

@@ -11,7 +11,13 @@
 |
 */
 
+// Route::get('sockettest', "RecommenderController@getTestMessage");
+
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
+
+
+Route::get('district/province', "DistrictController@getProvinces")->name('district.getprovinces');
+Route::get('district/city', "DistrictController@getCities")->name('district.getcities');
 
 
 Route::get('like', "LikeController@like")->name('like');
@@ -57,7 +63,7 @@ Route::post('resource/{id}/download', 'ResourceController@postDownload')->name("
 
 /* get image from storage */
 Route::get('image/{src?}', function ($src){
-    return Image::make(storage_path($src))->response();
+	return Image::make(storage_path($src))->response();
 })->where('src', '(.*)')->name('image');
 
 /* book module for users */
@@ -65,6 +71,7 @@ Route::group(["prefix"=>"book"], function(){
 	Route::get("/", "BookController@index")->name("book.index");
 	Route::get("{id}", "BookController@show")->name("book.show");
 	Route::get('{id}/updatekj', 'BookController@updateKejian')->name('book.updatekj');
+	Route::post('/downloadcw', 'BookController@downloadCourseWare')->name('book.downloadcw');
 	// Route::get('search', 'BookController@search')->name('book.search');
 });
 
@@ -97,8 +104,8 @@ Auth::routes();
  * wechat routes
  */
 Route::group(["prefix" => "wechat"], function(){
-	Route::get("/","WechatController@index");
-    Route::post("/","WechatController@server");
+	Route::get("/",'Wechat\WechatController@index');
+	Route::post("/",'Wechat\WechatController@server');
 });
 
 Auth::routes();
@@ -113,12 +120,18 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	})->name('admin.index');
 	Route::get('/errors',"PermissionController@admin_permission_error")->name('admin.errors.index');
 	Route::post('/logout','Admin\AdminAuthController@logout')->name('admin.logout');
+	Route::get('/getlogout', 'Admin\AdminAuthController@logout')->name('admin.logout');
 
 	Route::get('bookreq', 'BookRequestAdminController@getIndex')->name('admin.bookreq.index');
 	Route::get('bookreq/{id}', 'BookRequestAdminController@show')->name('admin.bookreq.show');
 	Route::post('bookreq/{id}/pass', 'BookRequestAdminController@pass')->name('admin.bookreq.pass');
 	Route::post('bookreq/{id}/reject', 'BookRequestAdminController@reject')->name('admin.bookreq.reject');
 	Route::delete('bookreq/{id}', 'BookRequestAdminController@destroy')->name('admin.bookreq.destroy');
+	Route::post('bookreq/{id}/shipping', 'BookRequestAdminController@shipping')->name('admin.bookreq.shipping');
+	Route::post('bookreq/{id}/passorder', 'BookRequestAdminController@passAndBindOrder')->name('admin.bookreq.passorder');
+	Route::get('bookreq/export/packaging', "DatabaseController@exportBookRequestPackagingTable")->name('admin.bookreq.export.packaging');
+	Route::get('bookreq/export/book', "DatabaseController@exportBookRequestBookTable")->name('admin.bookreq.export.book');
+	Route::post('bookreq/{id}/reset', "BookRequestAdminController@resetStatus")->name('admin.bookreq.reset');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
 	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
@@ -127,7 +140,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('cert/{id}/reject', 'CertRequestAdminController@reject')->name('admin.cert.reject');
 	Route::post('cert/{id}/deprive', 'CertRequestAdminController@deprive')->name('admin.cert.deprive');
 	Route::delete('cert/{id}', 'CertRequestAdminController@destroy')->name('admin.cert.destroy');
-	
+
 	Route::group(['prefix'=>'book'], function(){
 		Route::get('/', 'BookAdminController@index')->name('admin.book.index');
 		Route::post('/', 'BookAdminController@store')->name('admin.book.store');
@@ -136,7 +149,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::put('{id}', 'BookAdminController@update')->name('admin.book.update');
 		Route::delete('{id}', 'BookAdminController@destroy')->name('admin.book.destroy');
 		Route::get('{id}/edit', 'BookAdminController@edit')->name('admin.book.edit');
-		Route::get('import', 'DatabaseController@importBooks')->name('admin.book.import');
+		Route::post('import', 'DatabaseController@importBooks')->name('admin.book.import');
 		Route::get('{id}/updatekj', 'BookAdminController@updateKejian')->name('admin.book.updatekj');
 	});
 
@@ -155,9 +168,15 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	 * user routes
 	 */
 	Route::group(['prefix'=>'user'],function (){
-		Route::get('/', 'Admin\AdminUserController@index')->name("admin.user.index");
+		Route::get('/', 'UserAdminController@index')->name("admin.user.index");
+		Route::post('promote', 'UserAdminController@promote')->name("admin.user.promote");
+		Route::get('{id}', 'UserAdminController@show')->name('admin.user.show');
+	});
 
-		Route::post('/create','Admin\AdminUserController@create')->name('admin.user.create');
+	Route::group(['prefix'=>'admin'], function(){
+		Route::get('/', 'AdminAdminController@index')->name('admin.admin.index');
+		Route::post('/changerole', 'AdminAdminController@update')->name('admin.admin.changerole');
+		Route::post('/demote', 'AdminAdminController@demote')->name('admin.admin.demote');
 	});
 
 	Route::group(['prefix'=>'department'],function (){
@@ -179,7 +198,41 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::get('{id}/edit', 'ConferenceAdminController@edit')->name('admin.conference.edit');
 		Route::get('{id}/export', "DatabaseController@exportConferenceRegisters")->name('admin.conference.export');
 	});
-});
+
+	Route::group(['prefix'=>'material'], function() {
+		Route::get('/','Wechat\WechatMaterialAdminController@index')->name('admin.material.index');
+		Route::get('/{id}','Wechat\WechatMaterialAdminController@show')->name('admin.material.show');
+		Route::post('/sync','Wechat\WechatMaterialAdminController@sync')->name('admin.material.sync');
+		Route::post('/{id}/set_display','Wechat\WechatMaterialAdminController@set_display')->name('admin.material.set_display');
+		Route::post('/{id}/drop','Wechat\WechatMaterialAdminController@drop')->name('admin.material.drop');
+		Route::post('/update_cate','Wechat\WechatMaterialAdminController@updateCategory')->name('admin.material.update_cate');
+	});
+
+	Route::group(['prefix'=>'wechat'], function() {
+		Route::get('/','Admin\Wechat\WechatController@index')->name('admin.wechat.index');
+		Route::get('/auto_reply','Admin\Wechat\WechatAutoReplyController@index')->name('admin.wechat.auto_reply.index');
+		Route::post('/auto_reply','Admin\Wechat\WechatAutoReplyController@store')->name('admin.wechat.auto_reply.store');
+		Route::post('/auto_reply/{id}/destroy','Admin\Wechat\WechatAutoReplyController@destroy')->name('admin.wechat.auto_reply.destroy');
+		Route::post('/auto_reply/edit','Admin\Wechat\WechatAutoReplyController@storeEdit')->name('admin.wechat.auto_reply.edit');
+		Route::post('/module/update_status','Admin\Wechat\WechatModuleController@changeModuleStatus')->name('admin.wechat.module.changestatus');
+
+		Route::get('/module','Admin\Wechat\WechatModuleController@index')->name('admin.wechat.module.index');
+	});
+
+	Route::group(['prefix'=>'forum'], function (){
+		Route::get('/','Admin\Forum\HomeController@index')->name('admin.forum.index');
+		Route::get('/category','Admin\Forum\CategoryController@forum_index')->name('admin.forum.category.index');
+
+		Route::group(['prefix'=>'material'], function() {
+			Route::get('/','Admin\Forum\MaterialController@index')->name('admin.forum.material.index');
+			Route::get('/{id}','Admin\Forum\MaterialController@show')->name('admin.forum.material.show');
+			Route::post('/sync','Admin\Forum\MaterialController@sync')->name('admin.forum.material.sync');
+			Route::post('/{id}/set_display','Admin\Forum\MaterialController@set_display')->name('admin.forum.material.set_display');
+			Route::post('/{id}/drop','Admin\Forum\MaterialController@drop')->name('admin.forum.material.drop');
+			Route::post('/update_cate','Admin\Forum\MaterialController@updateCategory')->name('admin.forum.material.update_cate');
+		});
+	});
+}); // end admin
 
 Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
 	Route::get('/',"UserController@index")->name('user.index');
@@ -202,3 +255,31 @@ Route::group(["prefix" => "email"],function (){
 Route::group(["prefix" => "message"],function (){
 	Route::get('/',"MessageController@index")->name('message.index');
 });
+
+Route::group(["prefix" => "material",'middleware' => ['auth']],function (){
+	Route::get('/','Wechat\WechatMaterialController@index')->name('material.index');
+	Route::get('/search','Wechat\WechatMaterialController@search')->name('material.search');
+	Route::get("/{id}/",'Wechat\WechatMaterialController@show')->name('material.show');
+});
+
+Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
+	Route::get('/','CategoryController@index')->name('category.index');
+	Route::post('/create','CategoryController@create')->name('category.create');
+	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
+});
+
+//评论路由
+Route::group(["prefix" => "comment",'middleware' => ['auth']],function (){
+	//Route::get('/','EBookMall\CommentController@index')->name('comment.index');
+	Route::get("/{bookid}",'EBookMall\CommentController@show')->name('comment.show');
+	Route::get('/{bookid}/create', 'EBookMall\CommentController@create')->name('comment.create');
+	Route::post('/{bookid}/store', 'EBookMall\CommentController@store')->name('comment.store');
+});
+
+//收藏路由
+Route::group(["prefix" => "favorite",'middleware' => ['auth']],function (){
+	Route::get('/manage','EBookMall\FavoriteController@show')->name('favorite.manage');
+	Route::post('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
+});
+
+Route::get('/paidbook', 'PaidBook\PaidBookController@index');
