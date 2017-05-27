@@ -46,7 +46,7 @@ Route::group(['prefix'=>'userinfo'], function(){
 	Route::post("teacher", "UserInfoController@postSaveTeacher")->name("userinfo.teacher.save");
 	Route::post("author", "UserInfoController@postSaveAuthor")->name("userinfo.author.save");
 	Route::post("missing", "UserInfoController@postSaveMissing")->name("userinfo.missing.save");
-
+	
 });
 
 
