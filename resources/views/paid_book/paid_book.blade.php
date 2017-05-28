@@ -4,6 +4,7 @@
 
 @section('content')
 
+
     <div class="row" style="padding:0 20px 0 20px;">
     <h4>已购图书</h4>
         <div class="col-xs-12" style="padding:0;">
@@ -21,9 +22,10 @@
                     <small>价格: {{ $book->price }}</small><br>
                     <small>购买时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
                 </div>
-                <div>
-                {{ Form::textarea('comment') }}
+                <div style="text-align:center;">
+                    <button style="width:100%;" onclick="location.href='{{ route("comment.create",$book->id) }}'">评论</button>
                 </div>
+                <hr>
                 </div>
                 @endforeach
         </div
