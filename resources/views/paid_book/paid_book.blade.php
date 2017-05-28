@@ -19,7 +19,7 @@
                     <small>出版时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
                     <small>ISBN: {{ $book->isbn }}</small><br>
                     <small>价格: {{ $book->price }}</small><br>
-                    <small>时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
+                    <small>购买时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
                 </div>
                 <div>
                 {{ Form::textarea('comment') }}

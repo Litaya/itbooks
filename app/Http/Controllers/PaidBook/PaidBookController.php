@@ -14,6 +14,7 @@ class PaidBookController extends Controller
         $user_id = Auth::user()->id;
         $paidbook = PaidBook::where('user_id',$user_id)
                     ->join('book','book.isbn','=','paidbook.isbn')
+                    ->orderBy('buy_time','desc')
                     ->get();
         //return $paidbook;
         return view('paid_book.paid_book')->with('paidbook',$paidbook);
