@@ -282,4 +282,6 @@ Route::group(["prefix" => "favorite",'middleware' => ['auth']],function (){
 	Route::post('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
 });
 
-Route::get('/paidbook', 'PaidBook\PaidBookController@index');
+Route::group(["prefix" => "paidbook",'middleware' => ['auth']],function (){
+	Route::get('/', 'PaidBook\PaidBookController@index')->name('paidbook.index');
+});
