@@ -20,7 +20,7 @@ class CommentController extends Controller
     public function create($bookid){
 
       $book=Book::find($bookid);
-      
+
       return view("comment.create",["book"=>$book]);
     }
 

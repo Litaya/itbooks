@@ -2,6 +2,7 @@
 
 
 @section('title', '发表评论')
+
 @section('content')
 <div id="new">
   <form action="{{route('comment.store', $book->id)}}" method="POST">

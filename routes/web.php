@@ -282,3 +282,13 @@ Route::group(["prefix" => "favorite",'middleware' => ['auth']],function (){
 	Route::get('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
 	Route::any('/{bookid}/drop', 'EBookMall\FavoriteController@drop')->name('favorite.drop');
 });
+
+
+//show purchased books
+Route::group(["prefix" => "paidbook",'middleware' => ['auth']],function (){
+	Route::get('/','PaidBook\PaidBookController@index')->name('paidbook.index');
+});
+
+Route::group(["prefix" => "purchase",'middleware' => ['auth']],function (){
+	Route::get('/','PaidBook\PurchaseController@index')->name('purchase.index');
+});

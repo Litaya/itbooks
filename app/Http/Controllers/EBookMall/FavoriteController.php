@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use App\Models\Favorite;
 use App\Models\Book;
+
 use App\Helpers\CrossDomainHelper;
 
 class FavoriteController extends Controller
@@ -25,6 +26,7 @@ class FavoriteController extends Controller
     public function store(Request $request,$bookid)
     {
       $user=Auth::user();
+
       if(empty(Favorite::where('user_id', $user->id)->where('target_id',$bookid)->where('target_type',3)->get() ))
       {
         $newfavorite =new Favorite;
