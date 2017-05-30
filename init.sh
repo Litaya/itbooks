@@ -9,3 +9,4 @@ chmod -R a+w storage
 chmod -R a+w bootstrap/cache
 cp .env.example .env
 php artisan key:generate
+php artisan migrate
