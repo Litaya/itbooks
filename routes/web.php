@@ -46,7 +46,7 @@ Route::group(['prefix'=>'userinfo'], function(){
 	Route::post("teacher", "UserInfoController@postSaveTeacher")->name("userinfo.teacher.save");
 	Route::post("author", "UserInfoController@postSaveAuthor")->name("userinfo.author.save");
 	Route::post("missing", "UserInfoController@postSaveMissing")->name("userinfo.missing.save");
-	
+
 });
 
 
@@ -267,3 +267,5 @@ Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
 	Route::post('/create','CategoryController@create')->name('category.create');
 	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
 });
+
+Route::get('/bookpop','BookPopController@BookPop')->name('book_pop.show');
