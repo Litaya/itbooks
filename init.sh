@@ -7,5 +7,5 @@ mkdir storage/framework/cache
 mkdir vendor
 chmod -R a+w storage
 chmod -R a+w bootstrap/cache
-chmod a+w storage/logs/laravel.log
+cp .env.example .env
 php artisan key:generate
