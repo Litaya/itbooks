@@ -279,5 +279,6 @@ Route::group(["prefix" => "comment",'middleware' => ['auth']],function (){
 //收藏路由
 Route::group(["prefix" => "favorite",'middleware' => ['auth']],function (){
 	Route::get('/manage','EBookMall\FavoriteController@show')->name('favorite.manage');
-	Route::post('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
+	Route::get('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
+	Route::any('/{bookid}/drop', 'EBookMall\FavoriteController@drop')->name('favorite.drop');
 });

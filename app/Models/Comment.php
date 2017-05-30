@@ -20,7 +20,7 @@ class Comment extends Model
     ];
 
     public function user(){
-    	$this->belongsTo('App\Models\User','user_id','id');
+    	return $this->belongsTo('App\Models\User','user_id','id');
     }
 
     public function material(){

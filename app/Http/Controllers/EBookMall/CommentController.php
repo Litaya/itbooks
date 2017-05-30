@@ -20,7 +20,7 @@ class CommentController extends Controller
     public function create($bookid){
 
       $book=Book::find($bookid);
-
+      
       return view("comment.create",["book"=>$book]);
     }
 
@@ -39,7 +39,9 @@ class CommentController extends Controller
       $newcomment->status=1;//暂定审核通过
 
       $newcomment->save();
-      return redirect()->back();
+
+      $comments =Comment::where("target_id",$bookid)->where("status",1)->get();
+      return view("comment.show",["comments"=>$comments]);
 
     }
 }
