@@ -9,6 +9,7 @@ use App\Models\BookRequest;
 use App\Models\Book;
 use App\Models\Department;
 use App\Models\DownloadRecord;
+use App\Models\User;
 
 use App\Helpers\FileHelper;
 
@@ -370,6 +371,68 @@ class DatabaseController extends Controller
         })->store('xlsx')->export('xlsx');
 
         return redirect()->route("admin.resource.index");
+    }
+
+    public function exportAllTeachers(){
+        $ar = PM::getAdminRole();
+        if($ar == "SUPERADMIN"){
+            $records = DB::select("select user.username as username, user.email as email, user_info.realname as realname,
+                        d1.name as province, d2.name as city, user_info.address as address, user_info.workplace as workplace,
+                        user.json_content as ujson, user_info.json_content as ijson,
+                        user.created_at as created_at
+                        from user
+                        left join user_info on user.id = user_info.user_id
+                        left join district as d1 on user_info.province_id = d1.id
+                        left join district as d2 on user_info.city_id = d2.id
+                        where user.certificate_as = 'TEACHER';");
+        }
+        else{
+            return redirect()->route("admin.index");
+        }
+
+        if(count($records) == 0){
+            Session::flash('warning', '没有需要导出的教师信息');
+            return redirect()->route("admin.user.index");
+        }
+
+        $filename = date("Y-m-d")."_教师信息_".time();
+        $export = Excel::create($filename, function($excel) use ($records){
+            $excel->sheet("教师信息", function($sheet) use ($records){
+
+                $sheet->setAutoSize(true);
+                $sheet->row(1, [
+                    "用户名", "真实姓名", "邮箱", "申请余量", "省", "市",
+                    "地址", "学校名称", "院系名称", 
+                    "职务", "职称", 
+                    "教授课程1", "学生人数1", "教授课程2", "学生人数2", "教授课程3", "学生人数3"]);
+
+                foreach($records as $record){
+                    $ujson = json_decode($record["ujson"]);
+                    $ijson = json_decode($record["ijson"]);
+                    $sheet->appendRow([
+                            !empty($record["username"]) ?   $record["username"] : "",
+                            !empty($record["realname"]) ?   $record["realname"] : "",
+                            !empty($record["email"]) ?      $record["email"] : "",
+                            empty($ujson->teacher) ? "" : (empty($ujson->teacher->book_limit) ? "" : $ujson->teacher->book_limit),
+                            !empty($record["province"]) ?   $record["province"] : "",
+                            !empty($record["city"]) ?       $record["city"] : "",
+                            !empty($record["address"]) ?    $record["address"] : "",
+                            !empty($record["workplace"]) ?  $record["workplace"] : "",
+                            !empty($ijson->department) ?    $ijson->department : "",
+                            !empty($ijson->position) ?      $ijson->position : "",
+                            !empty($ijson->jobtitle) ?      $ijson->jobtitle : "",
+                            !empty($ijson->course_name_1) ? $ijson->course_name_1 : "",
+                            !empty($ijson->number_stud_1) ? $ijson->number_stud_1 : "",
+                            !empty($ijson->course_name_2) ? $ijson->course_name_2 : "",
+                            !empty($ijson->number_stud_2) ? $ijson->number_stud_2 : "",
+                            !empty($ijson->course_name_3) ? $ijson->course_name_3 : "",
+                            !empty($ijson->number_stud_3) ? $ijson->number_stud_3 : "",
+                        ]);
+                }
+            });
+        })->store('xlsx')->export('xlsx');
+
+        return redirect()->route("admin.user.index");
     }
 
 }
