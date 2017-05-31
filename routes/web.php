@@ -268,6 +268,9 @@ Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
 	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
 });
 
+
+Route::get('/bookpop','BookPopController@BookPop')->name('book_pop.show');
+
 //评论路由
 Route::group(["prefix" => "comment",'middleware' => ['auth']],function (){
 	//Route::get('/','EBookMall\CommentController@index')->name('comment.index');
@@ -279,8 +282,10 @@ Route::group(["prefix" => "comment",'middleware' => ['auth']],function (){
 //收藏路由
 Route::group(["prefix" => "favorite",'middleware' => ['auth']],function (){
 	Route::get('/manage','EBookMall\FavoriteController@show')->name('favorite.manage');
-	Route::post('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
+	Route::get('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
+	Route::any('/{bookid}/drop', 'EBookMall\FavoriteController@drop')->name('favorite.drop');
 });
+
 
 //show purchased books
 Route::group(["prefix" => "paidbook",'middleware' => ['auth']],function (){

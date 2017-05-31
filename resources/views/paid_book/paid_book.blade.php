@@ -28,7 +28,7 @@
                 <hr>
                 </div>
                 @endforeach
-        </div
+        </div>
     </div>
 
 @endsection

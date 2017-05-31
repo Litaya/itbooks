@@ -114,5 +114,7 @@ return [
 		'number_stud_1' => '第一个课程的学生人数',
 		'department' => '院系名称',
 		'jobtitle' => '职称',
+		'role' => '角色',
+		'cate_name' => '分类名'
 	],
 ];

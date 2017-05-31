@@ -19,6 +19,21 @@ Route::get('/user', function (Request $request) {
 
 Route::group(["prefix"=>'book'],function (){
 	Route::post('/search/{search_string}','BookController@getBooksBySearch')->name('api.book.search');
+	Route::post('/search_teaching/{search_string}','BookController@getTeachingMaterialsBySearch')->name('api.book.search_teaching');
 });
 
-Route::post('district/citiesof', "DistrictController@postFetchCitiesOf")->name("api.district.citiesof");
+Route::group(["prefix"=>"admin"], function(){
+	Route::get('getalldepartments', 'AdminAdminController@getAllDepartments')->name('api.admin.get_all_departments');
+	Route::get('getadminrolemapping', 'AdminAdminController@getAdminRoleMapping')->name('api.admin.get_admin_role_mapping');
+	Route::get('getallprovinces', "DistrictController@getProvinces")->name('api.admin.get_all_provinces');
+});
+
+Route::group(["prefix"=>"category"], function(){
+	Route::get('/all','CategoryController@getAll')->name('api.category.all');
+	Route::get('/exist','CategoryController@cateExist')->name('api.category.exist');
+});
+
+Route::group(["prefix"=>'material'], function (){
+	Route::get('/cate_materials',"MaterialController@getCateMaterials")->name("material.catematerials");
+});
+
