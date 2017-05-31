@@ -28,7 +28,6 @@ class CommentController extends Controller
     {
       //需要修改
       $user=Auth::user();
-      
       $newcomment=new Comment;
       $newcomment->user_id=$user->id;
       $newcomment->target_type=3;
@@ -40,6 +39,20 @@ class CommentController extends Controller
 
       $newcomment->save();
       return redirect()->back();
+
+      $newcomment=new Comment;
+      $newcomment->user_id=$user->id;
+      $newcomment->target_type=3;//暂定是图书
+      $newcomment->comment_type=1;//暂定无回复评论
+      $newcomment->target_id=$bookid;
+      $newcomment->reply_id=0;
+      $newcomment->content=$request->content;
+      $newcomment->status=1;//暂定审核通过
+
+      $newcomment->save();
+
+      $comments =Comment::where("target_id",$bookid)->where("status",1)->get();
+      return view("comment.show",["comments"=>$comments]);
 
     }
 }

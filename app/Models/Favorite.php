@@ -19,6 +19,10 @@ class Favorite extends Model
     	$this->belongsTo('App\Models\Material','target_id','id');
     }
 
+    public function book(){
+      return $this->belongsTo('App\Models\Book','target_id','id');
+    }
+
 	public function user(){
 		$this->belongsTo('App\Models\User','user_id','id');
 	}

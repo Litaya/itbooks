@@ -15,3 +15,4 @@ Homestead.yaml
 *.swp
 *.DS_Store
 /public/D:\\Code\\itbooks\\storage\\logs\\userbehavior.log
+/npm-debug.log
