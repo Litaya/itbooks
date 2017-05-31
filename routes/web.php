@@ -171,8 +171,10 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::group(['prefix'=>'user'],function (){
 		Route::get('/', 'UserAdminController@index')->name("admin.user.index");
 		Route::post('promote', 'UserAdminController@promote')->name("admin.user.promote");
+		Route::get('exportteacherinfo', 'DatabaseController@exportAllTeachers')->name('admin.user.exportteacher');
 		Route::post('{id}/update', 'UserAdminController@update')->name("admin.user.update");
 		Route::get('{id}', 'UserAdminController@show')->name('admin.user.show');
+		
 	});
 
 	Route::group(['prefix'=>'admin'], function(){

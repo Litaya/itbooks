@@ -5,13 +5,17 @@
 @section('content')
 
 <div class="row">
-<div class="col-xs-12">
+<div class="col-xs-8 col-md-6">
 {!! Form::open(["route"=>"admin.user.index", "method"=>"GET"]) !!}
 {{ Form::text('search', null, ['placeholder'=>'用户名、邮箱、真实姓名']) }}
 {{ Form::select('role', ["all"=>"全部", "teacher"=>"教师", "staff"=>"职员", "student"=>"学生", "other"=>"其他"], Input::get('role')) }}
 {{ Form::submit('搜索') }}
-</div>
 {!! Form::close() !!}
+</div>
+
+<div class="col-xs-4 col-md-6">
+<a href="{{route('admin.user.exportteacher')}}"><button class="btn btn-md btn-success pull-right">导出教师信息</button></a>
+</div>
 </div>
 
 
