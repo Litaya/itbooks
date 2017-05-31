@@ -8,5 +8,5 @@ mkdir vendor
 chmod -R a+w storage
 chmod -R a+w bootstrap/cache
 cp .env.example .env
+composer install
 php artisan key:generate
-php artisan migrate
