@@ -104,7 +104,7 @@ class UserInfoController extends Controller
 		$userinfo = self::get_user_info(Auth::user());  // 需要显示，默认展开json_content，下同
 		$lockrole = false;
 		$admissions = CertRequest::where("user_id", "=", Auth::id())->where("status", "<>", 2)->get();
-		if(count($admissions) > 0) $lockrole = true;
+		if(count($admissions) > 0 && $userinfo->role == "teacher") $lockrole = true;
 		return view("userinfo.basic")->withUserinfo($userinfo)->withLockrole($lockrole);
 	}
 
