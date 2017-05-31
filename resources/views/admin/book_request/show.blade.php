@@ -83,15 +83,7 @@
                         <div class="col-md-12">
                             <p><strong>{{$bookreq->book->name}}</strong></p>
                             <div class="col-md-6">
-                                @if($bookreq->book->img_upload)
-                                    @if(strpos(strtolower($bookreq), "http")!==FALSE)
-                                    <img src="{{$bookreq->book->img_upload}}" class="img-responsive" style="width: 80%"></img>
-                                    @else
-                                    <img src="{{route('image', $bookreq->book->img_upload)}}" class="img-responsive" style="width: 80%"></img>
-                                    @endif
-                                @else
-                                    <img src="{{URL::asset('test_images/404.jpg')}}" class="img-responsive" style="width: 80%"></img>
-                                @endif
+                                <img src="{{ url_file_exists("http://www.tup.com.cn/upload/bigbookimg/".$bookreq->book->product_number.".jpg")?"http://www.tup.com.cn/upload/bigbookimg/".$bookreq->book->product_number.".jpg":"/test_images/404.jpg" }}" class="img-responsive" alt="" style="width: 80%;">
                             </div>
                             <div class="col-md-6">
                                 <ul>

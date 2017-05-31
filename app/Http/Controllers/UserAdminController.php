@@ -76,10 +76,12 @@ class UserAdminController extends Controller
         
         if(!empty($request->role)){
             $user = User::find($id);
+            $userinfo = UserInfo::find($id);
             switch($request->role){
                 case "TEACHER":
                 {
                     $user->certificate_as = "TEACHER";
+                    $userinfo->role = "teacher";
                     if(empty($user->json_content)){
                         $jdata = [];
                         $jdata["teacher"] = [];
@@ -94,27 +96,34 @@ class UserAdminController extends Controller
                         $user->json_content = json_encode($jdata);
                     }
                     $user->update();
+                    $userinfo->update();
                 }
                 break;
 
                 case "STUDENT":
                 {
                     $user->certificate_as = "STUDENT";
+                    $userinfo->role = "student";
                     $user->update();
+                    $userinfo->update();
                 }
                 break;
 
                 case "STAFF":
                 {
                     $user->certificate_as = "STAFF";
+                    $userinfo->role = "staff";
                     $user->update();
+                    $userinfo->update();
                 }
                 break;
 
                 case "OTHER":
                 {
                     $user->certificate_as = "OTHER";
+                    $userinfo->role = "other";
                     $user->update();
+                    $userinfo->update();
                 }
                 break;
 
