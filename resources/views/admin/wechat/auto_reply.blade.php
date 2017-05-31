@@ -21,27 +21,22 @@
             </h3>
             <hr>
             @if(sizeof($wechat_auto_replies)>0)
-                <table class="table table-bordered table-hover">
-                    <tr style="font-weight:bold;">
-                        <td style="min-width: 80px;">回复规则</td>
-                        <td style="min-width: 80px;">回复类型</td>
-                        <td>回复内容</td>
-                        <td style="min-width: 80px;">触发次数</td>
-                        <td style="min-width: 120px;">操作</td>
-                    </tr>
-                    @foreach($wechat_auto_replies as $wechat_auto_reply)
-                        <tr>
-                            <td>{{ $wechat_auto_reply->regex }}</td>
-                            <td>{{ $wechat_auto_reply->type==0?"文字":($wechat_auto_reply->type==1?"图片":"图文") }}</td>
-                            <td>{{ $wechat_auto_reply->content }}</td>
-                            <td>{{ $wechat_auto_reply->trigger_quantity }}</td>
-                            <td>
-                                <button class="btn btn-success btn-xs" data-target="#alterReply" onclick="showModal('alterReply', {{ $wechat_auto_reply->id }},'{{$wechat_auto_reply->regex}}')">修改</button> &nbsp;&nbsp;
-                                <button class="btn btn-danger btn-xs" onclick="removeAutoReply('{{ route('admin.wechat.auto_reply.destroy',$wechat_auto_reply->id) }}')">删除</button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </table>
+                @foreach($wechat_auto_replies as $wechat_auto_reply)
+
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="font-size:12px;">
+                            <p>
+                                <strong>回复规则</strong>&nbsp;&nbsp;{{ $wechat_auto_reply->regex }}&nbsp;&nbsp;
+                                <strong>回复类型</strong>&nbsp;&nbsp;{{ $wechat_auto_reply->type==0?"文字":($wechat_auto_reply->type==1?"图片":"图文") }}&nbsp;&nbsp;
+                                <strong>触发次数</strong>&nbsp;&nbsp;{{ $wechat_auto_reply->trigger_quantity }}&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="javascript:void(0)" data-target="#alterReply" onclick="showModal('alterReply', {{ $wechat_auto_reply->id }},'{{$wechat_auto_reply->regex}}')"><i class="fa fa-edit push"></i>修改</a> &nbsp;&nbsp;
+                                <a href="javascript:void(0)" onclick="removeAutoReply('{{ route('admin.wechat.auto_reply.destroy',$wechat_auto_reply->id) }}')"><i class="fa fa-times push"></i>删除</a>
+                            </p>
+                            <strong>回复内容</strong><br>
+                            {{ $wechat_auto_reply->content }}
+                        </div>
+                    </div>
+                @endforeach
             @endif
         </div>
     </div>

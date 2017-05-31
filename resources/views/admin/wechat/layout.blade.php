@@ -24,6 +24,7 @@
             <ul>
                 <li class="_side_item"><a href="{{ route('admin.wechat.module.index') }}"><i class="fa fa-th push"></i>功能模块</a></li>
                 <li class="_side_item"><a href="{{ route('admin.wechat.auto_reply.index') }}"><i class="fa fa-reply push"></i>自定义回复</a></li>
+                {{--<li class="_side_item"><a href="{{ route('admin.wechat.menu.index') }}"><i class="fa fa-bars push"></i>自定义菜单</a></li>--}}
             </ul>
         </div>
         <div class="col-lg-10" id="wechat_content">
