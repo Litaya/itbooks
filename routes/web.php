@@ -216,9 +216,11 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::post('/auto_reply','Admin\Wechat\WechatAutoReplyController@store')->name('admin.wechat.auto_reply.store');
 		Route::post('/auto_reply/{id}/destroy','Admin\Wechat\WechatAutoReplyController@destroy')->name('admin.wechat.auto_reply.destroy');
 		Route::post('/auto_reply/edit','Admin\Wechat\WechatAutoReplyController@storeEdit')->name('admin.wechat.auto_reply.edit');
-		Route::post('/module/update_status','Admin\Wechat\WechatModuleController@changeModuleStatus')->name('admin.wechat.module.changestatus');
 
+		Route::post('/module/update_status','Admin\Wechat\WechatModuleController@changeModuleStatus')->name('admin.wechat.module.changestatus');
 		Route::get('/module','Admin\Wechat\WechatModuleController@index')->name('admin.wechat.module.index');
+
+		Route::get('/menu','Admin\Wechat\WechatMenuController@index')->name('admin.wechat.menu.index');
 	});
 
 	Route::group(['prefix'=>'forum'], function (){
