@@ -13,6 +13,8 @@
                         <p><strong>申请书目:</strong> {{$bookreq->book->name}}</p>
                         <p><strong>ISBN:</strong> {{$bookreq->book->isbn}} </p>
                         <p><strong>申请用户:</strong> {{$bookreq->user->username}}</p>
+                        <p><strong>单位:</strong> {{$bookreq->user->userinfo->workplace}}</p>
+                        <p><strong>Email:</strong> {{$bookreq->user->email}}</p>
                         <p><strong>发起时间:</strong> {{$bookreq->created_at}}</p>
                         <p><strong>收件人:</strong>   {{$bookreq->receiver}}</p>
                         <p><strong>收件地址:</strong> {{$bookreq->address}}</p>
