@@ -24,7 +24,7 @@ class WechatMenuController extends Controller
     	Menu::where('id',$id)->update(['status'=>1]);
     	$menu = Menu::where('id',$id)->first();
     	$app = Wechat::getInstance()->getApp();
-    	$app->add(json_decode($menu->json, true));
+    	$app->menu->add(json_decode($menu->json, true)["button"]);
 		$request->session()->flash('wechat_message','已成功应用菜单');
 		$request->session()->flash('wechat_status','success');
 		return 'success';
@@ -66,7 +66,7 @@ class WechatMenuController extends Controller
 		$this->validate($request,['menu'=>'required','title'=>'required']);
 		$button = $request->get('menu');
 		$app = Wechat::getInstance()->getApp();
-		$app->add($button);
+		$app->menu->add($button["button"]);
 		$menu = Menu::create([
 			'title' => $request->get('title'),
 			'json'  => json_encode($button),
