@@ -30,8 +30,8 @@ class Courseware
 	public static function getCoursewarePassword($isbn, $department_code){
 		$isbn_len = strlen($isbn);
 
-		if($department_code[0] == '1'){ #（理工分社）：密码是书号倒数第6-倒数第2，再加一个6，例如9787302419181，密码是419186
-			return substr($isbn,$isbn_len-6,5).'6';
+		if($department_code[0] == '1'){ #（理工分社）：密码是书号后五位，再加一个6，例如9787302419181，密码是419186
+			return substr($isbn,$isbn_len-5,5).'6';
 		}
 		if($department_code[0] == '2' || $department_code[0] == 6){ #（计算机分社、高职分社）：书号后6位两两相加，例如450269，密码是4+5,0+2,6+9，最后是9215
 			return (string)((int)$isbn[$isbn_len-6]+(int)$isbn[$isbn_len-5]). (string)((int)$isbn[$isbn_len-4]+(int)$isbn[$isbn_len-3]). (string)((int)$isbn[$isbn_len-2]+(int)$isbn[$isbn_len-1]);
