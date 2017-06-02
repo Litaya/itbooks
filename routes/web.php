@@ -223,6 +223,13 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 		Route::get('/module','Admin\Wechat\WechatModuleController@index')->name('admin.wechat.module.index');
 
 		Route::get('/menu','Admin\Wechat\WechatMenuController@index')->name('admin.wechat.menu.index');
+		Route::get('/menu/create','Admin\Wechat\WechatMenuController@create')->name('admin.wechat.menu.create');
+		Route::post('/menu/save_create','Admin\Wechat\WechatMenuController@postSave')->name('admin.wechat.menu.saveCreate');
+		Route::get('/menu/{id}/detail','Admin\Wechat\WechatMenuController@detail')->name('admin.wechat.menu.detail');
+		Route::get('/menu/{id}/edit','Admin\Wechat\WechatMenuController@edit')->name('admin.wechat.menu.edit');
+		Route::post('/menu/{id}/saveEdit','Admin\Wechat\WechatMenuController@saveEdit')->name('admin.wechat.menu.saveEdit');
+		Route::post('/menu/{id}/drop','Admin\Wechat\WechatMenuController@drop')->name('admin.wechat.menu.drop');
+		Route::post('/menu/{id}/apply','Admin\Wechat\WechatMenuController@apply')->name('admin.wechat.menu.apply');
 	});
 
 	Route::group(['prefix'=>'forum'], function (){

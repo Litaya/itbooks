@@ -15,10 +15,10 @@ class CreateMenuTable extends Migration
     {
 	    Schema::create('menu',function (Blueprint $table){
 		    $table->increments('id');
-		    $table->string('module');
-		    $table->unsignedInteger('user_id');
-		    $table->string('source')->comment('来自微信对话框/网页端行为');
-		    $table->string('uri')->comment('请求的uri');
+		    $table->string('title');
+		    $table->text('json');
+		    $table->integer('status')->comment('当前状态：0未启用；1正在使用');
+		    $table->timestamps();
 	    });
     }
 
