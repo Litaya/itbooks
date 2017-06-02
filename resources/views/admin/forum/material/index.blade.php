@@ -173,7 +173,6 @@
         // 删除图文素材
         function drop_material(url){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            console.log(url,CSRF_TOKEN);
             $.ajax({
                 method:'post',
                 url:url,

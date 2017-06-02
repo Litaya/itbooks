@@ -258,3 +258,34 @@ a{
     }
   }
 }
+
+.menu-item-1{
+  border:1px solid #cccccc;
+  background-color: #f6f6f6;
+  padding: 10px 5px;
+  text-align: center;
+}
+.menu-item-wrapper{
+  padding: 2px;
+}
+.menu-item-2{
+  border:1px solid #cccccc;
+  border-top: none;
+  background-color: #ffffff;
+  text-align: center;
+  padding: 10px 1px;
+  font-size: 14px;
+}
+.leftest{
+  border-left: 1px solid #cccccc;
+}
+.menu-item-content{
+  padding: 0;
+  margin-top: 3px;
+}
+.item_detail_general{
+  color: #00CC99;
+}
+.item_detail_line{
+  font-size: 14px;
+}
