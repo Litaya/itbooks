@@ -69,13 +69,23 @@ class Courseware extends WechatHandler{
 				}
 			}
 		}
-
+		if($this->message->MsgType == 'event' && $this->message->Event == 'CLICK' && $this->message->EventKey=='courseware'){
+			$match = true;
+			$reply = "请在公众号后台按下面格式回复:\n".
+				"【1】课件#书号，例如：课件#9787302307488\n".
+				"【2】密码#书号，例如9787302307488\n"
+				."【3】书号，例如，9787302307488\n\n".
+				"注：\n".
+				"（1）书号是封底的ISBN号（13位数字，不用加横线）\n".
+				"（2）不要在#前后加空格\n".
+				"（3）点击微信公众号界面下方的小键盘图标，可以在文本框中输入回复内容";
+		}
 		if($match){
 			Log::info("处理模块：Courseware");
 			return $reply;
 		}
 
-# 责任链没有断的情况下，继续向下处理
+		# 责任链没有断的情况下，继续向下处理
 		if(!empty($this->successor)){
 			Log::info('模块['.$this->name().']无法处理，传递给下一个模块');
 			return $this->successor->handle();
