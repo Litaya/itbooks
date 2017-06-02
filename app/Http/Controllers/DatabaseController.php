@@ -165,7 +165,7 @@ class DatabaseController extends Controller
         if($ar == "SUPERADMIN"){
             $requests = BookRequest::unhandled()
                                 ->leftJoin('book', 'book.id', '=', 'book_request.book_id')
-                                ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname')
+                                ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname', 'book.isbn as isbn')
                                 ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
@@ -173,7 +173,7 @@ class DatabaseController extends Controller
             $requests = BookRequest::ofDepartmentCode(PM::getAdminDepartmentCode())
                                 ->unhandled()
                                 //->leftJoin('book', 'book.id', '=', 'book_request.book_id') //joined in scope
-                                ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname')
+                                ->select('receiver', 'address', 'phone', 'book_request.created_at', 'book.name as bookname', 'book.isbn as isbn')
                                 ->orderBy('book_request.created_at', 'desc')
                                 ->get()->toArray();
         }
@@ -189,7 +189,9 @@ class DatabaseController extends Controller
         for($i = 0; $i < count($requests); $i++){
             $requests[$i] = (array)$requests[$i];
             $key = $requests[$i]["receiver"] . "_@_" . $requests[$i]["address"] . "_@_" . $requests[$i]["phone"];
-            $aggregate[$key][] = $requests[$i]["bookname"]; 
+            $isbn = !empty($requests[$i]["isbn"]) ? $requests[$i]["isbn"] : "";
+            if(strlen($isbn) > 6) $isbn = substr($isbn, strlen($isbn)-6, 6);
+            $aggregate[$key][] = $requests[$i]["bookname"] . "(" . $isbn . ")";
         }
 
         $filename = date("Y-m-d")."快递打印单_".time();
