@@ -14,7 +14,7 @@
     </div>
     <div class="row">
         <div class="col-lg-12 col-md-12">
-            <button class="btn btn-primary btn-sm" {{ $menu->status == 1?'disabled="disabled"':"" }} onclick="apply('{{ route('admin.wechat.menu.apply',$menu->id) }}')"><i class="fa fa-check push"></i>应用</button>
+            <button class="btn btn-primary btn-sm" onclick="apply('{{ route('admin.wechat.menu.apply',$menu->id) }}')"><i class="fa fa-check push"></i>应用</button>
             <a class="btn btn-success btn-sm" href="{{ route('admin.wechat.menu.edit',$menu->id) }}"><i class="fa fa-edit push"></i>编辑</a>
             <button class="btn btn-danger btn-sm" onclick="drop('{{ route('admin.wechat.menu.drop',$menu->id) }}')"><i class="fa fa-times push"></i>删除</button>
         </div>
