@@ -7,7 +7,7 @@
     <br>
     <br>
     <img src="img/qr.jpg" />
-    <h4>微信捐赠获取积分</h4><br>
+    <h4>微信扫码付款</h4><br>
 </div>
 
 @endsection
