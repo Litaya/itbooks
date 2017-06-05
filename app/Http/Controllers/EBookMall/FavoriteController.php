@@ -37,18 +37,17 @@ class FavoriteController extends Controller
 
         $newfavorite->save();
       }
-      else {//待改进
-        //  return redirect()->back()->withInput()->withErrors('已收藏过该图书');
+      else {
+          return redirect()->back()->with('status','已收藏过该图书');
       }
-      //return redirect()->back();
-      //将来做弹出消息
+      return redirect()->back()->with('status','收藏成功！');
     }
 
     public function drop($bookid){
       $user=Auth::user();
       Favorite::where('user_id', $user->id)->where('target_id',$bookid)->delete();
 
-      return redirect()->back()->withInput(['删除成功！']);
+      return redirect()->back()->with('status','删除成功！');
     }
 
     private function grabImages(&$books){
