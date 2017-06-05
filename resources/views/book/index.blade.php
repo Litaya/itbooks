@@ -10,11 +10,11 @@
             margin: 0;
         }
 
-        .col-center-block {  
-            float: none;  
-            display: block;  
-            margin-left: auto;  
-            margin-right: auto;  
+        .col-center-block {
+            float: none;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .img-in-well {
@@ -50,7 +50,7 @@
 
     <div class="col-xs-12">
         <div class="panel panel-default">
-        
+
         @if(count($topbooks) > 0)
         <div class="panel-body" style="padding-left: 0px; padding-right: 0px;">
             <div class="col-xs-5">
@@ -81,7 +81,7 @@
                             <p>
                                 <h2>{{$book->name}}</h2>
                             </p>
-                            
+
                             </div>
                             </div>
                             @endforeach
@@ -91,7 +91,7 @@
             <a data-toggle="collapse" href="#newbookCollapse" class="list-group-item">最新上架</a>
             <div class="collapse" id="newbookCollapse">
                 <div class="well">
-                        <div class="row">    
+                        <div class="row">
                             @foreach($newbooks as $book)
                             <div class="col-xs-6">
                             <div class="well well-showcase">
@@ -99,7 +99,7 @@
                             <p>
                                 <h2>{{$book->name}}</h2>
                             </p>
-                            
+
                             </div>
                             </div>
                             @endforeach
@@ -109,7 +109,7 @@
             <a data-toggle="collapse" href="#hotbookCollapse" class="list-group-item">热门图书</a>
             <div class="collapse" id="hotbookCollapse">
                 <div class="well">
-                        <div class="row" id="hotbookRow">    
+                        <div class="row" id="hotbookRow">
                             @foreach($hotbooks as $book)
                             <div class="col-xs-6">
                             <div class="well well-showcase">
@@ -133,8 +133,8 @@
 
 
 
-    
-    
+
+
     </div>
     </div>
 

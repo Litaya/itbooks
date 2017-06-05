@@ -1,6 +1,5 @@
 @extends('layouts.frame')
 
-
 @section('title', '发表评论')
 
 @section('content')

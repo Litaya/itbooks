@@ -29,6 +29,17 @@ class CommentController extends Controller
     {
       //需要修改
       $user=Auth::user();
+      $newcomment=new Comment;
+      $newcomment->user_id=$user->id;
+      $newcomment->target_type=3;
+      $newcomment->comment_type=1;
+      $newcomment->target_id=$bookid;
+      $newcomment->reply_id=0;
+      $newcomment->content=$request->content;
+      $newcomment->status=1;
+
+      $newcomment->save();
+      return redirect()->back();
 
       $newcomment=new Comment;
       $newcomment->user_id=$user->id;
