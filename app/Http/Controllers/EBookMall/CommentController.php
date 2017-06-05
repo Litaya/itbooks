@@ -13,12 +13,13 @@ class CommentController extends Controller
 {
     //
     public function show($bookid){
-      $comments =Comment::where("target_id",$bookid)->where("status",1)->get();
-      return view("comment.show",["comments"=>$comments]);
+      $comments=null;
+      $comments =Comment::where("target_id",$bookid)->where("status",1)->paginate(10);
+
+      return view("comment.show",["comments"=>$comments,"bookid"=>$bookid]);
     }
 
     public function create($bookid){
-
       $book=Book::find($bookid);
 
       return view("comment.create",["book"=>$book]);
@@ -51,8 +52,10 @@ class CommentController extends Controller
 
       $newcomment->save();
 
-      $comments =Comment::where("target_id",$bookid)->where("status",1)->get();
-      return view("comment.show",["comments"=>$comments]);
+      /*$comments =Comment::where("target_id",$bookid)->where("status",1)->get();
+      return view("comment.show",["comments"=>$comments]);*/
+
+      return redirect()->route('comment.show',$bookid)->with('status','发表评论成功！');
 
     }
 }
