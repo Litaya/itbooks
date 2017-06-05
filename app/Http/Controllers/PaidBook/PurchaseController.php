@@ -26,6 +26,16 @@ class PurchaseController extends Controller
         return view('paid_book.shopping_cart')->with('cart',$cart);
     }
 
+    public function add_cart($bookisbn)
+    {
+        $user_id = Auth::user()->id;
+        $cart = ShoppingCart::firstOrNew(
+            ['user_id' => $user_id], ['isbn' => $bookisbn]
+        );
+        $cart->add_time = Carbon\Carbon::now();
+        $cart->save();
+    }
+
     public function drop_cart($bookisbn)
     {
         $user_id = Auth::user()->id;
