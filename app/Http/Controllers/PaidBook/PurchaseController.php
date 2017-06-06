@@ -31,10 +31,11 @@ class PurchaseController extends Controller
     {
         $user_id = Auth::user()->id;
         $cart = ShoppingCart::firstOrNew(
-            ['user_id' => $user_id], ['isbn' => $bookisbn]
+          array('user_id' => $user_id, 'isbn' => $bookisbn)
         );
         $cart->add_time = Carbon\Carbon::now();
         $cart->save();
+      return redirect()->back()->with('info','添加购物车成功！');
     }
 
     public function drop_cart($bookisbn)
@@ -43,7 +44,6 @@ class PurchaseController extends Controller
         ShoppingCart::where('user_id',$user_id)
         ->where('isbn',$bookisbn)
         ->delete();
-
         return redirect()->back()->withInput(['删除成功！']);
     }
 }

@@ -26,8 +26,8 @@ class FavoriteController extends Controller
     public function store(Request $request,$bookid)
     {
       $user=Auth::user();
-
-      if(empty(Favorite::where('user_id', $user->id)->where('target_id',$bookid)->where('target_type',3)->get() ))
+      $oldfavorite=Favorite::where('user_id', $user->id)->where('target_id',$bookid)->where('target_type',3)->get();
+      if(empty($oldfavorite[0]))
       {
         $newfavorite =new Favorite;
 
@@ -36,11 +36,12 @@ class FavoriteController extends Controller
         $newfavorite->target_type=3;//暂定是图书
 
         $newfavorite->save();
+        return redirect()->back()->with('status','收藏成功！');
       }
       else {
           return redirect()->back()->with('status','已收藏过该图书');
       }
-      return redirect()->back()->with('status','收藏成功！');
+
     }
 
     public function drop($bookid){

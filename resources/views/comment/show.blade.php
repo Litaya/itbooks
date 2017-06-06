@@ -4,8 +4,8 @@
 
 @section('content')
 <div>
-  <button type="button" class="btn btn-lg btn-success col-lg-12" >
-    <a style="text-decoration:none;out-line: none; color:rgb(242, 246, 245)" href="{{route('comment.create',$bookid)}}">发表评论</a>
+  <button type="button" class="btn btn-lg btn-success col-lg-12" onclick="location.href='{{route("comment.create",$bookid)}}'">
+    发表评论
   </button>
 </div>
 <div class="conmments" style="margin-top: 10px;">

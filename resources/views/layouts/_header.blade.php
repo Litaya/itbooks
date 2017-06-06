@@ -20,7 +20,9 @@
         {{--<li class="{{Request::is('cert*') ? "active":""}}"><a href="{{route('cert.index')}}">认证</a></li>--}}
       <!--li class="{{Request::is('personal') ? "active":""}}"><a href="#">个人空间</a></li-->
         @if(Auth::user())
-          <li><a href="{{ route('user.index') }}">个人资料</a></li>
+        <li><a href="{{ route('user.center') }}">个人中心</a></li>
+        <li><a href="{{ route('user.index') }}">个人资料</a></li>
+        <li><a href="{{ route('purchase.shopping_cart') }}">购物车</a></li>
           <li>
             <a href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

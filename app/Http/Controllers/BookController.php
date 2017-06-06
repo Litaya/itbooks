@@ -54,6 +54,10 @@ class BookController extends Controller
 			$imurl = "http://www.tup.com.cn/upload/bigbookimg/".$book->product_number.".jpg";
 			if(CrossDomainHelper::url_exists($imurl, $imurl)){ $book->img_upload = $imurl; $info_changed = true; }
 		}
+		if(empty($book->file_upload)){
+			$fileurl=DB::table('book_supply')->where('book_id', $book->id)->value('book_id');
+			$book->file_upload = $fileurl; $info_changed = true;
+		}
 
 		if($book->type==1 && empty($book->kj_url)){
 			$kj_url_list = ["http://www.tup.com.cn/upload/books/kj/".$book->product_number.".rar",

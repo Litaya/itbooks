@@ -285,7 +285,14 @@ Route::group(["prefix" => "favorite",'middleware' => ['auth']],function (){
 	Route::get('/{bookid}/store', 'EBookMall\FavoriteController@store')->name('favorite.store');
 	Route::any('/{bookid}/drop', 'EBookMall\FavoriteController@drop')->name('favorite.drop');
 });
-
+//图书资源不存在的路由
+Route::get('not',function(){
+	 return view('notFound');
+})->name('notFound');
+//show 用户中心
+Route::get('/center',function(){
+	return view('user.personal_center');
+})->name('user.center');
 
 //show purchased books
 Route::group(["prefix" => "paidbook",'middleware' => ['auth']],function (){
