@@ -30,12 +30,14 @@ class PurchaseController extends Controller
     public function add_cart($bookisbn)
     {
         $user_id = Auth::user()->id;
+        if(ShoppingCart::where('user_id', $user_id)->where('isbn',$bookisbn)->get() != null)
+          return redirect()->back()->with('info','该商品已经在购物车中！');
         $cart = ShoppingCart::firstOrNew(
           array('user_id' => $user_id, 'isbn' => $bookisbn)
         );
         $cart->add_time = Carbon\Carbon::now();
         $cart->save();
-      return redirect()->back()->with('info','添加购物车成功！');
+        return redirect()->back()->with('info','添加购物车成功！');
     }
 
     public function drop_cart($bookisbn)
