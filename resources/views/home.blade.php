@@ -44,7 +44,9 @@
     </div>
     <div class="row" style="padding:0 20px 0 20px;">
         <hr>
-        <h4>热门图书</h4>
+        <a href="{{ route('book_pop.show') }}" style="color:#3C3C3C;">
+            <h4>热门图书</h4>
+        </a>
         <div class="col-xs-12" style="padding:0;">
             <div class="col-xs-3" style="padding: 0 10px 0 0;">
                 <a href="{{ route("book.show",$hotbooks[0]->id) }}"><img src="{{ $hotbooks[0]->img_upload }}" alt="" style="width:100%; height:120px; box-shadow: 1px 1px 5px #666;"></a>

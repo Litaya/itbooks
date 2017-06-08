@@ -21,15 +21,15 @@
             <div class="col-xs-7">
                 <small>
                 <a href="{{route('book.show', $favorite->id)}}"><p><strong>{{$favorite->name}}</strong></p></a>
-                作者: {{$favorite->authors}}<br>
-                定价: {{$favorite->price}}
-                <p>ISBN号：{{$favorite->isbn}}</p>
-                <p>出版时间：{{$favorite->publish_time}}</p>
+                <small>作者: {{ str_limit($favorite->authors, $limit = 24, $end = "...") }}</small><br>
+                <small>出版时间: {{ date("Y-m-d",strtotime($favorite->publish_time)) }}</small><br>
+                <small>ISBN: {{ $favorite->isbn }}</small><br>
+                <small>价格: {{ $favorite->price }}</small><br>
             </div>
-            <form action="{{ route('favorite.drop',$favorite->id) }}" method="DELETE" style="display: inline;">
+            <form action="{{ route('favorite.drop',$favorite->id) }}" method="DELETE" style="display: inline;text-align:center;">
               {{ method_field('DELETE') }}
               {{ csrf_field() }}
-            <button type="submit" >删除</button>
+            <button type="submit" class="btn btn-default btn-xs" >删除</button>
             </form>
       </div>
     @endforeach
