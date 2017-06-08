@@ -11,7 +11,13 @@
                 @foreach($paidbook as $book)
                 <div style="clear:both">
                 <div class="col-xs-3" style="padding: 0 10px 0 0;">
-                    <a href="{{ route("book.show",$book->id) }}"><img src="{{ $book->img_upload }}" alt="" style="width:100%; height:120px; box-shadow: 1px 1px 5px #666;"></a>
+                    <a href="{{ route("book.show",$book->id) }}">
+                    @if($book->img_upload)
+                    <img class="img-responsive" alt="{{$book->name}}" src="{{URL::asset($book->img_upload)}}"></img>
+                    @else
+                    <img class="img-responsive" alt="{{$book->name}}" src="{{URL::asset('test_images/404.jpg')}}"></img>
+                    @endif
+                    </a>
                 </div>
                 <div class="col-xs-9">
                     <p style="margin-bottom: 5px;"></p>
