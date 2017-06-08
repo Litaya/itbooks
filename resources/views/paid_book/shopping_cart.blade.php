@@ -27,7 +27,7 @@
                     @if($book->img_upload)
                     <img class="img-responsive" alt="{{$book->name}}" src="{{URL::asset($book->img_upload)}}"></img>
                     @else
-                    <img class="img-responsive" alt="{{$book->name}}" src="{{URL::asset('test_images/404.jpg')}}"></img>
+                    <img class="img-responsive" alt="{{$book->name}}" src="{{URL::asset("http://www.tup.com.cn/upload/bigbookimg/".$book->product_number.".jpg") }}"></img>
                     @endif
                     </a>
                 </div>
