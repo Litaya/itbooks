@@ -80,8 +80,9 @@
             });
         }
         function constructItem(material) {
-            var href_url = material["display"]==1?"{{ route("material.show",$material['id']) }}":material["url"];
+            var href_url = material["display"]==1?"{{route('material.index')}}"+'/'+material['id']:material["url"];
             var title    = material['title'].substr(0,50);
+            console.log(material);
             return '<a href="'+href_url+'">'+
                 '<div class="col-xs-12 item">'+
                 '<div class="col-xs-3" style="padding: 0;"><img class="item-img" src="'+material['cover_path']+'" alt=""></div>'+
