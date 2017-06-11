@@ -36,8 +36,26 @@ class Courseware
 		if($department_code[0] == '2' || $department_code[0] == 6){ #（计算机分社、高职分社）：书号后6位两两相加，例如450269，密码是4+5,0+2,6+9，最后是9215
 			return (string)((int)$isbn[$isbn_len-6]+(int)$isbn[$isbn_len-5]). (string)((int)$isbn[$isbn_len-4]+(int)$isbn[$isbn_len-3]). (string)((int)$isbn[$isbn_len-2]+(int)$isbn[$isbn_len-1]);
 		}
-		if($department_code[0] == '3'){#（经管分社） 书号最后两位相加（进位），最前面补上“tup”，例如372356，密码为tup37241(5+6=11,进位后，3变成4)，再例如422228，密码tup42230
-			return "tup".substr($isbn,$isbn_len-6,3).(string)((int)$isbn[$isbn_len-3]+(int)floor(((int)$isbn[$isbn_len-2]+(int)$isbn[$isbn_len-1])/10)).(string)(((int)$isbn[$isbn_len-2]+(int)$isbn[$isbn_len-1])%10);
+		if($department_code[0] == '3'){
+			#（经管分社）先取后6位，最前面加“tup”,然后后2位相加，如果相加结果是1位数，则直接替换后2位;，如果相加结果是2位数，则用个位数替换后2位，然后进位;
+			# 书号是：9787302455929 则密码是tup45601
+			# 书号是：9787302455923 则密码是tup45595
+			# 书号是：9787302455929 则密码是tup45601
+			$isbn_len = strlen($isbn);
+			if($isbn_len < 6){
+				return '输入的isbn无效';
+			}
+			$prefix_4 = intval(substr($isbn, $isbn_len-6,4));
+			$last_0   = intval(substr($isbn, $isbn_len-1, 1));
+			$last_1   = intval(substr($isbn, $isbn_len-2, 1));
+			$last_sum = $last_0 + $last_1;
+			if($last_sum / 10 > 0){
+				$prefix_4 += 1;
+			}
+			$prefix_4 %= 10000;
+			$last_sum %= 10;
+			$pass = "tup".(string)($prefix_4).(string)($last_sum);
+			return $pass;
 		}
 		if($department_code[0] == '4'){#（外语分社）无密码
 			return '此课件无密码';
