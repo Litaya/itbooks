@@ -49,7 +49,7 @@ class Courseware
 			$last_0   = intval(substr($isbn, $isbn_len-1, 1));
 			$last_1   = intval(substr($isbn, $isbn_len-2, 1));
 			$last_sum = $last_0 + $last_1;
-			if($last_sum / 10 > 0){
+			if((int)($last_sum / 10) > 0){
 				$prefix_4 += 1;
 			}
 			$prefix_4 %= 10000;
