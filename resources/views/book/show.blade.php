@@ -115,7 +115,6 @@
     </div>
   </div>
   @if(!empty($similar_books))
-
       <div class="panel panel-default">
           <div class="panel-heading">
           <div class="row">
@@ -139,13 +138,17 @@
               @endforeach
               </div>
           </div>
-          </div>
-
-      </div>
-
+        </div>
   @endif
-
-
+  <div>
+    <div class="bshare-custom">
+      <a title="分享到" href="http://www.bShare.cn/" id="bshare-shareto" class="bshare-more">&nbsp;&nbsp;&nbsp;分享到</a>
+      <a title="分享到QQ空间" class="bshare-qzone">QQ空间</a>
+      <a title="分享到新浪微博" class="bshare-sinaminiblog">新浪微博</a>
+      <a title="分享到人人网" class="bshare-renren">人人网</a>
+      <a title="分享到腾讯微博" class="bshare-qqmb">腾讯微博</a>
+    </div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+  </div>
 <script>
 function updateKjUrl(){
     var xmlhttp;

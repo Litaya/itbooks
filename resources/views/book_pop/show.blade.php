@@ -36,8 +36,4 @@
           </ul>
       </div>
   </div>
-  <div>
-    <p>分享本页到:<a href="http://www.weibo.com"><img style="width:35px;height:30px;" src="test_images/weibo.jpg"></a><a href="http://qzone.qq.com"><img style="width:30px;height:30px;" src="test_images/qzone.jpg"></a></p>
-  </div>
-</div>
 @endsection
