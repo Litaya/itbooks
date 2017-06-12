@@ -30,7 +30,7 @@ class PurchaseController extends Controller
     public function add_cart($bookisbn)
     {
         $user_id = Auth::user()->id;
-        if(ShoppingCart::where('user_id', $user_id)->where('isbn',$bookisbn)->get() != null)
+        if(ShoppingCart::where('user_id', $user_id)->where('isbn',$bookisbn)->exists() == true)
           return redirect()->back()->with('info','该商品已经在购物车中！');
         $cart = ShoppingCart::firstOrNew(
           array('user_id' => $user_id, 'isbn' => $bookisbn)
