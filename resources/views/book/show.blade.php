@@ -81,7 +81,7 @@
               @if(Auth::check())
                   <button class="btn btn-default btn-xs" style="width:60px" onclick="location.href='{{route("favorite.store",$book->id)}}'"> 收藏</button>
                   @if($book->file_upload)
-                  <a href="<?php echo "/pdfjs/web/viewer.html?file=compressed.tracemonkey-pldi-09".'.pdf';?>"><button class="btn btn-default btn-xs">试读图书</button></a>
+                  <a href="<?php echo "/pdfjs/web/viewer.html?file={$book->file_upload}".'.pdf';?>"><button class="btn btn-default btn-xs">试读图书</button></a>
                   @else
                   <a href="{{route('notFound')}}"><button class="btn btn-default btn-xs">试读图书</button></a>
                   @endif
