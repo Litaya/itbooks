@@ -77,7 +77,7 @@
               <p>ISBN号: {{$book->isbn}}</p>
               <p>定价: {{number_format($book->price,2)}}</p>
               <p>类别: {{$book->type==0?"其他图书":($book->type==1?"教材":"非教材")}}</p>
-              <p>出版时间: {{$book->publish_time}}</p>
+              <p>出版时间: {{date('Y-m-d',strtotime($book->publish_time))}}</p>
               @if(Auth::check())
                   <button class="btn btn-default btn-xs" style="width:60px" onclick="location.href='{{route("favorite.store",$book->id)}}'"> 收藏</button>
                   @if($book->file_upload)
