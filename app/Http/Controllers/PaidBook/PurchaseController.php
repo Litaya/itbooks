@@ -62,9 +62,12 @@ class PurchaseController extends Controller
          //账户余额
          $balance = AccountBalance::find($user_id);
          if(AccountBalance::where('user_id',$user_id) == false)
-         $balance = AccountBalance::firstOrNew(
+         {
+             $balance = AccountBalance::firstOrNew(
              ['user_id' => $user_id]
-         );
+             );
+             $balance = AccountBalance::find($user_id);
+         }
          //else
          //$balance = AccountBalance::find($user_id);
          //return var_export($balance != null,true);
