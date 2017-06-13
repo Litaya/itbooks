@@ -42,7 +42,7 @@
                     <small>出版时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
                     <small>ISBN: {{ $book->isbn }}</small><br>
                     <small>价格: {{ number_format($book->price,2) }}</small><br>
-                    <small>购买时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
+                    <small>购买时间: {{ date("Y-m-d",strtotime($book->add_time)) }}</small><br>
                 </div>
                 <div style="text-align:center;">
                     <button style="width:100%;" onclick="location.href='{{ route("purchase.drop_cart",$book->isbn) }}'">删除</button>

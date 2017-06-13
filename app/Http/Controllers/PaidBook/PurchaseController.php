@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
 {
+    private $total_price;
     public function index()
     {
         $user_id = Auth::user()->id;
@@ -54,10 +55,10 @@ class PurchaseController extends Controller
         return redirect()->back()->withInput(['删除成功！']);
     }
 
-    // public function purchase()
-    // {
-    //     $user_id = Auth::user()->id;
-    //     ShoppingCart::where('user_id',$user_id)
-    //     ->delete();
-    // }
+     public function purchase()
+     {
+         $user_id = Auth::user()->id;
+         ShoppingCart::where('user_id',$user_id)
+         ->delete();
+     }
 }
