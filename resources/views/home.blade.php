@@ -24,7 +24,7 @@
                     <small>作者: {{ str_limit($topbooks[0]->authors, $limit = 24, $end = "...") }}</small><br>
                     <small>出版时间: {{ date("Y-m-d",strtotime($topbooks[0]->publish_time)) }}</small><br>
                     <small>ISBN: {{ $topbooks[0]->isbn }}</small><br>
-                    <small>价格: {{ $topbooks[0]->price }}</small><br>
+                    <small>价格: {{ number_format($topbooks[0]->price,2) }}</small><br>
                 </div>
             @endif
         </div>
@@ -56,7 +56,7 @@
                 <small>作者: {{ str_limit($hotbooks[0]->authors, $limit = 24, $end = "...") }}</small><br>
                 <small>出版时间: {{ date("Y-m-d",strtotime($hotbooks[0]->publish_time)) }}</small><br>
                 <small>ISBN: {{ $hotbooks[0]->isbn }}</small><br>
-                <small>价格: {{ $hotbooks[0]->price }}</small><br>
+                <small>价格: {{ number_format($hotbooks[0]->price,2) }}</small><br>
             </div>
         </div>
         <div class="col-xs-12" style="padding:0;margin-top: 20px;">
@@ -84,7 +84,7 @@
                 <small>作者: {{ str_limit($newbooks[0]->authors, $limit = 24, $end = "...") }}</small><br>
                 <small>出版时间: {{ date("Y-m-d",strtotime($newbooks[0]->publish_time)) }}</small><br>
                 <small>ISBN: {{ $newbooks[0]->isbn }}</small><br>
-                <small>价格: {{ $newbooks[0]->price }}</small><br>
+                <small>价格: {{ number_format($newbooks[0]->price,2) }}</small><br>
             </div>
         </div>
         <div class="col-xs-12" style="padding:0;margin-top: 20px;">
@@ -113,7 +113,7 @@
                     <small>作者: {{ str_limit($book->authors, $limit = 24, $end = "...") }}</small><br>
                     <small>出版时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
                     <small>ISBN: {{ $book->isbn }}</small><br>
-                    <small>价格: {{ $book->price }}</small><br>
+                    <small>价格: {{ number_format($book->price,2) }}</small><br>
                 </div>
             </div>
         @endforeach

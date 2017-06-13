@@ -75,7 +75,7 @@
               <p><strong>{{$book->name}}</strong></p>
               <p>作者: {{$book->authors}}</p>
               <p>ISBN号: {{$book->isbn}}</p>
-              <p>定价: {{$book->price}}</p>
+              <p>定价: {{number_format($book->price,2)}}</p>
               <p>类别: {{$book->type==0?"其他图书":($book->type==1?"教材":"非教材")}}</p>
               <p>出版时间: {{$book->publish_time}}</p>
               @if(Auth::check())

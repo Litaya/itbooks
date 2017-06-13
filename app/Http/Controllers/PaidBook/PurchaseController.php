@@ -24,7 +24,12 @@ class PurchaseController extends Controller
                     ->join('book','book.isbn','=','shoppingcart.isbn')
                     ->orderBy('add_time','desc')
                     ->get();
-        return view('paid_book.shopping_cart')->with('cart',$cart);
+        $total_price = 0.00;
+        foreach($cart as $book)
+        {
+            $total_price += $book->price;
+        }
+        return view('paid_book.shopping_cart')->with('cart',$cart)->with('total_price',$total_price);
     }
 
     public function add_cart($bookisbn)
@@ -48,4 +53,11 @@ class PurchaseController extends Controller
         ->delete();
         return redirect()->back()->withInput(['删除成功！']);
     }
+
+    // public function purchase()
+    // {
+    //     $user_id = Auth::user()->id;
+    //     ShoppingCart::where('user_id',$user_id)
+    //     ->delete();
+    // }
 }
