@@ -3,7 +3,11 @@
 @section('title', '购物车')
 
 @section('content')
-
+@if(Session::has('info'))
+          <div class="alert alert-info">
+           {{Session::get('info')}}
+          </div>
+        @endif
         
 
     <div class="row" style="padding:0 20px 0 20px;">
@@ -16,7 +20,7 @@
         <h4>购物车</h4>
     </div>
          <div style="text-align:center;float:right;">
-             <button style="width:100%;" onclick="location.href='{{ route("purchase.index") }}'">去结算>></button>
+             <button style="width:100%;" onclick="location.href='{{ route("purchase.purchase") }}'">去结算>></button>
          </div>
          <div class="col-xs-12" style="padding:0;">
             <p>总价格：{{number_format($total_price,2)}}</p>

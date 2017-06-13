@@ -304,4 +304,5 @@ Route::group(["prefix" => "purchase",'middleware' => ['auth']],function (){
 	Route::get('/shoppingcart','PaidBook\PurchaseController@shopping_cart')->name('purchase.shopping_cart');
 	Route::any('/{bookisbn}/drop','PaidBook\PurchaseController@drop_cart')->name('purchase.drop_cart');
 	Route::any('/{bookisbn}/add','PaidBook\PurchaseController@add_cart')->name('purchase.add_cart');
+	Route::any('/purchase','PaidBook\PurchaseController@purchase')->name('purchase.purchase');
 });

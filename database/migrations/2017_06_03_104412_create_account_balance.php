@@ -14,9 +14,9 @@ class CreateAccountBalance extends Migration
     public function up()
     {
         // Balance is the amount of money that is left
-        Schema::create('accountbalance', function (Blueprint $table) {
+        Schema::create('account_balance', function (Blueprint $table) {
             $table->integer('user_id')->index();
-            $table->integer('balance');
+            $table->integer('balance')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateAccountBalance extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accountbalance');
+        Schema::dropIfExists('account_balance');
     }
 }

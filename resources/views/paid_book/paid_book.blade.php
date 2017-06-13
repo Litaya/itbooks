@@ -25,7 +25,7 @@
                     <small>作者: {{ str_limit($book->authors, $limit = 24, $end = "...") }}</small><br>
                     <small>出版时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
                     <small>ISBN: {{ $book->isbn }}</small><br>
-                    <small>价格: {{ $book->price }}</small><br>
+                    <small>价格: {{ number_format($book->price,2) }}</small><br>
                     <small>购买时间: {{ date("Y-m-d",strtotime($book->publish_time)) }}</small><br>
                 </div>
                 <div style="text-align:center;">

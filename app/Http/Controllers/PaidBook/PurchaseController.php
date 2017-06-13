@@ -7,6 +7,7 @@ use Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ShoppingCart;
+use App\Models\AccountBalance;
 use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
@@ -25,12 +26,12 @@ class PurchaseController extends Controller
                     ->join('book','book.isbn','=','shoppingcart.isbn')
                     ->orderBy('add_time','desc')
                     ->get();
-        $total_price = 0.00;
+        $this->total_price = 0.00;
         foreach($cart as $book)
         {
-            $total_price += $book->price;
+            $this->total_price += $book->price;
         }
-        return view('paid_book.shopping_cart')->with('cart',$cart)->with('total_price',$total_price);
+        return view('paid_book.shopping_cart')->with('cart',$cart)->with('total_price',$this->total_price);
     }
 
     public function add_cart($bookisbn)
@@ -58,7 +59,24 @@ class PurchaseController extends Controller
      public function purchase()
      {
          $user_id = Auth::user()->id;
+         //账户余额
+         $balance = AccountBalance::find($user_id);
+         if(AccountBalance::where('user_id',$user_id) == false)
+         $balance = AccountBalance::firstOrNew(
+             ['user_id' => $user_id]
+         );
+         //else
+         //$balance = AccountBalance::find($user_id);
+         //return var_export($balance != null,true);
+         if($balance->balance < $this->total_price)
+         {
+             return redirect()->back()->with('info','余额不足');
+         }
          ShoppingCart::where('user_id',$user_id)
          ->delete();
+         $balance->balance = $balance->balance-$this->total_price;
+         $balance->save();
+         //return $balance->balance;
+         return redirect()->back()->with('info','支付成功，余额为￥'.number_format($balance->balance,2));
      }
 }
