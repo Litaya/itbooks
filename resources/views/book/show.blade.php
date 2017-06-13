@@ -142,7 +142,7 @@
   @endif
   <div>
     <div class="bshare-custom">
-      <a title="分享到" href="http://www.bShare.cn/" id="bshare-shareto" class="bshare-more">&nbsp;&nbsp;&nbsp;分享到</a>
+      <a title="分享到" id="bshare-shareto">&nbsp;分享到:</a>
       <a title="分享到QQ空间" class="bshare-qzone">QQ空间</a>
       <a title="分享到新浪微博" class="bshare-sinaminiblog">新浪微博</a>
       <a title="分享到人人网" class="bshare-renren">人人网</a>
