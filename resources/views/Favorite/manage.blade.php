@@ -19,7 +19,7 @@
               <a href="{{route('book.show', $favorite->id)}}"><img class="img-thumbnail img-in-well col-center-block" src="{{$favorite->img_upload}}" alt="Book"></a>
             </div>
             <div class="col-xs-7">
-                <small>
+                
                 <a href="{{route('book.show', $favorite->id)}}"><p><strong>{{$favorite->name}}</strong></p></a>
                 <small>作者: {{ str_limit($favorite->authors, $limit = 24, $end = "...") }}</small><br>
                 <small>出版时间: {{ date("Y-m-d",strtotime($favorite->publish_time)) }}</small><br>
