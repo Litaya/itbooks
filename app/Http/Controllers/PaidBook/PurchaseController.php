@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ShoppingCart;
 use App\Models\AccountBalance;
+use App\Models\PaidBook;
 use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
@@ -61,12 +62,13 @@ class PurchaseController extends Controller
          $user_id = Auth::user()->id;
          //账户余额
          $balance = AccountBalance::find($user_id);
-         if(AccountBalance::where('user_id',$user_id) == false)
+         if(AccountBalance::where('user_id',$user_id)->exists() == false)
          {
              $balance = AccountBalance::firstOrNew(
              ['user_id' => $user_id]
              );
-             $balance = AccountBalance::find($user_id);
+             $balance->balance = 0;
+             $balance->save();
          }
          //else
          //$balance = AccountBalance::find($user_id);
@@ -75,8 +77,14 @@ class PurchaseController extends Controller
          {
              return redirect()->back()->with('info','余额不足');
          }
-         ShoppingCart::where('user_id',$user_id)
-         ->delete();
+         $cart = ShoppingCart::where('user_id',$user_id)->get();
+         foreach($cart as $book)
+         {
+            PaidBook::insert(
+              array('user_id'=>$user_id,'isbn'=>$book->isbn)
+            );
+         }
+         ShoppingCart::where('user_id',$user_id)->delete();
          $balance->balance = $balance->balance-$this->total_price;
          $balance->save();
          //return $balance->balance;
