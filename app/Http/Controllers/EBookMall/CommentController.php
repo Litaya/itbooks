@@ -14,7 +14,7 @@ class CommentController extends Controller
     //
     public function show($bookid){
       $comments=null;
-      $comments =Comment::where("target_id",$bookid)->where("status",1)->paginate(10);
+      $comments =Comment::where("target_id",$bookid)->where("status",1)->orderBy('created_at','desc')->paginate(10);
 
       return view("comment.show",["comments"=>$comments,"bookid"=>$bookid]);
     }
