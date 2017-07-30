@@ -42,7 +42,7 @@
                     <tr>
                         <td>{{$cert->username}}</td>
                         <td>{{$cert->realname}}</td>
-                        <td>{{str_limit($cert->workplace, $limit = 15, $end = "...")}}</td>
+                        <td>{{str_limit($cert->workplace, $limit = 60, $end = "...")}}</td>
                         <td>
                         @if(!empty($cert->cert_name))
                             @if(strtoupper($cert->cert_name)=="TEACHER")
