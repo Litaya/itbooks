@@ -4,6 +4,29 @@
 
 @section('content')
 
+    <style>
+        .item{
+            box-shadow: 1px 1px 1px #eee;
+            background-color: white;
+            padding: 0;
+            margin-bottom: 10px;
+        }
+        .item-img{
+            width:100%;
+            min-height:80px;
+        }
+        .item-content{
+            min-height: 80px;
+            padding: 0 5px 0 10px;
+        }
+        .item-title{
+            margin: 0;
+        }
+        .item-hint{
+            color: #cccccc;;
+        }
+    </style>
+
     <div class="row">
         <div class="panel panel-danger hidden" id="warning_box">
             <div class="panel-body" id="warning_msg">
@@ -17,9 +40,9 @@
             <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
             </ul>
             @if(strpos($user->certificate_as, "TEACHER") !== false)
-            <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书（教师每年最多只能申请10本样书）</small></p>
+                <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书（教师每年最多只能申请10本样书）</small></p>
             @elseif(strpos($user->certificate_as, "AUTHOR") !== false)
-            <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->author->book_limit }}</span>&nbsp;本书</small></p>
+                <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->author->book_limit }}</span>&nbsp;本书</small></p>
             @endif
         </div>
         <div class="col-xs-12">
@@ -58,6 +81,30 @@
             </form>
         </div>
     </div>
+
+    <!-- TODO 这里太暴力，写死了，要改 -->
+    @if(!empty($banner_items))
+        <div class="row">
+            <hr>
+            <div class="col-lg-12">
+                @foreach($banner_items as $material)
+                    <a href="{{ $material->display==1?route("material.show",$material->id):$material->url }}">
+                        {{--<a href="{{ $material->url }}">--}}
+                        <div class="col-xs-12 item">
+                            <div class="col-xs-3" style="padding: 0;">
+                                <img class="item-img" src="{{ $material->cover_path }}" alt="">
+                            </div>
+                            <div class="col-xs-9 item-content">
+                                <p class="item-title">{{ \Illuminate\Support\Str::limit($material->title,50) }}</p>
+                                <small class="item-hint" style="position: absolute; bottom: 2px;">阅读 {{ $material->reading_quantity  }}</small>
+                                <small class="item-hint" style="position: absolute; bottom: 2px; right: 5px;">{{ $material->wechat_update_time }}</small>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     <script>
         var books_num = 0;
@@ -107,7 +154,7 @@
                     var book_isbn = books[i]['isbn'];
 
                     $("#result_place").append("<li><a href='javascript:void(0)' class='book_item' id='book_"+book_id
-                            +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\",\""+book_isbn+"\")'>"+book_name+"</a></li>");
+                        +"' onclick='book_select(\""+book_id+"\",\""+book_com_name+"\",\""+book_isbn+"\")'>"+book_name+"</a></li>");
                 }
 
             });
@@ -134,9 +181,9 @@
     </script>
 
     @if(!empty($addbook))
-    <script>
-    book_select("{{$addbook->id}}", "{{$addbook->name}}", "{{$addbook->isbn}}");
-    </script>
+        <script>
+            book_select("{{$addbook->id}}", "{{$addbook->name}}", "{{$addbook->isbn}}");
+        </script>
     @endif
-    
+
 @stop
