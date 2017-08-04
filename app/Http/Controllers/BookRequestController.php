@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Material;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 
@@ -30,15 +31,18 @@ class BookRequestController extends Controller
         $userinfo = UserInfoController::get_user_info($user);
     	if(!empty($user->json_content))
     	    $user->json_content = json_decode($user->json_content);
-        
-        $args = ['user'=>$user, 'userinfo'=>$userinfo];
 
         if(!empty($request->addbook)){
             $book = Book::find($request->addbook);
             if(!empty($book)) $args['addbook'] = $book;
         }
 
-		return view('book_request.index', $args);
+        // TODO 这里写的太暴力了，需要更好的解决方案。
+        $newActivity = Material::where('category_id',4)->take(5)->get();
+
+	    $args = ['user'=>$user, 'userinfo'=>$userinfo, 'banner_items'=>$newActivity];
+
+	    return view('book_request.index', $args);
     }
 
     public function storeMultiple(Request $request){
@@ -105,7 +109,9 @@ class BookRequestController extends Controller
     public function record(Request $request)
     {
         $user = User::find($request->userId);
-        return view('book_request.record')->withUser($user);
+	    $newActivity = Material::where('category_id',4)->take(5)->get();
+
+	    return view('book_request.record')->withUser($user)->withBannerItems($newActivity);
     }
 
     /**
