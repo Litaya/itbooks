@@ -38,7 +38,7 @@ class BookRequestController extends Controller
         }
 
         // TODO 这里写的太暴力了，需要更好的解决方案。
-        $newActivity = Material::where('category_id',4)->take(5)->get();
+        $newActivity = Material::where('category_id',4)->orderBy('wechat_update_time','desc')->take(5)->get();
 
 	    $args = ['user'=>$user, 'userinfo'=>$userinfo, 'banner_items'=>$newActivity];
 
@@ -109,7 +109,7 @@ class BookRequestController extends Controller
     public function record(Request $request)
     {
         $user = User::find($request->userId);
-	    $newActivity = Material::where('category_id',4)->take(5)->get();
+	    $newActivity = Material::where('category_id',4)->orderBy('wechat_update_time','desc')->take(5)->get();
 
 	    return view('book_request.record')->withUser($user)->withBannerItems($newActivity);
     }
