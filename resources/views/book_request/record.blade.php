@@ -73,7 +73,7 @@
                                     <img class="item-img" src="{{ $material->cover_path }}" alt="">
                                 </div>
                                 <div class="col-xs-9 item-content">
-                                    <p class="item-title">{{ \Illuminate\Support\Str::limit($material->title,50) }}</p>
+                                    <p class="item-title">{{ \Illuminate\Support\Str::limit($material->title,40) }}</p>
                                     <small class="item-hint" style="position: absolute; bottom: 2px;">阅读 {{ $material->reading_quantity  }}</small>
                                     <small class="item-hint" style="position: absolute; bottom: 2px; right: 5px;">{{ $material->wechat_update_time }}</small>
                                 </div>
