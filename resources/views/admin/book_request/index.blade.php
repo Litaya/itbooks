@@ -16,9 +16,10 @@
             </div>
             
             @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
-            <div class="col-md-4 col-md-offset-4">
-                <a href="{{route('admin.bookreq.export.book')}}"><button class="btn-default move-right">导出库房发书单</button></a>
-                <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn-default move-right">导出快递打印单</button></a>
+            <div class="col-md-6 col-md-offset-2">
+                <a href="{{route('admin.bookreq.export.bookreq')}}"><button class="btn btn-sm btn-primary move-right">导出全部样书申请单</button></a>
+                <a href="{{route('admin.bookreq.export.book')}}"><button class="btn btn-sm btn-warning move-right">导出库房发书单</button></a>
+                <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn btn-sm btn-success move-right">导出快递打印单</button></a>
             </div>
             @endif
             <!-- END SEARCH BAR -->

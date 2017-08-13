@@ -437,4 +437,64 @@ class DatabaseController extends Controller
         return redirect()->route("admin.user.index");
     }
 
+	public function exportAllBookRequest(Request $request){
+		$ar = PM::getAdminRole();
+		if($ar == 'SUPERADMIN'){
+			$book_requests = BookRequest::unhandled()
+				->leftJoin('book', 'book.id', '=', 'book_id')
+				->leftJoin('user_info', 'user_info.user_id', '=', 'user_id')
+				->leftJoin('user', 'user.id', '=', 'user_id')
+				->select('book.isbn as isbn','book.name as bookname','book.price as bookprice',
+					'user_info.realname as realname','user_info.workplace as workplace' ,
+					'user.email as email','status','message','phone', 'reciever','order_number');
+			$filename = date("Y-m-d")."样书申请单_".time();
+			$export = Excel::create($filename, function($excel) use ($book_requests){
+				$excel->sheet("样书申请单", function($sheet) use ($book_requests){
+
+					$sheet->setAutoSize(true);
+
+					$sheet->row(1, ["书代号", "书名", "定价","申请人", "工作单位", "常用邮箱", "申请状态",
+						"收件人",'联系方式', "运单号",'教材使用情况','备注']);
+					foreach($book_requests as $book_request){
+						$sheet->appendRow([
+							$book_request["isbn"]." ",
+							$book_request["bookname"],
+							$book_request["bookprice"],
+							$book_request["realname"],
+							$book_request["workplace"],
+							$book_request['email'],
+							$book_request['status'] == 1?"申请成功":"申请失败",
+							$book_request['reciever'],
+							$book_request['phone'],
+							$book_request['order_number'],
+							json_decode($book_request[''],true)['book_plan'],
+							json_decode($book_request[''],true)['remarks'],
+
+							implode(" ", $book_request["receiver"])
+						]);
+					}
+
+					$sheet->setColumnFormat(array(
+						'A' => '@',
+						'B' => '@',
+						'C' => '0.00',
+						'D' => '@',
+						'E' => '@',
+						'F' => '@',
+						'G' => '0',
+						'H' => '@',
+						'I' => '@',
+						'J' => '@',
+						'K' => '@',
+						'L' => '@',
+
+					));
+				});
+			})->store('xlsx')->export('xlsx');
+		}else{
+			$request->session()->flash('notice_message','您没有操作权限！');
+			$request->session()->flash('notice_status','danger');
+		}
+	}
+
 }

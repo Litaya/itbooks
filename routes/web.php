@@ -131,6 +131,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::post('bookreq/{id}/passorder', 'BookRequestAdminController@passAndBindOrder')->name('admin.bookreq.passorder');
 	Route::get('bookreq/export/packaging', "DatabaseController@exportBookRequestPackagingTable")->name('admin.bookreq.export.packaging');
 	Route::get('bookreq/export/book', "DatabaseController@exportBookRequestBookTable")->name('admin.bookreq.export.book');
+	Route::get('bookreq/export/bookreq', "DatabaseController@exportAllBookRequest")->name('admin.bookreq.export.bookreq');
 	Route::post('bookreq/{id}/reset', "BookRequestAdminController@resetStatus")->name('admin.bookreq.reset');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
