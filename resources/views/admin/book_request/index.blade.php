@@ -145,6 +145,15 @@
                                     {!! Form::close() !!}
                                 </div>
                             @endif
+                            @if(in_array(PM::getAdminRole(), ["REPRESENTATIVE"]))
+                                @if(!empty($bookreq->book) and !empty($bookreq->book->department))
+                                <div class="col-xs-5 col-md-2">
+                                    <a href="{{route('admin.bookreq.show', $bookreq->id)}}">
+                                        <button class="btn btn-primary btn-xs">详情</button>
+                                    </a>
+                                </div>
+                                @endif
+                            @endif
                             <!-- END ROLE CHECK FOR REQUEST PROCESS -->
 
                         </div>

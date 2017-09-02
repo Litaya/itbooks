@@ -86,8 +86,10 @@ class Wechat
 			$updated = false; # 本次获取没有任何更新
 			# 遍历获取到的每张图片，如果有未存库的，存库
 			foreach ($items as $item){
+                Log::info("图片media_id:".$item['media_id']);
 				$db_img = WechatImgUrl::where('thumb_media_id',$item["media_id"])->get();
 				if(sizeof($db_img)==0){ //如果还未存库
+                    Log::info("图片存库");
 					WechatImgUrl::create([
 						'thumb_media_id' => $item["media_id"],
 						'url'            => $item["url"],
@@ -165,7 +167,7 @@ class Wechat
 		$start_time = strtotime($start_time);
 		$end_time   = strtotime($end_time);
 
-#        Log::info("start: $start_time...... end: $end_time");
+        # Log::info("start: $start_time...... end: $end_time");
 		$this->storeWechatImagesToDB(); // 先将所有的图片素材存库
 		$offset = 0; $count = 20; $news_sum = 0;
 		while (1){
@@ -178,8 +180,7 @@ class Wechat
 			foreach ($news as $new){
 				$media_id    = $new['media_id'];
 				$update_time = intval($new['update_time']);
-
-				#Log::info("start: $start_time...... end: $end_time........update_time:$update_time");
+				# Log::info("start: $start_time...... end: $end_time........update_time:$update_time");
 
 				# 更新本次获取的列表中的最大、最小时间.
 				if($smallest > $update_time) $smallest = $update_time;
@@ -187,9 +188,10 @@ class Wechat
 
 				# 如果本条时间不在目标时间内，跳过
 				if($update_time > $end_time || $update_time < $start_time) {
+                    Log::info("本条时间不在目标时间内");
 					continue;
 				}
-
+                Log::info('本条时间在目标时间内');
 				# 如果在目标时间内，则更新
 				$old_materials = Material::where('media_id',$media_id)->get();
 				$delete_mark   = [];
@@ -201,13 +203,15 @@ class Wechat
 				# 对于多图文消息
 				foreach ($items as $item){
 					$thumb_media_id = $item['thumb_media_id'];
+                    # TODO 微信改了thumb_media_id的数据，不知道现在的缩略图的thumb_media_id变成了个什么东西，没法用啊，需要改一下
 					$img_in_db      = WechatImgUrl::where('thumb_media_id',$thumb_media_id)->first();
 					$cover_path     = empty($img_in_db)?'/img/example.jpg':$img_in_db->local_url;
 
-                    if($cover_path == '/img/example.jpg') continue;
+                    # if($cover_path == '/img/example.jpg') continue;
 
 					// 如果获取到的新的素材与库中的某素材同名，则更新同名素材，不同名的，则新建。
 					if(isset($delete_mark[$item['title']])){
+                        Log::info("同名素材：".$item['title']);
 						Material::where('title',$item['title'])->update([
 							'thumb_media_id'     => $thumb_media_id,
 							'cover_path'         => $cover_path,
@@ -221,6 +225,7 @@ class Wechat
 						]);
 						unset($delete_mark[$item['title']]);
 					} else{
+                        Log::info("不同名，创建新素材");
 						Material::create([
 							'media_id'           => $media_id,
 							'title'              => $item['title'],
