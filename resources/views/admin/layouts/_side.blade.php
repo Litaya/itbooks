@@ -13,9 +13,11 @@
     @if(in_array('FORUM',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/forum')?'sidebar-active':''}}"><a href="{{ route('admin.forum.index') }}"> <i class="fa fa-comments push"></i>论坛管理</a></li>
     @endif
+    <!--
     @if(in_array('MATERIAL',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/material')?'sidebar-active':''}}"><a href="{{ route('admin.material.index') }}"> <i class="fa fa-university push"></i>微信文章</a></li>
     @endif
+    -->
     @if(in_array('MATERIAL',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/wechat')?'sidebar-active':''}}"><a href="{{ route('admin.wechat.index') }}"> <i class="fa fa-weixin push"></i>微信后台</a></li>
     @endif
