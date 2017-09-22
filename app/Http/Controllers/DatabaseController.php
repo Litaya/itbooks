@@ -498,4 +498,46 @@ class DatabaseController extends Controller
 		}
 	}
 
+	/**
+	 * 导出发货单（发行单）
+	 * isbn price amount book_name username phone address
+	 */
+	public function exportInvoices(){
+		$records = BookRequest::leftJoin('book','book.id','=','book_id')
+			->where('status',0)->get();
+		if(count($records) == 0){
+			Session::flash('warning','没有需要导出的发行单信息');
+			return redirect()->route('admin.bookreq.index');
+		}
+		$filename = date('Y-m-d').'_发行单_'.time();
+		$export = Excel::create($filename, function ($excel) use ($records){
+			$excel->sheet('发行单',function ($sheet) use ($records){
+				$sheet->setAutoSize(true);
+				$sheet->row(1,["ISBN","定价","数量","书名","姓名","电话","地址"]);
+				foreach ($records as $record) {
+					$sheet->appendRow([
+						$record->isbn." ".
+						$record->price,
+						1,
+						$record->book_name,
+						$record->receiver,
+						$record->phone,
+						$record->address
+					]);
+				}
+				$sheet->setColumnFormat(array(
+					'A' => '@',
+					'B' => '0.00',
+					'C' => '0',
+					'D' => '@',
+					'E' => '@',
+					'F' => '@',
+					'G' => '@',
+				));
+			});
+		})->store('xlsx')->export('xlsx');
+
+		return redirect()->route('admin.bookreq.index');
+	}
+
 }
