@@ -504,7 +504,13 @@ class DatabaseController extends Controller
 	 */
 	public function exportInvoices(){
 		$records = BookRequest::leftJoin('book','book.id','=','book_id')
-			->where('status',0)->get();
+			->where('status',0)->select(
+				'book.isbn as isbn',
+				'book.price as price',
+				'book.name as book_name',
+				'receiver',
+				'phone',
+				'address')->get();
 		if(count($records) == 0){
 			Session::flash('warning','没有需要导出的发行单信息');
 			return redirect()->route('admin.bookreq.index');
@@ -516,7 +522,7 @@ class DatabaseController extends Controller
 				$sheet->row(1,["ISBN","定价","数量","书名","姓名","电话","地址"]);
 				foreach ($records as $record) {
 					$sheet->appendRow([
-						$record->isbn." ".
+						$record->isbn." ",
 						$record->price,
 						1,
 						$record->book_name,
