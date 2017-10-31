@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\Permission;
+use App\Libraries\PermissionManager;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 
 use App\Models\ConferenceRegister;
@@ -519,12 +522,34 @@ class DatabaseController extends Controller
 			return redirect()->route('admin.bookreq.index');
 		}
 
+		// 根据用户权限过滤记录
+		$user  = Auth::user();
+		$admin = Admin::where('user_id',$user->id)->get();
+		if(count($admin) == 0){
+			Session::flash('warning','用户角色错误');
+			return redirect()->route('admin.bookreq.index');
+		}
+		$admin = $admin[0];
+		$department = Department::where('id',$admin->department_id)->first();
+		$code  = $department->code;
+		$departments = DB::select("select * from department where code like '".$code."%'");
+		$department_ids = array();
+		foreach ($departments as $department){
+			array_push($department_ids,$department->id);
+		}
+		$records_filtered = array();
+		foreach ($records as $record){
+			if(in_array($record->department_id, $department_ids)){
+				array_push($records_filtered,$record);
+			}
+		}
+
 		$filename = date('Y-m-d').'_发行单_'.time();
-		$export = Excel::create($filename, function ($excel) use ($records){
-			$excel->sheet('发行单',function ($sheet) use ($records){
+		$export = Excel::create($filename, function ($excel) use ($records_filtered){
+			$excel->sheet('发行单',function ($sheet) use ($records_filtered){
 				$sheet->setAutoSize(true);
 				$sheet->row(1,["ISBN","定价","数量","书名","姓名","电话","地址"]);
-				foreach ($records as $record) {
+				foreach ($records_filtered as $record) {
 					$sheet->appendRow([
 						$record->isbn." ",
 						$record->price,
