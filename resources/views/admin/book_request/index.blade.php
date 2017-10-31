@@ -20,7 +20,7 @@
                 <a href="{{route('admin.bookreq.export.bookreq')}}"><button class="btn btn-sm btn-primary move-right">导出全部样书申请单</button></a>
                 <a href="{{route('admin.bookreq.export.book')}}"><button class="btn btn-sm btn-warning move-right">导出库房发书单</button></a>
                 <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn btn-sm btn-success move-right">导出快递打印单</button></a>
-{{--                <a href="{{route('admin.bookreq.export.invoice') }}"><button class="btn btn-sm btn-success move-right">导出发行单</button></a>--}}
+                <a href="{{route('admin.bookreq.export.invoice') }}"><button class="btn btn-sm btn-danger move-right">导出发行单</button></a>
                 <!-- TODO 导出发货单 admin.bookreq.export.invoice -->
             </div>
             @endif

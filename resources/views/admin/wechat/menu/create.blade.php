@@ -101,6 +101,7 @@
             <button class="btn btn-success" onclick="postSave()"><i class="fa fa-save push"></i>保存</button>
             <button class="btn btn-primary" onclick="postSaveAndApply()"><i class="fa fa-check push"></i>保存并应用</button>
         </div>
+		Route::get('export', 'DatabaseController@exportDownloadRecord')->name('admin.resource.export');
     </div>
     <script>
         var vue = new Vue({
@@ -193,7 +194,7 @@
                     title: vue._data.title
                 },
                 success:function (menu_id) {
-//                    location.reload();
+                    location.reload();
                 }
             });
         }

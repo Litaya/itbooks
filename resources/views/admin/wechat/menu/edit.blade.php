@@ -89,7 +89,7 @@
                         </form>
                     </div>
                     <div class="panel panel-footer" style="margin: 0;">
-                        {{--<button class="btn btn-success btn-sm" onclick="saveDetail()"><i class="fa fa-save push"></i>保存</button>--}}
+                        <button class="btn btn-success btn-sm" onclick="saveDetail()"><i class="fa fa-save push"></i>保存</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteButton()"><i class="fa fa-times push"></i>删除</button>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
     <p hidden id="decoder">hi</p>
     <script>
         $("#decoder").html('{{ $menu->json }}');
-        var menu = JSON.parse($("#decoder").html());
+        var menu = JSON.parse($("#decoder").text());
         var vue = new Vue({
             el: '#menu_structure',
             data:{
