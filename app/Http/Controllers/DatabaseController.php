@@ -19,6 +19,7 @@ use URL;
 use DB;
 use PDO;
 use Session;
+use Auth;
 
 use App\Helpers\CrossDomainHelper;
 
@@ -303,6 +304,7 @@ class DatabaseController extends Controller
     }
 
     public function exportDownloadRecord(){
+        /*
         $ar = PM::getAdminRole();
         if($ar == "SUPERADMIN"){
             $records = DownloadRecord::leftJoin('book', 'book.id', '=', 'book_id')
@@ -371,7 +373,7 @@ class DatabaseController extends Controller
                 ));
             });
         })->store('xlsx')->export('xlsx');
-
+        */
         return redirect()->route("admin.resource.index");
     }
 
@@ -510,11 +512,13 @@ class DatabaseController extends Controller
 				'book.name as book_name',
 				'receiver',
 				'phone',
+                'book.department_id as department_id',
 				'address')->get();
 		if(count($records) == 0){
 			Session::flash('warning','没有需要导出的发行单信息');
 			return redirect()->route('admin.bookreq.index');
 		}
+
 		$filename = date('Y-m-d').'_发行单_'.time();
 		$export = Excel::create($filename, function ($excel) use ($records){
 			$excel->sheet('发行单',function ($sheet) use ($records){
