@@ -532,7 +532,7 @@ class DatabaseController extends Controller
 		$admin = $admin[0];
 		$department = Department::where('id',$admin->department_id)->first();
 		$code  = $department->code;
-		$departments = DB::select("select * from department where code like '".$code."%'");
+        $departments = Department::where('code','like',"$code%")->get();
 		$department_ids = array();
 		foreach ($departments as $department){
 			array_push($department_ids,$department->id);
