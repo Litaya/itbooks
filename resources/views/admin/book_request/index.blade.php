@@ -16,11 +16,38 @@
             </div>
             
             @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
-            <div class="col-md-6 col-md-offset-2">
+            <div class="col-md-7 col-md-offset-1">
                 <a href="{{route('admin.bookreq.export.bookreq')}}"><button class="btn btn-sm btn-primary move-right">导出全部样书申请单</button></a>
                 <a href="{{route('admin.bookreq.export.book')}}"><button class="btn btn-sm btn-warning move-right">导出库房发书单</button></a>
                 <a href="{{route('admin.bookreq.export.packaging')}}"><button class="btn btn-sm btn-success move-right">导出快递打印单</button></a>
                 <a href="{{route('admin.bookreq.export.invoice') }}"><button class="btn btn-sm btn-danger move-right">导出发行单</button></a>
+                <button class="btn btn-sm btn-primary move-right" data-toggle="modal" data-target="#import-express" >导入发行单</button>
+
+
+                <div class="modal fade bs-example-modal-sm" id="import-express" tabindex="-1" role="dialog" aria-labelledby="deleteOfficeLable" style="margin-top: 200px">
+                    <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="deleteOfficeLable">导入发行单</h4>
+                            </div>
+                            <div class="modal-body">
+                                {!! Form::open(["route"=>"admin.bookreq.import_express", "method"=>"post", "files"=>true]) !!}
+                                {{ Form::file("express_file", ["class"=>"form-control form-spacing-top"])}}
+                                {{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top"])}}
+                                <button type="button" class="btn btn-default form-spacing-top" data-dismiss="modal">取消</button>
+                                {!! Form::close() !!}
+                                <hr>
+                                <div>
+                                    <span style="color:red;">注意事项:</span><br>
+                                    1. 表头的标准格式:快递单号、状态、ISBN、定价、数量、书名、姓名、电话、地址 <br>
+                                    2. 请保证isbn与用户真实名字的准确性 <br>
+                                    3. 同一份文件可提交多次
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- TODO 导出发货单 admin.bookreq.export.invoice -->
             </div>
             @endif

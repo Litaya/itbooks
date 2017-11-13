@@ -34,6 +34,13 @@ class FileHelper {
 		return $folder;
 	}
 
+	public static function bookRequestFolder(){
+		$folder = "fileupload/resource/bookrequest/";
+		if(!File::isDirectory(storage_path($folder)))
+			File::makeDirectory(storage_path($folder), 0777, true);
+		return $folder;
+	}
+
 	public static function saveUserImage($user, $image, $action){
 		if($action == "certificate"){
 			$folder = FileHelper::userCertificateFolder($user);
@@ -50,6 +57,13 @@ class FileHelper {
 			return $location;
 		}
 		return FALSE;
+	}
+
+	public static function saveExpressFile($file){
+		$filename = $file->getClientOriginalName().$file->getClientOriginalExtension();
+		$location = 'express/'.$filename;
+		Storage::disk('public')->put($location, file_get_contents($file));
+		return $location;
 	}
 
 	public static function saveResourceFile($file){

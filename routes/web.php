@@ -115,6 +115,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 // admin dashboard routes:
 Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 
+	Route::group(["prefix" => "test"], function(){
+
+		Route::post("/",'Admin\AdminTestController@storeExpressInfo')->name('admin.test.store_express');
+		Route::get("/",'Admin\AdminTestController@index')->name('admin.test.index');
+	});
+
+
 	Route::get('/',function (){
 		return view('admin.index');
 	})->name('admin.index');
@@ -134,6 +141,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::get('bookreq/export/bookreq', "DatabaseController@exportAllBookRequest")->name('admin.bookreq.export.bookreq');
 	Route::get('bookreq/export/invoice', "DatabaseController@exportInvoices")->name('admin.bookreq.export.invoice');
 	Route::post('bookreq/{id}/reset', "BookRequestAdminController@resetStatus")->name('admin.bookreq.reset');
+	Route::post('bookreq/importexpress',"DatabaseController@importExpressInfo")->name('admin.bookreq.import_express');
 
 	Route::get('cert', 'CertRequestAdminController@index')->name('admin.cert.index');
 	//Route::get('cert/{id}', 'CertificationAdminController@show')->name('admin.cert.show');
