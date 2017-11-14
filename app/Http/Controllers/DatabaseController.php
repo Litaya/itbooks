@@ -601,22 +601,27 @@ class DatabaseController extends Controller
 				Session::flash('notice_status','warning');
 			}else{
 				foreach ($data as $row){
+					$book    = Book::where('isbn',$row['isbn'])->first();
+					$users   = UserInfo::where('realname',$row['姓名'])->get();
+					$userIds = [];
+					foreach ($users as $user){
+						array_push($userIds, $user->user_id);
+					}
+					$book_req = BookRequest::where('book_id',$book->id)->whereIn('user_id',$userIds)->first();
+					if($book_req == null){
+						array_push($failed, $row);
+						continue;
+					}
 					if($row['快递单号']!=null){
-						$book    = Book::where('isbn',$row['isbn'])->first();
-						$users   = UserInfo::where('realname',$row['姓名'])->get();
-						$userIds = [];
-						foreach ($users as $user){
-							array_push($userIds, $user->user_id);
-						}
-						$book_req = BookRequest::where('book_id',$book->id)->whereIn('user_id',$userIds)->first();
-						if($book_req == null){
-							array_push($failed, $row);
-							continue;
-						}
 						$book_req->order_number = $row['快递单号'];
 						$book_req->status = 1; //审核通过，已发送快递
-						$book_req->save();
+					}else{
+						$book_req->status  = 2;
+						$book_req_msg = json_decode($book_req->message, true);
+						$book_req_msg['admin_reply'] = $row['拒绝理由'];
+						$book_req->message = json_encode($book_req_msg);
 					}
+					$book_req->save();
 				}
 				$message = "一共处理".sizeof($data)."条记录，处理成功".(sizeof($data) - sizeof($failed))."条，处理失败".sizeof($failed)."条，无法处理的记录有:\n";
 				foreach ($failed as $row){
