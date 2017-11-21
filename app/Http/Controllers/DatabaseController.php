@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\BookRequestDao;
 use App\Http\Middleware\Permission;
 use App\Libraries\PermissionManager;
 use App\Models\Admin;
@@ -554,8 +555,10 @@ class DatabaseController extends Controller
 		$export = Excel::create($filename, function ($excel) use ($records_filtered){
 			$excel->sheet('发行单',function ($sheet) use ($records_filtered){
 				$sheet->setAutoSize(true);
-				$sheet->row(1,["ISBN","定价","数量","书名","姓名","电话","地址"]);
+				$sheet->row(1,["ISBN","定价","数量","书名","姓名","电话","地址","分社"]);
 				foreach ($records_filtered as $record) {
+					$department = Department::where('id',$record->department_id)->first();
+					$code       = $department->code;
 					$sheet->appendRow([
 						$record->isbn." ",
 						$record->price,
@@ -563,7 +566,8 @@ class DatabaseController extends Controller
 						$record->book_name,
 						$record->receiver,
 						$record->phone,
-						$record->address
+						$record->addres,
+						substr($code,0,1)
 					]);
 				}
 				$sheet->setColumnFormat(array(
@@ -574,6 +578,7 @@ class DatabaseController extends Controller
 					'E' => '@',
 					'F' => '@',
 					'G' => '@',
+					'H' => '@',
 				));
 			});
 		})->store('xlsx')->export('xlsx');
@@ -613,15 +618,10 @@ class DatabaseController extends Controller
 						continue;
 					}
 					if($row['快递单号']!=null){
-						$book_req->order_number = $row['快递单号'];
-						$book_req->status = 1; //审核通过，已发送快递
+						BookRequestDao::passAndBindOrder($book_req, Auth::user(), $book_req->user, $row['快递单号']);
 					}else{
-						$book_req->status  = 2;
-						$book_req_msg = json_decode($book_req->message, true);
-						$book_req_msg['admin_reply'] = $row['拒绝理由'];
-						$book_req->message = json_encode($book_req_msg);
+						BookRequestDao::rejectBookRequest($book_req, Auth::user(), $book_req->user);
 					}
-					$book_req->save();
 				}
 				$message = "一共处理".sizeof($data)."条记录，处理成功".(sizeof($data) - sizeof($failed))."条，处理失败".sizeof($failed)."条，无法处理的记录有:\n";
 				foreach ($failed as $row){

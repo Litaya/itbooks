@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\BookRequestDao;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -134,14 +135,8 @@ class BookRequestAdminController extends Controller
         }
         // 权限检查通过
 
-        if($bookreq->status == 0){
-            $bookreq->status = 1;
-            $bookreq->handler_id = Auth::id();
-            $bookreq->update();
-            Session::flash('success', '您通过了一项样书申请');
-        }
-        else
-            Session::flash('warning', '此申请已经被审批过');
+	    $result = BookRequestDao::passBookRequest($bookreq, Auth::user(), $bookreq->user);
+        Session::flash($result["status"]==BookRequestDao::$SUCCESS?"success":"danger", $result["message"]);
 
         return redirect()->route("admin.bookreq.index");
     }
@@ -159,28 +154,9 @@ class BookRequestAdminController extends Controller
                 return redirect()->back()->withErrors(["您没有处理此样书申请的权限"]);
         }
         // 权限检查通过
-
-        if($bookreq->status == 0){
-            $bookreq->status = 2;
-            $bookreq->handler_id = Auth::id();
-            if($request->message){
-                $js = json_decode($bookreq->message, true);
-                $js["admin_reply"] = $request->message;
-                $bookreq->message = json_encode($js);
-            }
-            $bookreq->update();
-
-	        $user      = $bookreq->user;
-	        $user_json = $bookreq->user->json_content;
-	        $user_json = json_decode($user_json,true);
-	        $user_json['teacher']['book_limit'] ++ ;
-	        $user->json_content = json_encode($user_json);
-	        $user->save();
-
-	        Session::flash('success', '您拒绝了一项样书申请');
-        }
-        else
-            Session::flash('warning', '此申请已经被审批过');
+	    $reply_message = $request->message?$request->message:"";
+	    $result = BookRequestDao::rejectBookRequest($bookreq, Auth::user(), $bookreq->user, $reply_message);
+	    Session::flash($result["status"]==BookRequestDao::$SUCCESS?"success":"danger", $result["message"]);
 
         $args = [];
         if(!empty($request->category)) $args["category"] = $request->category;
@@ -190,21 +166,12 @@ class BookRequestAdminController extends Controller
         return redirect()->route("admin.bookreq.index", $args);
     }
 
-    public function destroy($id){
+    public function destroy(Request $request, $id){
         $req = BookRequest::find($id);
-        $req->delete();
 
-        if($req->status==0 ||$req->status == 1) { // 只有在样书申请等待审核或者已经通过的状态下，删除才会在申请限额上减一
-	        $bookreq = $req;
-	        $user = $bookreq->user;
-	        $user_json = $bookreq->user->json_content;
-	        $user_json = json_decode($user_json, true);
-	        $user_json['teacher']['book_limit']++;
-	        $user->json_content = json_encode($user_json);
-	        $user->save();
-        }
-	    Session::flash('success', '您删除了一个样书申请');
-        
+        $result = BookRequestDao::destroyBookRequest($req, $req->user);
+	    Session::flash($result["status"]==BookRequestDao::$SUCCESS?"success":"danger", $result["message"]);
+
         $args = [];
         if(!empty($request->category)) $args["category"] = $request->category;
         if(!empty($request->search)) $args["search"] = $request->search;
@@ -292,16 +259,10 @@ class BookRequestAdminController extends Controller
                 return redirect()->back()->withErrors(["您没有处理此样书申请的权限"]);
         }
 
-        if($bookreq->status != 0){
-            $bookreq->status = 0;
-            $bookreq->order_number = "";
-            $bookreq->handler_id = Auth::id();
-            $bookreq->update();
-        }
-        else
-            Session::flash('warning', '此申请是未处理状态，无需重置');
+	    $result = BookRequestDao::resetBookRequest($bookreq, Auth::user(), $bookreq->user);
+	    Session::flash($result["status"]==BookRequestDao::$SUCCESS?"success":"danger", $result["message"]);
 
-        $args = [];
+	    $args = [];
         if(!empty($request->category)) $args["category"] = $request->category;
         if(!empty($request->search)) $args["search"] = $request->search;
         if(!empty($request->page)) $args["page"] = $request->page;

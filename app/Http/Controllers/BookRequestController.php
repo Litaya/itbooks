@@ -61,6 +61,13 @@ class BookRequestController extends Controller
 	    $phone    = $request->get('phone');
 	    $book_plan = "";
 	    $remarks  = "";
+
+	    if(!strstr($address, "市")){
+		    $request->session()->flash('notice_status','danger');
+		    $request->session()->flash('notice_message','收件地址必须完整填写省市信息！');
+		    return redirect()->route('bookreq.index');
+	    }
+
 	    if($request->has('book_plan')){
 			$book_plan = $request->get('book_plan');
 	    }
