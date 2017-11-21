@@ -566,7 +566,7 @@ class DatabaseController extends Controller
 						$record->book_name,
 						$record->receiver,
 						$record->phone,
-						$record->addres,
+						$record->address,
 						substr($code,0,1)
 					]);
 				}
