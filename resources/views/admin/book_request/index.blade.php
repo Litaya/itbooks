@@ -7,14 +7,14 @@
     <div class="container">
         <div class="row">
             <!-- SEARCH BAR -->
-            <div class="col-md-4"> 
+            <div class="col-md-4">
             {!! Form::open(["route"=>"admin.bookreq.index", "method"=>"GET"]) !!}
             {{ Form::text("search", Input::get('search'), ["placeholder"=>"ISBN、书名、用户名..."]) }}
             {{ Form::select("category", [""=>"-类别-", "handled"=>"已处理", "unhandled"=>"未处理"], Input::get('category')) }}
             {{ Form::submit("搜索") }}
             {!! Form::close() !!}
             </div>
-            
+
             @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
             <div class="col-md-7 col-md-offset-1">
                 <a href="{{route('admin.bookreq.export.bookreq')}}"><button class="btn btn-sm btn-primary move-right">导出全部样书申请单</button></a>
@@ -34,7 +34,8 @@
                             <div class="modal-body">
                                 {!! Form::open(["route"=>"admin.bookreq.import_express","id"=>"import_express_form", "method"=>"post", "files"=>true]) !!}
                                 {{ Form::file("express_file", ["class"=>"form-control form-spacing-top"])}}
-                                {{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top"])}}
+                                {{--{{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top"])}}--}}
+                                <button type="button" class="btn btn-primary form-spacing-top" onclick="submit()">提交</button>
                                 <button type="button" class="btn btn-default form-spacing-top" data-dismiss="modal">取消</button>
                                 {!! Form::close() !!}
                                 <hr>
@@ -47,20 +48,22 @@
                                 </div>
                             </div>
                             <script>
-                                var form = new FormData(document.getElementById("import_express_form"));
-                                $.ajax({
-                                    type: 'POST',
-                                    url: '/admin/bookreq/importexpress',
-                                    data: form,
-                                    processData:false,
-                                    contentType:false,
-                                    success: function(){
-                                        window.location.reload();
-                                    },
-                                    error: function(xhr, type){
-                                        alert('Ajax error!')
-                                    }
-                                });
+                                function submit(){
+                                    var form = new FormData(document.getElementById("import_express_form"));
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/admin/bookreq/importexpress',
+                                        data: form,
+                                        processData:false,
+                                        contentType:false,
+                                        success: function(){
+                                            window.location.reload();
+                                        },
+                                        error: function(xhr, type){
+                                            alert('Ajax error!')
+                                        }
+                                    });
+                                }
                             </script>
                         </div>
                     </div>
@@ -72,7 +75,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table class="table"> 
+                <table class="table">
                 <thead>
                     <tr>
                         <th width="6%">用户</th>
@@ -115,7 +118,7 @@
                             <!-- td><span style="color: #AAA;"><small>不存在</small></span></td -->
                             <td><span style="color: #AAA;"><small>不存在</small></span></td>
                         @endif
-                        
+
                         @if(!empty($bookreq->book) and !empty($bookreq->book->department))
                             <td>{{$bookreq->book->department->name}}</td>
                         @else
@@ -124,7 +127,7 @@
 
                         <td>{{$bookreq->created_at}}</td>
                         <td>{{$bookreq->receiver}}</td>
-                        
+
                         @if($bookreq->status==0)
                             <td>待审核
                                 @if(!empty($bookreq->handler))
@@ -154,7 +157,7 @@
                         <div class="row">
 
                             <!-- BEGIN ROLE CHECK FOR REQUEST PROCESS-->
-                            @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"])) 
+                            @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN"]))
                                 @if($bookreq->status==0)
                                     <div class="col-xs-5 col-md-2">
                                     <button type="button"
@@ -242,7 +245,7 @@
                                     <h4 class="modal-title" id="reject-modal-label">拒绝申请</h4>
                                     </div>
                                     <div class="modal-body">
-                                    
+
                                     {!! Form::open(["route"=>["admin.bookreq.reject", $bookreq->id], "method"=>"POST"]) !!}
                                     {{ Form::label("message", "拒绝理由:") }}
                                     {{ Form::textarea("message", null, ["class"=>"form-control"]) }}
