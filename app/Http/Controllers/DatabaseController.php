@@ -639,9 +639,9 @@ class DatabaseController extends Controller
 					}
 				}
 				$message = "一共处理".sizeof($data)."条记录，处理成功".(sizeof($data) - sizeof($failed))."条，处理失败".sizeof($failed)."条，无法处理的记录有:\n";
-				foreach ($failed as $row){
-					$row      = $row["row"];
-					$message .= $row['姓名']."，isbn：".$row['isbn'].", 错误原因：".$row['message'];
+				foreach ($failed as $record){
+					$row      = $record["row"];
+					$message .= $row['姓名']."，isbn：".$row['isbn'].", 错误原因：".$record['message'];
 				}
 				Session::flash('notice_message',$message);
 			}
