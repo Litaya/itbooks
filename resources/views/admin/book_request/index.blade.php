@@ -31,22 +31,6 @@
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title" id="deleteOfficeLable">导入发行单</h4>
                             </div>
-                            <div class="modal-body">
-                                {!! Form::open(["route"=>"admin.bookreq.import_express","id"=>"import_express_form", "method"=>"post", "files"=>true]) !!}
-                                {{ Form::file("express_file", ["class"=>"form-control form-spacing-top"])}}
-                                {{--{{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top"])}}--}}
-                                <button type="button" class="btn btn-primary form-spacing-top" onclick="submit()">提交</button>
-                                <button type="button" class="btn btn-default form-spacing-top" data-dismiss="modal">取消</button>
-                                {!! Form::close() !!}
-                                <hr>
-                                <div>
-                                    <span style="color:red;">注意事项:</span><br>
-                                    1. 表头的标准格式:快递单号、状态、ISBN、定价、数量、书名、姓名、电话、地址 <br>
-                                    2. 每个excel文件下只能有一张工作表 <br>
-                                    3. 请保证isbn与用户真实名字的准确性 <br>
-                                    4. 同一份文件可提交多次
-                                </div>
-                            </div>
                             <script>
                                 function submit(){
                                     var form = new FormData(document.getElementById("import_express_form"));
@@ -64,7 +48,28 @@
                                         }
                                     });
                                 }
+                                $(function () {
+                                    $("#import_express_form").submit(function (e) {
+                                        submit();
+                                        return false;
+                                    });
+                                })
                             </script>
+                            <div class="modal-body">
+                                {!! Form::open(["route"=>"admin.bookreq.import_express","id"=>"import_express_form", "method"=>"post", "files"=>true]) !!}
+                                {{ Form::file("express_file", ["class"=>"form-control form-spacing-top"])}}
+                                {{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top"])}}
+                                <button type="button" class="btn btn-default form-spacing-top" data-dismiss="modal">取消</button>
+                                {!! Form::close() !!}
+                                <hr>
+                                <div>
+                                    <span style="color:red;">注意事项:</span><br>
+                                    1. 表头的标准格式:快递单号、状态、ISBN、定价、数量、书名、姓名、电话、地址 <br>
+                                    2. 每个excel文件下只能有一张工作表 <br>
+                                    3. 请保证isbn与用户真实名字的准确性 <br>
+                                    4. 同一份文件可提交多次
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
