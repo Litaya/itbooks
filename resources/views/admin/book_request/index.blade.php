@@ -34,6 +34,7 @@
                             <script>
                                 function submit(){
                                     var form = new FormData(document.getElementById("import_express_form"));
+                                    $("#express_submit").value("正在提交中...").setAttribute("disabled","disabled");
                                     $.ajax({
                                         type: 'POST',
                                         url: '/admin/bookreq/importexpress',
@@ -41,10 +42,11 @@
                                         processData:false,
                                         contentType:false,
                                         success: function(){
+                                            $("#express_submit").value("提交").setAttribute("disabled","");
                                             window.location.reload();
                                         },
                                         error: function(xhr, type){
-                                            alert('Ajax error!')
+                                            alert('请手动刷新页面！');
                                         }
                                     });
                                 }
@@ -58,7 +60,7 @@
                             <div class="modal-body">
                                 {!! Form::open(["route"=>"admin.bookreq.import_express","id"=>"import_express_form", "method"=>"post", "files"=>true]) !!}
                                 {{ Form::file("express_file", ["class"=>"form-control form-spacing-top"])}}
-                                {{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top"])}}
+                                {{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top","id"=>"express_submit"])}}
                                 <button type="button" class="btn btn-default form-spacing-top" data-dismiss="modal">取消</button>
                                 {!! Form::close() !!}
                                 <hr>
