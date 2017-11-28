@@ -620,6 +620,7 @@ class DatabaseController extends Controller
 							"row"     => $row,
 							"message" => "isbn错误"
 						]);
+                        continue;
 					}
 					foreach ($users as $user){
 						array_push($userIds, $user->user_id);
@@ -628,7 +629,7 @@ class DatabaseController extends Controller
 					if($book_req == null){
 						array_push($failed, [
 							"row"     => $row,
-							"message" => "isbn正确，但查询不到用户的相关记录"
+							"message" => "isbn正确，但查询不到用户的相关记录;"
 						]);
 						continue;
 					}
