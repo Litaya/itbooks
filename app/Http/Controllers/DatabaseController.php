@@ -590,6 +590,8 @@ class DatabaseController extends Controller
 		$this->validate($request,[
 			"express_file" => 'required'
 		]);
+
+		// Save file
 		$file = $request->file('express_file');
 		if($file->getClientOriginalExtension()!= 'xlsx'){
 			Session::flash('notice_message',"文件格式错误，只能上传xlsx格式的文件");
@@ -597,9 +599,13 @@ class DatabaseController extends Controller
 			return redirect()->route('admin.bookreq.index');
 		}
 		$location = FileHelper::saveExpressFile($request->file('express_file'));
+
+		// Process file
 		Excel::load('storage/app/public/'.$location, function ($reader){
 			$data   = $reader->all();
 			$failed = [];
+
+			// file validation
 			if (sizeof($data) == 0){
 				$message = "文件内容为空！";
 				Session::flash('notice_message',$message);
@@ -609,12 +615,21 @@ class DatabaseController extends Controller
 					$book    = Book::where('isbn',$row['isbn'])->first();
 					$users   = UserInfo::where('realname',$row['姓名'])->get();
 					$userIds = [];
+					if($book == null){
+						array_push($failed,[
+							"row"     => $row,
+							"message" => "isbn错误"
+						]);
+					}
 					foreach ($users as $user){
 						array_push($userIds, $user->user_id);
 					}
 					$book_req = BookRequest::where('book_id',$book->id)->whereIn('user_id',$userIds)->first();
 					if($book_req == null){
-						array_push($failed, $row);
+						array_push($failed, [
+							"row"     => $row,
+							"message" => "isbn正确，但查询不到用户的相关记录"
+						]);
 						continue;
 					}
 					if($row['快递单号']!=null){
@@ -625,12 +640,13 @@ class DatabaseController extends Controller
 				}
 				$message = "一共处理".sizeof($data)."条记录，处理成功".(sizeof($data) - sizeof($failed))."条，处理失败".sizeof($failed)."条，无法处理的记录有:\n";
 				foreach ($failed as $row){
-					$message .= $row['姓名']."，isbn：".$row['isbn']."；";
+					$row      = $row["row"];
+					$message .= $row['姓名']."，isbn：".$row['isbn'].", 错误原因：".$row['message'];
 				}
 				Session::flash('notice_message',$message);
 			}
 		});
-		return redirect()->route('admin.bookreq.index');
+		return 'success';
 	}
 
 }

@@ -32,7 +32,7 @@
                                 <h4 class="modal-title" id="deleteOfficeLable">导入发行单</h4>
                             </div>
                             <div class="modal-body">
-                                {!! Form::open(["route"=>"admin.bookreq.import_express", "method"=>"post", "files"=>true]) !!}
+                                {!! Form::open(["route"=>"admin.bookreq.import_express","id"=>"import_express_form", "method"=>"post", "files"=>true]) !!}
                                 {{ Form::file("express_file", ["class"=>"form-control form-spacing-top"])}}
                                 {{ Form::submit("导入", ["class"=>"btn btn-primary form-spacing-top"])}}
                                 <button type="button" class="btn btn-default form-spacing-top" data-dismiss="modal">取消</button>
@@ -46,6 +46,22 @@
                                     4. 同一份文件可提交多次
                                 </div>
                             </div>
+                            <script>
+                                var form = new FormData(document.getElementById("import_express_form"));
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/admin/bookreq/importexpress',
+                                    data: form,
+                                    processData:false,
+                                    contentType:false,
+                                    success: function(){
+                                        window.location.reload();
+                                    },
+                                    error: function(xhr, type){
+                                        alert('Ajax error!')
+                                    }
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
