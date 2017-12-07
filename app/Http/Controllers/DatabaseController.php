@@ -613,8 +613,6 @@ class DatabaseController extends Controller
 			}else{
 				foreach ($data as $row){
 					$book    = Book::where('isbn',$row['isbn'])->first();
-					$users   = UserInfo::where('realname',$row['姓名'])->get();
-					$userIds = [];
 					if($book == null){
 						array_push($failed,[
 							"row"     => $row,
@@ -622,14 +620,11 @@ class DatabaseController extends Controller
 						]);
                         continue;
 					}
-					foreach ($users as $user){
-						array_push($userIds, $user->user_id);
-					}
-					$book_req = BookRequest::where('book_id',$book->id)->whereIn('user_id',$userIds)->first();
+					$book_req = BookRequest::where('book_id',$book->id)->where('receiver',$row['姓名'])->first();
 					if($book_req == null){
 						array_push($failed, [
 							"row"     => $row,
-							"message" => "isbn正确，但查询不到用户的相关记录;"
+							"message" => "isbn正确，但查询不到收件人;"
 						]);
 						continue;
 					}
