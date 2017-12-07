@@ -62,6 +62,16 @@ class BookRequestController extends Controller
 	    $book_plan = "";
 	    $remarks  = "";
 
+
+	    // 添加省份限制
+	    if(!!strstr($address, "省")){
+	    	if(!!strstr($address, "北京")&&!!strstr($address, "天津")&&!!strstr($address, "上海")&&!!strstr($address, "重庆")){
+			    $request->session()->flash('notice_status','danger');
+			    $request->session()->flash('notice_message','收件地址必须完整填写省市信息！');
+			    return redirect()->route('bookreq.index');
+		    }
+	    }
+
 	    if(!strstr($address, "市")){
 		    $request->session()->flash('notice_status','danger');
 		    $request->session()->flash('notice_message','收件地址必须完整填写省市信息！');

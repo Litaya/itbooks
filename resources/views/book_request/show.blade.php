@@ -61,7 +61,7 @@
                                     <li>作者: {{$bookreq->book->authors}}</li>
                                     <li>ISBN号: {{$bookreq->book->isbn}}</li>
                                     <li>定价: {{$bookreq->book->price}}</li>
-                                    <li>类别: {{$bookreq->book->type==0?"其他图书":($bookreq->book->type==1?"教辅":"非教辅")}}</li>
+                                    <li>类别: {{$bookreq->book->type==0?"其他图书":($bookreq->book->type==1?"教材":"非教材")}}</li>
                                     <li>出版时间: {{date('Y-m-d', strtotime($bookreq->book->publish_time))}}</li>
                                 </ul>
                             </div>

@@ -58,8 +58,8 @@
                            value="{{ isset($userinfo->realname)?$userinfo->realname:"" }}">
                 </div>
                 <div class="form-group">
-                    <label for="address" >收件地址（<span style="color:red">写清：省、市、区、路单位名称或住址）</span></label>
-                    <input type="text" class="form-control" name="address" id="address" placeholder="详细地址"
+                    <label for="address" >收件地址（<span style="color:red">写清：省、市、区及详细收件地址）</span></label>
+                    <input type="text" class="form-control" name="address" id="address" placeholder="地址必须包含省市"
                            value="{{ isset($userinfo->address)?$userinfo->address:"" }}">
                 </div>
                 <div class="form-group">
