@@ -34,7 +34,7 @@
                             <script>
                                 function submit(){
                                     var form = new FormData(document.getElementById("import_express_form"));
-                                    $("#express_submit").value("正在提交中...").setAttribute("disabled","disabled");
+                                    $("#express_submit").val("正在提交中...").attr("disabled","disabled");
                                     $.ajax({
                                         type: 'POST',
                                         url: '/admin/bookreq/importexpress',
@@ -42,11 +42,11 @@
                                         processData:false,
                                         contentType:false,
                                         success: function(){
-                                            $("#express_submit").value("提交").setAttribute("disabled","");
+                                            $("#express_submit").val("提交").attr("disabled","");
                                             window.location.reload();
                                         },
                                         error: function(xhr, type){
-                                            alert('请手动刷新页面！');
+                                            alert('出现错误，请手动刷新页面！');
                                         }
                                     });
                                 }
