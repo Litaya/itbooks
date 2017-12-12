@@ -13,7 +13,7 @@
             <h3>我的分社</h3>
             <hr>
             @foreach( $departments as $department)
-                <div class="col-lg-4 department-module">
+                <div class="col-lg-4 col-md-4 col-xs-4 department-module">
                     <a href=" {{ route('admin.department.show',['department_code'=>$department->code]) }}">
                         <div class="panel panel-default">
                             <div class="panel-body">

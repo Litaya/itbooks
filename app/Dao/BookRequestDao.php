@@ -8,9 +8,10 @@
 
 namespace App\Dao;
 
-use App\Libraries\WechatModules\Book;
+use App\Models\Book;
 use App\Models\BookRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class BookRequestDao{
 
@@ -144,5 +145,55 @@ class BookRequestDao{
 			"status"  => BookRequestDao::$SUCCESS,
 			"message" => BookRequestDao::$PASS_BINDORDER_SUCCESS_MSG
 		];
+	}
+
+	/**
+	 * 检查样书申请的合法性
+	 * 检查项目包括：
+	 *     1. 收货地址必须包括省市（直辖市可不包括省）
+	 *     2. 用户的申请次数不可以超过限额
+	 *     3. 用户每本书只能申请一次
+	 * @param Request $request
+	 */
+	public static function checkRequest(Request $request, User $user){
+
+		$book_ids = $request->get('book-ids');
+		$address  = $request->get('address');
+		$user_json = json_decode($user->json_content,true);
+
+		// 接口返回值的初始化
+		$return_message = ["status"=>"success","message"=>""];
+
+		// 省份限制:收货地址必须包括省市（直辖市可不包括省）
+		if(!strstr($address, "省")){
+			if(!strstr($address, "北京")&&!strstr($address, "天津")&&!strstr($address, "上海")&&!strstr($address, "重庆")){
+				$return_message["status"]  = 'danger';
+				$return_message["message"] = '收件地址必须完整填写省市信息！';
+			}
+		}
+		if(!strstr($address, "市")){
+			$return_message["status"]  = 'danger';
+			$return_message["message"] = '收件地址必须完整填写省市信息！';
+		}
+
+		// 申请次数限制:用户的申请次数不可以超过限额
+		if( $user_json['teacher']['book_limit'] - sizeof($book_ids) < 0){
+			$return_message["status"]  = 'danger';
+			$return_message["message"] = '您申请的书籍多于您的限额，请重新申请!';
+		}
+
+		// 用户每本书只能申请一次
+		$user_id      = $user->id;
+		foreach ($book_ids as $book_id){
+			$book_request = BookRequest::where("user_id",$user_id)->where('book_id',$book_id)->whereIn('status',[0,1])->first();
+			if(!$book_request->isEmpty()){
+				$book = Book::where('id',$book_id)->first();
+				$return_message["status"]  = 'danger';
+				$return_message["message"] = "您已经申请过[".$book->name."]，不可重复申请，请重新选择";
+				break;
+			}
+		}
+
+		return $return_message;
 	}
 }

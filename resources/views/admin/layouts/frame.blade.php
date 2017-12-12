@@ -22,10 +22,10 @@
 
 @include('admin.layouts._header')
 <div class="container">
-    <div class="col-lg-2" id="side-bar">
+    <div class="col-lg-2 col-md-2 col-xs-2" id="side-bar">
         @include('admin.layouts._side')
     </div>
-    <div class="col-lg-10" style="padding: 40px 0 40px 50px;">
+    <div class="col-lg-10 col-md-10 col-md-10" style="padding: 40px 0 40px 50px;">
         @include('admin.layouts._message')
         @yield('content')
     </div>

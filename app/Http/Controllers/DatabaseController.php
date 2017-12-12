@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dao\BookRequestDao;
+use App\Dao\DepartmentDao;
 use App\Http\Middleware\Permission;
 use App\Libraries\PermissionManager;
 use App\Models\Admin;
@@ -558,7 +559,7 @@ class DatabaseController extends Controller
 				$sheet->row(1,["ISBN","定价","数量","书名","姓名","电话","地址","分社"]);
 				foreach ($records_filtered as $record) {
 					$department = Department::where('id',$record->department_id)->first();
-					$code       = $department->code;
+					$subDept    = DepartmentDao::getSubDepartment($department);
 					$sheet->appendRow([
 						$record->isbn." ",
 						$record->price,
@@ -567,7 +568,7 @@ class DatabaseController extends Controller
 						$record->receiver,
 						$record->phone,
 						$record->address,
-						substr($code,0,1)
+						$subDept->name
 					]);
 				}
 				$sheet->setColumnFormat(array(

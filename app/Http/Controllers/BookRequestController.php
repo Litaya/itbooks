@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dao\BookRequestDao;
 use App\Models\Material;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
@@ -56,28 +57,20 @@ class BookRequestController extends Controller
 		    'phone'    => 'required|regex:/\+?[0-9\-]+/',
 	    ]);
 
+	    // 合法性检查
+	    $check_result = BookRequestDao::checkRequest($request, $user);
+	    if($check_result['status'] != 'success'){
+		    $request->session()->flash('notice_status',$check_result['status']);
+		    $request->session()->flash('notice_message',$check_result['message']);
+		    return redirect()->route('bookreq.index');
+	    }
+
+		// 数据初始化
 	    $receiver = $request->get('receiver');
 	    $address  = $request->get('address');
 	    $phone    = $request->get('phone');
 	    $book_plan = "";
 	    $remarks  = "";
-
-
-	    // 添加省份限制
-	    if(!!strstr($address, "省")){
-	    	if(!!strstr($address, "北京")&&!!strstr($address, "天津")&&!!strstr($address, "上海")&&!!strstr($address, "重庆")){
-			    $request->session()->flash('notice_status','danger');
-			    $request->session()->flash('notice_message','收件地址必须完整填写省市信息！');
-			    return redirect()->route('bookreq.index');
-		    }
-	    }
-
-	    if(!strstr($address, "市")){
-		    $request->session()->flash('notice_status','danger');
-		    $request->session()->flash('notice_message','收件地址必须完整填写省市信息！');
-		    return redirect()->route('bookreq.index');
-	    }
-
 	    if($request->has('book_plan')){
 			$book_plan = $request->get('book_plan');
 	    }
@@ -86,15 +79,9 @@ class BookRequestController extends Controller
 	    }
 	    $message = ['book_plan'=>$book_plan,'remarks'=>$remarks];
 	    $message = json_encode($message);
-
 	    $book_ids = $request->get('book-ids');
 
-	    if( $user_json['teacher']['book_limit'] - sizeof($book_ids) < 0){
-		    $request->session()->flash('notice_status','danger');
-		    $request->session()->flash('notice_message','您申请的书籍多于您的限额，请重新申请!');
-		    return redirect()->route('bookreq.index');
-	    }
-
+		// 插入数据到数据表
 	    foreach ($book_ids as $book_id){
 	    	$book_req = new BookRequest();
 		    $book_req->user_id  = Auth::id();
@@ -111,7 +98,8 @@ class BookRequestController extends Controller
 	    	$book_req->save();
 	    }
 
-	    UserInfo::where('user_id',$user->id)->update(['address'=>$address]);
+	    // 地址仅保留省市
+	    UserInfo::where('user_id',$user->id)->update(['address'=>substr($address,0,strpos($address,'市')+strlen('市'))]);
 
 	    $user_json['teacher']['book_limit'] -= sizeof($book_ids);
 	    $user->json_content = json_encode($user_json);
