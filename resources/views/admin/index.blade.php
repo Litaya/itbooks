@@ -3,8 +3,8 @@
 @section('title','书圈-后台管理系统')
 @section('content')
 
-    <div class="col-lg-12">
-        <div class="col-lg-4 main-module {{ in_array('USER',\App\Libraries\PermissionManager::getAdminModules())?"active":"" }}">
+    <div class="col-lg-12 col-md-12 col-xs-12">
+        <div class="col-lg-4 col-md-4 col-xs-4 main-module {{ in_array('USER',\App\Libraries\PermissionManager::getAdminModules())?"active":"" }}">
             <a href="{{ route('admin.user.index') }}">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -17,7 +17,7 @@
             </a>
         </div>
 
-        <div class="col-lg-4 main-module {{ in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules())?"active":"" }}" >
+        <div class="col-lg-4 col-md-4 col-xs-4 main-module {{ in_array('BOOK',\App\Libraries\PermissionManager::getAdminModules())?"active":"" }}" >
             <a href="{{ route('admin.book.index') }}">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -30,7 +30,7 @@
             </a>
         </div>
 
-        <div class="col-lg-4 main-module {{ in_array('DEPARTMENT',\App\Libraries\PermissionManager::getAdminModules())?"active":"" }}">
+        <div class="col-lg-4 col-md-4 col-xs-4 main-module {{ in_array('DEPARTMENT',\App\Libraries\PermissionManager::getAdminModules())?"active":"" }}">
             <a href="{{ route('admin.department.index') }}">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -44,11 +44,11 @@
         </div>
     </div>
 
-    <div class="col-lg-12">&nbsp;
+    <div class="col-lg-12 col-md-12 col-xs-12">&nbsp;
     </div>
 
     @if( in_array('USER',\App\Libraries\PermissionManager::getAdminModules()) )
-        <div class="col-lg-6 usual-module">
+        <div class="col-lg-6 col-md-6 col-xs-6 usual-module">
             <div class="panel panel-primary">
                 <div class="panel-heading">确认用户身份 &nbsp;&nbsp; <a href="{{ route('admin.user.index') }}"> <small>查看全部>></small></a></div>
                 <div class="panel-body">
@@ -86,7 +86,7 @@
     @endif
 
     @if(in_array('BOOKREQ',\App\Libraries\PermissionManager::getAdminModules()))
-        <div class="col-lg-6 usual-module">
+        <div class="col-lg-6 col-md-6 col-xs-6 usual-module">
             <div class="panel panel-primary">
                 <div class="panel-heading">样书申请 &nbsp;&nbsp;<a href="{{ route('admin.bookreq.index') }}"> <small>查看全部>></small></a></div>
                 <div class="panel-body">
