@@ -185,7 +185,7 @@ class BookRequestDao{
 		// 用户每本书只能申请一次
 		$user_id      = $user->id;
 		foreach ($book_ids as $book_id){
-			$book_request = BookRequest::where("user_id",$user_id)->where('book_id',$book_id)->whereIn('status',[0,1])->first();
+			$book_request = BookRequest::where("user_id",$user_id)->where('book_id',$book_id)->whereIn('status',[0,1])->get();
 			if(!$book_request->isEmpty()){
 				$book = Book::where('id',$book_id)->first();
 				$return_message["status"]  = 'danger';
