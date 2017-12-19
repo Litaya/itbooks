@@ -89,8 +89,8 @@ class BookRequestDao{
 	 */
 	public static function destroyBookRequest(BookRequest $bookreq, User $user){
 		$user_result = null;
-		if($bookreq->status == 2) {
-			$user_result = UserDao::updateBookRequestLimit($user, -1); // 给用户的样书申请-1
+		if($bookreq->status != 2) {
+			$user_result = UserDao::updateBookRequestLimit($user, 1); // 给用户的样书申请-1
 		}
 		$bookreq->delete();
 		if (($user_result != null && $user_result["status"] != UserDao::$SUCCESS)) {
