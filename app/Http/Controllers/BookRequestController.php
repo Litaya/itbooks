@@ -99,7 +99,9 @@ class BookRequestController extends Controller
 	    }
 
 	    // 地址仅保留省市
-	    UserInfo::where('user_id',$user->id)->update(['address'=>substr($address,0,strpos($address,'市')+strlen('市'))]);
+	    // UserInfo::where('user_id',$user->id)->update(['address'=>substr($address,0,strpos($address,'市')+strlen('市'))]);
+		// 地址保留全部
+	    UserInfo::where('user_id',$user->id)->update(['address'=>$address]);
 
 	    $user_json['teacher']['book_limit'] -= sizeof($book_ids);
 	    $user->json_content = json_encode($user_json);
