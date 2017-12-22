@@ -166,14 +166,18 @@ class BookRequestDao{
 
 		// 省份限制:收货地址必须包括省市（直辖市可不包括省）
 		if(!strstr($address, "省")){
-			if(!strstr($address, "北京")&&!strstr($address, "天津")&&!strstr($address, "上海")&&!strstr($address, "重庆")){
-				$return_message["status"]  = 'danger';
-				$return_message["message"] = '收件地址必须完整填写省市信息！';
+			// 自治区
+			if(!strstr($address,"内蒙古") && !strstr($address, "新疆") && !strstr($address, "广西") && !strstr($address, "宁夏") && !strstr($address,"西藏")){
+				// 直辖市
+				if(!strstr($address, "北京")&&!strstr($address, "天津")&&!strstr($address, "上海")&&!strstr($address, "重庆")){
+					$return_message["status"]  = 'danger';
+					$return_message["message"] = '收件地址必须完整填写您所在的省，自治区，直辖市！';
+				}
 			}
 		}
 		if(!strstr($address, "市")){
 			$return_message["status"]  = 'danger';
-			$return_message["message"] = '收件地址必须完整填写省市信息！';
+			$return_message["message"] = '收件地址必须完整填写您所在的市！';
 		}
 
 		// 申请次数限制:用户的申请次数不可以超过限额
