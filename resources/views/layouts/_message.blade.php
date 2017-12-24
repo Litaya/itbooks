@@ -1,5 +1,5 @@
 @if(Session::has('notice_message'))
-    <div class="col-lg-12">
+    <div class="col-lg-12 col-md-12 col-xs-12">
         <div class="panel panel-{{Session::has('notice_status')?Session::get('notice_status'):'default'}}">
             <div class="panel-body">
                 {{ Session::get('notice_message') }}

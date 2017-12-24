@@ -19,12 +19,12 @@
     </style>
 
     <div class="container" style="margin:-40px 0 -40px -50px;">
-        <div class="col-lg-2" id="second_sider">
+        <div class="col-lg-2 col-md-2 col-xs-2" id="second_sider">
             @include('admin.forum.layouts._side')
         </div>
-        <div class="col-lg-10" id="forum_content">
+        <div class="col-lg-10 col-md-10 col-xs-10" id="forum_content">
             @if(Session::has('forum_message'))
-                <div class="col-lg-12">
+                <div class="col-lg-12 col-md-12 col-xs-12">
                     <div class="panel panel-{{Session::has('forum_status')?Session::get('forum_status'):'default'}}">
                         <div class="panel-body">
                             {{ Session::get('forum_message') }}

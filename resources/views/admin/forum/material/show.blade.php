@@ -40,38 +40,21 @@
                 <a href="javascript:void(0)" class="smaller hidden" onclick="saveCategory()" id="save_category_btn"><i class="fa fa-check"></i>保存</a>&nbsp;&nbsp;
                 <a href="javascript:void(0)" class="smaller" data-toggle="modal" data-target="#addCategory">添加分类</a>
             </small>
-            {{--<span class="category-item">标签1</span>--}}
-            {{--<span class="category-item">标签2</span>--}}
-            {{--<a href="javascript:void(0)"><span class="category-item"><i class="fa fa-plus"></i></span></a>--}}
         </p>
         <hr>
     </div>
     <div class="row" >
-        <div class="col-xs-7 shadow"style="background-color: white; padding: 20px;">
-            <div class="col-xs-12" id="body"></div>
+        <div class="col-lg-7 col-md-7 col-xs-7 shadow" style="background-color: white; padding: 20px;">
+            <div class="col-lg-12 col-md-12 col-xs-12" id="body"></div>
         </div>
         {{--评论部分--}}
-        <div class="col-xs-5" >
-            <div class="col-xs-12 shadow" style="background-color: white; padding-bottom: 20px;">
+        <div class="col-lg-5 col-md-5 col-xs-5" >
+            <div class="col-lg-12 col-md-12 col-xs-12 shadow" style="background-color: white; padding-bottom: 20px;">
                 <h4>评论列表</h4>
                 <hr>
-                <div class="col-lg-12">
+                <div class="col-lg-12 col-md-12 col-xs-12">
                     暂无评论
                 </div>
-                {{--<div class="col-lg-12" style="padding: 0;height: 70px;">--}}
-                    {{--<img src="/img/avatar.png" alt="" style="width:50px;height: 50px;border-radius: 25px; position: absolute; left: 0;"/>--}}
-                    {{--<p style="position: absolute;left: 70px;"><a href="javascript:void(0)">张馨如</a>：雷哥很给力--}}
-                        {{--<br>--}}
-                        {{--<small>2015-01-01&nbsp;12:32:12</small>--}}
-                    {{--</p>--}}
-                {{--</div>--}}
-                {{--<div class="col-lg-12" style="padding: 0;height: 70px;">--}}
-                    {{--<img src="/img/avatar.png" alt="" style="width:50px;height: 50px;border-radius: 25px; position: absolute; left: 0;"/>--}}
-                    {{--<p style="position: absolute;left: 70px;"><a href="javascript:void(0)">丛硕</a>回复<a href="javascript:void(0)">张馨如</a>：我同意--}}
-                        {{--<br>--}}
-                        {{--<small>2015-01-01&nbsp;12:32:12</small>--}}
-                    {{--</p>--}}
-                {{--</div>--}}
             </div>
         </div>
         <hr>

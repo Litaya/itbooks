@@ -26,7 +26,7 @@
     </style>
     {{-- 页头： 阅读量、同步列表等组件 --}}
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-12 col-xs-12">
             <small style="color:gray">今日阅读:23 &nbsp;&nbsp;今日评论:12</small> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <form action="#" class="form-inline" style="display: inline;">
                 <div class="form-group">
@@ -63,10 +63,10 @@
     {{-- 搜索结果/首页结果 --}}
     @foreach($materials as $material)
         <div class="row" style="background-color: #ffffff; box-shadow:0 0 5px #ccc;margin-bottom: 10px;">
-            <div class="col-lg-2" style="padding-left: 0;">
+            <div class="col-lg-2 col-md-2 col-xs-2" style="padding-left: 0;">
                 <a href="javascript:void(0)"><img src="{{ $material->cover_path }}" alt="" height="100px;" width="100%;"></a>
             </div>
-            <div class="col-lg-10" style="padding: 10px 0 0 0;height: 100px;">
+            <div class="col-lg-10 col-md-10 col-xs-10" style="padding: 10px 0 0 0;height: 100px;">
                 <p>
                     <a href="{{ route('admin.forum.material.show',$material->id) }}" target="_blank">{{ $material->title }}</a>
                     <span  style="position: absolute;right: 10px;">

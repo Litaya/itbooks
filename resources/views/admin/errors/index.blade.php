@@ -11,7 +11,7 @@
 <body>
 @include('admin.layouts._header')
 <div class="container">
-    <div class="col-lg-12" style="padding: 40px 50px 0 50px;">
+    <div class="col-lg-12 col-md-12 col-xs-12" style="padding: 40px 50px 0 50px;">
         <div class="panel panel-danger">
             <div class="panel-body">
                 {{ $message }}
