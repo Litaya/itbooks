@@ -10,6 +10,7 @@ use App\Models\Admin;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\ConferenceRegister;
 use App\Models\BookRequest;
 use App\Models\Book;
@@ -458,6 +459,7 @@ class DatabaseController extends Controller
 					'user.email as email','status','message','book_request.phone as bookreqphone', 'receiver','order_number','book_request.address as bookreqaddress')
 				->get()
 				->toArray();*/
+            DB::connection()->disableQueryLog();
 			$book_requests = DB::select('select book.isbn as isbn, book.name as bookname, book.price as bookprice,user.email as email,status, message, book_request.phone as bookreqphone, receiver, order_number, book_request.address as bookreqaddress from book_request left join book on book.id = book_request.book_id left join user on user.id = book_request.user_id');
 			$filename = date("Y-m-d")."样书申请单_".time();
 			$export = Excel::create($filename, function($excel) use ($book_requests){
