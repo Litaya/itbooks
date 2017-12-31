@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\User;
 use App\Models\UserInfo;
 
 /**
@@ -26,5 +27,22 @@ class ScriptHelper{
 			}
 		}
 		echo "处理完毕";
+	}
+
+	public static function resetBookLimit(){
+		$users = User::where('certificate_as','like','%TEACHER%')->get();
+		$counter = 0;
+		foreach ($users as $user){
+			$counter ++;
+			if($counter % 100 == 0){
+				echo "$counter\n";
+			}
+			$user_json = $user->json_content;
+			$user_json = json_decode($user_json,true);
+			$user_json['teacher']['book_limit'] = 10 ;
+			$user->json_content = json_encode($user_json);
+			$user->save();
+		}
+		echo "共处理 $counter 条记录";
 	}
 }

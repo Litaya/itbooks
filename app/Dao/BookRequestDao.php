@@ -200,4 +200,8 @@ class BookRequestDao{
 
 		return $return_message;
 	}
+
+	public static function getAllBookRequests(){
+
+	}
 }

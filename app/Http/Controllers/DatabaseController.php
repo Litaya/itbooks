@@ -449,16 +449,6 @@ class DatabaseController extends Controller
 	public function exportAllBookRequest(Request $request){
 		$ar = PM::getAdminRole();
 		if($ar == 'SUPERADMIN'){
-			/*
-			$book_requests = BookRequest::unhandled()
-				->leftJoin('book', 'book.id', '=', 'book_request.book_id')
-				->leftJoin('user_info', 'user_info.user_id', '=', 'book_request.user_id')
-				->leftJoin('user', 'user.id', '=', 'book_request.user_id')
-				->select('book.isbn as isbn','book.name as bookname','book.price as bookprice',
-					'user_info.realname as realname','user_info.workplace as workplace' ,
-					'user.email as email','status','message','book_request.phone as bookreqphone', 'receiver','order_number','book_request.address as bookreqaddress')
-				->get()
-				->toArray();*/
             DB::connection()->disableQueryLog();
 			$book_requests = DB::select('select book.isbn as isbn, book.name as bookname, book.price as bookprice,user.email as email,status, message, book_request.phone as bookreqphone, receiver, order_number, book_request.address as bookreqaddress from book_request left join book on book.id = book_request.book_id left join user on user.id = book_request.user_id');
 			$filename = date("Y-m-d")."样书申请单_".time();
