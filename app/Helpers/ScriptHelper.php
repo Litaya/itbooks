@@ -62,7 +62,7 @@ class ScriptHelper{
 				echo $block_index % $block_size."\n";
 			}
 
-			$book_requests = DB::select('select book.isbn as isbn, book.name as bookname, book.price as bookprice,user.email as email,status, message, book_request.phone as bookreqphone, receiver, order_number, book_request.address as bookreqaddress, department.code as code, department.name as department_name from book_request left join book on book.id = book_request.book_id left join user on user.id = book_request.user_id left join department on department.id = book.department_id limit '.$block_size.' offset '.($block_size*($block_index-1)));
+			$book_requests = DB::select('select book.isbn as isbn, book.name as bookname, book.price as bookprice,user.email as email,status, message, book_request.phone as bookreqphone, receiver, order_number, book_request.address as bookreqaddress, department.code as code, department.name as department_name, book_request.created_at as created_at from book_request left join book on book.id = book_request.book_id left join user on user.id = book_request.user_id left join department on department.id = book.department_id order by book_request.created_at DESC limit '.$block_size.' offset '.($block_size*($block_index-1)));
 			if (count($book_requests) == 0)
 				break;
 
@@ -73,7 +73,7 @@ class ScriptHelper{
 					$sheet->setAutoSize(true);
 
 					$sheet->row(1, ["书代号", "书名", "定价", "常用邮箱", "申请状态","收货地址",
-						"收件人",'联系方式', "运单号",'部门代码','部门名称','教材使用情况','备注']);
+						"收件人",'联系方式', "运单号",'部门代码','部门名称','教材使用情况','备注','申请时间']);
 
 					foreach($book_requests as $book_request){
 						$sheet->appendRow([
@@ -90,6 +90,7 @@ class ScriptHelper{
 							$book_request['department_name'],
 							json_decode($book_request['message'],true)['book_plan'],
 							json_decode($book_request['message'],true)['remarks'],
+							$book_request['created_at']
 						]);
 					}
 
@@ -106,7 +107,8 @@ class ScriptHelper{
 						'J' => '@',
 						'K' => '@',
 						'L' => '@',
-
+						'M' => '@',
+						'N' => '@'
 					));
 				});
 			})->store('xlsx');
