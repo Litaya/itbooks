@@ -605,6 +605,8 @@ class DatabaseController extends Controller
 				Session::flash('notice_status','warning');
 			}else{
 				foreach ($data as $row){
+
+					// isbn validation
 					$book    = Book::where('isbn',$row['isbn'])->first();
 					if($book == null){
 						array_push($failed,[
@@ -613,6 +615,7 @@ class DatabaseController extends Controller
 						]);
                         continue;
 					}
+					// book request record validation
 					$book_req = BookRequest::where('book_id',$book->id)->where('receiver',$row['姓名'])->first();
 					if($book_req == null){
 						array_push($failed, [
@@ -621,10 +624,12 @@ class DatabaseController extends Controller
 						]);
 						continue;
 					}
+
+					// if there is '快递单号' cell in .xlsx file, then pass the request, otherwise reject it.
 					if($row['快递单号']!=null){
 						BookRequestDao::passAndBindOrder($book_req, Auth::user(), $book_req->user, $row['快递单号']);
 					}else{
-						BookRequestDao::rejectBookRequest($book_req, Auth::user(), $book_req->user);
+						BookRequestDao::rejectBookRequest($book_req, Auth::user(), $book_req->user, $row['状态']);
 					}
 				}
 				$message = "一共处理".sizeof($data)."条记录，处理成功".(sizeof($data) - sizeof($failed))."条，处理失败".sizeof($failed)."条，无法处理的记录有:\n";
