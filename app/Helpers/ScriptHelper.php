@@ -53,7 +53,7 @@ class ScriptHelper{
 		$time = time();
 		DB::connection()->disableQueryLog();
 
-		$block_size = 2;
+		$block_size = 1000;
 		$block_index = 1;
 
 		while ($block_index){
