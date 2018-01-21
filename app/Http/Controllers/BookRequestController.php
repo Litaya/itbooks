@@ -118,7 +118,7 @@ class BookRequestController extends Controller
     {
         $user = User::find($request->userId);
 	    $newActivity = Material::where('category_id',4)->orderBy('wechat_update_time','desc')->take(5)->get();
-	    $bookRequests = BookRequest::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->paginate(1);
+	    $bookRequests = BookRequest::where('user_id',Auth::user()->id)->orderBy('created_at','desc')->paginate(10);
 
 	    return view('book_request.record')->withUser($user)->withBannerItems($newActivity)->withBookRequests($bookRequests);
     }
