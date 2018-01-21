@@ -503,6 +503,7 @@ class DatabaseController extends Controller
 	 * isbn price amount book_name username phone address
 	 */
 	public function exportInvoices(){
+		//TODO 这里查询太慢了
 		$records = BookRequest::leftJoin('book','book.id','=','book_id')
 			->where('status',0)->select(
 				'book.isbn as isbn',
@@ -511,7 +512,7 @@ class DatabaseController extends Controller
 				'receiver',
 				'phone',
 				'book.department_id as department_id',
-				'address')->get();
+				'address')->orderBy('receiver')->orderBy('phone')->get();
 		if(count($records) == 0){
 			Session::flash('warning','没有需要导出的发行单信息');
 			return redirect()->route('admin.bookreq.index');
@@ -548,19 +549,37 @@ class DatabaseController extends Controller
 		$export = Excel::create($filename, function ($excel) use ($records_filtered){
 			$excel->sheet('发行单',function ($sheet) use ($records_filtered){
 				$sheet->setAutoSize(true);
-				$sheet->row(1,["ISBN","定价","数量","书名","姓名","电话","地址","分社"]);
+				$sheet->row(1,["ISBN","定价","数量","书名","分社","姓名","电话","地址"]);
+				$current = [
+					'receiver' => '',
+					'phone'    => '',
+					'address'  => '',
+				];
+				Log::info($current);
 				foreach ($records_filtered as $record) {
 					$department = Department::where('id',$record->department_id)->first();
 					$subDept    = DepartmentDao::getSubDepartment($department);
+					$receiver   = $record->receiver;
+					$phone      = $record->phone;
+					$address    = $record->address;
+					if ($receiver == $current['receiver'] && $phone == $current['phone'] && $address == $current['address']){
+						$receiver = '';
+						$phone    = '';
+						$address  = '';
+					}else{
+						$current['receiver'] = $receiver;
+						$current['phone']    = $phone;
+						$current['address']  = $address;
+					}
 					$sheet->appendRow([
 						$record->isbn." ",
 						$record->price,
 						1,
 						$record->book_name,
-						$record->receiver,
-						$record->phone,
-						$record->address,
-						$subDept->name
+						$subDept->name,
+						$receiver,
+						$phone,
+						$address
 					]);
 				}
 				$sheet->setColumnFormat(array(
@@ -579,6 +598,11 @@ class DatabaseController extends Controller
 		return redirect()->route('admin.bookreq.index');
 	}
 
+	/**
+	 * 导入发行单
+	 * @param Request $request
+	 * @return \Illuminate\Http\RedirectResponse|string
+	 */
 	public function importExpressInfo(Request $request){
 		$this->validate($request,[
 			"express_file" => 'required'
@@ -604,8 +628,14 @@ class DatabaseController extends Controller
 				Session::flash('notice_message',$message);
 				Session::flash('notice_status','warning');
 			}else{
+				$current_receiver = '';
 				foreach ($data as $row){
-
+					$receiver = trim($row['姓名']);
+					if ($receiver == ''){
+						$receiver = $current_receiver;
+					}else{
+						$current_receiver = $receiver;
+					}
 					// isbn validation
 					$book    = Book::where('isbn',$row['isbn'])->first();
 					if($book == null){
@@ -616,11 +646,11 @@ class DatabaseController extends Controller
                         continue;
 					}
 					// book request record validation
-					$book_req = BookRequest::where('book_id',$book->id)->where('receiver',$row['姓名'])->first();
+					$book_req = BookRequest::where('book_id',$book->id)->where('receiver',$receiver)->where('status',0)->first();
 					if($book_req == null){
 						array_push($failed, [
 							"row"     => $row,
-							"message" => "isbn正确，但查询不到收件人;"
+							"message" => "isbn正确，但查询不到收件人，或该申请已被处理;"
 						]);
 						continue;
 					}
