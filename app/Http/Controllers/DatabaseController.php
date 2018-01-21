@@ -558,7 +558,11 @@ class DatabaseController extends Controller
 				Log::info($current);
 				foreach ($records_filtered as $record) {
 					$department = Department::where('id',$record->department_id)->first();
-					$subDept    = DepartmentDao::getSubDepartment($department);
+					$department_name = '';
+					if ($department != null){
+						$subDept         = DepartmentDao::getSubDepartment($department);
+						$department_name = $subDept->name;
+					}
 					$receiver   = $record->receiver;
 					$phone      = $record->phone;
 					$address    = $record->address;
