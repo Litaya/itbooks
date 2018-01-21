@@ -41,7 +41,7 @@
                         <p><strong>目前教材使用情况:</strong> {{empty(json_decode($bookreq->message)->book_plan)?"未填写":json_decode($bookreq->message)->book_plan}} </p>
                         <p><strong>留言:</strong> {{empty(json_decode($bookreq->message)->remarks)?"未填写":json_decode($bookreq->message)->remarks}} </p>
                         @if($bookreq->status==2)
-                            <p><strong>拒绝理由:</strong>
+                            <p style="color:red"><strong>拒绝理由:</strong>
                                 @if(!empty(json_decode($bookreq->message)->admin_reply))
                                     {{json_decode($bookreq->message)->admin_reply}}
                                 @endif
