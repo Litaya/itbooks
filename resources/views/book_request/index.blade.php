@@ -36,7 +36,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN（或书名或作者）检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
+            {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN（书号后6位数字）检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
             <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
             </ul>
             @if(strpos($user->certificate_as, "TEACHER") !== false)
