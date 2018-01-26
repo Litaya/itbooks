@@ -44,7 +44,7 @@
                     @foreach($book_requests as $bookreq)
                         <a href="{{ !empty($bookreq->book) ? route('bookreq.show', $bookreq->id) : '#' }}" class="list-group-item">
                             @if(!empty($bookreq->book))
-                                <h5 class="list-group-item-heading">{{ $bookreq->book->name }} <small style="color:#777">[点击查看详情]</small></h5>
+                                <h5 class="list-group-item-heading">{{ $bookreq->book->name }} <small style="color:red">[点击查看详情]</small></h5>
                             @else
                                 <h5 class="list-group-item-heading">[本社不再提供此书]</h5>
                             @endif
