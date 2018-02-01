@@ -6,6 +6,7 @@ use App\Dao\BookRequestDao;
 use App\Dao\DepartmentDao;
 use App\Helpers\ExportInvoice\ExportInvoiceByReceiverHelper;
 use App\Helpers\ExportInvoice\ExportInvoiceHelper;
+use App\Helpers\ExportInvoice\ExportInvoiceOrderByDepartmentHelper;
 use App\Libraries\PermissionManager;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use App\Models\Department;
 
 use App\Helpers\FileHelper;
 
+use Illuminate\Support\Facades\Log;
 use Input;
 use Excel;
 use URL;
@@ -499,7 +501,7 @@ class DatabaseController extends Controller
 	 * isbn price amount book_name username phone address
 	 */
 	public function exportInvoices(){
-		$helper = new ExportInvoiceByReceiverHelper();
+		$helper = new ExportInvoiceOrderByDepartmentHelper();
 		$records = $helper->constructExportRecords(Auth::user());
 		if (count($records)==0){
 			Session::flash('warning','没有需要导出的发行单信息');
