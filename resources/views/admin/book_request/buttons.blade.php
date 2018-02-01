@@ -66,53 +66,12 @@
                         <h4 class="modal-title" id="close_bookreq_title">关闭样书申请功能</h4>
                     </div>
                     <script>
-                        function open_submit() {
-                            $.ajax({
-                                type: 'GET',
-                                url: '/admin/bookreq/open_bookreq',
-                                data: [],
-                                processData:false,
-                                contentType:false,
-                                success: function(){
-                                    window.location.reload();
-                                },
-                                error: function(xhr, type){
-                                    alert('出现错误，请手动刷新页面！');
-                                }
-                            });
-                        }
-                        function close_submit(){
-                            var form = new FormData(document.getElementById("close_bookreq_form"));
-                            $("#close_submit").val("正在提交中...").attr("disabled","disabled");
-                            $.ajax({
-                                type: 'POST',
-                                url: '/admin/bookreq/close_bookreq',
-                                data: form,
-                                processData:false,
-                                contentType:false,
-                                success: function(){
-                                    $("#close_submit").val("确认关闭").attr("disabled","");
-                                    window.location.reload();
-                                },
-                                error: function(xhr, type){
-                                    alert('出现错误，请手动刷新页面！');
-                                }
-                            });
-                        }
                         $(function () {
                             $("#close_bookreq_form").submit(function (e) {
-                                close_submit();
                                 return false;
                             });
                         })
                     </script>
-                    <div class="modal-body">
-                        {!! Form::open(["route"=>"admin.bookreq.close_bookreq","id"=>"close_bookreq_form", "method"=>"post", "files"=>true]) !!}
-                        <textarea class="form-control" name="close_notice" id="close_notice" cols="30" rows="3" placeholder="请输入关闭之后的公告内容（例如：样书申请功能暂时关闭，预计开放时间为 2018.3.22）"></textarea>
-                        {{ Form::submit("确认关闭", ["class"=>"btn btn-primary form-spacing-top","id"=>"close_submit"])}}
-                        <button type="button" class="btn btn-default form-spacing-top" data-dismiss="modal">取消</button>
-                        {!! Form::close() !!}
-                    </div>
                 </div>
             </div>
         </div>
