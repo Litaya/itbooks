@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dao\BookRequestDao;
+use App\Libraries\PermissionManager;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -208,7 +209,6 @@ class BookRequestAdminController extends Controller
         return redirect()->route('admin.bookreq.show', $id);
     }
     
-
     public function passAndBindOrder($id, Request $request){
         $this->validate($request, [
             "order_number" => "required"
@@ -244,7 +244,6 @@ class BookRequestAdminController extends Controller
 
         return redirect()->route("admin.bookreq.index", $args);
     }
-
 
     public function resetStatus($id, Request $request){
         $bookreq = BookRequest::find($id);

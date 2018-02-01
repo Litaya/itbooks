@@ -34,73 +34,76 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12">
-            {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN（书号后6位数字）检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
-            <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
-            </ul>
-            @if(strpos($user->certificate_as, "TEACHER") !== false)
-                <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orangered">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书（教师每年最多只能申请10本样书）</small></p>
-            @elseif(strpos($user->certificate_as, "AUTHOR") !== false)
-                <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->author->book_limit }}</span>&nbsp;本书</small></p>
-            @endif
-        </div>
-        <div class="col-xs-12">
-            <form action="{{ route("bookreq.store.multiple") }}" method="post">
-                {{ csrf_field() }}
-                <h4><i class="fa fa-book"></i> 您选择的书籍 <small>在搜索框搜索选择</small></h4>
-                <ul class="list-group" id="selected_books">
+    @if(config('models.book_request.status') == 1)
+        <div class="row">
+            <div class="col-xs-12">
+                {{ Form::text('search',null,['class'=>'form-control dropdown-toggle','placeholder'=>'请输入ISBN（书号后6位数字）检索书籍','id'=>"search_box","data-toggle"=>"dropdown"]) }}
+                <ul class="dropdown-menu" style="position: absolute;left: 20px;top: 40px; width: 90%" id="result_place">
                 </ul>
-                <hr>
-                <div class="form-group">
-                    <label for="receiver">收件人姓名</label>
-                    <input type="text" class="form-control" name="receiver" id="receiver" placeholder="收件人姓名"
-                           value="{{ isset($userinfo->realname)?$userinfo->realname:"" }}">
-                </div>
-                <div class="form-group">
-                    <label for="address" >收件地址（<span style="color:orangered">写清：省、市、区及详细收件地址）</span></label>
-                    <input type="text" class="form-control" name="address" id="address" placeholder="地址必须包含省市"
-                           value="{{ isset($userinfo->address)?$userinfo->address:"" }}">
-                </div>
-                <div class="form-group">
-                    <label for="phone">联系电话</label>
-                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="电话"
-                           value="{{ isset($userinfo->phone)?$userinfo->phone:"" }}">
-                </div>
-                <div class="form-group">
-                    <label for="book_plan">目前教材使用情况(可选)</label>
-                    <textarea class="form-control" name="book_plan" id="book_plan" placeholder="使用教材的书名、作者、出版社"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="remarks">备注(可选)</label>
-                    <textarea class="form-control" name="remarks" id="remarks" placeholder="备注"></textarea>
-                </div>
-                <div class="form-group" id="checkboxes"  hidden>
-                </div>
-                <button type="submit" class="btn btn-default">提交</button>
-            </form>
+                @if(strpos($user->certificate_as, "TEACHER") !== false)
+                    <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orangered">{{ $user->json_content->teacher->book_limit }}</span>&nbsp;本书（教师每年最多只能申请10本样书）</small></p>
+                @elseif(strpos($user->certificate_as, "AUTHOR") !== false)
+                    <p><small id="notice-book-limit" style="color:grey;font-size: 12px">您还可申请&nbsp;<span id="books_num" style="color:orange">{{ $user->json_content->author->book_limit }}</span>&nbsp;本书</small></p>
+                @endif
+            </div>
+            <div class="col-xs-12">
+                <form action="{{ route("bookreq.store.multiple") }}" method="post">
+                    {{ csrf_field() }}
+                    <h4><i class="fa fa-book"></i> 您选择的书籍 <small>在搜索框搜索选择</small></h4>
+                    <ul class="list-group" id="selected_books">
+                    </ul>
+                    <hr>
+                    <div class="form-group">
+                        <label for="receiver">收件人姓名</label>
+                        <input type="text" class="form-control" name="receiver" id="receiver" placeholder="收件人姓名"
+                               value="{{ isset($userinfo->realname)?$userinfo->realname:"" }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="address" >收件地址（<span style="color:orangered">写清：省、市、区及详细收件地址）</span></label>
+                        <input type="text" class="form-control" name="address" id="address" placeholder="地址必须包含省市"
+                               value="{{ isset($userinfo->address)?$userinfo->address:"" }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">联系电话</label>
+                        <input type="tel" class="form-control" name="phone" id="phone" placeholder="电话"
+                               value="{{ isset($userinfo->phone)?$userinfo->phone:"" }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="book_plan">目前教材使用情况(可选)</label>
+                        <textarea class="form-control" name="book_plan" id="book_plan" placeholder="使用教材的书名、作者、出版社"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks">备注(可选)</label>
+                        <textarea class="form-control" name="remarks" id="remarks" placeholder="备注"></textarea>
+                    </div>
+                    <div class="form-group" id="checkboxes"  hidden>
+                    </div>
+                    <button type="submit" class="btn btn-default">提交</button>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <hr>
-        <div class="col xs-12" style="padding:0 10px">
-            <div class="panel" style="border-color: orangered">
-                <div class="panel-body">
-                    <p><small style="color:orangered">申请须知</small></p>
-                    <small>
-                        <ol>
-                            <li>每本书籍只能申请一次</li>
-                            <li>收货地址必须完整填写省市</li>
-                            <li>申请样书的数量不得超过本年度限额</li>
-                            <li>请填写正确的联系电话</li>
-                        </ol>
-                    </small>
+        <div class="row">
+            <hr>
+            <div class="col xs-12" style="padding:0 10px">
+                <div class="panel" style="border-color: orangered">
+                    <div class="panel-body">
+                        <p><small style="color:orangered">申请须知</small></p>
+                        <small>
+                            <ol>
+                                <li>每本书籍只能申请一次</li>
+                                <li>收货地址必须完整填写省市</li>
+                                <li>申请样书的数量不得超过本年度限额</li>
+                                <li>请填写正确的联系电话</li>
+                            </ol>
+                        </small>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    @else
+        @include('book_request.closed')
+    @endif
     <!-- TODO 这里太暴力，写死了，要改 -->
     @if(!empty($banner_items))
         <div class="row">

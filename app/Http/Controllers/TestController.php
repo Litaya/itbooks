@@ -19,4 +19,6 @@ class TestController extends Controller
     	Log::info($request->img_media_id);
     	return view('test.imgupload', compact('js'));
     }
+    public function index(){
+    }
 }
