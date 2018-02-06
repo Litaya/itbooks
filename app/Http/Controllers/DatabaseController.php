@@ -19,6 +19,7 @@ use App\Models\Department;
 use App\Helpers\FileHelper;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Input;
 use Excel;
 use URL;
@@ -386,15 +387,6 @@ class DatabaseController extends Controller
 	public function exportAllTeachers(){
 		$ar = PM::getAdminRole();
 		if($ar == "SUPERADMIN"){
-//			$records = DB::select("select user.username as username, user.email as email, user_info.realname as realname,
-//                        d1.name as province, d2.name as city, user_info.address as address, user_info.workplace as workplace,
-//                        user.json_content as ujson, user_info.json_content as ijson,
-//                        user.created_at as created_at
-//                        from user
-//                        left join user_info on user.id = user_info.user_id
-//                        left join district as d1 on user_info.province_id = d1.id
-//                        left join district as d2 on user_info.city_id = d2.id
-//                        where user.certificate_as = 'TEACHER';");
 			$records = UserDao::getAllTeachers();
 		}
 		else{
@@ -406,50 +398,55 @@ class DatabaseController extends Controller
 			return redirect()->route("admin.user.index");
 		}
 
-		$filename = date("Y-m-d")."_教师信息_".time();
-		$export = Excel::create($filename, function($excel) use ($records){
-			$excel->sheet("教师信息", function($sheet) use ($records){
-
-				$sheet->setAutoSize(true);
-				$sheet->row(1, [
-					"用户名", "真实姓名", "邮箱", "申请余量", "省", "市",
-					"地址", "学校名称", "院系名称",
-					"职务", "职称",
-					"教授课程1", "学生人数1", "教授课程2", "学生人数2", "教授课程3", "学生人数3"]);
-
-				foreach($records as $record){
-					$ujson = $record["ujson"];
-					$ijson = $record["ijson"];
-					$sheet->appendRow([
-						!empty($record["username"]) ?   $record["username"] : "",
-						!empty($record["realname"]) ?   $record["realname"] : "",
-						!empty($record["email"]) ?      $record["email"] : "",
-						empty($ujson->teacher) ? "" : (empty($ujson->teacher->book_limit) ? "" : $ujson->teacher->book_limit),
-						!empty($record["province"]) ?   $record["province"] : "",
-						!empty($record["city"]) ?       $record["city"] : "",
-						!empty($record["address"]) ?    $record["address"] : "",
-						!empty($record["workplace"]) ?  $record["workplace"] : "",
-						!empty($ijson->department) ?    $ijson->department : "",
-						!empty($ijson->position) ?      $ijson->position : "",
-						!empty($ijson->jobtitle) ?      $ijson->jobtitle : "",
-						!empty($ijson->course_name_1) ? $ijson->course_name_1 : "",
-						!empty($ijson->number_stud_1) ? $ijson->number_stud_1 : "",
-						!empty($ijson->course_name_2) ? $ijson->course_name_2 : "",
-						!empty($ijson->number_stud_2) ? $ijson->number_stud_2 : "",
-						!empty($ijson->course_name_3) ? $ijson->course_name_3 : "",
-						!empty($ijson->number_stud_3) ? $ijson->number_stud_3 : "",
-					]);
-				}
-			});
-		})->store('xlsx')->export('xlsx');
-
-		return redirect()->route("admin.user.index");
+		$filename = date("Y-m-d")."_教师信息_".time().".csv";
+		$fullpath = "exports/".$filename;
+		$t_header = "用户名,真实姓名,邮箱,申请余量,省,市,地址,学校名称,院系名称,职务,职称,教授课程1,学生人数1,教授课程2,学生人数2,教授课程3,学生人数3";
+		Storage::put($fullpath,$t_header);
+		foreach ($records as $record){
+			$ujson = $record["ujson"];
+			$ijson = $record["ijson"];
+			$username = !empty($record["username"]) ?   $record["username"] : "";
+			$realname = !empty($record["realname"]) ?   $record["realname"] : "";
+			$email    = !empty($record["email"]) ?      $record["email"] : "";
+			$book_lim = empty($ujson->teacher) ? "" : (empty($ujson->teacher->book_limit) ? "" : $ujson->teacher->book_limit);
+			$province = !empty($record["province"]) ?   $record["province"] : "";
+			$city     = !empty($record["city"]) ?       $record["city"] : "";
+			$address  = !empty($record["address"]) ?    $record["address"] : "";
+			$workplace = !empty($record["workplace"]) ?  $record["workplace"] : "";
+			$department = !empty($ijson->department) ?    $ijson->department : "";
+			$position   = !empty($ijson->position) ?      $ijson->position : "";
+			$jobtitle   = !empty($ijson->jobtitle) ?      $ijson->jobtitle : "";
+			$course_name_1 = !empty($ijson->course_name_1) ? $ijson->course_name_1 : "";
+			$number_stud_1 = !empty($ijson->number_stud_1) ? $ijson->number_stud_1 : "";
+			$course_name_2 =!empty($ijson->course_name_2) ? $ijson->course_name_2 : "";
+			$number_stud_2 = !empty($ijson->number_stud_2) ? $ijson->number_stud_2 : "";
+			$course_name_3 = !empty($ijson->course_name_3) ? $ijson->course_name_3 : "";
+			$number_stud_3 =!empty($ijson->number_stud_3) ? $ijson->number_stud_3 : "";
+			$line = $username.",". $realname.",".
+				$email.",".
+				$book_lim.",".
+				$province.",".
+				$city.",".
+				$address.",".
+				$workplace.",".
+				$department.",".
+				$position.",".
+				$jobtitle.",".
+				$course_name_1.",".
+				$number_stud_1.",".
+				$course_name_2.",".
+				$number_stud_2.",".
+				$course_name_3.",".
+				$number_stud_3;
+			Storage::append($fullpath,$line);
+		}
+		return response()->download(storage_path("app/exports/".$filename),$filename);
 	}
 
 	public function exportAllBookRequest(Request $request){
 		$ar = PM::getAdminRole();
 		if($ar == 'SUPERADMIN'){
-            DB::connection()->disableQueryLog();
+			DB::connection()->disableQueryLog();
 			$book_requests = DB::select('select book.isbn as isbn, book.name as bookname, book.price as bookprice,user.email as email,status, message, book_request.phone as bookreqphone, receiver, order_number, book_request.address as bookreqaddress from book_request left join book on book.id = book_request.book_id left join user on user.id = book_request.user_id');
 			$filename = date("Y-m-d")."样书申请单_".time();
 			$export = Excel::create($filename, function($excel) use ($book_requests){
@@ -558,7 +555,7 @@ class DatabaseController extends Controller
 							"row"     => $row,
 							"message" => "isbn错误"
 						]);
-                        continue;
+						continue;
 					}
 					// book request record validation
 					$book_req = BookRequest::where('book_id',$book->id)->where('receiver',$receiver)->where('status',0)->first();
