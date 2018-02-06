@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dao\BookRequestDao;
 use App\Dao\DepartmentDao;
+use App\Dao\UserDao;
 use App\Helpers\ExportInvoice\ExportInvoiceByReceiverHelper;
 use App\Helpers\ExportInvoice\ExportInvoiceHelper;
 use App\Helpers\ExportInvoice\ExportInvoiceOrderByDepartmentHelper;
@@ -385,15 +386,16 @@ class DatabaseController extends Controller
 	public function exportAllTeachers(){
 		$ar = PM::getAdminRole();
 		if($ar == "SUPERADMIN"){
-			$records = DB::select("select user.username as username, user.email as email, user_info.realname as realname,
-                        d1.name as province, d2.name as city, user_info.address as address, user_info.workplace as workplace,
-                        user.json_content as ujson, user_info.json_content as ijson,
-                        user.created_at as created_at
-                        from user
-                        left join user_info on user.id = user_info.user_id
-                        left join district as d1 on user_info.province_id = d1.id
-                        left join district as d2 on user_info.city_id = d2.id
-                        where user.certificate_as = 'TEACHER';");
+//			$records = DB::select("select user.username as username, user.email as email, user_info.realname as realname,
+//                        d1.name as province, d2.name as city, user_info.address as address, user_info.workplace as workplace,
+//                        user.json_content as ujson, user_info.json_content as ijson,
+//                        user.created_at as created_at
+//                        from user
+//                        left join user_info on user.id = user_info.user_id
+//                        left join district as d1 on user_info.province_id = d1.id
+//                        left join district as d2 on user_info.city_id = d2.id
+//                        where user.certificate_as = 'TEACHER';");
+			$records = UserDao::getAllTeachers();
 		}
 		else{
 			return redirect()->route("admin.index");
@@ -416,8 +418,8 @@ class DatabaseController extends Controller
 					"教授课程1", "学生人数1", "教授课程2", "学生人数2", "教授课程3", "学生人数3"]);
 
 				foreach($records as $record){
-					$ujson = json_decode($record["ujson"]);
-					$ijson = json_decode($record["ijson"]);
+					$ujson = $record["ujson"];
+					$ijson = $record["ijson"];
 					$sheet->appendRow([
 						!empty($record["username"]) ?   $record["username"] : "",
 						!empty($record["realname"]) ?   $record["realname"] : "",
