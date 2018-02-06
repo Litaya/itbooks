@@ -8,7 +8,9 @@
 
 namespace App\Dao;
 
+use App\Models\District;
 use App\Models\User;
+use App\Models\UserInfo;
 
 class UserDao{
 
@@ -48,5 +50,33 @@ class UserDao{
 		$result["status"]  = UserDao::$SUCCESS;
 		$result["message"] = UserDao::$SUCCESS_MSG;
 		return $result;
+	}
+
+	public static function getAllTeachers(){
+		$teachers = User::where('certificate_as','TEACHER')->get();
+		$records  = array();
+		foreach ($teachers as $teacher){
+			$record = [
+				'username'   => $teacher->username,
+				'email'      => $teacher->email,
+				'ujson'      => json_decode($teacher->json_content),
+				'created_at' => $teacher->created_at
+			];
+
+			$user_info = UserInfo::where('user_id',$teacher->id)->first();
+			if ($user_info == null) continue;
+			$record['realname']  = $user_info->record;
+			$record['address']   = $user_info->address;
+			$record['workspace'] = $user_info->workspace;
+			$record['ijson']     = json_decode($teacher->json_content);
+
+			$province = District::where('id',$user_info->province_id)->first();
+			$city     = District::where('id',$user_info->city_id)->first();
+			$record['province'] = empty($province) ? "" : $province->name;
+			$record['city']     = empty($city)? "" : $city->name;
+
+			array_push($records,$record);
+		}
+		return $records;
 	}
 }
