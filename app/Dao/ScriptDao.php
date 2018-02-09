@@ -8,6 +8,7 @@
 namespace App\Dao;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ScriptDao{
 	public static function exportAllTeachers(){

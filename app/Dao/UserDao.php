@@ -11,6 +11,7 @@ namespace App\Dao;
 use App\Models\District;
 use App\Models\User;
 use App\Models\UserInfo;
+use Illuminate\Support\Facades\Log;
 
 class UserDao{
 
@@ -54,8 +55,13 @@ class UserDao{
 
 	public static function getAllTeachers(){
 		$teachers = User::where('certificate_as','TEACHER')->get();
+        Log::info(sizeof($teachers));   $count = 0;     
 		$records  = array();
 		foreach ($teachers as $teacher){
+            $count++; 
+            if($count % 100 == 0){
+				Log::info($count);
+            }
 			$record = [
 				'username'   => $teacher->username,
 				'email'      => $teacher->email,
@@ -65,7 +71,7 @@ class UserDao{
 
 			$user_info = UserInfo::where('user_id',$teacher->id)->first();
 			if ($user_info == null) continue;
-			$record['realname']  = $user_info->record;
+			$record['realname']  = $user_info->realname;
 			$record['address']   = $user_info->address;
 			$record['workspace'] = $user_info->workspace;
 			$record['ijson']     = json_decode($teacher->json_content);
