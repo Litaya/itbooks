@@ -34,16 +34,16 @@ class ScriptDao{
 			$province = !empty($record["province"]) ?   $record["province"] : "";
 			$city     = !empty($record["city"]) ?       $record["city"] : "";
 			$address  = !empty($record["address"]) ?    $record["address"] : "";
-			$workplace = !empty($record["workplace"]) ?  $record["workplace"] : "";
+			$workplace  = !empty($record["workplace"]) ?  $record["workplace"] : "";
 			$department = !empty($ijson->department) ?    $ijson->department : "";
 			$position   = !empty($ijson->position) ?      $ijson->position : "";
 			$jobtitle   = !empty($ijson->jobtitle) ?      $ijson->jobtitle : "";
 			$course_name_1 = !empty($ijson->course_name_1) ? $ijson->course_name_1 : "";
 			$number_stud_1 = !empty($ijson->number_stud_1) ? $ijson->number_stud_1 : "";
-			$course_name_2 =!empty($ijson->course_name_2) ? $ijson->course_name_2 : "";
+			$course_name_2 = !empty($ijson->course_name_2) ? $ijson->course_name_2 : "";
 			$number_stud_2 = !empty($ijson->number_stud_2) ? $ijson->number_stud_2 : "";
 			$course_name_3 = !empty($ijson->course_name_3) ? $ijson->course_name_3 : "";
-			$number_stud_3 =!empty($ijson->number_stud_3) ? $ijson->number_stud_3 : "";
+			$number_stud_3 = !empty($ijson->number_stud_3) ? $ijson->number_stud_3 : "";
 			$line = $username.",". $realname.",".
 				$email.",".
 				$book_lim.",".
