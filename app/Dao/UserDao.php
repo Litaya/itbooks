@@ -73,7 +73,7 @@ class UserDao{
 			if ($user_info == null) continue;
 			$record['realname']  = $user_info->realname;
 			$record['address']   = $user_info->address;
-			$record['workspace'] = $user_info->school_name;
+			$record['workplace'] = $user_info->workplace;
 			$record['ijson']     = json_decode($user_info->json_content);
 
 			$province = District::where('id',$user_info->province_id)->first();
