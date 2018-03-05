@@ -2,8 +2,12 @@
 
 namespace App\Helpers;
 
+use App\Dao\UserDao;
+use App\Models\BookRequest;
+use App\Models\District;
 use App\Models\User;
 use App\Models\UserInfo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 use Excel;
@@ -120,5 +124,71 @@ class ScriptHelper{
 				break;
 			}
 		}
+	}
+
+	/**
+	 * @param $start string 如果为null, 则表示导出全部
+	 * @param $end string 如果为null,则导出本年
+	 */
+	public static function exportSubscribedTeacherByTime($start=null, $end = null){
+		if ($start == null){
+			$start = '2000-01-01 00:00:00';
+			$end   = date('Y-01-01 00:00:00',strtotime('next year'));
+		}
+		if ($end == null ){
+			$end = date('Y-01-01 00:00:00',strtotime('next year'));
+		}
+		$users = User::whereDate('created_at','>', date('Y-m-d',strtotime($start)))->whereDate('created_at',' < ', date('Y-m-d',strtotime($end)))->where('certificate_as','=',"TEACHER")->get();
+		if (count($users) == 0)
+			return;
+
+		$filename = date("Y-m-d H:i:s",time())."_教师信息";
+		$export   = Excel::create($filename, function ($excel) use ($users){
+			$excel->sheet('教师信息',function ($sheet) use ($users){
+				$sheet->setAutoSize(true);
+
+				$sheet->row(1, ["用户名","真实姓名","邮箱","申请余量","省","市","地址","学校名称","院系名称","职务",
+					"职称","教授课程1","学生人数1","教授课程2","学生人数2","教授课程3","学生人数3"]);
+
+				foreach($users as $user){
+					$valid_book_requests = BookRequest::where('user_id',$user->id)
+						->where('status',1)
+						->whereRaw('created_at > '.date_timestamp_get(new \DateTime(date('Y-01-01 00:00:00',strtotime('this year')))))
+						->whereRaw('created_at < '.date_timestamp_get(new \DateTime(date('Y-01-01 00:00:00',strtotime('next year')))))->get();
+					$limit = count($valid_book_requests)+$user->getBookLimit();
+
+					$userInfo = $user->userInfo;
+					$ijson    = json_decode($userInfo->json_content);
+					$province = District::where('id',$userInfo->province_id)->first();
+					$city     = District::where('id',$userInfo->userInfo->city_id)->first();
+
+					$sheet->appendRow([
+						$user->username,
+						$userInfo->realname,
+						$user->email,
+						$limit,
+						empty($province) ? "" : $province->name,
+						empty($city)? "" : $city->name,
+						empty($userInfo->address)?"":$userInfo->address,
+						empty($userInfo->workplace)?"":$userInfo->workplace,
+						empty($ijson->department)? "" : $ijson->department,
+						empty($ijson->position)? "" : $ijson->position,
+						empty($ijson->jobtitle)? "" : $ijson->jobtitle,
+						empty($ijson->course_name_1)? "" : $ijson->course_name_1,
+						empty($ijson->number_stud_1)? "" : $ijson->number_stud_1,
+						empty($ijson->course_name_2)? "" : $ijson->course_name_2,
+						empty($ijson->number_stud_2)? "" : $ijson->number_stud_2,
+						empty($ijson->course_name_3)? "" : $ijson->course_name_3,
+						empty($ijson->number_stud_3)? "" : $ijson->number_stud_3
+					]);
+				}
+
+				$sheet->setColumnFormat(array(
+					'A' => '@', 'B' => '@', 'C' => '@', 'D' => '@', 'E' => '@', 'F' => '@',
+					'G' => '@', 'H' => '@', 'I' => '@', 'J' => '@', 'K' => '@', 'L' => '@',
+					'M' => '@', 'N' => '@', 'O' => '@', 'P' => '@', 'Q' => '@',
+				));
+			});
+		})->store('xlsx');
 	}
 }
