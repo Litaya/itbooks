@@ -36,4 +36,12 @@ class OrderFeedback extends Model
 		return $this->belongsTo('App\Models\User', 'admin_id', 'id');
 	}
 
+	public function bookDepartmentName(){
+		$book = Book::where('id',$this->book_id)->first();
+		if ($book != null){
+			$department = Department::where('id',$book->department_id)->first();
+			return $department->name;
+		}else
+			return -1;
+	}
 }

@@ -103,4 +103,9 @@ class User extends Authenticatable
 	public function bookLikes(){
 		return $this->hasMany('App\Models\Like', 'user_id', 'id');
 	}
+
+	public function getBookLimit(){
+		$user_json = json_decode($this->json_content,true);
+		return $user_json['teacher']['book_limit'];
+	}
 }
