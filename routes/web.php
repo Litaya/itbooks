@@ -11,6 +11,15 @@
 |
 */
 
+Route::get('/', function () {
+	return redirect()->route('home');
+})->name('index');
+Route::get('/errors',"PermissionController@user_permission_error")->name('errors.index');
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
 // Route::get('sockettest', "RecommenderController@getTestMessage");
 
 Route::get('navigate', "NavigationController@navigate")->name('navigate');
@@ -90,15 +99,6 @@ Route::group(["prefix"=>"bookreq"], function(){
 
 /* user certification module */
 Route::resource('cert', 'CertificationController');
-
-
-Route::get('/', function () {
-	return redirect()->route('home');
-})->name('index');
-Route::get('/errors',"PermissionController@user_permission_error")->name('errors.index');
-
-Route::get('/home', 'HomeController@index')->name('home');
-Auth::routes();
 
 /**
  * wechat routes
@@ -255,6 +255,15 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 			Route::post('/update_cate','Admin\Forum\MaterialController@updateCategory')->name('admin.forum.material.update_cate');
 		});
 	});
+
+	Route::group(['prefix'=>'order_fb'], function (){
+		Route::get('/','Admin\OrderFbAdminController@index')->name('admin.order_fb.index');
+		Route::get('/{id}/','Admin\OrderFbAdminController@show')->name('admin.order_fb.show');
+		Route::get('/{id}/pass','Admin\OrderFbAdminController@pass')->name('admin.order_fb.pass');
+		Route::get('/{id}/reset','Admin\OrderFbAdminController@reset')->name('admin.order_fb.reset');
+
+		Route::post('/{id}/reject','Admin\OrderFbAdminController@reject')->name('admin.order_fb.reject');
+	});
 }); // end admin
 
 Route::group(['prefix'=>'user','middleware' => ['auth']],function (){
@@ -291,6 +300,18 @@ Route::group(["prefix" => "category",'middleware' => ['auth']],function (){
 	Route::post('/create','CategoryController@create')->name('category.create');
 	Route::delete("/drop",'CategoryController@drop')->name('category.drop');
 	Route::post('/altername','CategoryController@alterCateName')->name('category.altername');
+});
+
+Route::group(["prefix"=>"order_fb",'middleware'=> ['auth']], function (){
+	// page interface
+	Route::get('/','OrderFbController@index')->name('order_fb.index');
+	Route::get('/records','OrderFbController@records')->name('order_fb.records');
+	Route::get('/{id}/',"OrderFbController@show")->name('order_fb.show');
+
+	// post interface
+	Route::post('/','OrderFbController@submit')->name('order_fb.submit');
+	Route::post('/{id}/cancel','OrderFbController@cancel')->name('order_fb.cancel');
+	Route::post('/{id}/drop','OrderFbController@drop')->name('order_fb.drop');
 });
 
 Route::group(["prefix" => "test"],function () {
