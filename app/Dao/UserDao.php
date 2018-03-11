@@ -8,6 +8,7 @@
 
 namespace App\Dao;
 
+use App\Models\BookRequest;
 use App\Models\District;
 use App\Models\User;
 use App\Models\UserInfo;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserDao{
 
-	public static $LIMIT           = 10;  // 样书申请上界
+	public static $LIMIT           = 12;  // 样书申请上界
 	public static $UNHANDLED       = 0;
 	public static $SUCCESS         = 1;
 	public static $FAIL_OUTOFLIMIT = 2;
@@ -38,7 +39,7 @@ class UserDao{
 		];
 		$user_json = $user->json_content;
 		$user_json = json_decode($user_json,true);
-		$limit     = $user_json['teacher']['book_limit'];
+		$limit     = self::getUserYearLimit($user);
 		if($limit + $num < 0 || $limit+$num > UserDao::$LIMIT){
 			$result["status"]  = UserDao::$FAIL_OUTOFLIMIT;
 			$result["message"] = UserDao::$FAIL_OUTOFLIMIT_MSG;
@@ -85,4 +86,18 @@ class UserDao{
 		}
 		return $records;
 	}
+
+	/**
+	 * 本函数用于获取用户本年总共的申请额度
+	 * @param User $user
+	 * @return int
+	 */
+	public static function getUserYearLimit(User $user){
+		$valid_book_requests = BookRequest::where('user_id',$user->id)
+			->where('status',1)
+			->whereDate('created_at','>',date('Y-01-01',strtotime('this year')))
+			->whereDate('created_at','<',date('Y-01-01',strtotime('next year')))->get();
+		return count($valid_book_requests)+$user->getBookLimit();
+	}
+
 }
