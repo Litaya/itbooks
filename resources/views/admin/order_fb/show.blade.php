@@ -39,12 +39,18 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-4 col-xs-4"><a href="{{ route('admin.order_fb.index') }}"><button class="btn btn-primary btn-block">返回</button></a></div>
-                    <div class="col-lg-4 col-md-4 col-xs-4" data-toggle="modal" data-target="#reject-modal"><button class="btn btn-danger btn-block">拒绝</button></div>
-                    <div class="col-lg-4 col-md-4 col-xs-4">
-                        {!! Form::open(["route"=>["admin.order_fb.pass", $order_fb->id], "method"=>"POST"]) !!}
-                        <input class="btn btn-success btn-block" type="submit" value="通过"/>
-                        {!! Form::close() !!}
-                    </div>
+                    @if($order_fb->status == 0)
+                        <div class="col-lg-4 col-md-4 col-xs-4" data-toggle="modal" data-target="#reject-modal"><button class="btn btn-danger btn-block">拒绝</button></div>
+                        <div class="col-lg-4 col-md-4 col-xs-4">
+                            {!! Form::open(["route"=>["admin.order_fb.pass", $order_fb->id], "method"=>"GET"]) !!}
+                            <input class="btn btn-success btn-block" type="submit" value="通过"/>
+                            {!! Form::close() !!}
+                        </div>
+                    @else
+                        <div class="col-lg-4 col-md-4 col-xs-4">
+                            <a href="{{ route('admin.order_fb.reset',['id'=>$order_fb->id]) }}"><button class="btn btn-danger btn-block">重置</button></a>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-xs-12">

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserDao{
 
-	public static $LIMIT           = 10;  // 样书申请上界
+	public static $LIMIT           = 12;  // 样书申请上界
 	public static $UNHANDLED       = 0;
 	public static $SUCCESS         = 1;
 	public static $FAIL_OUTOFLIMIT = 2;
@@ -95,8 +95,8 @@ class UserDao{
 	public static function getUserYearLimit(User $user){
 		$valid_book_requests = BookRequest::where('user_id',$user->id)
 			->where('status',1)
-			->whereRaw('created_at > '.date_timestamp_get(new \DateTime(date('Y-01-01 00:00:00',strtotime('this year')))))
-			->whereRaw('created_at < '.date_timestamp_get(new \DateTime(date('Y-01-01 00:00:00',strtotime('next year')))))->get();
+			->whereDate('created_at','>',date('Y-01-01',strtotime('this year')))
+			->whereDate('created_at','<',date('Y-01-01',strtotime('next year')))->get();
 		return count($valid_book_requests)+$user->getBookLimit();
 	}
 

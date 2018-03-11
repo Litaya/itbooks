@@ -21,7 +21,7 @@ class OrderFeedback extends Model
 		'order_time',
 		'order_count',
 		'image_path',
-		'status',
+		'status', //申请状态, -2: 用户删除申请； -1: 用户取消申请；0: 正在申请；1: 申请通过；2: 申请拒绝;
 		'refuse_message',
 		'ext'
 	];

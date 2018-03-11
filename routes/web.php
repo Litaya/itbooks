@@ -259,8 +259,9 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
 	Route::group(['prefix'=>'order_fb'], function (){
 		Route::get('/','Admin\OrderFbAdminController@index')->name('admin.order_fb.index');
 		Route::get('/{id}/','Admin\OrderFbAdminController@show')->name('admin.order_fb.show');
+		Route::get('/{id}/pass','Admin\OrderFbAdminController@pass')->name('admin.order_fb.pass');
+		Route::get('/{id}/reset','Admin\OrderFbAdminController@reset')->name('admin.order_fb.reset');
 
-		Route::post('/{id}/pass','Admin\OrderFbAdminController@pass')->name('admin.order_fb.pass');
 		Route::post('/{id}/reject','Admin\OrderFbAdminController@reject')->name('admin.order_fb.reject');
 	});
 }); // end admin
