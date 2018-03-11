@@ -155,12 +155,13 @@ class ScriptHelper{
 						->where('status',1)
 						->whereRaw('created_at > '.date_timestamp_get(new \DateTime(date('Y-01-01 00:00:00',strtotime('this year')))))
 						->whereRaw('created_at < '.date_timestamp_get(new \DateTime(date('Y-01-01 00:00:00',strtotime('next year')))))->get();
-					$limit = count($valid_book_requests)+$user->getBookLimit();
+                    $cur_l = json_decode($user->json_content,true)['teacher']['book_limit'];
+					$limit = count($valid_book_requests)+$cur_l;
 
 					$userInfo = $user->userInfo;
 					$ijson    = json_decode($userInfo->json_content);
 					$province = District::where('id',$userInfo->province_id)->first();
-					$city     = District::where('id',$userInfo->userInfo->city_id)->first();
+					$city     = District::where('id',$userInfo->city_id)->first();
 
 					$sheet->appendRow([
 						$user->username,
