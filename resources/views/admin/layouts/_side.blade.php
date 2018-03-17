@@ -52,6 +52,7 @@
 
     @if(in_array(PM::getAdminRole(), ["SUPERADMIN", "DEPTADMIN", "REPRESENTATIVE"]))
         <li class="{{Request::is('admin/bookreq')?'sidebar-active':''}}"><a href="{{ route('admin.bookreq.index') }}"> <i class="fa fa-book push"></i>样书申请</a></li>
+        <li class="{{Request::is('admin/order_fb')?'sidebar-active':''}}"><a href="{{ route('admin.order_fb.index') }}"> <i class="fa fa-file push"></i>订购反馈</a></li>
     @endif
     @if(in_array('USER',\App\Libraries\PermissionManager::getAdminModules()))
         <li class="{{Request::is('admin/cert')?'sidebar-active':''}}"><a href="{{ route('admin.cert.index') }}"> <i class="fa fa-user push"></i>身份认证</a></li>

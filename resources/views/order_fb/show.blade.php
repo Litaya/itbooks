@@ -6,31 +6,34 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-xs-12 col-md-12">
-                <div class="panel panel-primary">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         订购反馈状态
                     </div>
                     <div class="panel-body">
-                        <span><strong>申请书目：</strong>{{ $fb->book->name }}</span><br>
-                        <span><strong>订购数量：</strong>{{ $fb->order_count }}</span><br>
-                        <span><strong>订购时间：</strong>{{ $fb->order_time }}</span><br>
-                        <span><strong>发起时间：</strong>{{ $fb->created_at }}</span><br>
-                        <span><strong>当前状态：</strong><span style="color: {{ $fb->status==0?'#7098DA':($fb->status==1?'#4E4':'#E44')}}">{{$fb->status==0?'审核中':($fb->status==1?'已通过':'未通过')}}</span>
-                        </span><br>
+                        <small><strong>申请书目：</strong>{{ $fb->book->name }}</small><br>
+                        <small><strong>订购数量：</strong>{{ $fb->order_count }}</small><br>
+                        <small><strong>订购时间：</strong>{{ $fb->order_time }}</small><br>
+                        <small><strong>发起时间：</strong>{{ $fb->created_at }}</small><br>
+                        <small><strong>当前状态：</strong><span style="color: {{ $fb->status==0?'#7098DA':($fb->status==1?'#4E4':'#E44')}}">{{$fb->status==0?'审核中':($fb->status==1?'已通过':'未通过')}}</span></small><br>
+                        @if($fb->status==2)
+                            <small><strong>拒绝理由：</strong>{{ $fb->refuse_message }}</small><br> 
+                        @endif
+                        <br>
                         <img class="img-responsive" src="{{route('image', $fb->image_path)}}" width="auto"/>
                     </div>
                 </div>
             </div>
             <div class="col-lg-12 col-xs-12 col-md-12">
                 <a href="{{ route('book.show',$fb->book->id) }}">
-                <div class="panel panel-primary">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         书籍详情
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-xs-4">
-                                <img src="{{ url_file_exists("http://www.tup.com.cn/upload/bigbookimg/".$fb->book->product_number.".jpg")?"http://www.tup.com.cn/upload/bigbookimg/".$fb->book->product_number.".jpg":"/test_images/404.jpg" }}" class="img-responsive" alt="" style="width: 100%;">
+                                <img src="{{ url_file_exists("http://www.tup.com.cn/upload/bigbookimg/".$fb->book->product_number.".jpg")?"http://www.tup.com.cn/upload/bigbookimg/".$fb->book->product_number.".jpg":"/test_images/404.jpg" }}" class="img-responsive" alt="" style="width: 100%">
                             </div>
                             <div class="col-lg-8 col-md-8 col-xs-8">
                                 <small><strong>作者：</strong>{{ $fb->book->authors }}</small><br>
