@@ -9,6 +9,8 @@
 namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatHandler;
+use EasyWeChat\Message\News;
+use Illuminate\Support\Facades\Log;
 
 class Test extends WechatHandler {
 	public function handle(){
@@ -49,7 +51,7 @@ class Test extends WechatHandler {
 		return '测试模块';
 	}
 	public function weight(){
-		return '10000';
+		return 10000;
 	}
 
 }

@@ -32,11 +32,11 @@ class HomeController extends Controller
 	    $hot_books = RecommendHelper::getHotBooks();
 	    $new_books = RecommendHelper::getNewBooks();
 
-//	    self::grabImages($top_books);
-//	    self::grabImages($books_recommend);
-//	    self::grabImages($hot_books);
-//	    self::grabImages($new_books);
-//
+	    self::grabImages($top_books);
+	    self::grabImages($books_recommend);
+	    self::grabImages($hot_books);
+	    self::grabImages($new_books);
+
 	    return  view("home")->withTopbooks($top_books)
 		    ->withBooksrecommend($books_recommend)
 		    ->withHotbooks($hot_books)

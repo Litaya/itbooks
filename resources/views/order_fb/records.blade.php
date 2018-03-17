@@ -29,10 +29,11 @@
         </style>
 
         <div class="row">
-            <h4>订购反馈记录</h4>
-            <div class="list-group">
+            <h4>订购反馈记录 <small><a href='{{ route('order_fb.index')}}'>点此申请订购反馈</a></small></h4><hr>
+            <div class="list-group" style='margin-bottom:none'>
                 @if(sizeof($order_fbs) == 0)
-                    <p style="text-align: center; font-size: 14px;">暂无订购反馈记录，快去<a href="{{ route('order_fb.index') }}">填写申请反馈</a>吧！</p>
+                    <p style="font-size: 14px;">暂无订购反馈记录，快去<a href="{{ route('order_fb.index') }}">填写申请反馈</a>吧！</p>
+                    <p style="font-size: 14px;">提示：本页仅显示今年申请记录</p>
                 @else
                     @foreach($order_fbs as $fb)
                         <a href="{{ route('order_fb.show', $fb->id) }}" class="list-group-item">
@@ -58,6 +59,8 @@
                 @endif
             </div>
         </div>
+
+        <div class="row"><a href="{{ route('order_fb.index') }}"><button class="btn btn-primary">前往申请页</button></a></div>
 
         <div class="row" id="pages" style="text-align: center">
             <div class="col-lg-12 col-md-12 col-xs-12"></div>

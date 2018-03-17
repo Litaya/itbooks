@@ -27,6 +27,7 @@
                             </thead>
                             <tbody>
                             @foreach($order_fbs as $fb)
+                                <tr>
                                 <td>{{ $fb->user_realname }}</td>
                                 <td>{{ $fb->book->name }}</td>
                                 <td>{{ $fb->book_isbn }}</td>
@@ -48,7 +49,7 @@
                                             </span>
                                         @endif
                                     </div>
-                                </td>
+                                </td></tr>
                             @endforeach
                             </tbody>
                         </table>

@@ -17,10 +17,12 @@
                         <span><strong>发起时间：</strong>{{ $fb->created_at }}</span><br>
                         <span><strong>当前状态：</strong><span style="color: {{ $fb->status==0?'#7098DA':($fb->status==1?'#4E4':'#E44')}}">{{$fb->status==0?'审核中':($fb->status==1?'已通过':'未通过')}}</span>
                         </span><br>
+                        <img class="img-responsive" src="{{route('image', $fb->image_path)}}" width="auto"/>
                     </div>
                 </div>
             </div>
             <div class="col-lg-12 col-xs-12 col-md-12">
+                <a href="{{ route('book.show',$fb->book->id) }}">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         书籍详情
@@ -39,7 +41,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div></a>
             </div>
             <div class="col-lg-12 col-xs-12 col-md-12">
                 <a class="btn btn-primary" href="{{ route('order_fb.records') }}">返回</a>

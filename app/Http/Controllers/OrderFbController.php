@@ -25,7 +25,11 @@ class OrderFbController extends Controller
 	}
 
 	public function records(){
-		$order_fbs = OrderFeedback::whereRaw('status > -1')->orderBy('status','desc')->orderBy('created_at','desc')->paginate(10);
+		$order_fbs = OrderFeedback::whereRaw('status > -1')
+            ->where('user_id',Auth::user()->id)
+            ->whereDate('created_at','>',date('Y-01-01 00:00:00',strtotime('this year')))
+            ->whereDate('created_at','<',date('Y-01-01 00:00:00',strtotime('next year')))
+            ->orderBy('status')->orderBy('created_at','desc')->paginate(10);
 		return view('order_fb.records',compact('order_fbs'));
 	}
 
@@ -44,12 +48,21 @@ class OrderFbController extends Controller
 
 		if($request->image_media_id){
 			// 检查isbn的有效性
-			$book = Book::where('isbn', $request->isbn)->first();
+			$book = Book::where('isbn','like', "%".$request->isbn)->first();
 			if ($book == null){
-				$request->flash('danger','图书isbn无效，您输入的isbn号为'.$request->isbn.'，请截图后联系管理员！');
+               return redirect()->route('order_fb.index')->withErrors(['图书isbn无效，您输入的isbn号为'.$request->isbn.'，请截图后联系管理员！']);   
 			}
 			$book_isbn = $book->isbn;
 			$book_id   = $book->id;
+
+            $user = Auth::user();
+            $order_feedback_old = OrderFeedback::whereIn('status',[0,1])
+                ->where('book_id',$book->id)->where('user_id',$user->id)
+                ->whereDate('created_at','>',date('Y-01-01 00:00:00',strtotime('this year')))
+                ->whereDate('created_at','<',date('Y-01-01 00:00:00',strtotime('next year')))->first();
+            if (!empty($order_feedback_old)){
+                return redirect()->route('order_fb.index')->withErrors(['您已在本年度申请过该书籍的订购反馈']);
+            }
 
 			// 获取department信息
 			$department      = Department::where('id',$book->department_id)->first();
@@ -83,7 +96,7 @@ class OrderFbController extends Controller
 				'user_realname'   => $user_realname,
 				'order_time'      => $order_time,
 				'order_count'     => $order_count,
-				'image_path'      => $filename,
+				'image_path'      => $folder.$filename,
 				'status'          => 0
 			]);
 

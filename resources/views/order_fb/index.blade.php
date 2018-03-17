@@ -4,12 +4,26 @@
 
 @section('content')
     <div class="container">
-        <div class="col-xs-12">
+        <div class="row">
+            <h4>订购反馈申请 <small><a href="{{ route('order_fb.records') }}">点此查看历史申请</a></small></h4>
+            <hr>
+            <div class="panel panel-default">
+                <div class="panel-body" style="font-size:12px;">
+                    <strong style="color:orangered;font-size:14px;">申请须知</strong> <br>
+                    1. 一年内同一书号只能上传一次订购信息 <br>
+                    2. 订购信息被通过，则本年度样书申请额度+1 <br>
+                    3. 用户本年样书申请额度不超过12本 <br>
+                    4. 一年内没有上传订购信息的，减少2本申请数量，减少到2本为止
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <form action="{{ route('order_fb.submit') }}" method="post">
                 {{ csrf_field() }}
                 <div class="form-group">
                     <label for="isbn">订购书号</label>
-                    <input type="text" class="form-control" name="isbn" id="isbn" placeholder="请确保您输入的书号准确">
+                    <input type="text" class="form-control" name="isbn" id="isbn" placeholder="请输入教材isbn后六位">
                 </div>
                 <div class="form-group" style="width: auto;">
                     <label for="order_datetime">订购日期</label>
@@ -21,7 +35,7 @@
                 </div>
                 {{ Form::text('image_media_id',null,["id"=>"image_media_id","hidden"=>"hidden"]) }}
                 <div class="form-group">
-                    <label for="count">上传证明截图</label>
+                    <small style="font-weight: bold"> 上传提交给教学秘书或者教务处今年选用教材的表格截图</small>
                     <a href="javascript:void(0)" class="btn btn-default btn-sm" onclick="chooseImage()">选择图片</a>
                 </div>
                 {{ Form::submit("提交", ["class"=>"btn btn-primary btn-block form-spacing-top"])}}
@@ -49,6 +63,7 @@
                                 localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
                                 isShowProgressTips: 1, // 默认为1，显示进度提示
                                 success: function (res) {
+                                    alert('图片上传成功!');
                                     var serverId = res.serverId; // 返回图片的服务器端ID
                                     $("#image_media_id").val(serverId);
                                 }

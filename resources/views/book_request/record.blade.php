@@ -30,8 +30,9 @@
             {{--<p style="font-size: 12px; color:#ccc">Tips:&nbsp;您可在申请详情页上传相关书籍的学校订书单,审核通过后相关申请不扣总的申请次数</p>--}}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <small style="font-size: 12px; color:grey">亲爱的{{ Auth::user()->username }}，您好。您共申请了{{ sizeof(Auth::user()->bookRequests()->whereIn('status',[1,0])->get()) }}本样书，今年的总申请额度还有{{ json_decode(Auth::user()->json_content)->teacher->book_limit }}本。
-                        <br>您可<a href="{{ route("bookreq.index") }}">点击此处</a>申请样书</small>
+                    <small style="font-size: 12px; color:grey">亲爱的{{ Auth::user()->username }}，您好。您共申请了{{ sizeof(Auth::user()->bookRequests()->whereIn('status',[1,0])->get()) }}本样书，今年的总申请额度还有{{ json_decode(Auth::user()->json_content)->teacher->book_limit }}本。<br>
+                        您可<a href="{{ route("bookreq.index") }}">点击此处</a>申请样书，<a href="{{ route("order_fb.index") }}">点击此处</a>增加样书额度
+                    </small>
                 </div>
             </div>
         </div>

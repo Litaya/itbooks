@@ -32,19 +32,19 @@ class OrderFbAdminController extends Controller
 
 			// 检查同一书号本年是否已经上传并同意一次
 			$order_feedback_old = OrderFeedback::where('status',1)
-				->where('book_id','')
-				->whereDate('created_at','>',date('Y-01-01',strtotime($order_feedback->created_at)))
-				->whereDate('created_at','<',date('Y-01-01',strtotime(date('Y-01-01',strtotime($order_feedback->created_at)))+365*24*60*60))->first();
+				->where('book_id',$order_feedback->book_id)->where('user_id',$user->id)
+				->whereDate('created_at','>',date('Y-01-01 00:00:00',strtotime($order_feedback->created_at)))
+				->whereDate('created_at','<',date('Y-01-01 00:00:00',strtotime(date('Y-01-01',strtotime($order_feedback->created_at)))+365*24*60*60))->first();
 			if (!empty($order_feedback_old)){
 				return redirect()->back()->withErrors(["用户本年已对本书籍申请一次订购证明"]);
 			}
 
 			// 更改用户的样书申请额度
 			$result = UserDao::updateBookRequestLimit($user, 1);
-			$order_feedback->status = 1;
-			$order_feedback->save();
 
 			if ($result['status'] == UserDao::$SUCCESS){
+                $order_feedback->status = 1;
+                $order_feedback->save();
 				return redirect()->back();
 			}else{
 				return redirect()->back()->withErrors($result['message']);

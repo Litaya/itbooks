@@ -6,7 +6,6 @@ $dic_handler = opendir($dictionary);
 while (($filename = readdir($dic_handler)) !== false){
 	if ($filename != "." && $filename != "..") {
 		$module_class_name = explode(".",$filename)[0];
-
 		$module_models = \App\Models\WechatModuleModel::where('module',$module_class_name)->get();
 
 		# 如果还未存库

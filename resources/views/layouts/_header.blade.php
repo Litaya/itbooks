@@ -20,6 +20,7 @@
       <!--li class="{{Request::is('personal') ? "active":""}}"><a href="#">个人空间</a></li-->
         @if(Auth::user())
           <li class="{{Request::is('bookreq*') ? "active":""}}"><a href="{{route('bookreq.record')}}">样书申请</a></li>
+          <li class="{{Request::is('order_fb*') ? "active":""}}"><a href="{{route('order_fb.records')}}">订购反馈</a></li>
           <li><a href="{{ route('user.index') }}">个人资料</a></li>
           <li>
             <a href="{{ route('logout') }}"
