@@ -58,20 +58,16 @@ class ResourceAdminController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $this->validate($request, [
             "file_upload" => "required",
             "title" => "required|min:1|max:30",
-            "credit" => "required|integer",
         ]);
 
         $access_role = [];
-        if($request->role_author) array_push($access_role, 'AUTHOR');
+        if($request->role_teacher_with_order) array_push($access_role, 'TEACHER_WITH_ORDER');
         if($request->role_teacher) array_push($access_role, 'TEACHER');
         if($request->role_user) array_push($access_role, 'USER');
 
@@ -83,10 +79,16 @@ class ResourceAdminController extends Controller
             $res->file_upload = $request->file_upload;
             $res->access_role = implode('|', $access_role);
             $res->description = $request->description;
-            $res->credit = $request->credit;
+	        $res->credit = $request->credit;
+            if (empty($request->credit))
+            	$res->credit = 0;
             $res->type = "url"; //($request->file_upload)->getClientOriginalExtension();
-            if(!empty($request->book_id) and Book::find($requst->book_id))
-                $res->owner_book_id = $request->book_id;
+            if(!empty($request->book_isbn) and Book::find($request->book_isbn)){
+            	$book = Book::where('isbn','like','%'.$request->book_isbn)->first();
+                $res->owner_book_id = $book->id;
+            } else{
+	            $res->owner_book_id = 0;
+	        }
             $res->save();
 
             Session::flash('success', '上传资源成功');
