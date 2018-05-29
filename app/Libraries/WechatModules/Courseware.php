@@ -2,6 +2,7 @@
 
 namespace App\Libraries\WechatModules;
 
+use App\Dao\ResourceDao;
 use App\Libraries\WechatHandler;
 use App\Models\Book;
 use App\Models\User;
@@ -12,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 class Courseware extends WechatHandler{
 	public function handle()
 	{
-
 		$msg_type = $this->message->MsgType;
 		$match    = false;
 		$reply    = "";
@@ -48,8 +48,17 @@ class Courseware extends WechatHandler{
 								$reply = "本书没有课件";
 							}else{
 								$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
+								$resources_str = "";
+								$resourceDao = new ResourceDao();
+								$resources = $resourceDao->getAllResource($user, $book->id);
+								foreach ($resources as $resource){
+									$resources_str = "\n".$resources_str."【".$resource->title."】\n地址：".$resource->file_upload."\n资源简介：".$resource->description;
+								}
 								$match = true;
 								$reply = "课件下载地址：$kj_url \n课件密码：$pass";
+								if(sizeof($resources) > 0){
+									$reply = $reply."\n\n其他资源".$resources_str;
+								}
 							}
 						}
 					} else if($content_arr[0] == '密码'){
