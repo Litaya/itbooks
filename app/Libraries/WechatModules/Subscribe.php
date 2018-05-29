@@ -40,7 +40,7 @@ class Subscribe extends WechatHandler {
 				}
 				$reply = "感谢你的关注！我们会把最精彩的内容第一时间发给你！如果你是第一次光临，请先注册我们的会员，你将能够获得我们更多的服务\n" .
 					"<a href='http://www.itshuquan.com/userinfo/basic?openid=" . $open_id . "'>用户注册</a>\n" .
-					"<a href='https://itbook.kuaizhan.com/39/60/p332015340738c5'>新手指南</a>";
+					"<a href='http://www.itshuquan.com/material/cate/4'>新手指南</a>";
                 Log::info("处理模块: Subscribe");
 				return $reply;
 			}else if($this->message->Event=='unsubscribe'){
