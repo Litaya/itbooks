@@ -169,7 +169,7 @@ Route::group(["prefix" => "admin",'middleware' => ['auth']], function(){
         Route::get('export', 'DatabaseController@exportDownloadRecord')->name('admin.resource.export');
 		Route::get('create', 'ResourceAdminController@create')->name('admin.resource.create');
 		Route::get('{id}', 'ResourceAdminController@show')->name('admin.resource.show')->where('id', '[0-9]+');
-		Route::put('{id}', 'ResourceAdminController@update')->name('admin.resource.update');
+		Route::post('{id}', 'ResourceAdminController@update')->name('admin.resource.update');
 		Route::delete('{id}', 'ResourceAdminController@destroy')->name('admin.resource.destroy');
 		Route::get('{id}/edit', 'ResourceAdminController@edit')->name('admin.resource.edit');
 		Route::post('{id}/download', 'ResourceAdminController@postDownload')->name('admin.resource.download');

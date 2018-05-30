@@ -51,15 +51,18 @@
                     </p>
                     <hr>
                     <p><small>下载需要积分: {{$resource->credit}}</small></p>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <a href="{{$resource->file_upload}}"><button class="btn btn-success btn-block form-spacing-top"]>下载资源</button></a>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <a href="{{ route("admin.resource.edit", $resource->id) }}"><button class="btn btn-success btn-block form-spacing-top"]>重新编辑</button></a>
+                    </div>
+                    <div class="col-md-3">
                         {!! Form::open(["route"=>["admin.resource.destroy", $resource->id], "method"=>"delete"]) !!}
                         {{ Form::submit("删除资源", ["class"=>"btn btn-danger btn-block form-spacing-top"]) }}
                         {!! Form::close() !!}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <a href="{{route('admin.resource.index')}}">
                             <button class="btn btn-default btn-block form-spacing-top">返回列表</button>
                         </a>

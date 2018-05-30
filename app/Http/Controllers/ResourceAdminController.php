@@ -96,8 +96,6 @@ class ResourceAdminController extends Controller
             return redirect()->back()->withErrors(['用户角色至少勾选一项']);
         }
 
-
-
         return redirect()->route('admin.resource.show', $res->id);
     }
 
@@ -139,22 +137,35 @@ class ResourceAdminController extends Controller
             "title" => "required|min:1|max:30",
             "credit" => "required|integer",
         ]);
+	    $access_role = [];
+	    if($request->role_teacher_with_order) array_push($access_role, 'TEACHER_WITH_ORDER');
+	    if($request->role_teacher) array_push($access_role, 'TEACHER');
+	    if($request->role_user) array_push($access_role, 'USER');
 
-        $res = Resource::find($id);
-        $res->owner_user_id = Auth::id();
-        // $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
-        $res->file_upload = $request->file_upload;
-        $res->access_role = implode('|', $request->access_role);
-        $res->description = $request->description;
-        $res->credit = $request->credit;
-        $res->type = "url"; // ($request.file_upload)->getClientOriginalExtension();
-        if(!empty($request->book_id) and Book::find($requst->book_id))
-            $res->owner_book_id = $request->book_id;
-        $res->update();
-            
-        Session::flash('success', '资源信息修改成功');
-
-        return redirect()->route('admin.resource.show', $res->id);
+	    if(count($access_role) > 0){
+		    $res = Resource::find($id);
+		    $res->title = $request->title;
+		    $res->owner_user_id = Auth::id();
+		    // $res->file_upload = FileHelper::saveResourceFile($request->file_upload);
+		    $res->file_upload = $request->file_upload;
+		    $res->access_role = implode('|', $access_role);
+		    $res->description = $request->description;
+		    $res->credit = $request->credit;
+		    if (empty($request->credit))
+			    $res->credit = 0;
+		    $res->type = "url"; //($request->file_upload)->getClientOriginalExtension();
+		    if(!empty($request->book_isbn) and Book::where('isbn','like',"%".$request->book_isbn)->first()){
+			    $book = Book::where('isbn','like','%'.$request->book_isbn)->first();
+			    $res->owner_book_id = $book->id;
+		    } else{
+			    $res->owner_book_id = 0;
+		    }
+	        $res->update();
+	        Session::flash('success', '资源信息修改成功');
+	    }else {
+		    return redirect()->back()->withErrors(['用户角色至少勾选一项']);
+	    }
+	    return redirect()->route('admin.resource.show', $res->id);
     }
 
     /**
