@@ -48,7 +48,7 @@ class Resource extends Model
 	    	array_push($user_resource_roles, "TEACHER");
 
 	    	if (!empty($book_id)){
-	    		$order_feedbacks = OrderFeedback::where('book_id', $book_id)->where('user_id', $user->id)->get();
+	    		$order_feedbacks = OrderFeedback::where('book_id', $book_id)->where('user_id', $user->id)->where('status',1)->get();
 	    		if (sizeof($order_feedbacks) != 0){
 	    			array_push($user_resource_roles, 'TEACHER_WITH_ORDER');
 			    }

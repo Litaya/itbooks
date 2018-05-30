@@ -52,7 +52,7 @@ class Courseware extends WechatHandler{
 								$resourceDao = new ResourceDao();
 								$resources = $resourceDao->getAllResource($user, $book->id);
 								foreach ($resources as $resource){
-									$resources_str = "\n".$resources_str."【".$resource->title."】\n地址：".$resource->file_upload."\n资源简介：".$resource->description;
+									$resources_str = $resources_str."\n\n【".$resource->title."】\n资源简介：".$resource->description."\n下载地址：".$resource->file_upload;
 								}
 								$match = true;
 								$reply = "课件下载地址：$kj_url \n课件密码：$pass";
@@ -74,7 +74,7 @@ class Courseware extends WechatHandler{
 							$reply = "课件密码：$pass";
 						}
 					}
-					$reply = $reply."\n<a href='".$book_url."'>查看更多图书资源</a>";
+					$reply = $reply."\n\n<a href='".$book_url."'>查看更多图书资源</a>";
 				}
 			}
 		}

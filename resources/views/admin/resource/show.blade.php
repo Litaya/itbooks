@@ -33,14 +33,14 @@
                     <p><strong>资源描述：</strong>{{$resource->description}}</p>
                     <p>
                         <strong>对应书籍：</strong>
-                        @if($resource->owner_book_id != NULL)
+                        @if(!empty($resource->owner_book_id))
+                            <a href="{{ route('admin.book.show',["id"=>$resource->ownerBook->id]) }}">{{ $resource->ownerBook->name }}</a>
+                        @else
                             @if($resource->owner_book_id == 0)
                                 全部
                             @else
-                                <a href="{{ route('admin.book.show',["id"=>$resource->ownerBook->id]) }}">{{ $resource->ownerBook->name }}</a>
+                                无对应书籍
                             @endif
-                        @else
-                            无对应书籍
                         @endif
                     </p>
                     <p><strong>资源权限：</strong>

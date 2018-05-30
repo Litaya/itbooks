@@ -83,7 +83,7 @@ class ResourceAdminController extends Controller
             if (empty($request->credit))
             	$res->credit = 0;
             $res->type = "url"; //($request->file_upload)->getClientOriginalExtension();
-            if(!empty($request->book_isbn) and Book::find($request->book_isbn)){
+            if(!empty($request->book_isbn) and Book::where('isbn','like',"%".$request->book_isbn)->first()){
             	$book = Book::where('isbn','like','%'.$request->book_isbn)->first();
                 $res->owner_book_id = $book->id;
             } else{
