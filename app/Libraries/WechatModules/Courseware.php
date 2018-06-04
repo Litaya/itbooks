@@ -33,6 +33,7 @@ class Courseware extends WechatHandler{
 					if(preg_match("/[^＃]+＃[0-9]+/",$content)){
 						$content_arr = explode('＃',$content);
 					}
+                    $book = null;
 					if($content_arr[0] == '课件'){
 						$isbn   = $content_arr[1];
 						$book   = Book::where('isbn','like',"%$isbn")->first();
@@ -48,17 +49,8 @@ class Courseware extends WechatHandler{
 								$reply = "本书没有课件";
 							}else{
 								$pass   = \App\Models\Courseware::getCoursewarePassword($isbn,$code);
-								$resources_str = "";
-								$resourceDao = new ResourceDao();
-								$resources = $resourceDao->getAllResource($user, $book->id);
-								foreach ($resources as $resource){
-									$resources_str = $resources_str."\n\n【".$resource->title."】\n资源简介：".$resource->description."\n下载地址：".$resource->file_upload;
-								}
 								$match = true;
 								$reply = "课件下载地址：$kj_url \n课件密码：$pass";
-								if(sizeof($resources) > 0){
-									$reply = $reply."\n\n其他资源".$resources_str;
-								}
 							}
 						}
 					} else if($content_arr[0] == '密码'){
@@ -74,6 +66,17 @@ class Courseware extends WechatHandler{
 							$reply = "课件密码：$pass";
 						}
 					}
+                    if(!empty($book)){
+                        $resources_str = "";
+                        $resourceDao = new ResourceDao();
+                        $resources = $resourceDao->getAllResource($user, $book->id);
+                        foreach ($resources as $resource){
+                            $resources_str = $resources_str."\n\n【".$resource->title."】\n".$resource->description."\n<a href='".$resource->file_upload."'>点此下载</a>";
+                        }
+                        if(sizeof($resources) > 0){
+                            $reply = $reply."\n\n其他资源".$resources_str;
+                        }
+                    }
 					$reply = $reply."\n\n<a href='".$book_url."'>查看更多图书资源</a>";
 				}
 			}
