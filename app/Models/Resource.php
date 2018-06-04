@@ -26,8 +26,18 @@ class Resource extends Model
         return $this->belongsTo('App\Models\User', 'owner_user_id', 'id');
     }
 
-    public function ownerBook(){
-        return $this->belongsTo('App\Models\Book', 'owner_book_id', 'id');
+    public function books(){
+    	$resource_books = ResourceBook::where('resource_id', $this->id)->get();
+    	if (count($resource_books) == 0){
+    		return [];
+	    }else{
+    		$books = [];
+    		foreach ($resource_books as $resource_book){
+    			$book = Book::where('id', $resource_book->book_id)->first();
+    			array_push($books, $book);
+		    }
+		    return $books;
+	    }
     }
 
     public function checkUserValidation(User $user, $book_id){

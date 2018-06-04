@@ -33,8 +33,10 @@
                     <p><strong>资源描述：</strong>{{$resource->description}}</p>
                     <p>
                         <strong>对应书籍：</strong>
-                        @if(!empty($resource->owner_book_id))
-                            <a href="{{ route('admin.book.show',["id"=>$resource->ownerBook->id]) }}">{{ $resource->ownerBook->name }}</a>
+                        @if($resource->owner_book_id == 1)
+                            @foreach($resource->books() as $book)
+                                <a href="{{ route('admin.book.show',["id"=>$book->id]) }}">{{ $book->name }}</a>&nbsp;&nbsp;
+                            @endforeach
                         @else
                             @if($resource->owner_book_id == 0)
                                 全部
