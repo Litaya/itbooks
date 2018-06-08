@@ -23,7 +23,9 @@ class ResourceDao{
         $book_resources = [];
         foreach($resource_books as $rb){
             $resource = Resource::where('id', $rb->resource_id)->first();
-            array_push($book_resources, $resource);
+            if (!empty($resource)){
+                array_push($book_resources, $resource);
+            }
         }
 
 		# 对于每个资源，检测其用户权限

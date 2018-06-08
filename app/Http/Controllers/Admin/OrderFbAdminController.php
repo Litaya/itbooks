@@ -42,7 +42,7 @@ class OrderFbAdminController extends Controller
 			// 更改用户的样书申请额度
 			$result = UserDao::updateBookRequestLimit($user, 1);
 
-			if ($result['status'] == UserDao::$SUCCESS){
+			if ($result['status'] == UserDao::$SUCCESS or $result['status'] == UserDao::$FAIL_OUTOFLIMIT){
                 $order_feedback->status = 1;
                 $order_feedback->save();
 				return redirect()->back();
