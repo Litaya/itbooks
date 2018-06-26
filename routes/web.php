@@ -318,3 +318,8 @@ Route::group(["prefix" => "test"],function () {
 	Route::get('/imgupload','TestController@imgUpload')->name('test.imgupload');
 	Route::post('/imgupload','TestController@saveImage')->name('test.saveimage');
 });
+
+Route::group(["prefix" => "prompt"],function () {
+	Route::get('/courseware','PromptController@courseware')->name('prompt.courseware');
+
+});
