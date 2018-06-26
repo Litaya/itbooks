@@ -32,6 +32,8 @@ class WechatMessageFactory{
 				return $this->courseware_hint();
 			case self::$COURSEWARE_REPLY:
 				return $this->courseware_reply($message);
+			case self::$CW_BR_PWD_HINT:
+				return $this->cw_br_pwd_hint($message);
 			default:
 				return '';
 		}

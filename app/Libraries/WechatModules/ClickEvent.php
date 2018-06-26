@@ -9,6 +9,7 @@
 namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatHandler;
+use App\Libraries\WechatMessageFactory;
 
 class ClickEvent extends WechatHandler{
 	public function handle()
@@ -17,8 +18,8 @@ class ClickEvent extends WechatHandler{
 		$reply = '';
 		if ($this->canHandle()){
 			$match = true;
-			$reply = '';
-
+			$message_factory  = new WechatMessageFactory();
+			$reply = $message_factory->factory($this->message, WechatMessageFactory::$CW_BR_PWD_HINT);
 		}
 
 		# 本模块能处理的情况下，不考虑其他模块
@@ -29,10 +30,10 @@ class ClickEvent extends WechatHandler{
 
 		# 责任链没有断的情况下，继续向下处理
 		if(!empty($this->successor)){
-			Log::info('模块[AutoReply]无法处理，传递给下一个模块');
+			Log::info('模块[ClickEvent]无法处理，传递给下一个模块');
 			return $this->successor->handle();
 		}else{ # 没有下一个处理模块，则返回空串
-			Log::info('模块[AutoReply]是最后一个模块');
+			Log::info('模块[ClickEvent]是最后一个模块');
 			return "";
 		}
 	}
