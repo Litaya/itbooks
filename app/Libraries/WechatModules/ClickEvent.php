@@ -10,6 +10,7 @@ namespace App\Libraries\WechatModules;
 
 use App\Libraries\WechatHandler;
 use App\Libraries\WechatMessageFactory;
+use Illuminate\Support\Facades\Log;
 
 class ClickEvent extends WechatHandler{
 	public function handle()

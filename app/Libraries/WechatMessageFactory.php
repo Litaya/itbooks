@@ -9,7 +9,7 @@
 namespace App\Libraries;
 
 use App\Dao\ResourceDao;
-use App\Libraries\WechatModules\Book;
+use App\Models\Book;
 use App\Models\User;
 use App\Models\UserInfo;
 
@@ -54,6 +54,7 @@ class WechatMessageFactory{
 	private function courseware_reply($message){
 		$openid    = $message->FromUserName;
 		$user      = User::where('openid',$openid)->first();
+		$user_info = UserInfo::where('user_id',$user->id)->first();
 		$content   = $message->Content;
 		$book_url = url('/home')."?openid=$openid";
 		if(empty($user_info) || empty($user_info->role)){
@@ -71,21 +72,24 @@ class WechatMessageFactory{
 		$reply  = '';
 		if ($content_arr[0] == '课件'){
 			if(empty($kj_url)){
-				return "本书没有课件";
-			}
-			$resources_str = "";
-			$resourceDao = new ResourceDao();
-			$resources = $resourceDao->getAllResource($user, $book->id);
-			foreach ($resources as $resource){
-				$resources_str = $resources_str."\n\n【".$resource->title."】\n资源简介：".$resource->description."\n下载地址：".$resource->file_upload;
-			}
-			$reply = "课件下载地址：$kj_url \n课件密码：$pass";
-			if(sizeof($resources) > 0){
-				$reply = $reply."\n\n其他资源".$resources_str;
-			}
+		        $reply = "本书没有课件";
+			}else{
+			    $reply = "课件下载地址：$kj_url \n课件密码：$pass";
+            }
 		}else if ($content_arr[0] == '密码'){
 			$reply = "课件密码：$pass";
 		}
+
+        $resources_str = "";
+        $resourceDao = new ResourceDao();
+        $resources = $resourceDao->getAllResource($user, $book->id);
+        foreach ($resources as $resource){
+            $resources_str = $resources_str."\n\n【".$resource->title."】\n".$resource->description."\n<a href='".$resource->file_upload."'>点此下载</a>";
+        }
+        if(sizeof($resources) > 0){
+            $reply = $reply."\n\n其他资源".$resources_str;
+        }
+
 		$reply = $reply."\n\n<a href='".$book_url."'>查看更多图书资源</a>";
 		return $reply;
 	}
@@ -96,7 +100,7 @@ class WechatMessageFactory{
 		$book_url = url('/home')."?openid=$openid";
 		$cw_url   = route('prompt.courseware');
 		$reply = "<a href='".$book_url."'>搜索图书资源</a>";
-		$reply .= "\n下载课件密码";
+		$reply .= "\n<a href='".$cw_url."'>下载课件密码</a>";	
 
 		if(!empty($user)&&strpos($user->certificate_as,'TEACHER')!==false){
 			$reply.="\n<a href='http://www.itshuquan.com/bookreq?openid=".$openid."'>申请教材样书</a>";
