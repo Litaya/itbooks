@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\WechatMessageFactory;
 use App\Libraries\WechatMessageSender;
 use App\Models\Courseware;
 use App\Models\UserInfo;
@@ -160,34 +161,11 @@ class BookController extends Controller
 		$this->validate($request,[
 			'book_id' => 'required'
 		]);
-
 		$user      = Auth::user();
-		$user_info = UserInfo::where('user_id',$user->id)->first();
 		$book      = Book::where('id',$request->get('book_id'))->first();
-
 		$openid    = $user->openid;
-		$book_url  = url('/home')."?openid=$openid";
 
-		if(empty($user_info) || empty($user_info->role)){
-			$reply = "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
-		}else{
-			$code   = $book->department->code;
-			$kj_url = Courseware::getCourseware($book->id);
-			if(empty($kj_url)){
-				$reply = "本书没有课件";
-			}else{
-				$record = new DownloadRecord;
-				$record->user_id = $user->id;
-				$record->book_id = $book->id;
-				$record->save();
-				
-				$isbn  = $book->isbn;
-				$pass  = Courseware::getCoursewarePassword($isbn,$code);
-				$reply = "课件下载地址：$kj_url \n 课件密码：$pass";
-			}
-			$reply = $reply."\n<a href='".$book_url."'>更多图书资源</a>";
-		}
-
+		$reply = WechatMessageFactory::courseware_reply_from_web($user,$book);
 		$result = WechatMessageSender::sendText($openid,$reply);
 		return $result;
 	}

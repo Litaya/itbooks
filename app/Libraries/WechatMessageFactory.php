@@ -10,6 +10,8 @@ namespace App\Libraries;
 
 use App\Dao\ResourceDao;
 use App\Models\Book;
+use App\Models\Courseware;
+use App\Models\DownloadRecord;
 use App\Models\User;
 use App\Models\UserInfo;
 
@@ -18,6 +20,7 @@ class WechatMessageFactory{
 	public static $COURSEWARE_REPLY = 1;
 	public static $CW_BR_PWD_HINT   = 2;
 	public static $CW_BR_PWD_REPLY  = 3;
+	public static $COURSEWARE_WEB   = 4;
 
 
 	/**
@@ -90,6 +93,37 @@ class WechatMessageFactory{
             $reply = $reply."\n\n其他资源".$resources_str;
         }
 
+		$reply = $reply."\n\n<a href='".$book_url."'>查看更多图书资源</a>";
+		return $reply;
+	}
+
+	public static function courseware_reply_from_web($user, $book){
+		$user_info = UserInfo::where('user_id',$user->id)->first();
+		$openid = $user->openid;
+		$book_url = url('/home') . "?openid=$openid";
+
+		if(empty($user_info) || empty($user_info->role)){
+			$reply = "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
+		}else {
+			$isbn = $book->isbn;
+			$code = $book->department->code;
+			$kj_url = \App\Models\Courseware::getCourseware($book->id);
+			$pass = \App\Models\Courseware::getCoursewarePassword($isbn, $code);
+			if (empty($kj_url)) {
+				$reply = "本书没有课件";
+			} else {
+				$reply = "课件下载地址：$kj_url \n课件密码：$pass";
+			}
+		}
+		$resources_str = "";
+		$resourceDao = new ResourceDao();
+		$resources = $resourceDao->getAllResource($user, $book->id);
+		foreach ($resources as $resource){
+			$resources_str = $resources_str."\n\n【".$resource->title."】\n".$resource->description."\n<a href='".$resource->file_upload."'>点此下载</a>";
+		}
+		if(sizeof($resources) > 0){
+			$reply = $reply."\n\n其他资源".$resources_str;
+		}
 		$reply = $reply."\n\n<a href='".$book_url."'>查看更多图书资源</a>";
 		return $reply;
 	}
