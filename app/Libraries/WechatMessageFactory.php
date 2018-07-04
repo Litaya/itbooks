@@ -134,14 +134,14 @@ class WechatMessageFactory{
 		$book_url = url('/home')."?openid=$openid";
 		$cw_url   = route('prompt.courseware');
 		$reply = "<a href='".$book_url."'>搜索图书资源</a>";
-		$reply .= "\n<a href='".$cw_url."'>下载课件密码</a>";	
+		$reply .= "\n\n<a href='".$cw_url."'>下载课件密码</a>";	
 
 		if(!empty($user)&&strpos($user->certificate_as,'TEACHER')!==false){
-			$reply.="\n<a href='http://www.itshuquan.com/bookreq?openid=".$openid."'>申请教材样书</a>";
-			$reply.= "\n<a href='http://www.itshuquan.com/bookreq/record?openid=".$openid."'>查看样书记录</a>\n".
-				"<a href='http://www.itshuquan.com/order_fb?openid=".$openid."'>教材订购反馈</a>";
+			$reply.="\n\n<a href='http://www.itshuquan.com/bookreq?openid=".$openid."'>申请教材样书</a>";
+			$reply.= "\n\n<a href='http://www.itshuquan.com/bookreq/record?openid=".$openid."'>查看样书记录</a>\n".
+				"\n<a href='http://www.itshuquan.com/order_fb?openid=".$openid."'>教材订购反馈</a>";
 		}else if($user->certificate_as=="") {
-			$reply.="\n<a href='http://www.itshuquan.com/bookreq?openid=".$openid."'>申请教材样书</a>";
+			$reply.="\n\n<a href='http://www.itshuquan.com/bookreq?openid=".$openid."'>申请教材样书</a>";
 		}
 
 		return $reply;
