@@ -63,7 +63,11 @@ class WechatMessageFactory{
 		if(empty($user_info) || empty($user_info->role)){
 			return "只有注册用户才可下载课件，<a href='http://www.itshuquan.com/userinfo/basic?openid=".$openid."'>点此注册</a>";
 		}
-		$content_arr = explode('#',$content);
+		if(preg_match("/[^#]+#[0-9]+/",$content))
+			$content_arr = explode('#',$content);
+		else
+			$content_arr = explode('＃',$content);
+
 		$isbn   = $content_arr[1];
 		$book      = Book::where('isbn','like',"%$isbn")->first();
 		if (empty($book)){
